@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+  http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+  http://www.springframework.org/schema/context 
+  http://www.springframework.org/schema/context/spring-context-3.0.xsd  
+  http://www.springframework.org/schema/mvc  
+  http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd  
+  http://www.springframework.org/schema/aop   
+  http://www.springframework.org/schema/aop/spring-aop-3.2.xsd  
+  http://www.springframework.org/schema/task 
+  http://www.springframework.org/schema/task/spring-task-3.0.xsd
+  http://www.springframework.org/schema/tx 
+  http://www.springframework.org/schema/tx/spring-tx.xsd
+  ">
+
+
+	<!-- spring配置 -->
+	<context:component-scan base-package="com.bracelet.socket" />
+	<context:component-scan base-package="com.bracelet.controller" />
+	<context:component-scan base-package="com.bracelet.service" />
+	<context:component-scan base-package="com.bracelet.aop" />
+
+	<!-- 数据库配置文件 -->
+	<context:property-placeholder location="classpath:db.properties" />
+
+
+	<!-- 数据库基本信息配置 -->
+	<bean id="parentDataSource" class="com.alibaba.druid.pool.DruidDataSource"  abstract="true">
+		<property name="driverClassName" value="${mysql.driverClassName}" />
+		<property name="filters" value="${mysql.filters}" />
+		<property name="maxActive" value="${mysql.maxActive}" />
+		<property name="initialSize" value="${mysql.initialSize}" />
+		<property name="maxWait" value="${mysql.maxWait}" />
+		<property name="minIdle" value="${mysql.minIdle}" />
+		<property name="timeBetweenEvictionRunsMillis" value="${mysql.timeBetweenEvictionRunsMillis}" />
+		<property name="minEvictableIdleTimeMillis" value="${mysql.minEvictableIdleTimeMillis}" />
+		<property name="validationQuery" value="${mysql.validationQuery}" />
+		<property name="testWhileIdle" value="${mysql.testWhileIdle}" />
+		<property name="testOnBorrow" value="${mysql.testOnBorrow}" />
+		<property name="testOnReturn" value="${mysql.testOnReturn}" />
+		<property name="maxOpenPreparedStatements" value="${mysql.maxOpenPreparedStatements}" />
+		<property name="removeAbandoned" value="${mysql.removeAbandoned}" />
+		<property name="removeAbandonedTimeout" value="${mysql.removeAbandonedTimeout}" />
+		<property name="logAbandoned" value="${mysql.logAbandoned}" />
+		<property name="poolPreparedStatements" value="false" />
+	</bean>
+	<!-- 主数据库 -->
+	<bean id="dataSourceM" parent="parentDataSource">
+		<property name="url" value="${mysqlM.url}" />
+		<property name="username" value="${mysqlM.username}" />
+		<property name="password" value="${mysqlM.password}" />
+	</bean>
+	<!-- 从数据库 -->
+	<bean id="dataSourceC" parent="parentDataSource">
+		<property name="url" value="${mysqlC.url}" />
+		<property name="username" value="${mysqlC.username}" />
+		<property name="password" value="${mysqlC.password}" />
+	</bean>
+	<!-- 启用CGliB -->
+	<aop:aspectj-autoproxy />
+	<!--切面注入spring自定义标签 -->
+	<bean id="dsChangeAspect" class="com.bracelet.datasource.DataSourceAspect" />
+	<!--动态数据源、主从库选择、从可以配置多个，随意配置 -->
+	<bean id="dynamicDataSource" class="com.bracelet.datasource.DynamicDataSource">
+		<property name="master" ref="dataSourceM" />
+		<property name="slaves">
+			<list>
+				<ref bean="dataSourceC" />
+			</list>
+		</property>
+	</bean>
+	<!-- 配置Jdbc模板 -->
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dynamicDataSource"></property>
+	</bean>
+	<!-- 配置事务管理器 -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+		p:dataSource-ref="dataSourceM" />
+	<!-- 启用基于注解的事务管理 -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="save*" propagation="REQUIRED" />  
+           <tx:method name="add*" propagation="REQUIRED" />  
+           <tx:method name="create*" propagation="REQUIRED" />  
+           <tx:method name="insert*" propagation="REQUIRED" />  
+           <tx:method name="update*" propagation="REQUIRED" />  
+           <tx:method name="merge*" propagation="REQUIRED" />  
+           <tx:method name="del*" propagation="REQUIRED" />  
+           <tx:method name="remove*" propagation="REQUIRED" />  
+           <tx:method name="put*" propagation="REQUIRED" />  
+           <tx:method name="get*" propagation="SUPPORTS" read-only="true" />  
+           <tx:method name="count*" propagation="SUPPORTS" read-only="true" />  
+          <tx:method name="find*" propagation="SUPPORTS" read-only="true" />  
+          <tx:method name="list*" propagation="SUPPORTS" read-only="true" />  
+          <tx:method name="*" propagation="SUPPORTS" read-only="true" /> 
+		</tx:attributes>
+	</tx:advice>
+
+	<!-- <bean
+		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter"> -->
+		<bean
+		  class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+			<bean
+					class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
+			</list>
+		</property>
+	</bean>
+</beans>
