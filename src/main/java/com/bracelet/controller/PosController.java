@@ -15,6 +15,7 @@ import com.bracelet.entity.UserInfo;
 import com.bracelet.entity.VersionInfo;
 import com.bracelet.entity.WatchFriend;
 import com.bracelet.exception.BizException;
+import com.bracelet.redis.LimitCache;
 import com.bracelet.service.ILocationService;
 import com.bracelet.service.IStepService;
 import com.bracelet.service.IUserInfoService;
@@ -32,6 +33,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -52,8 +54,10 @@ public class PosController extends BaseController {
 	WatchTkService watchtkService;
 	@Autowired
 	ILocationService locationService;
-	@Resource
-	BaseChannelHandler baseChannelHandler;
+	
+	@Autowired
+	LimitCache limitCache;
+	
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	@ResponseBody
@@ -114,6 +118,20 @@ public class PosController extends BaseController {
 		bb.put("lat", lo.getLat());
 		bb.put("updatetime",Utils.format14DateString(lo.getUpload_time().getTime()));
 		return bb.toString();
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/redisTest", method = RequestMethod.GET)
+	public String redisTest() {
+		boolean e=limitCache.addKey("e", "1");
+		boolean f=limitCache.addKey("f", "1");
+		boolean b=limitCache.addKey("a", "1");
+		logger.info("b="+b);
+		b=limitCache.deleteKey("a");
+		logger.info("b="+b);
+		Long size=limitCache.getSize();
+		logger.info("size="+size);
+		return "1";
 	}
 
 
