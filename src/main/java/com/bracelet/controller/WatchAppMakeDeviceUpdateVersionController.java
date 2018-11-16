@@ -20,6 +20,7 @@ import com.bracelet.service.WatchSetService;
 import com.bracelet.socket.BaseChannelHandler;
 import com.bracelet.util.ChannelMap;
 import com.bracelet.util.HttpClientGet;
+import com.bracelet.util.RadixUtil;
 import com.bracelet.util.RanomUtil;
 import com.bracelet.util.RespCode;
 import com.bracelet.util.Utils;
@@ -106,9 +107,10 @@ public class WatchAppMakeDeviceUpdateVersionController extends BaseController {
 			watchSetService.insertSmsSetLogInfo(imei,setStatus,operatorNumber,content);
 			return bb.toString();
 		}
-		String reps = "[YW*"+imei+"*0001*0002*COST1,";
+		String reps = "[YW*"+imei+"*0001*";
 		if (socketLoginDto.getChannel().isActive()) {
-			reps = reps + operatorNumber + "," + content + "]";
+			String msg = "COST1,"+reps + operatorNumber + "," + content ;
+			reps=reps+RadixUtil.changeRadix(msg)+"*"+msg+ "]";
 			socketLoginDto.getChannel().writeAndFlush(reps);
 			bb.put("code", 1);
 			setStatus = 1;

@@ -9,6 +9,7 @@ import com.bracelet.service.IUserInfoService;
 import com.bracelet.service.WatchSetService;
 import com.bracelet.socket.BaseChannelHandler;
 import com.bracelet.util.ChannelMap;
+import com.bracelet.util.RadixUtil;
 import com.bracelet.util.Utils;
 
 import org.slf4j.Logger;
@@ -121,7 +122,8 @@ public class WatchAppContDeviceController extends BaseController {
 				return bb.toString();
 			}
 			if (socketLoginDto.getChannel().isActive()) {
-				String reps = "[YW*"+imei+"*0001*0012*MONITOR,"+phone+"]";
+				String msg="MONITOR,"+phone;
+				String reps = "[YW*"+imei+"*0001*"+RadixUtil.changeRadix(msg)+"*"+msg+"]";
 				socketLoginDto.getChannel().writeAndFlush(reps);
 				bb.put("code", 1);
 			} else {
@@ -147,9 +149,10 @@ public class WatchAppContDeviceController extends BaseController {
 				watchSetService.insertpushMessageLog(imei,setStatus,message);
 				return bb.toString();
 			}
-			String reps = "[YW*"+imei+"*0001*0018*MESSAGE,";
+			
 			if (socketLoginDto.getChannel().isActive()) {
-				reps = reps + message+"]";
+				String msg="MESSAGE,"+message;
+				String reps = "[YW*"+imei+"*0001*"+RadixUtil.changeRadix(msg)+"*"+msg+"]";
 				socketLoginDto.getChannel().writeAndFlush(reps);
 				bb.put("code", 1);
 				setStatus=1;
