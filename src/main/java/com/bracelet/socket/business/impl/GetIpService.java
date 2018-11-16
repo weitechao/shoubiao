@@ -19,17 +19,17 @@ import com.bracelet.service.IDeviceService;
 import com.bracelet.service.ILocationService;
 import com.bracelet.service.IVoltageService;
 import com.bracelet.service.IinsertFriendService;
+import com.bracelet.socket.business.IService;
+import com.bracelet.util.RadixUtil;
+import com.bracelet.util.Utils;
 
 @Service("getIpService")
-public class GetIpService extends AbstractBizService {
+public class GetIpService implements IService {
 	private Logger logger = LoggerFactory.getLogger(getClass());
-
-	@Autowired
+    @Autowired
 	IDeviceService ideviceService;
-
-	@Override
-	protected String process2(SocketLoginDto socketLoginDto, String jsonInfo,
-			Channel channel) {
+    @Override
+	public String process(String jsonInfo, Channel channel) {
 
 		logger.info("获取服务器连接IP:" + jsonInfo);
 
@@ -40,36 +40,29 @@ public class GetIpService extends AbstractBizService {
 		logger.info("imei=" + imei + ",info=" + info + ",no=" + no);
 		List<IpAddressInfo> list = ideviceService.getipinfo();
 		int count = list.size();
-		StringBuffer sb = new StringBuffer("[YW*" + imei + "*0001*0002*IPREQ,");
-		sb.append(count);
+		StringBuffer sb = new StringBuffer("[YW*" + imei + "*0001*");//0002*
+        StringBuffer add=new StringBuffer("IPREQ,");
+		add.append(count);
 		if (count > 0) {
 			for (IpAddressInfo infoo : list) {
-				sb.append(",");
-				sb.append(infoo.getIp());
-				sb.append(",");
-				sb.append(infoo.getPort());
+				add.append(",");
+				add.append(infoo.getIp());
+				add.append(",");
+				add.append(infoo.getPort());
 			}
 		}
+		sb.append(RadixUtil.changeRadix(add.toString()));
+		sb.append("*");
+		sb.append(add.toString());
 		sb.append("]");
+		logger.info("获取服务器ip端口返回"+sb.toString());
 		return sb.toString();
 	}
-
-	@Override
-	protected SocketBaseDto process1(SocketLoginDto socketLoginDto,
-			JSONObject jsonObject, Channel channel) {
+    @Override
+	public SocketBaseDto process(JSONObject jsonObject, Channel incoming) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
-	/*
-	 * [YW*111111111111111*0002*008f*UD,220414,134652,A,22.571707,N,113.8613968,E
-	 * ,
-	 * 0.1,0.0,100,7,60,90,1000,50,0000,4,1,460,0,9360,4082,131,9360,4092,148,9360
-	 * ,4091,143,9360,4153,141]
-	 * 
-	 * [YW*111111111111111*0002*0066*UD,230516,123715,V,0.000000,N,0.000000,E,0.00
-	 * ,0.0,0.0,0,100,58,1279,0,00000000,1,1,460,0,9331,4770,1,0]
-	 * [YW*111111111111111
-	 * *0002*0066*UD,230516,123741,V,0.000000,N,0.000000,E,0.00
-	 * ,0.0,0.0,0,52,58,1279,0,00000000,1,1,460,0,9331,4740,22,0]
-	 */
+	
 }

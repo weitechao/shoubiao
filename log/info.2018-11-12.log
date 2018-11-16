@@ -1,0 +1,26 @@
+2018-11-12 12:57:57,231 [main] INFO  SocketServer - ===start socket:7780
+2018-11-12 12:58:29,967 [http-8080-1] INFO  PosController - lbs=460,0,10173,4931,46,10173,4263,35,10173,4572,35,10173,4934,33,9363,5463,31,10173,4932,31
+2018-11-12 12:58:29,967 [http-8080-1] INFO  PosController - wifi=1
+2018-11-12 12:58:29,967 [http-8080-1] INFO  PosController - deviceId=8618123456789
+2018-11-12 12:58:30,106 [http-8080-1] INFO  PosController - 第三方定位结果：{"infocode":"10000","result":{"city":"娣卞湷甯?","province":"骞夸笢鐪?","poi":"銆婃満姊颁笌妯″叿銆嬫潅蹇楃ぞ","adcode":"440304","street":"娉扮劧涔濊矾","desc":"骞夸笢鐪? 娣卞湷甯? 绂忕敯鍖? 娣卞崡澶ч亾 闈犺繎銆婃満姊颁笌妯″叿銆嬫潅蹇楃ぞ","country":"涓浗","type":"4","location":"114.0239857,22.5358889","road":"娣卞崡澶ч亾","radius":"550","citycode":"0755"},"info":"OK","status":"1"}
+2018-11-12 12:58:30,447 [http-8080-1] INFO  DruidDataSource - {dataSource-1} inited
+2018-11-12 13:00:29,820 [main] INFO  SocketServer - ===start socket:7780
+2018-11-12 13:00:34,046 [http-8080-1] INFO  PosController - lbs=460,0,10173,4931,46,10173,4263,35,10173,4572,35,10173,4934,33,9363,5463,31,10173,4932,31
+2018-11-12 13:00:34,046 [http-8080-1] INFO  PosController - wifi=1
+2018-11-12 13:00:34,046 [http-8080-1] INFO  PosController - deviceId=8618123456789
+2018-11-12 13:00:34,276 [http-8080-1] INFO  PosController - 第三方定位结果：{"infocode":"10000","result":{"city":"娣卞湷甯?","province":"骞夸笢鐪?","poi":"銆婃満姊颁笌妯″叿銆嬫潅蹇楃ぞ","adcode":"440304","street":"娉扮劧涔濊矾","desc":"骞夸笢鐪? 娣卞湷甯? 绂忕敯鍖? 娣卞崡澶ч亾 闈犺繎銆婃満姊颁笌妯″叿銆嬫潅蹇楃ぞ","country":"涓浗","type":"4","location":"114.0239857,22.5358889","road":"娣卞崡澶ч亾","radius":"550","citycode":"0755"},"info":"OK","status":"1"}
+2018-11-12 13:00:34,559 [http-8080-1] INFO  DruidDataSource - {dataSource-1} inited
+2018-11-12 13:03:12,430 [main] INFO  SocketServer - ===start socket:7780
+2018-11-12 13:03:15,180 [http-8080-1] INFO  PosController - lbs=460,0,10173,4931,46,10173,4263,35,10173,4572,35,10173,4934,33,9363,5463,31,10173,4932,31
+2018-11-12 13:03:15,180 [http-8080-1] INFO  PosController - wifi=1
+2018-11-12 13:03:15,180 [http-8080-1] INFO  PosController - deviceId=8618123456789
+2018-11-12 13:03:15,574 [http-8080-1] INFO  PosController - 第三方定位结果：{"infocode":"10000","result":{"city":"深圳市","province":"广东省","poi":"《机械与模具》杂志社","adcode":"440304","street":"泰然九路","desc":"广东省 深圳市 福田区 深南大道 靠近《机械与模具》杂志社","country":"中国","type":"4","location":"114.0239857,22.5358889","road":"深南大道","radius":"550","citycode":"0755"},"info":"OK","status":"1"}
+
+2018-11-12 13:03:15,934 [http-8080-1] INFO  DruidDataSource - {dataSource-1} inited
+2018-11-12 13:04:24,725 [main] INFO  SocketServer - ===start socket:7780
+2018-11-12 13:04:29,817 [http-8080-1] INFO  PosController - lbs=460,0,10173,4931,46,10173,4263,35,10173,4572,35,10173,4934,33,9363,5463,31,10173,4932,31
+2018-11-12 13:04:29,817 [http-8080-1] INFO  PosController - wifi=1
+2018-11-12 13:04:29,817 [http-8080-1] INFO  PosController - deviceId=8618123456789
+2018-11-12 13:04:30,094 [http-8080-1] INFO  PosController - 第三方定位结果：{"infocode":"10000","result":{"city":"深圳市","province":"广东省","poi":"《机械与模具》杂志社","adcode":"440304","street":"泰然九路","desc":"广东省 深圳市 福田区 深南大道 靠近《机械与模具》杂志社","country":"中国","type":"4","location":"114.0239857,22.5358889","road":"深南大道","radius":"550","citycode":"0755"},"info":"OK","status":"1"}
+
+2018-11-12 13:04:30,378 [http-8080-1] INFO  DruidDataSource - {dataSource-1} inited

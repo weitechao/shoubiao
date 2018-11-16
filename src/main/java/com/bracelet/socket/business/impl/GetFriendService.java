@@ -23,6 +23,7 @@ import com.bracelet.service.IVoltageService;
 import com.bracelet.service.IinsertFriendService;
 import com.bracelet.socket.business.IService;
 import com.bracelet.util.ChannelMap;
+import com.bracelet.util.RadixUtil;
 import com.bracelet.util.RespCode;
 import com.bracelet.util.Utils;
 
@@ -52,29 +53,35 @@ public class GetFriendService extends AbstractBizService {
 		String[] shuzu = jsonInfo.split("\\*");
 		String imei = shuzu[1];// 设备imei
 		String no = shuzu[2];// 流水号
-		StringBuffer sb = new StringBuffer("[YW*"+imei+"*0001*0002*FDL,");
+		StringBuffer sb = new StringBuffer("[YW*"+imei+"*0001*");
+				//0002*FDL,");
 		List<InsertFriend> list = insertFriendService.getInfoList(imei, 2);
 		//对方同意则更改状态为2，所有用2查询
+		
+		StringBuffer sbb = new StringBuffer();
 		int count = list.size();
 		if (count != 0) {
-			sb.append(count);
+			sbb.append(count);
 			for (InsertFriend info : list) {
-				sb.append(",");
+				sbb.append(",");
 				WatchDevice watchd = ideviceService.getDeviceInfo(info
 						.getAdd_imei());
 				if (watchd != null) {
-					sb.append(info.getAdd_imei());
-					sb.append(",");
-					sb.append(watchd.getNickname());
-					sb.append(",");
-					sb.append(watchd.getPhone());
+					sbb.append(info.getAdd_imei());
+					sbb.append(",");
+					sbb.append(watchd.getNickname());
+					sbb.append(",");
+					sbb.append(watchd.getPhone());
 				}
 			}
 		} else {
-			sb.append(count);
+			sbb.append(count);
 		}
 
-		sb.append("]");
+		sbb.append("]");
+		sb.append(RadixUtil.changeRadix(sbb.toString()));
+		sb.append("*");
+		sb.append(sbb.toString());
 
 		return sb.toString();
 

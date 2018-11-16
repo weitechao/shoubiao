@@ -65,6 +65,7 @@ public class SmsToGetLocation extends AbstractBizService {
 			String msg = SmsUtil.sendMsgMenSuo(phone, code);
 			smslogService.insert("短信验证码", phone, "SMS_115095090",
 					"{\"number\":\"" + code + "\"}", 0, msg);
+			//听过短信发送给终端
 		} catch (ApiException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

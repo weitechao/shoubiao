@@ -28,7 +28,7 @@ public interface ILocationService {
 
 
 	boolean insertUdInfo(String imei, Integer locationType,String lat, String lon, String status,
-			String time);
+			String time,Integer locationStyle);
 
 	LocationWatch getLatest(String imei);
 

@@ -16,6 +16,7 @@ import com.bracelet.service.IDeviceService;
 import com.bracelet.service.ILocationService;
 import com.bracelet.service.IVoltageService;
 import com.bracelet.service.IinsertFriendService;
+import com.bracelet.util.RadixUtil;
 
 @Service("insertFriendService")
 public class InsertFriendService extends AbstractBizService {
@@ -51,7 +52,14 @@ public class InsertFriendService extends AbstractBizService {
 		} else {
 			status = 0;
 		}
-		return "[YW*"+imei+"*NNNN*LEN*MFD,"+addimei+"," + status + "]";
+		String message="MFD,"+addimei+"," + status + "]";
+		
+		StringBuffer sb=new StringBuffer("[YW*"+imei+"*0001*");
+		sb.append(RadixUtil.changeRadix(message));
+		sb.append("*");
+		sb.append(message);
+         logger.info("好友添加返回设备info"+sb.toString());
+		return sb.toString();
 	}
 
 	@Override

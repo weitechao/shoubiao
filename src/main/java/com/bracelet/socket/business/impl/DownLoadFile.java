@@ -60,7 +60,7 @@ public class DownLoadFile extends AbstractBizService {
 					+ doinfo.get(0).getAll_number() + ","
 					+ doinfo.get(0).getSource() + "]";
 		} else {
-			resp = "[YW*" + imei + "*NNNN*LEN*FILE]";
+			resp = "[YW*" + imei + "*0008*LEN*FILE]";
 		}
 		return resp;
 	}

@@ -55,9 +55,9 @@ public class CostService extends AbstractBizService {
 		smsLogService.insertWatch(imei, cmd, infoshuzu[2]);
 		String resp = null;
 		if ("COST1".equals(cmd)) {
-			resp = "[YW*"+imei+"*0001*0002*COST1,1]";
+			resp = "[YW*"+imei+"*0001*0007*COST1,1]";
 		} else {
-			resp = "[YW*"+imei+"*0001*0002*COST2,1]";
+			resp = "[YW*"+imei+"*0001*0007*COST2,1]";
 		}
 		return resp;
 	}

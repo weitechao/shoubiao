@@ -126,13 +126,13 @@ public class LocationServiceImpl implements ILocationService {
 
 	@Override
 	public boolean insertUdInfo(String imei, Integer locationType, String lat,
-			String lon, String status, String time) {
+			String lon, String status, String time,Integer locationStyle) {
 		Timestamp now = Utils.getCurrentTimestamp();
 		int i = jdbcTemplate
-				.update("insert into location_watchinfo (imei, location_type, lat, lng, status, location_time, upload_time) values (?,?,?,?,?,?,?)",
-						new Object[] { imei, locationType ,lat, lon, status, time, now }, new int[] {
+				.update("insert into location_watchinfo (imei, location_type, lat, lng, status, location_time, upload_time, location_style) values (?,?,?,?,?,?,?,?)",
+						new Object[] { imei, locationType ,lat, lon, status, time, now,  locationStyle}, new int[] {
 								Types.VARCHAR, Types.INTEGER, Types.VARCHAR,Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
-								Types.TIMESTAMP });
+								Types.TIMESTAMP, Types.INTEGER });
 		return i == 1;
 	}
 

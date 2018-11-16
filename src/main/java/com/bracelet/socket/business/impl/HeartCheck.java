@@ -52,12 +52,14 @@ public class HeartCheck extends AbstractBizService {
 		//还需要保存下电量
 		voltageService.insertDianLiang(imei, Integer.valueOf(energy));
 		logger.info("链路保持imei:" + imei + "," + ",no:" + no + ",电量:" + energy);
-
-	
-		String resp = "[YW*"+imei+"*0001*0002*LK,"+Utils.getTime()+"]";
+	     
+		String resp = "[YW*"+imei+"*0001*0016*LK,"+Utils.getTime()+"]";
+		logger.info("心跳返回="+resp);
 		return resp;
 		
 		}
+
+
 
 	/*@Override
 	public SocketBaseDto process(JSONObject jsonObject, Channel channel) {

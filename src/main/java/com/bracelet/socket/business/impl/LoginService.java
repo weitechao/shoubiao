@@ -34,6 +34,57 @@ public class LoginService implements IService {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
+
+	/*
+	 * 终端发送:
+	 * [YW*YYYYYYYYYY*NNNN*LEN*INIT,电话号码,运营商类型,固件版本号,全部参数设置次数流水号,通信录设置次数流水号
+	 * ,长度计算方式]
+	 * 实例:[YW*861900039990378*0001*0033*INIT,13256122653,0,D9_WZX_3KEY_V0
+	 * .1.389.QGJ_V1.0,0002,2300,1]
+	 * 
+	 * 手表初始化
+	 */
+
+	@Override
+	public String process(String jsonInfo, Channel channel) {
+
+		String[] shuzu = jsonInfo.split("\\*");
+		String imei = shuzu[1];// 设备imei
+		String no = shuzu[2];// 流水号
+		String info = shuzu[4];
+
+		String[] infoshuzu = info.split(",");
+		String phone = infoshuzu[1];
+		int TypeOfOperator = Integer.valueOf(infoshuzu[2]);// 运营商类型:1表示移动2表示联通、3表示电信,0xFF表示其他
+		String dv = infoshuzu[3];// 设备固件版本
+
+		WatchDevice watchd = ideviceService.getDeviceInfo(imei);
+		if(watchd != null){
+			ideviceService.updateImeiInfo(watchd.getId(), phone, TypeOfOperator, dv);
+		}else{
+			ideviceService.insertNewImei(imei, phone, TypeOfOperator, dv);
+		}
+		
+
+		logger.info("设备初始化登录dv:" + dv + "," + ",no:" + no + ",imei:" + imei);
+
+		SocketLoginDto channelDto = new SocketLoginDto();
+		channelDto.setChannel(channel);
+		channelDto.setNo(no);
+		channelDto.setImei(imei);
+		channelDto.setPhone(phone);
+		// channelDto.setUser_id(userInfo.getUser_id());
+
+		logger.info("保存手表登录信息,no:" + no + ",imei" + imei);
+		ChannelMap.addChannel(imei, channelDto);
+		ChannelMap.addChannel(channel, channelDto);
+
+		String resp = "[YW*"+imei+"*0001*0006*INIT,1]";
+		logger.info("返回设备登录信息="+resp);
+		return resp;
+	}
+	
+	
 	public SocketBaseDto process(JSONObject jsonObject, Channel channel) {
 		JSONObject jsonObject2 = (JSONObject) jsonObject.get("data");
 		if (jsonObject2 == null) {
@@ -69,54 +120,5 @@ public class LoginService implements IService {
 		dto.setTimestamp(new Date().getTime());
 		dto.setStatus(0);
 		return dto;
-	}
-
-	/*
-	 * 终端发送:
-	 * [YW*YYYYYYYYYY*NNNN*LEN*INIT,电话号码,运营商类型,固件版本号,全部参数设置次数流水号,通信录设置次数流水号
-	 * ,长度计算方式]
-	 * 实例:[YW*861900039990378*0001*0033*INIT,13256122653,0,D9_WZX_3KEY_V0
-	 * .1.389.QGJ_V1.0,0002,2300,1]
-	 * 
-	 * 手表初始化
-	 */
-
-	@SuppressWarnings("unused")
-	@Override
-	public String process(String jsonInfo, Channel channel) {
-
-		String[] shuzu = jsonInfo.split("\\*");
-		String imei = shuzu[1];// 设备imei
-		String no = shuzu[2];// 流水号
-		String info = shuzu[4];
-
-		String[] infoshuzu = info.split(",");
-		String phone = infoshuzu[1];
-		int TypeOfOperator = Integer.valueOf(infoshuzu[2]);// 运营商类型:1表示移动2表示联通、3表示电信,0xFF表示其他
-		String dv = infoshuzu[3];// 设备固件版本
-
-		WatchDevice watchd = ideviceService.getDeviceInfo(imei);
-		if(watchd != null){
-			ideviceService.updateImeiInfo(watchd.getId(), phone, TypeOfOperator, dv);
-		}else{
-			ideviceService.insertNewImei(imei, phone, TypeOfOperator, dv);
-		}
-		
-
-		logger.info("设备初始化dv:" + dv + "," + ",no:" + no + ",imei:" + imei);
-
-		SocketLoginDto channelDto = new SocketLoginDto();
-		channelDto.setChannel(channel);
-		channelDto.setNo(no);
-		channelDto.setImei(imei);
-		channelDto.setPhone(phone);
-		// channelDto.setUser_id(userInfo.getUser_id());
-
-		logger.info("保存手表登录信息,no:" + no + ",imei" + imei);
-		ChannelMap.addChannel(imei, channelDto);
-		ChannelMap.addChannel(channel, channelDto);
-
-		String resp = "[YW*"+imei+"*0001*0002*INIT,1]";
-		return resp;
 	}
 }
