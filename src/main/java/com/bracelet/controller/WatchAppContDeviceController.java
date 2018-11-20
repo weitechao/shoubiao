@@ -149,7 +149,6 @@ public class WatchAppContDeviceController extends BaseController {
 				watchSetService.insertpushMessageLog(imei,setStatus,message);
 				return bb.toString();
 			}
-			
 			if (socketLoginDto.getChannel().isActive()) {
 				String msg="MESSAGE,"+message;
 				String reps = "[YW*"+imei+"*0001*"+RadixUtil.changeRadix(msg)+"*"+msg+"]";
@@ -180,9 +179,9 @@ public class WatchAppContDeviceController extends BaseController {
 				watchSetService.insertCaptLog(imei,setStatus,come);
 				return bb.toString();
 			}
-			String reps = "[YW*"+imei+"*0001*0006*CAPT,";
 			if (socketLoginDto.getChannel().isActive()) {
-				reps = reps + come+"]";
+				String msg="CAPT,"+come;
+				String reps = "[YW*"+imei+"*0001*"+RadixUtil.changeRadix(msg)+"*"+msg+"]";
 				socketLoginDto.getChannel().writeAndFlush(reps);
 				bb.put("code", 1);
 				setStatus=1;

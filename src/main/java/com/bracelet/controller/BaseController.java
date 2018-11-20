@@ -30,16 +30,16 @@ public class BaseController {
 	}
 	
 	protected String checkTokenWatchAndUser(String token) {
-		String reponse="";
-		if (StringUtils.isEmpty(token)) {
-			reponse="1";
-		}
+		String reponse="0";
+		/*if (StringUtils.isEmpty(token)) {
+			reponse="0";
+		}*/
 		Long user_id = tokenInfoService.getUserIdByToken(token);
-		if (user_id == null) {
+		if (user_id != null) {
 			logger.info("[checkTokenAndUser] 通过token检查userid不存在，token:" + token);
-			reponse="2";
+			reponse=user_id+"";
 		}
-		return reponse+user_id;
+		return reponse;
 	}
 	
 	

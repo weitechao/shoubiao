@@ -20,6 +20,7 @@ import com.bracelet.service.WatchSetService;
 import com.bracelet.socket.BaseChannelHandler;
 import com.bracelet.util.ChannelMap;
 import com.bracelet.util.HttpClientGet;
+import com.bracelet.util.RadixUtil;
 import com.bracelet.util.RanomUtil;
 import com.bracelet.util.RespCode;
 import com.bracelet.util.Utils;
@@ -65,8 +66,8 @@ public class WatchAppSetController extends BaseController {
 			watchSetService.insertInfo(imei, setStatus, 19);
 			return bb.toString();
 		}
-		String reps = "[YW*" + imei + "*0001*0007*TRACKER]";
 		if (socketLoginDto.getChannel().isActive()) {
+			String reps = "[YW*" + imei + "*0001*0007*TRACKER]";
 			socketLoginDto.getChannel().writeAndFlush(reps);
 			bb.put("code", 1);
 			setStatus = 1;
@@ -102,14 +103,14 @@ public class WatchAppSetController extends BaseController {
 		return bb.toString();
 	}
 
+	/*设置全部参数指令*/
 	@ResponseBody
 	@RequestMapping(value = "/set", method = RequestMethod.POST)
 	public String addfriend(@RequestBody String body) {
 		JSONObject jsonObject = (JSONObject) JSON.parse(body);
 		String token = jsonObject.getString("token");
 		String imei = jsonObject.getString("imei");
-		String phone = jsonObject.getString("phone");// 号码
-		String data = jsonObject.getString("voiceData");
+		String data = jsonObject.getString("data");
 
 		JSONObject bb = new JSONObject();
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
@@ -117,16 +118,94 @@ public class WatchAppSetController extends BaseController {
 			bb.put("code", 0);
 			return bb.toString();
 		}
-		StringBuffer sb = new StringBuffer("[YW*" + imei + "*NNNN*LEN*SET,");
 		if (socketLoginDto.getChannel().isActive()) {
-			sb.append(phone).append("1234").append(",").append(data);
-			sb.append("]");
-			socketLoginDto.getChannel().writeAndFlush(sb.toString());
+			String msg="SET,"+data;
+			String reps = "[YW*"+imei+"*0001*"+RadixUtil.changeRadix(msg)+"*"+msg+"]";
+			socketLoginDto.getChannel().writeAndFlush(reps);
 			bb.put("code", 1);
 		} else {
 			bb.put("code", 0);
 		}
 		return bb.toString();
 	}
+	
+	//通讯录设置
+	@ResponseBody
+	@RequestMapping(value = "/communicationSettings", method = RequestMethod.POST)
+	public String CommunicationSettings(@RequestBody String body) {
+		JSONObject jsonObject = (JSONObject) JSON.parse(body);
+		String token = jsonObject.getString("token");
+		String imei = jsonObject.getString("imei");
+		String data = jsonObject.getString("data");
+
+		JSONObject bb = new JSONObject();
+		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
+		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
+			bb.put("code", 0);
+			return bb.toString();
+		}
+		
+		if (socketLoginDto.getChannel().isActive()) {
+			String msg="PHB,"+data;
+			String reps = "[YW*"+imei+"*0001*"+RadixUtil.changeRadix(msg)+"*"+msg+"]";
+			socketLoginDto.getChannel().writeAndFlush(reps);
+			bb.put("code", 1);
+		} else {
+			bb.put("code", 0);
+		}
+		return bb.toString();
+	}
+	   //对讲群聊
+		@ResponseBody
+		@RequestMapping(value = "/intercomGroupChat", method = RequestMethod.POST)
+		public String intercomGroupChat(@RequestBody String body) {
+			JSONObject jsonObject = (JSONObject) JSON.parse(body);
+			String token = jsonObject.getString("token");
+			String imei = jsonObject.getString("imei");
+			String data = jsonObject.getString("data");
+
+			JSONObject bb = new JSONObject();
+			SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
+			if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
+				bb.put("code", 0);
+				return bb.toString();
+			}
+			
+			if (socketLoginDto.getChannel().isActive()) {
+				String msg="TK,"+data;
+				String reps = "[YW*"+imei+"*0001*"+RadixUtil.changeRadix(msg)+"*"+msg+"]";
+				socketLoginDto.getChannel().writeAndFlush(reps);
+				bb.put("code", 1);
+			} else {
+				bb.put("code", 0);
+			}
+			return bb.toString();
+		}
+		 //好友微聊
+		@ResponseBody
+		@RequestMapping(value = "/microChatFriends", method = RequestMethod.POST)
+		public String microChatFriends(@RequestBody String body) {
+			JSONObject jsonObject = (JSONObject) JSON.parse(body);
+			String token = jsonObject.getString("token");
+			String imei = jsonObject.getString("imei");
+			String data = jsonObject.getString("data");
+
+			JSONObject bb = new JSONObject();
+			SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
+			if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
+				bb.put("code", 0);
+				return bb.toString();
+			}
+			if (socketLoginDto.getChannel().isActive()) {
+				String msg="TK2,"+data;
+				String reps = "[YW*"+imei+"*0001*"+RadixUtil.changeRadix(msg)+"*"+msg+"]";
+				socketLoginDto.getChannel().writeAndFlush(reps);
+				bb.put("code", 1);
+			} else {
+				bb.put("code", 0);
+			}
+			return bb.toString();
+		}
+		
 
 }

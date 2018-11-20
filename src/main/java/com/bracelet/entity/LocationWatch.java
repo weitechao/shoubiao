@@ -16,6 +16,15 @@ public class LocationWatch {
 	private Timestamp upload_time;
 	private String status;
 	private String location_time;
+	private Integer location_style;
+	
+	
+	public Integer getLocation_style() {
+		return location_style;
+	}
+	public void setLocation_style(Integer location_style) {
+		this.location_style = location_style;
+	}
 	public Long getId() {
 		return id;
 	}

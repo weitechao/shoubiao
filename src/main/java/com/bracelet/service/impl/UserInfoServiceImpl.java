@@ -447,4 +447,27 @@ public class UserInfoServiceImpl implements IUserInfoService {
 		}
 		return null;
 	}
+
+	@Override
+	public UserInfo getUserInfoLuRuByUsername(String username) {
+		String sql = "select * from user_luru_info where username=? LIMIT 1";
+		List<UserInfo> list = jdbcTemplate.query(sql,
+				new Object[] { username }, new BeanPropertyRowMapper<UserInfo>(
+						UserInfo.class));
+		if (list != null && !list.isEmpty()) {
+			return list.get(0);
+		} else {
+			logger.info("cannot find userinfo,username:" + username);
+		}
+		return null;
+	}
+
+	@Override
+	public boolean updateUserPassword(Long user_id, String password) {
+		int i = jdbcTemplate.update(
+				"update user_info set password=? where user_id = ?",
+				new Object[] { password, user_id }, new int[] { Types.VARCHAR,
+						Types.INTEGER });
+		return i == 1;
+	}
 }

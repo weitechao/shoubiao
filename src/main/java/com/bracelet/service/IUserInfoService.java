@@ -85,4 +85,8 @@ public interface IUserInfoService {
 
 	WatchAppVersionInfo getItfyVersionInfo();
 
+	UserInfo getUserInfoLuRuByUsername(String imei);
+
+	boolean updateUserPassword(Long user_id, String password);
+
 }
