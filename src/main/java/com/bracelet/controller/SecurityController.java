@@ -1,17 +1,23 @@
 package com.bracelet.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.bracelet.dto.HttpBaseDto;
+import com.bracelet.dto.SocketLoginDto;
 import com.bracelet.entity.Fence;
 import com.bracelet.entity.Fencelog;
 import com.bracelet.entity.OddShape;
 import com.bracelet.entity.SensitivePoint;
 import com.bracelet.entity.SensitivePointLog;
+import com.bracelet.entity.WatchPhoneBook;
 import com.bracelet.exception.BizException;
 import com.bracelet.service.IFenceService;
 import com.bracelet.service.IFencelogService;
 import com.bracelet.service.ISensitivePointService;
 import com.bracelet.service.ISensitivePointlogService;
 import com.bracelet.service.IUserInfoService;
+import com.bracelet.util.ChannelMap;
+import com.bracelet.util.RadixUtil;
 import com.bracelet.util.RespCode;
 import com.bracelet.util.Utils;
 
@@ -43,6 +49,108 @@ public class SecurityController extends BaseController {
 	ISensitivePointService sensitivePointService;
 	@Autowired
 	ISensitivePointlogService sensitivePointlogService;
+
+	/* 查找电子围栏 */
+	@ResponseBody
+	@RequestMapping(value = "/getwatchfence/{token}/{imei}", method = RequestMethod.GET)
+	public String getwatchfence(@PathVariable String token, @PathVariable String imei) {
+		JSONObject bb = new JSONObject();
+
+		String userId = checkTokenWatchAndUser(token);
+		if ("0".equals(userId)) {
+			bb.put("code", -1);
+			return bb.toString();
+		}
+
+		Fence fenone = fenceService.getWatchOne(imei);
+		if (fenone != null) {
+			bb.put("lat", fenone.getLat());
+			bb.put("lng", fenone.getLng());
+			bb.put("radius", fenone.getRadius());
+			bb.put("name", fenone.getName());
+			bb.put("createtime", fenone.getCreatetime().getTime());
+			bb.put("updatetime", fenone.getUpdatetime().getTime());
+			bb.put("code", 1);
+		} else {
+			bb.put("code", 0);
+		}
+		return bb.toString();
+	}
+
+	/* 手表电子围栏 */
+	/* 添加 */
+	@ResponseBody
+	@RequestMapping(value = "/addwatchfence", method = RequestMethod.POST)
+	public String addwatchfence(@RequestBody String body) {
+		JSONObject bb = new JSONObject();
+		JSONObject jsonObject = (JSONObject) JSON.parse(body);
+		String token = jsonObject.getString("token");
+
+		String imei = jsonObject.getString("imei");
+		String name = jsonObject.getString("name");// 围栏名称
+		String lat = jsonObject.getString("lat");
+		String lng = jsonObject.getString("lng");
+		String radius = jsonObject.getString("radius");
+
+		String userId = checkTokenWatchAndUser(token);
+		if ("0".equals(userId)) {
+			bb.put("code", -1);
+			return bb.toString();
+		}
+		if (this.fenceService.insert(imei, name, lat, lng, radius)) {
+			bb.put("code", 1);
+		} else {
+			bb.put("code", 0);
+		}
+		return bb.toString();
+	}
+
+	/* 修改 */
+	@ResponseBody
+	@RequestMapping(value = "/udpatewatchfence", method = RequestMethod.POST)
+	public String udpateWatchfence(@RequestBody String body) {
+		JSONObject bb = new JSONObject();
+		JSONObject jsonObject = (JSONObject) JSON.parse(body);
+		String token = jsonObject.getString("token");
+
+		String imei = jsonObject.getString("imei");
+		String name = jsonObject.getString("name");// 围栏名称
+		String lat = jsonObject.getString("lat");
+		String lng = jsonObject.getString("lng");
+		String radius = jsonObject.getString("radius");
+		Long id = Long.valueOf(jsonObject.getString("id"));
+
+		String userId = checkTokenWatchAndUser(token);
+		if ("0".equals(userId)) {
+			bb.put("code", -1);
+			return bb.toString();
+		}
+		if (this.fenceService.updateWatchFence(id, imei, name, lat, lng, radius)) {
+			bb.put("code", 1);
+		} else {
+			bb.put("code", 0);
+		}
+		return bb.toString();
+	}
+
+	/* 删除 */
+	@ResponseBody
+	@RequestMapping(value = "/deletewatchfence/{token}/{id}", method = RequestMethod.GET)
+	public String udpateWatchfence(@PathVariable String token, @PathVariable Long id) {
+		JSONObject bb = new JSONObject();
+
+		String userId = checkTokenWatchAndUser(token);
+		if ("0".equals(userId)) {
+			bb.put("code", -1);
+			return bb.toString();
+		}
+		if (this.fenceService.deleteWatchFence(id)) {
+			bb.put("code", 1);
+		} else {
+			bb.put("code", 0);
+		}
+		return bb.toString();
+	}
 
 	/**
 	 * 电子围栏
@@ -101,8 +209,8 @@ public class SecurityController extends BaseController {
 			HttpBaseDto dto = new HttpBaseDto();
 			return dto;
 		} else {
-			logger.info(
-					"用户设置电子围栏失败, token:" + token + ",userId:" + user_id + ",lat:" + lat + ",lng:" + lng + ",radius:" + radius);
+			logger.info("用户设置电子围栏失败, token:" + token + ",userId:" + user_id + ",lat:" + lat + ",lng:" + lng + ",radius:"
+					+ radius);
 			throw new BizException(RespCode.SYS_ERR);
 		}
 	}
@@ -122,8 +230,8 @@ public class SecurityController extends BaseController {
 			HttpBaseDto dto = new HttpBaseDto();
 			return dto;
 		} else {
-			logger.info("用户修改电子围栏失败, token:" + token + ",userId:" + user_id + ",id:" + id + ",lat:" + lat + ",lng:" + lng
-					+ ",radius:" + radius);
+			logger.info("用户修改电子围栏失败, token:" + token + ",userId:" + user_id + ",id:" + id + ",lat:" + lat + ",lng:"
+					+ lng + ",radius:" + radius);
 			throw new BizException(RespCode.SYS_ERR);
 		}
 	}
@@ -190,7 +298,8 @@ public class SecurityController extends BaseController {
 				dataMap.put("timestamp", sp.getUpdatetime().getTime());
 
 				// sensitivepointlog
-				List<SensitivePointLog> splogList = this.sensitivePointlogService.findByCount(user_id, sp.getId(), 0, 3);
+				List<SensitivePointLog> splogList = this.sensitivePointlogService.findByCount(user_id, sp.getId(), 0,
+						3);
 				List<Map<String, Object>> splogDatalist = new LinkedList<Map<String, Object>>();
 				if (splogList != null) {
 					for (SensitivePointLog splog : splogList) {
@@ -220,8 +329,8 @@ public class SecurityController extends BaseController {
 
 	@ResponseBody
 	@RequestMapping(value = "/sensitivepoint", method = RequestMethod.POST)
-	public HttpBaseDto saveSensitivePoint(@RequestParam String token, @RequestParam String lat, @RequestParam String lng,
-			@RequestParam Integer radius) {
+	public HttpBaseDto saveSensitivePoint(@RequestParam String token, @RequestParam String lat,
+			@RequestParam String lng, @RequestParam Integer radius) {
 		if (StringUtils.isAllEmpty(lat, lng)) {
 			throw new BizException(RespCode.NOTEXIST_PARAM);
 		}
@@ -233,8 +342,8 @@ public class SecurityController extends BaseController {
 			HttpBaseDto dto = new HttpBaseDto();
 			return dto;
 		} else {
-			logger.info(
-					"用户设置敏感区域失败, token:" + token + ",userId:" + user_id + ",lat:" + lat + ",lng:" + lng + ",radius:" + radius);
+			logger.info("用户设置敏感区域失败, token:" + token + ",userId:" + user_id + ",lat:" + lat + ",lng:" + lng + ",radius:"
+					+ radius);
 			throw new BizException(RespCode.SYS_ERR);
 		}
 	}
@@ -254,8 +363,8 @@ public class SecurityController extends BaseController {
 			HttpBaseDto dto = new HttpBaseDto();
 			return dto;
 		} else {
-			logger.info("用户修改敏感区域失败, token:" + token + ",userId:" + user_id + ",id:" + id + ",lat:" + lat + ",lng:" + lng
-					+ ",radius:" + radius);
+			logger.info("用户修改敏感区域失败, token:" + token + ",userId:" + user_id + ",id:" + id + ",lat:" + lat + ",lng:"
+					+ lng + ",radius:" + radius);
 			throw new BizException(RespCode.SYS_ERR);
 		}
 	}
@@ -303,7 +412,8 @@ public class SecurityController extends BaseController {
 		dto.setData(splogDatalist);
 		return dto;
 	}
-	/*异形电子围栏*/
+
+	/* 异形电子围栏 */
 	@ResponseBody
 	@RequestMapping(value = "/otherFence", method = RequestMethod.POST)
 	public HttpBaseDto saveOtherFence(@RequestParam String token, @RequestParam String point) {
@@ -312,22 +422,21 @@ public class SecurityController extends BaseController {
 		}
 		char[] chars = point.toCharArray();
 		for (char aChar : chars) {
-		   boolean aacb=Utils.isChinesePunctuation(aChar);
-		   if(aacb){
-			   throw new BizException(RespCode.ERR_PARAM);
-		   }
+			boolean aacb = Utils.isChinesePunctuation(aChar);
+			if (aacb) {
+				throw new BizException(RespCode.ERR_PARAM);
+			}
 		}
 		Long user_id = checkTokenAndUser(token);
 		if (this.fenceService.insertOddShape(user_id, point)) {
 			HttpBaseDto dto = new HttpBaseDto();
 			return dto;
 		} else {
-			logger.info(
-					"用户设置异形电子围栏失败, token:" + token + ",userId:" + user_id + ",point:" + point);
+			logger.info("用户设置异形电子围栏失败, token:" + token + ",userId:" + user_id + ",point:" + point);
 			throw new BizException(RespCode.SYS_ERR);
 		}
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/OddShapefence/{token}", method = RequestMethod.GET)
 	public HttpBaseDto getOddShapeFence(@PathVariable String token) {
@@ -343,7 +452,7 @@ public class SecurityController extends BaseController {
 		}
 		return dto;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/OddShapefence/delete", method = RequestMethod.POST)
 	public HttpBaseDto deleteOddFence(@RequestParam String token, @RequestParam Long id) {

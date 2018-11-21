@@ -23,6 +23,7 @@ import com.bracelet.service.WatchTkService;
 import com.bracelet.socket.BaseChannelHandler;
 import com.bracelet.util.ChannelMap;
 import com.bracelet.util.HttpClientGet;
+import com.bracelet.util.RadixUtil;
 import com.bracelet.util.RanomUtil;
 import com.bracelet.util.RespCode;
 import com.bracelet.util.Utils;
@@ -56,13 +57,20 @@ public class WatchAppTkController extends BaseController {
 	@RequestMapping(value = "/tkToDevice", method = RequestMethod.POST)
 	public String addfriend(@RequestBody String body) {
 		JSONObject jsonObject = (JSONObject) JSON.parse(body);
+		JSONObject bb = new JSONObject();
 		String token = jsonObject.getString("token");
+		
+		String user_id = checkTokenWatchAndUser(token);
+		if ("0".equals(user_id)) {
+			bb.put("code", -1);
+			return bb.toString();
+		}
+		
 		String imei = jsonObject.getString("imei");
 		String phone = jsonObject.getString("phone");// 号码
 		String voiceData = jsonObject.getString("voiceData");// 语音内容 base64转字符串
 		String sourceName = jsonObject.getString("sourceName");// 文件名字
 		
-		JSONObject bb = new JSONObject();
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 		String numMessage=Utils.randomString(5);
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
@@ -92,5 +100,58 @@ public class WatchAppTkController extends BaseController {
 		}
 		return bb.toString();
 	}
+	
+	
+	  //对讲群聊
+			@ResponseBody
+			@RequestMapping(value = "/intercomGroupChat", method = RequestMethod.POST)
+			public String intercomGroupChat(@RequestBody String body) {
+				JSONObject jsonObject = (JSONObject) JSON.parse(body);
+				String token = jsonObject.getString("token");
+				String imei = jsonObject.getString("imei");
+				String data = jsonObject.getString("data");
+
+				JSONObject bb = new JSONObject();
+				SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
+				if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
+					bb.put("code", 0);
+					return bb.toString();
+				}
+				
+				if (socketLoginDto.getChannel().isActive()) {
+					String msg="TK,"+data;
+					String reps = "[YW*"+imei+"*0001*"+RadixUtil.changeRadix(msg)+"*"+msg+"]";
+					socketLoginDto.getChannel().writeAndFlush(reps);
+					bb.put("code", 1);
+				} else {
+					bb.put("code", 0);
+				}
+				return bb.toString();
+			}
+			 //好友微聊
+			@ResponseBody
+			@RequestMapping(value = "/microChatFriends", method = RequestMethod.POST)
+			public String microChatFriends(@RequestBody String body) {
+				JSONObject jsonObject = (JSONObject) JSON.parse(body);
+				String token = jsonObject.getString("token");
+				String imei = jsonObject.getString("imei");
+				String data = jsonObject.getString("data");
+
+				JSONObject bb = new JSONObject();
+				SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
+				if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
+					bb.put("code", 0);
+					return bb.toString();
+				}
+				if (socketLoginDto.getChannel().isActive()) {
+					String msg="TK2,"+data;
+					String reps = "[YW*"+imei+"*0001*"+RadixUtil.changeRadix(msg)+"*"+msg+"]";
+					socketLoginDto.getChannel().writeAndFlush(reps);
+					bb.put("code", 1);
+				} else {
+					bb.put("code", 0);
+				}
+				return bb.toString();
+			}
 
 }

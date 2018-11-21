@@ -36,4 +36,14 @@ public class PushlogServiceImpl implements IPushlogService {
 		return new Pagination<Pushlog>(sql, new Object[] { user_id }, pageParam, jdbcTemplate, Pushlog.class);
 	}
 
+	@Override
+	public boolean insertPushMsg(String imei, String message, int status) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate.update(
+				"insert into push_message (imei, msg, status, createtime) values (?,?,?,?)",
+				new Object[] {  imei, message, status, now }, new int[] {  Types.VARCHAR, Types.VARCHAR,
+						Types.INTEGER, Types.TIMESTAMP });
+		return i == 1;
+	}
+
 }

@@ -32,4 +32,6 @@ public interface ILocationService {
 
 	LocationWatch getLatest(String imei);
 
+	List<LocationWatch> getWatchFootprint(String imei, String starttime, String endtime);
+
 }

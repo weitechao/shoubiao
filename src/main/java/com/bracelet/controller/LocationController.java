@@ -8,6 +8,7 @@ import com.bracelet.dto.SocketLoginDto;
 import com.bracelet.entity.Location;
 import com.bracelet.entity.LocationOld;
 import com.bracelet.entity.LocationRequest;
+import com.bracelet.entity.LocationWatch;
 import com.bracelet.entity.OldBindDevice;
 import com.bracelet.entity.Step;
 import com.bracelet.entity.UserInfo;
@@ -47,6 +48,67 @@ public class LocationController extends BaseController {
 	@Resource
 	BaseChannelHandler baseChannelHandler;
 	private Logger logger = LoggerFactory.getLogger(getClass());
+	
+	
+	/* app查询手表最新定位 */
+	@ResponseBody
+	@RequestMapping(value = "/getlast/search/{token}/{imei}", method = RequestMethod.GET)
+	public String getLastLocation(@PathVariable String token,@PathVariable String imei) {
+		JSONObject bb = new JSONObject();
+		
+		String user_id = checkTokenWatchAndUser(token);
+		if ("0".equals(user_id)) {
+			bb.put("code", -1);
+			return bb.toString();
+		}
+
+		LocationWatch locationWatch = locationService.getLatest(imei);
+
+		if (locationWatch != null) {
+			bb.put("lat", locationWatch.getLat());
+			bb.put("lng", locationWatch.getLng());
+			bb.put("locationType", locationWatch.getLocation_type());
+			bb.put("uploadtime", locationWatch.getUpload_time().getTime());
+			bb.put("code", 1);
+		} else {
+			bb.put("code", 0);
+		}
+		return bb.toString();
+	}
+
+	/* 查询手表的轨迹 */
+	@ResponseBody
+	@RequestMapping(value = "/watchtrack/{token}/{imei}/{starttime}/{endtime}", method = RequestMethod.GET)
+	public String watchtrack(@PathVariable String token,@PathVariable String imei,
+			@PathVariable String starttime, @PathVariable String endtime) {
+		JSONObject bb = new JSONObject();
+		String user_id = checkTokenWatchAndUser(token);
+		if ("0".equals(user_id)) {
+			bb.put("code", -1);
+			return bb.toString();
+		}
+		
+		List<LocationWatch> locationList = locationService.getWatchFootprint(
+				imei, starttime, endtime);
+		JSONArray jsonArray = new JSONArray();
+		if (locationList != null) {
+			for (LocationWatch location : locationList) {
+				JSONObject dataMap = new JSONObject();
+				dataMap.put("lat", location.getLat());
+				dataMap.put("lng", location.getLng());
+				dataMap.put("timestamp", location.getUpload_time().getTime());
+				jsonArray.add(dataMap);
+			}
+			bb.put("codes", 1);
+			bb.put("result", jsonArray);
+		} else {
+			bb.put("codes", 0);
+		}
+
+		bb.put("result", jsonArray);
+		return bb.toString();
+	}
+	
 
 	@ResponseBody
 	@RequestMapping(value = "/search/latest/{token}", method = RequestMethod.GET)

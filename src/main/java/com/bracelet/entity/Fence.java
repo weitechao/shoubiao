@@ -17,6 +17,8 @@ public class Fence {
 	private Integer status;
 	private Timestamp createtime;
 	private Timestamp updatetime;
+	private String imei;
+	private String name;
 
 	public Long getId() {
 		return id;
@@ -86,6 +88,22 @@ public class Fence {
 	 */
 	public void setStatus(Integer status) {
 		this.status = status;
+	}
+
+	public String getImei() {
+		return imei;
+	}
+
+	public void setImei(String imei) {
+		this.imei = imei;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }

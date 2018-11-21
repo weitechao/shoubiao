@@ -16,6 +16,7 @@ import com.bracelet.entity.Fence;
 import com.bracelet.entity.FingerInfo;
 import com.bracelet.entity.MemberInfo;
 import com.bracelet.entity.PwdInfo;
+import com.bracelet.entity.WatchPhoneBook;
 import com.bracelet.entity.WhiteListInfo;
 import com.bracelet.service.IMemService;
 import com.bracelet.service.IPwdService;
@@ -106,6 +107,57 @@ public class MemberServiceImpl implements IMemService {
 			logger.info("get getMemberInfo null.user_id:" + username);
 		}
 		return null;
+	}
+
+	@Override
+	public WatchPhoneBook getPhoneBookByImeiAndPhone(String imei, String tel) {
+		String sql = "select * from watch_phonebook_info where imei =? and phone =? LIMIT 1";
+		List<WatchPhoneBook> list = jdbcTemplate.query(sql, new Object[] { imei, tel }, new BeanPropertyRowMapper<WatchPhoneBook>(
+						WatchPhoneBook.class));
+		if (list != null && !list.isEmpty()) {
+			return list.get(0);
+		} else {
+			logger.info("get getPhoneBookByImeiAndPhone null.user_id:" + tel+","+imei);
+		}
+		return null;
+	}
+
+	@Override
+	public boolean insertPhoneBookInfo(String imei, String name, String phone, String cornet, String headType,Integer status) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate
+				.update("insert into watch_phonebook_info ( imei, name, phone, cornet, headType, createtime, status) values (?,?,?,?,?,?,?)",
+						new Object[] { imei, name, phone, cornet, headType, now ,status},
+						new int[] { Types.VARCHAR, Types.VARCHAR,
+								Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
+								Types.TIMESTAMP,Types.INTEGER });
+		return i == 1;
+	}
+
+	@Override
+	public List<WatchPhoneBook> getPhoneBookByImei(String imei) {
+		String sql = "select * from watch_phonebook_info where imei =?";
+		List<WatchPhoneBook> list = jdbcTemplate
+				.query(sql, new Object[] { imei },
+						new BeanPropertyRowMapper<WatchPhoneBook>(WatchPhoneBook.class));
+		return list;
+	}
+
+	@Override
+	public boolean deletePhonebookById(Long id) {
+		jdbcTemplate.update("delete from watch_phonebook_info where   id = ?",
+				new Object[] { id }, new int[] { Types.INTEGER });
+		return true;
+	}
+
+	@Override
+	public boolean updatePhonebookById(Long id, String name, String phone, String cornet, String headType) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate
+				.update("update watch_phonebook_info set name=?, phone=?, cornet=?,headtype=?,updatetime=? where id = ?",
+						new Object[] { name,phone,cornet,headType ,now, id }, new int[] {
+								Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.TIMESTAMP,Types.INTEGER });
+		return i == 1;
 	}
 
 }

@@ -155,4 +155,52 @@ public class FenceServiceImpl implements IFenceService {
 		return i == 1;
 	}
 
+	@Override
+	public boolean insert(String imei, String name, String lat, String lng, String radius) {
+		Fence fence = this.getWatchOne(imei);
+		if (fence != null) {
+			logger.warn("imei[" + imei + "]已经设置过电子围栏[" + lat + "][" + lng + "][" + radius + "]!");
+			return false;
+		}
+
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate.update(
+				"insert into watch_fence (imei, name, lat, lng, radius, createtime, updatetime) values (?,?,?,?,?,?,?)",
+				new Object[] { imei, name, lat, lng, radius, now, now },
+				new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.TIMESTAMP, Types.TIMESTAMP });
+		return i == 1;
+	}
+	
+
+	@Override
+	public boolean updateWatchFence(Long id, String imei, String name, String lat, String lng, String radius) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate.update(
+				"update watch_fence set name = ?, lat = ?, lng = ?, radius = ?, updatetime = ? where id = ? and imei = ?",
+				new Object[] { name, lat, lng, radius, now, id, imei },
+				new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.TIMESTAMP, Types.INTEGER, Types.VARCHAR });
+		return i == 1;
+	}
+
+	@Override
+	public boolean deleteWatchFence(Long id) {
+		int i = jdbcTemplate.update(
+				"delete from watch_fence where id = ? ",
+				new Object[] { id }, new int[] { Types.INTEGER });
+		return i == 1;
+	}
+
+	@Override
+	public Fence getWatchOne(String imei) {
+		String sql = "select * from watch_fence where imei=? LIMIT 1";
+		List<Fence> list = jdbcTemplate.query(sql, new Object[] { imei }, new BeanPropertyRowMapper<Fence>(Fence.class));
+
+		if (list != null && !list.isEmpty()) {
+			return list.get(0);
+		} else {
+			logger.info("get return null.user_id:" + imei);
+		}
+		return null;
+	}
+
 }

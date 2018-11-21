@@ -93,18 +93,22 @@ public class WatchAppMakeDeviceUpdateVersionController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "/smsCmd", method = RequestMethod.POST)
 	public String smsCmd(@RequestBody String body) {
+		JSONObject bb = new JSONObject();
 		JSONObject jsonObject = (JSONObject) JSON.parse(body);
 		String token = jsonObject.getString("token");
+		
+		String user_id = checkTokenWatchAndUser(token);
+		if ("0".equals(user_id)) {
+			bb.put("code", -1);
+			return bb.toString();
+		}
+		
 		String imei = jsonObject.getString("imei");
 		String operatorNumber = jsonObject.getString("operatorNumber");
 		String content = jsonObject.getString("content");
-		JSONObject bb = new JSONObject();
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
-		Integer setStatus=null;
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
 			bb.put("code", 0);
-			setStatus = 0;
-			watchSetService.insertSmsSetLogInfo(imei,setStatus,operatorNumber,content);
 			return bb.toString();
 		}
 		String reps = "[YW*"+imei+"*0001*";
@@ -113,12 +117,9 @@ public class WatchAppMakeDeviceUpdateVersionController extends BaseController {
 			reps=reps+RadixUtil.changeRadix(msg)+"*"+msg+ "]";
 			socketLoginDto.getChannel().writeAndFlush(reps);
 			bb.put("code", 1);
-			setStatus = 1;
 		} else {
-			bb.put("code", 0);
-			setStatus = 0;
+			bb.put("code", 2);
 		}
-		watchSetService.insertSmsSetLogInfo(imei,setStatus,operatorNumber,content);
 		return bb.toString();
 	}
 	
@@ -126,18 +127,20 @@ public class WatchAppMakeDeviceUpdateVersionController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "/setIp", method = RequestMethod.POST)
 	public String setIp(@RequestBody String body) {
+		JSONObject bb = new JSONObject();
 		JSONObject jsonObject = (JSONObject) JSON.parse(body);
 		String token = jsonObject.getString("token");
+		String user_id = checkTokenWatchAndUser(token);
+		if ("0".equals(user_id)) {
+			bb.put("code", -1);
+			return bb.toString();
+		}
 		String imei = jsonObject.getString("imei");
 		String ip = jsonObject.getString("ip");
 		String port = jsonObject.getString("port");
-		JSONObject bb = new JSONObject();
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
-		Integer setStatus=null;
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
 			bb.put("code", 0);
-			setStatus=0;
-			watchSetService.insertIpSetInfo(imei, ip, port, setStatus);
 			return bb.toString();
 		}
 		String reps = "[YW*"+imei+"*0001*0014*IP,";
@@ -145,12 +148,9 @@ public class WatchAppMakeDeviceUpdateVersionController extends BaseController {
 			reps = reps + ip + "," + port + "]";
 			socketLoginDto.getChannel().writeAndFlush(reps);
 			bb.put("code", 1);
-			setStatus = 1;
 		} else {
-			setStatus = 0;
-			bb.put("code", 0);
+			bb.put("code", 2);
 		}
-		watchSetService.insertIpSetInfo(imei, ip, port, setStatus);
 		return bb.toString();
 	}
 	
@@ -160,24 +160,25 @@ public class WatchAppMakeDeviceUpdateVersionController extends BaseController {
 	public String factory(@PathVariable String token,
 			@PathVariable String imei) {
 		JSONObject bb = new JSONObject();
+		
+		String user_id = checkTokenWatchAndUser(token);
+		if ("0".equals(user_id)) {
+			bb.put("code", -1);
+			return bb.toString();
+		}
+		
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
-		Integer setStatus=null;
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
 			bb.put("code", 0);
-			setStatus = 0;
-			watchSetService.insertInfo(imei,setStatus,4);
 			return bb.toString();
 		}
 		String reps = "[YW*"+imei+"*0001*0007*FACTORY]";
 		if (socketLoginDto.getChannel().isActive()) {
 			socketLoginDto.getChannel().writeAndFlush(reps);
-			setStatus = 1;
 			bb.put("code", 1);
 		} else {
-			setStatus = 0;
 			bb.put("code", 0);
 		}
-		watchSetService.insertInfo(imei,setStatus,4);
 		return bb.toString();
 	}
 	
@@ -219,24 +220,25 @@ public class WatchAppMakeDeviceUpdateVersionController extends BaseController {
 	@RequestMapping(value = "/queryParameter/{token}/{imei}", method = RequestMethod.GET)
 	public String queryParameter(@PathVariable String token,@PathVariable String imei){
 		JSONObject bb = new JSONObject();
+		
+		String user_id = checkTokenWatchAndUser(token);
+		if ("0".equals(user_id)) {
+			bb.put("code", -1);
+			return bb.toString();
+		}
+		
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
-		Integer setStatus = null;
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
-			bb.put("code", 0);
-			setStatus = 0;
-			watchSetService.insertInfo(imei,setStatus,6);
+			bb.put("code", 2);
 			return bb.toString();
 		}
 		String reps = "[YW*"+imei+"*0001*0002*TS]";
 		if (socketLoginDto.getChannel().isActive()) {
 			socketLoginDto.getChannel().writeAndFlush(reps);
-			setStatus = 1;
 			bb.put("code", 1);
 		} else {
-			setStatus = 0;
 			bb.put("code", 0);
 		}
-		watchSetService.insertInfo(imei,setStatus,6);
 		return bb.toString();
 	}
 	
@@ -247,22 +249,25 @@ public class WatchAppMakeDeviceUpdateVersionController extends BaseController {
 	public String reset(@PathVariable String token,
 			@PathVariable String imei) {
 		JSONObject bb = new JSONObject();
+		
+		String user_id = checkTokenWatchAndUser(token);
+		if ("0".equals(user_id)) {
+			bb.put("code", -1);
+			return bb.toString();
+		}
+		
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
-		Integer setStatus = 0;
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
-			bb.put("code", 0);
-			watchSetService.insertInfo(imei,setStatus,7);
+			bb.put("code", 2);
 			return bb.toString();
 		}
 		String reps = "[YW*"+imei+"*0001*0005*RESET]";
 		if (socketLoginDto.getChannel().isActive()) {
 			socketLoginDto.getChannel().writeAndFlush(reps);
 			bb.put("code", 1);
-			setStatus= 1;
 		} else {
 			bb.put("code", 0);
 		}
-		watchSetService.insertInfo(imei,setStatus,7);
 		return bb.toString();
 	}
 

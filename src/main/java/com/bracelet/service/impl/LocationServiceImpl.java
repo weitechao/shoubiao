@@ -149,4 +149,13 @@ public class LocationServiceImpl implements ILocationService {
 		}
 		return null;
 	}
+
+	@Override
+	public List<LocationWatch> getWatchFootprint(String imei, String starttime, String endtime) {
+		String sql = "select * from location_watchinfo where imei=? and upload_time > ? and upload_time < ? order by upload_time asc";
+		List<LocationWatch> list = jdbcTemplate.query(sql, new Object[] { imei,
+				starttime, endtime }, new BeanPropertyRowMapper<LocationWatch>(
+						LocationWatch.class));
+		return list;
+	}
 }

@@ -2,13 +2,17 @@ package com.bracelet.service.impl;
 
 import java.sql.Timestamp;
 import java.sql.Types;
+import java.util.List;
 
+import com.bracelet.entity.MomentPwdInfo;
+import com.bracelet.entity.WatchDeviceSet;
 import com.bracelet.service.WatchSetService;
 import com.bracelet.util.Utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -104,5 +108,38 @@ public class WatchSetServiceImpl implements WatchSetService {
 		return i == 1;
 	}
 
+	@Override
+	public boolean updateWatchSet(Long id, String data) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate
+				.update("update watch_device_set  data=?,updatetime=? where id = ?",
+						new Object[] { data, now, id }, new int[] {
+								Types.VARCHAR, Types.TIMESTAMP, 
+								Types.VARCHAR });
+		return i == 1;
+	}
+
+	@Override
+	public WatchDeviceSet getDeviceSetByImei(String imei) {
+		String sql = "select * from watch_device_set where  imei=? limit 1";
+		List<WatchDeviceSet> list = jdbcTemplate.query(sql, new Object[] {
+				imei }, new BeanPropertyRowMapper<WatchDeviceSet>(
+						WatchDeviceSet.class));
+		if (list != null && !list.isEmpty()) {
+			return list.get(0);
+		} else {
+			logger.info("cannot find WatchDeviceSet,imei:" + imei);
+		}
+		return null;
+	}
+
+	@Override
+	public boolean insertWatchDeviceSet(String imei, String data) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate.update("insert into watch_device_set ( imei, data, createtime) values (?,?,?)",
+				new Object[] { imei, data,now },
+				new int[] { Types.VARCHAR, Types.VARCHAR, Types.TIMESTAMP });
+		return i == 1;
+	}
 	
 }

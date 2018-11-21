@@ -1,6 +1,6 @@
 package com.bracelet.service;
 
-
+import com.bracelet.entity.WatchDeviceSet;
 
 public interface WatchSetService {
 
@@ -22,5 +22,11 @@ public interface WatchSetService {
 	boolean insertGuardLog(String imei, Integer setStatus, Integer type);
 
 	boolean insertaddfriendLog(String imei, Integer setStatus, String role,String phone, String cornet, String headType);
+
+	boolean updateWatchSet(Long id, String data);
+
+	WatchDeviceSet getDeviceSetByImei(String imei);
+
+	boolean insertWatchDeviceSet(String imei, String data);
 	
 }
