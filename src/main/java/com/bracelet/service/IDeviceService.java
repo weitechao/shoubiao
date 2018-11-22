@@ -17,6 +17,12 @@ public interface IDeviceService {
 
 	boolean updateImeiInfo(Long id, String phone, int typeOfOperator, String dv);
 
+	boolean updateImeiInfo(Long id, String imei, String phone, String nickname, Integer sex, String birday,
+			String school_age, String school_info, String home_info, String weight, String height, String head);
+
+	boolean insertDeviceImeiInfo(String imei, String phone, String nickname, Integer sex, String birday,
+			String school_age, String school_info, String home_info, String weight, String height, String head);
+
 
 
 }

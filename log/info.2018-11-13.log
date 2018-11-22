@@ -1,0 +1,29 @@
+2018-11-13 15:48:49,313 [main] INFO  SocketServer - ===start socket:7780
+2018-11-13 15:49:12,973 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - add connect:/127.0.0.1:61585
+2018-11-13 15:49:12,974 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelActive:/127.0.0.1:61585在线
+2018-11-13 15:49:13,441 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelInactive:/127.0.0.1:61585掉线
+2018-11-13 15:49:13,441 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - remove connect:/127.0.0.1:61585
+2018-11-13 15:49:33,199 [nioEventLoopGroup-3-2] INFO  BaseChannelHandler - add connect:/127.0.0.1:61595
+2018-11-13 15:49:33,200 [nioEventLoopGroup-3-2] INFO  BaseChannelHandler - channelActive:/127.0.0.1:61595在线
+2018-11-13 15:49:35,629 [nioEventLoopGroup-3-2] INFO  BaseChannelHandler - [/127.0.0.1:61595]发送信息:[YW*8800000015*0001*000E*IPREQ
+2018-11-13 15:49:35,629 [nioEventLoopGroup-3-2] INFO  BusinessHandler - [YW*8800000015*0001*000E*IPREQ
+2018-11-13 15:49:35,629 [nioEventLoopGroup-3-2] INFO  SocketBusinessFactory - *****cmd:IPREQ
+2018-11-13 15:49:35,629 [nioEventLoopGroup-3-2] INFO  GetIpService - 获取服务器连接IP:YW*8800000015*0001*000E*IPREQ
+2018-11-13 15:49:35,629 [nioEventLoopGroup-3-2] INFO  GetIpService - imei=8800000015,info=IPREQ,no=0001
+2018-11-13 15:49:36,072 [nioEventLoopGroup-3-2] INFO  DruidDataSource - {dataSource-1} inited
+2018-11-13 15:49:36,113 [nioEventLoopGroup-3-2] INFO  GetIpService - 获取服务器ip端口返回[YW*8800000015*0001*25*IPREQ,2,127.0.0.1,5536,127.0.0.6,5956]
+2018-11-13 15:50:15,366 [nioEventLoopGroup-3-2] INFO  BaseChannelHandler - channelInactive:/127.0.0.1:61595掉线
+2018-11-13 15:50:15,366 [nioEventLoopGroup-3-2] INFO  BaseChannelHandler - remove connect:/127.0.0.1:61595
+2018-11-13 16:02:53,904 [main] INFO  SocketServer - ===start socket:7780
+2018-11-13 16:02:57,408 [nioEventLoopGroup-3-3] INFO  BaseChannelHandler - add connect:/127.0.0.1:62086
+2018-11-13 16:02:57,408 [nioEventLoopGroup-3-3] INFO  BaseChannelHandler - channelActive:/127.0.0.1:62086在线
+2018-11-13 16:03:21,506 [main] INFO  SocketServer - ===start socket:7780
+2018-11-13 16:03:27,442 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - add connect:/127.0.0.1:62132
+2018-11-13 16:03:27,443 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelActive:/127.0.0.1:62132在线
+2018-11-13 16:03:27,461 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - [/127.0.0.1:62132]发送信息:[YW*8800000015*0001*000E*IPREQ
+2018-11-13 16:03:27,461 [nioEventLoopGroup-3-1] INFO  BusinessHandler - [YW*8800000015*0001*000E*IPREQ
+2018-11-13 16:03:27,462 [nioEventLoopGroup-3-1] INFO  SocketBusinessFactory - *****cmd:IPREQ
+2018-11-13 16:03:27,462 [nioEventLoopGroup-3-1] INFO  GetIpService - 获取服务器连接IP:YW*8800000015*0001*000E*IPREQ
+2018-11-13 16:03:27,463 [nioEventLoopGroup-3-1] INFO  GetIpService - imei=8800000015,info=IPREQ,no=0001
+2018-11-13 16:03:27,697 [nioEventLoopGroup-3-1] INFO  DruidDataSource - {dataSource-1} inited
+2018-11-13 16:03:27,730 [nioEventLoopGroup-3-1] INFO  GetIpService - 获取服务器ip端口返回[YW*8800000015*0001*0025*IPREQ,2,127.0.0.1,5536,127.0.0.6,5956]

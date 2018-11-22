@@ -54,6 +54,7 @@ public class SecurityController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "/getwatchfence/{token}/{imei}", method = RequestMethod.GET)
 	public String getwatchfence(@PathVariable String token, @PathVariable String imei) {
+		
 		JSONObject bb = new JSONObject();
 
 		String userId = checkTokenWatchAndUser(token);

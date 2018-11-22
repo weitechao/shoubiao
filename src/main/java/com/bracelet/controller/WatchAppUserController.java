@@ -68,8 +68,8 @@ public class WatchAppUserController extends BaseController {
 		UserInfo userInfo = userInfoService.getUserInfoByUsername(tel);
 		if (userInfo != null) {
 
-			String token = tokenInfoService.genToken(userInfo.getUser_id());
 			if (password.equalsIgnoreCase(userInfo.getPassword())) {
+				String token = tokenInfoService.genToken(userInfo.getUser_id());
 				bb.put("code", 1);// 1表示login succes
 				bb.put("token", token);
 			} else {
