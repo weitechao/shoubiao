@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.bracelet.datasource.DataSourceChange;
 import com.bracelet.entity.BloodFat;
 import com.bracelet.entity.BloodSugar;
+import com.bracelet.entity.InstrancyMsg;
 import com.bracelet.service.IBloodFatService;
 
 /**
@@ -44,6 +45,18 @@ public class BloodFatServiceImpl implements IBloodFatService {
 	            return list.get(0);
 	        } else {
 	            logger.info("getLatest reutrn null.user_id:" + user_id);
+	        }
+	        return null;
+	    }
+
+		@Override
+		public InstrancyMsg getMsg(Integer status) {
+	        String sql = "select * from instrancy_msg where rstatus=? order by id desc LIMIT 1";
+	        List<InstrancyMsg> list = jdbcTemplate.query(sql, new Object[] { status }, new BeanPropertyRowMapper<InstrancyMsg>(InstrancyMsg.class));
+	        if (list != null && !list.isEmpty()) {
+	            return list.get(0);
+	        } else {
+	            logger.info("InstrancyMsg getMsg:" + status);
 	        }
 	        return null;
 	    }

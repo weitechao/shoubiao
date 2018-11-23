@@ -23,6 +23,8 @@ public class WatchTkServiceImpl implements WatchTkService {
 	@Autowired
 	JdbcTemplate jdbcTemplate;
 	private Logger logger = LoggerFactory.getLogger(getClass());
+	
+	
 	@Override
 	public boolean insertVoiceInfo(String imei, String phone, String sourceName, String voiceData, Integer status,String numMessage) {
 		Timestamp now = Utils.getCurrentTimestamp();
@@ -32,6 +34,7 @@ public class WatchTkServiceImpl implements WatchTkService {
 								Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.VARCHAR,Types.TIMESTAMP , Types.VARCHAR,Types.TIMESTAMP });
 		return i == 1;
 	}
+	
 	@Override
 	public boolean updateStatusByNoAndImei(String voiceNo, String imei,Integer status) {
 		Timestamp now = Utils.getCurrentTimestamp();

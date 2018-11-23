@@ -70,5 +70,4 @@ public class WatchVoiceInfo {
 	public void setNo(String no) {
 		this.no = no;
 	}
-
 }

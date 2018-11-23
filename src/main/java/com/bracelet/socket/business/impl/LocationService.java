@@ -67,6 +67,7 @@ public class LocationService extends AbstractBizService {
 				try {
 					if (!"0.000000".equals(lat) && !"0.000000".equals(lng)) {
 						String url = GPS_URL + "?key=" + GPS_KEY + "&coordsys=gps&locations=" + lng + "," + lat;
+						//http://restapi.amap.com/v3/assistant/coordinate/convert?key=c6a272fdecf96b343c31719d6b8cb0be&coordsys=gps&locations=114.0231567,22.5351085
 						logger.info("[LocationService]请求高德GPS位置转换,URL:" + url);
 						String responseJsonString = HttpClientGet.get(url);
 						logger.info("[LocationService]请求高德坐标转换，应答数据:" + responseJsonString);

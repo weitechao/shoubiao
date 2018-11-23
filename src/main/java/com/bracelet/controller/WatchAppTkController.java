@@ -28,6 +28,7 @@ import com.bracelet.util.RanomUtil;
 import com.bracelet.util.RespCode;
 import com.bracelet.util.Utils;
 
+import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,87 +72,31 @@ public class WatchAppTkController extends BaseController {
 		String voiceData = jsonObject.getString("voiceData");// 语音内容 base64转字符串
 		String sourceName = jsonObject.getString("sourceName");// 文件名字
 		
+		//	byte[] voiceData = Base64.decodeBase64(voiceContent);
+		// insertVoiceInfo(String sender, String receiver, String sourceName,String voiceData, Integer status,String numMessage);
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 		String numMessage=Utils.randomString(5);
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
-			watchtkService.insertVoiceInfo(imei,phone,sourceName,voiceData,0,numMessage);
-			bb.put("code", 0);
+			watchtkService.insertVoiceInfo(phone, imei, sourceName, voiceData, 0,numMessage);
+			bb.put("code", 2);
 			return bb.toString();
 		}
-		StringBuffer sb = new StringBuffer("[YW*" + imei
-				+ "*NNNN*LEN*TK,"+numMessage+",");
+		
 		if (socketLoginDto.getChannel().isActive()) {
-			sb.append(phone);
-			sb.append(",");
-			sb.append(sourceName);
-			sb.append(",");
-			sb.append(1);
-			sb.append(",");
-			sb.append(1);
-			sb.append(",");
-			sb.append(voiceData);
-			sb.append("]");
-			socketLoginDto.getChannel().writeAndFlush(sb.toString());
+			String msg="TK,"+phone+","+sourceName+"1,1,"+voiceData;
+			String reps = "[YW*"+imei+"*0001*"+RadixUtil.changeRadix(msg)+"*"+msg+"]";
 			bb.put("code", 1);
 			//因为这里我觉得下发的时候需要增加一个消息号，设备再回复的时候，。把消息号带上，这个消息号永远唯一，消息号我随机生成
-			watchtkService.insertVoiceInfo(imei,phone,sourceName,voiceData,1,numMessage);
+			socketLoginDto.getChannel().writeAndFlush(reps);
+			//byte[] voiceDatat = Base64.decodeBase64(voiceData);
+		//	socketLoginDto.getChannel().writeAndFlush(voiceDatat);    调试有可能是这种
+			
+			watchtkService.insertVoiceInfo(phone, imei, sourceName, voiceData, 1,numMessage);
 		} else {
+			watchtkService.insertVoiceInfo(phone, imei, sourceName, voiceData, 0,numMessage);
 			bb.put("code", 0);
 		}
 		return bb.toString();
 	}
 	
-	
-	  //对讲群聊
-			@ResponseBody
-			@RequestMapping(value = "/intercomGroupChat", method = RequestMethod.POST)
-			public String intercomGroupChat(@RequestBody String body) {
-				JSONObject jsonObject = (JSONObject) JSON.parse(body);
-				String token = jsonObject.getString("token");
-				String imei = jsonObject.getString("imei");
-				String data = jsonObject.getString("data");
-
-				JSONObject bb = new JSONObject();
-				SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
-				if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
-					bb.put("code", 0);
-					return bb.toString();
-				}
-				
-				if (socketLoginDto.getChannel().isActive()) {
-					String msg="TK,"+data;
-					String reps = "[YW*"+imei+"*0001*"+RadixUtil.changeRadix(msg)+"*"+msg+"]";
-					socketLoginDto.getChannel().writeAndFlush(reps);
-					bb.put("code", 1);
-				} else {
-					bb.put("code", 0);
-				}
-				return bb.toString();
-			}
-			 //好友微聊
-			@ResponseBody
-			@RequestMapping(value = "/microChatFriends", method = RequestMethod.POST)
-			public String microChatFriends(@RequestBody String body) {
-				JSONObject jsonObject = (JSONObject) JSON.parse(body);
-				String token = jsonObject.getString("token");
-				String imei = jsonObject.getString("imei");
-				String data = jsonObject.getString("data");
-
-				JSONObject bb = new JSONObject();
-				SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
-				if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
-					bb.put("code", 0);
-					return bb.toString();
-				}
-				if (socketLoginDto.getChannel().isActive()) {
-					String msg="TK2,"+data;
-					String reps = "[YW*"+imei+"*0001*"+RadixUtil.changeRadix(msg)+"*"+msg+"]";
-					socketLoginDto.getChannel().writeAndFlush(reps);
-					bb.put("code", 1);
-				} else {
-					bb.put("code", 0);
-				}
-				return bb.toString();
-			}
-
 }
