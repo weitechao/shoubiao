@@ -16,6 +16,8 @@ public class WatchVoiceInfo {
 	private String source_name;
 	private Timestamp updatetime;
 	private String no;
+	private Integer this_number;
+	private Integer all_number;
 	public Long getId() {
 		return id;
 	}
@@ -69,5 +71,17 @@ public class WatchVoiceInfo {
 	}
 	public void setNo(String no) {
 		this.no = no;
+	}
+	public Integer getThis_number() {
+		return this_number;
+	}
+	public void setThis_number(Integer this_number) {
+		this.this_number = this_number;
+	}
+	public Integer getAll_number() {
+		return all_number;
+	}
+	public void setAll_number(Integer all_number) {
+		this.all_number = all_number;
 	}
 }

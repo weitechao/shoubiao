@@ -26,12 +26,12 @@ public class WatchTkServiceImpl implements WatchTkService {
 	
 	
 	@Override
-	public boolean insertVoiceInfo(String imei, String phone, String sourceName, String voiceData, Integer status,String numMessage) {
+	public boolean insertVoiceInfo(String imei, String phone, String sourceName, String voiceData, Integer status,String numMessage,Integer thisNubmer,Integer allNumber) {
 		Timestamp now = Utils.getCurrentTimestamp();
 		int i = jdbcTemplate
-				.update("insert into watch_voice_info (sender, receiver, voice_content, status, source_name, createtime,no,updatetime) values (?,?,?,?,?,?,?,?)",
-						new Object[] { phone, imei, voiceData, status, sourceName, now, numMessage, now}, new int[] {
-								Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.VARCHAR,Types.TIMESTAMP , Types.VARCHAR,Types.TIMESTAMP });
+				.update("insert into watch_voice_info (sender, receiver, voice_content, status, source_name, createtime,no,updatetime,this_number,all_number) values (?,?,?,?,?,?,?,?,?,?)",
+						new Object[] { phone, imei, voiceData, status, sourceName, now, numMessage, now, thisNubmer, allNumber}, new int[] {
+								Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.VARCHAR,Types.TIMESTAMP , Types.VARCHAR,Types.TIMESTAMP , Types.INTEGER, Types.INTEGER});
 		return i == 1;
 	}
 	

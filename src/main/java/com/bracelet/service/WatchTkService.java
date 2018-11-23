@@ -8,7 +8,7 @@ import com.bracelet.entity.WatchVoiceInfo;
 
 public interface WatchTkService {
 	
-	boolean insertVoiceInfo(String sender, String receiver, String sourceName,String voiceData, Integer status,String numMessage);
+	boolean insertVoiceInfo(String sender, String receiver, String sourceName,String voiceData, Integer status,String numMessage,Integer thisNubmer,Integer allNumber);
 
 
 	boolean updateStatusByNoAndImei(String voiceNo, String imei, Integer status);

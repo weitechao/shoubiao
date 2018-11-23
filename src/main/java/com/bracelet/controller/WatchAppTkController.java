@@ -77,7 +77,7 @@ public class WatchAppTkController extends BaseController {
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 		String numMessage=Utils.randomString(5);
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
-			watchtkService.insertVoiceInfo(phone, imei, sourceName, voiceData, 0,numMessage);
+			watchtkService.insertVoiceInfo(phone, imei, sourceName, voiceData, 0,numMessage ,1,1);
 			bb.put("code", 2);
 			return bb.toString();
 		}
@@ -91,9 +91,9 @@ public class WatchAppTkController extends BaseController {
 			//byte[] voiceDatat = Base64.decodeBase64(voiceData);
 		//	socketLoginDto.getChannel().writeAndFlush(voiceDatat);    调试有可能是这种
 			
-			watchtkService.insertVoiceInfo(phone, imei, sourceName, voiceData, 1,numMessage);
+			watchtkService.insertVoiceInfo(phone, imei, sourceName, voiceData, 1,numMessage ,1,1);
 		} else {
-			watchtkService.insertVoiceInfo(phone, imei, sourceName, voiceData, 0,numMessage);
+			watchtkService.insertVoiceInfo(phone, imei, sourceName, voiceData, 0,numMessage ,1,1);
 			bb.put("code", 0);
 		}
 		return bb.toString();

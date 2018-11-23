@@ -22,6 +22,7 @@ import com.bracelet.service.IVoltageService;
 import com.bracelet.service.IinsertFriendService;
 import com.bracelet.service.WatchTkService;
 import com.bracelet.util.ChannelMap;
+import com.bracelet.util.RadixUtil;
 import com.bracelet.util.Utils;
 
 @Service("tk2Service")
@@ -36,8 +37,7 @@ public class Tk2Service extends AbstractBizService {
 	 * ZZZZZZZZZZ：要送达的好友的设备号，该设备需已在平台上注册过
 	 */
 	@Override
-	protected String process2(SocketLoginDto socketLoginDto, String jsonInfo,
-			Channel channel) {
+	protected String process2(SocketLoginDto socketLoginDto, String jsonInfo, Channel channel) {
 		logger.info("好友微聊:" + jsonInfo);
 		String[] shuzu = jsonInfo.split("\\*");
 		String imei = shuzu[1];// 设备imei
@@ -53,26 +53,22 @@ public class Tk2Service extends AbstractBizService {
 		SocketLoginDto socketLoginDtoto = ChannelMap.getChannel(receiver);
 		String noo = Utils.randomString(5);
 		if (socketLoginDtoto == null || socketLoginDtoto.getChannel() == null) {
-			watchtkService.insertVoiceInfo(imei, receiver, sourceName,
-					voiceContent, 0, noo);
-			return "";
+			watchtkService.insertVoiceInfo(imei, receiver, sourceName, voiceContent, 0, noo, thisNumber, allNumber);
+			return "[YW*" + imei + "*0001*0005*TK2,1]";
 		}
 		if (socketLoginDtoto.getChannel().isActive()) {
-			watchtkService.insertVoiceInfo(imei, receiver, sourceName,
-					voiceContent, 1, noo);
-			StringBuffer sb = new StringBuffer("[YW");
-			sb.append("imei").append("*NNNN*LEN*TK,").append(imei)
-					.append(sourceName).append(",").append(thisNumber)
-					.append(",").append(allNumber).append(",")
-					.append(voiceContent);
-			socketLoginDtoto.getChannel().writeAndFlush(sb.toString());
+			String msg = "TK2," + imei + "," + sourceName + "," + thisNumber + "," + allNumber + "," + voiceContent;
+			String reps = "[YW*" + imei + "*0001*" + RadixUtil.changeRadix(msg) + "*" + msg + "]";
+			socketLoginDtoto.getChannel().writeAndFlush(reps);
+			watchtkService.insertVoiceInfo(imei, receiver, sourceName, voiceContent, 1, noo, thisNumber, allNumber);
+		} else {
+			watchtkService.insertVoiceInfo(imei, receiver, sourceName, voiceContent, 0, noo, thisNumber, allNumber);
 		}
-		return "[YW*" + imei + "*NNNN*LEN*TK2,1] ";
+		return "[YW*" + imei + "*0001*0005*TK2,1]";
 	}
 
 	@Override
-	protected SocketBaseDto process1(SocketLoginDto socketLoginDto,
-			JSONObject jsonObject, Channel channel) {
+	protected SocketBaseDto process1(SocketLoginDto socketLoginDto, JSONObject jsonObject, Channel channel) {
 		return null;
 	}
 
