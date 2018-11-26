@@ -12,11 +12,14 @@ import org.springframework.stereotype.Component;
 import com.alibaba.fastjson.JSONObject;
 import com.bracelet.dto.SocketBaseDto;
 import com.bracelet.dto.SocketLoginDto;
+import com.bracelet.dto.WatchLatestLocation;
+import com.bracelet.entity.LocationWatch;
 import com.bracelet.entity.UserInfo;
 import com.bracelet.entity.WatchDevice;
 import com.bracelet.exception.BizException;
 import com.bracelet.util.RespCode;
 import com.bracelet.service.IDeviceService;
+import com.bracelet.service.ILocationService;
 import com.bracelet.service.IUserInfoService;
 import com.bracelet.socket.business.IService;
 import com.bracelet.util.ChannelMap;
@@ -31,6 +34,8 @@ public class LoginService implements IService {
 	IUserInfoService userInfoService;
 	@Autowired
 	IDeviceService ideviceService;
+	@Autowired
+	ILocationService locationService;
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -78,6 +83,18 @@ public class LoginService implements IService {
 		logger.info("保存手表登录信息,no:" + no + ",imei" + imei);
 		ChannelMap.addChannel(imei, channelDto);
 		ChannelMap.addChannel(channel, channelDto);
+		
+		LocationWatch locationWatch = locationService.getLatest(imei);
+		if(locationWatch != null){
+			WatchLatestLocation watchlastlocation = new WatchLatestLocation();
+			watchlastlocation.setImei(imei);
+			watchlastlocation.setLat(locationWatch.getLat());
+			watchlastlocation.setLng(locationWatch.getLng());
+			watchlastlocation.setLocationType(locationWatch.getLocation_type());
+			watchlastlocation.setTimestamp(locationWatch.getUpload_time().getTime());
+			ChannelMap.addlocation(imei, watchlastlocation);
+		}
+		
 
 		String resp = "[YW*"+imei+"*0001*0006*INIT,1]";
 		logger.info("返回设备登录信息="+resp);

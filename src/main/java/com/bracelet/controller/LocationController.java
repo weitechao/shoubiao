@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.bracelet.dto.HttpBaseDto;
 import com.bracelet.dto.SocketLoginDto;
+import com.bracelet.dto.WatchLatestLocation;
 import com.bracelet.entity.Location;
 import com.bracelet.entity.LocationOld;
 import com.bracelet.entity.LocationRequest;
@@ -48,48 +49,56 @@ public class LocationController extends BaseController {
 	@Resource
 	BaseChannelHandler baseChannelHandler;
 	private Logger logger = LoggerFactory.getLogger(getClass());
-	
-	
+
 	/* app查询手表最新定位 */
 	@ResponseBody
 	@RequestMapping(value = "/getlast/search/{token}/{imei}", method = RequestMethod.GET)
-	public String getLastLocation(@PathVariable String token,@PathVariable String imei) {
+	public String getLastLocation(@PathVariable String token, @PathVariable String imei) {
 		JSONObject bb = new JSONObject();
-		
+
 		String user_id = checkTokenWatchAndUser(token);
 		if ("0".equals(user_id)) {
 			bb.put("code", -1);
 			return bb.toString();
 		}
 
-		LocationWatch locationWatch = locationService.getLatest(imei);
+		WatchLatestLocation watchlocaiton = ChannelMap.getlocation(imei);
 
-		if (locationWatch != null) {
-			bb.put("lat", locationWatch.getLat());
-			bb.put("lng", locationWatch.getLng());
-			bb.put("locationType", locationWatch.getLocation_type());
-			bb.put("uploadtime", locationWatch.getUpload_time().getTime());
+		if (watchlocaiton != null) {
+			bb.put("lat", watchlocaiton.getLat());
+			bb.put("lng", watchlocaiton.getLng());
+			bb.put("locationType", watchlocaiton.getLocationType());
+			bb.put("uploadtime", watchlocaiton.getTimestamp());
 			bb.put("code", 1);
 		} else {
-			bb.put("code", 0);
+			LocationWatch locationWatch = locationService.getLatest(imei);
+			if (locationWatch != null) {
+				bb.put("lat", locationWatch.getLat());
+				bb.put("lng", locationWatch.getLng());
+				bb.put("locationType", locationWatch.getLocation_type());
+				bb.put("uploadtime", locationWatch.getUpload_time().getTime());
+				bb.put("code", 1);
+			} else {
+				bb.put("code", 0);
+			}
 		}
+
 		return bb.toString();
 	}
 
 	/* 查询手表的轨迹 */
 	@ResponseBody
 	@RequestMapping(value = "/watchtrack/{token}/{imei}/{starttime}/{endtime}", method = RequestMethod.GET)
-	public String watchtrack(@PathVariable String token,@PathVariable String imei,
-			@PathVariable String starttime, @PathVariable String endtime) {
+	public String watchtrack(@PathVariable String token, @PathVariable String imei, @PathVariable String starttime,
+			@PathVariable String endtime) {
 		JSONObject bb = new JSONObject();
 		String user_id = checkTokenWatchAndUser(token);
 		if ("0".equals(user_id)) {
 			bb.put("code", -1);
 			return bb.toString();
 		}
-		
-		List<LocationWatch> locationList = locationService.getWatchFootprint(
-				imei, starttime, endtime);
+
+		List<LocationWatch> locationList = locationService.getWatchFootprint(imei, starttime, endtime);
 		JSONArray jsonArray = new JSONArray();
 		if (locationList != null) {
 			for (LocationWatch location : locationList) {
@@ -108,7 +117,6 @@ public class LocationController extends BaseController {
 		bb.put("result", jsonArray);
 		return bb.toString();
 	}
-	
 
 	@ResponseBody
 	@RequestMapping(value = "/search/latest/{token}", method = RequestMethod.GET)
@@ -134,8 +142,7 @@ public class LocationController extends BaseController {
 	@RequestMapping(value = "/search/realtime/{token}", method = RequestMethod.GET)
 	public HttpBaseDto getRealtimeLocation(@PathVariable String token) {
 		Long user_id = checkTokenAndUser(token);
-		Location location = locationService.getRealtimeLocation(user_id,
-				Integer.valueOf(1));
+		Location location = locationService.getRealtimeLocation(user_id, Integer.valueOf(1));
 		Map<String, Object> dataMap = new HashMap<>();
 		if (location != null) {
 			dataMap.put("lat", location.getLat());
@@ -161,8 +168,7 @@ public class LocationController extends BaseController {
 			logger.info("askLocation error.no login.token:" + token);
 			throw new BizException(RespCode.U_NOT_EXIST);
 		}
-		SocketLoginDto socketLoginDto = ChannelMap.getChannel(userInfo
-				.getImei());
+		SocketLoginDto socketLoginDto = ChannelMap.getChannel(userInfo.getImei());
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
 			logger.info("socketLoginDto error.no login.token:" + token);
 			throw new BizException(RespCode.DEV_NOT_LOGIN);
@@ -175,14 +181,11 @@ public class LocationController extends BaseController {
 		re.setNo(RanomUtil.getFixLenthString(10));
 
 		if (socketLoginDto.getChannel().isActive()) {
-			socketLoginDto.getChannel().writeAndFlush(
-					JSON.toJSONString(re) + "\r\n");
-			logger.info("===request getLocation...ip:"
-					+ socketLoginDto.getChannel().remoteAddress().toString()
+			socketLoginDto.getChannel().writeAndFlush(JSON.toJSONString(re) + "\r\n");
+			logger.info("===request getLocation...ip:" + socketLoginDto.getChannel().remoteAddress().toString()
 					+ ",data:" + JSON.toJSONString(re));
 		} else {
-			logger.info("socketLoginDto error.no login.not active.token:"
-					+ token);
+			logger.info("socketLoginDto error.no login.not active.token:" + token);
 			throw new BizException(RespCode.DEV_NOT_LOGIN);
 		}
 
@@ -195,8 +198,7 @@ public class LocationController extends BaseController {
 	public HttpBaseDto getLocationFootprint(@PathVariable String token,
 			@RequestParam(value = "type", required = false) String type) {
 		Long user_id = checkTokenAndUser(token);
-		List<Location> locationList = locationService.getFootprint(user_id,
-				type);
+		List<Location> locationList = locationService.getFootprint(user_id, type);
 		List<Map<String, Object>> dataList = new LinkedList<Map<String, Object>>();
 		if (locationList != null) {
 			for (Location location : locationList) {
@@ -233,21 +235,17 @@ public class LocationController extends BaseController {
 		StringBuilder myurlBuilder = new StringBuilder(
 				"http://apilocate.amap.com/position?key=b4a2748e41314ae117645aa9589c6723&output=json&accesstype=0&cdma=0&network=0&bts=");
 		myurlBuilder.append(bts);
-		myurlBuilder
-				.append("&nearbts=0,0,0,0,0|0,0,0,0,0|0,0,0,0,0|0,0,0,0,0|0,0,0,0,0|0,0,0,0,0");
+		myurlBuilder.append("&nearbts=0,0,0,0,0|0,0,0,0,0|0,0,0,0,0|0,0,0,0,0|0,0,0,0,0|0,0,0,0,0");
 
 		logger.info(myurlBuilder.toString());
-		String responseJsonString = HttpClientGet
-				.urlReturnParamsAs(myurlBuilder.toString());
+		String responseJsonString = HttpClientGet.urlReturnParamsAs(myurlBuilder.toString());
 		if (responseJsonString != null) {
-			JSONObject responseJsonObject = (JSONObject) JSON
-					.parse(responseJsonString);
+			JSONObject responseJsonObject = (JSONObject) JSON.parse(responseJsonString);
 			String status = responseJsonObject.getString("status");
 			String info = responseJsonObject.getString("info");
 
 			if ("1".equals(status)) {
-				JSONObject resultJsonObject = responseJsonObject
-						.getJSONObject("result");
+				JSONObject resultJsonObject = responseJsonObject.getJSONObject("result");
 				if (resultJsonObject != null) {
 					String location = resultJsonObject.getString("location");
 					if (location != null) {
@@ -294,11 +292,10 @@ public class LocationController extends BaseController {
 	/* 查询轨迹 */
 	@ResponseBody
 	@RequestMapping(value = "/searchLocationTrack/{phone}/{starttime}/{endtime}", method = RequestMethod.GET)
-	public String searchLocationTrack(@PathVariable String phone,
-			@PathVariable String starttime, @PathVariable String endtime) {
+	public String searchLocationTrack(@PathVariable String phone, @PathVariable String starttime,
+			@PathVariable String endtime) {
 		JSONObject bb = new JSONObject();
-		List<LocationOld> locationList = locationService.getOldPhoneFootprint(
-				phone, starttime, endtime);
+		List<LocationOld> locationList = locationService.getOldPhoneFootprint(phone, starttime, endtime);
 		JSONArray jsonArray = new JSONArray();
 		if (locationList != null) {
 			for (LocationOld location : locationList) {
@@ -321,12 +318,12 @@ public class LocationController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "/oldphone/bind", method = RequestMethod.POST)
 	public String oldphoneBind(@RequestBody String body) {
-		
+
 		JSONObject jsonObject = (JSONObject) JSON.parse(body);
 		String name = jsonObject.getString("name");
 		String phone = jsonObject.getString("phone");
 		String imei = jsonObject.getString("imei");
-		logger.info("绑定名称="+name);
+		logger.info("绑定名称=" + name);
 		JSONObject bb = new JSONObject();
 
 		OldBindDevice olddevice = userInfoService.getOldDevice(phone, imei);
@@ -341,11 +338,10 @@ public class LocationController extends BaseController {
 
 	/* 查询绑定设备 */
 	@ResponseBody
-	@RequestMapping(value = "/searchBindDevice/{phone}", method = RequestMethod.GET,produces="text/html;charset=UTF-8")
+	@RequestMapping(value = "/searchBindDevice/{phone}", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
 	public String searchLocationTrack(@PathVariable String phone) {
 		JSONObject bb = new JSONObject();
-		List<OldBindDevice> locationList = userInfoService
-				.getOldPhoneDeviceBind(phone);
+		List<OldBindDevice> locationList = userInfoService.getOldPhoneDeviceBind(phone);
 		JSONArray jsonArray = new JSONArray();
 		if (locationList != null) {
 			for (OldBindDevice location : locationList) {
@@ -354,7 +350,7 @@ public class LocationController extends BaseController {
 				json.put("imei", location.getImei());
 				json.put("name", location.getName());
 				json.put("timestamp", location.getUpload_time().getTime());
-				logger.info(json+"");
+				logger.info(json + "");
 				jsonArray.add(json);
 			}
 			bb.put("codes", 1);
@@ -380,8 +376,8 @@ public class LocationController extends BaseController {
 	public String oldPhoneUpdate(@RequestBody String body) {
 		JSONObject jsonObject = (JSONObject) JSON.parse(body);
 		String name = jsonObject.getString("name");
-		Long id = 	jsonObject.getLong("id");
-		logger.info("更改绑定名称="+name);
+		Long id = jsonObject.getLong("id");
+		logger.info("更改绑定名称=" + name);
 		JSONObject bb = new JSONObject();
 		userInfoService.updateOldBindDeviceInfo(id, name);
 		bb.put("codes", 1);

@@ -191,10 +191,55 @@ public class SmsUtil {
 		return rsp.getMsg();
 	}
 	
-	/*public static void main(String[] args) throws ApiException {
-		String a=useFingerprintOpenDoorSendMsg("123456","tete","18735662247");
+	
+	public static SendSmsResponse  sendWatchVerificationCode(String name, String mobile,
+			String tplCode, String tplParam) throws ApiException {
+		logger.info("开始发送短信[mobile:" + mobile + ",tplCode:" + tplCode
+				+ ",tplParam:" + tplParam + "]");
+		// 可自助调整超时时间
+		System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
+		System.setProperty("sun.net.client.defaultReadTimeout", "10000");
+		SendSmsResponse result = null;
+		Integer rstatus = 0;
+		String rmsg = "";
+		try {
+			// 初始化acsClient,暂不支持region化
+			IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou",
+					Utils.accessKeyIdOfWatch, Utils.accessKeySecretOfWatch);
+			DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", product,
+					domain);
+			IAcsClient acsClient = new DefaultAcsClient(profile);
+			// 组装请求对象-具体描述见控制台-文档部分内容
+			SendSmsRequest request = new SendSmsRequest();
+			// 必填:待发送手机号
+			request.setPhoneNumbers(mobile);
+			// 必填:短信签名-可在短信控制台中找到
+			request.setSignName("亿多宝");
+			// 必填:短信模板-可在短信控制台中找到
+			request.setTemplateCode(tplCode);
+			// 可选:模板中的变量替换JSON串,如模板内容为"亲爱的${name},您的验证码为${code}"时,此处的值为
+			request.setTemplateParam(tplParam);
+			// hint 此处可能会抛出异常，注意catch
+			result = acsClient.getAcsResponse(request);
+			rmsg = result.getMessage();
+			logger.info("收到短信结果[mobile:" + mobile + ",tplCode:" + tplCode
+					+ ",tplParam:" + tplParam + "] ->: " + "Code="
+					+ result.getCode() + ", Message=" + result.getMessage()
+					+ ", RequestId=" + result.getRequestId() + ", BizId="
+					+ result.getBizId());
+		} catch (Exception e) {
+			rstatus = 1;
+			rmsg = e.getMessage();
+			logger.info("短信发送错误:", e);
+		}
+		return result;
+	}
+	
+	public static void main(String[] args) throws ApiException {
+		SendSmsResponse result=	SmsUtil.sendWatchVerificationCode("短信验证码", "18735662247", "SMS_151771312", "{\"code\":\"" + 1234567 + "\"}");
+	/*	String a=useFingerprintOpenDoorSendMsg("123456","tete","18735662247");
 		System.out.println(a);
 		String b=pickALockSendMsg("123456","18735662247");
-		System.out.println(b);
-	}*/
+		System.out.println(b);*/
+	}
 }

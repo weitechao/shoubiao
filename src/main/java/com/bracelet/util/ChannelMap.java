@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.bracelet.dto.SocketLoginDto;
+import com.bracelet.dto.WatchLatestLocation;
 
 public class ChannelMap {
 	private ChannelMap() {
@@ -20,6 +21,9 @@ public class ChannelMap {
 	 * key:channel,value:SocketLoginDto
 	 */
 	private static Map<Channel, SocketLoginDto> channelMap3 = new HashMap<Channel, SocketLoginDto>();
+	
+	
+	private static Map<String, WatchLatestLocation> channelMap4 = new HashMap<String, WatchLatestLocation>();
 
 	/**
 	 * 
@@ -61,5 +65,15 @@ public class ChannelMap {
 		}
 
 		channelMap3.remove(channel);
+	}
+	
+	
+	public static void addlocation(String imei, WatchLatestLocation dto) {
+		channelMap4.put(imei, dto);
+	}
+
+
+	public static WatchLatestLocation getlocation(String imei) {
+		return channelMap4.get(imei);
 	}
 }

@@ -40,6 +40,7 @@ public class AuthcodeServiceImpl implements IAuthcodeService {
 		jdbcTemplate.update("insert into authcode (tel, code, createtime) values (?,?,?)", new Object[] { tel, code, now },
 				new int[] { Types.VARCHAR, Types.VARCHAR, Types.TIMESTAMP });
 		//SendSmsResponse result=	SmsUtil.sendSms("短信验证码", tel, "SMS_98965016", "{\"number\":\"" + code + "\"}");
+		//SmsUtil.sendWatchVerificationCode("短信验证码", "18735662247", "SMS_151771312", "{\"code\":\"" + 1234567 + "\"}");   亿多宝短信测试OK
 		try {
 			String 	msg = SmsUtil.sendMsgMenSuo(tel,code);
 			smslogService.insert("短信验证码", tel, "SMS_115095090", "{\"number\":\"" + code + "\"}",0,msg);
