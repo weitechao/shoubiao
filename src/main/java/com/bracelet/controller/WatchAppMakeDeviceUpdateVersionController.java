@@ -106,9 +106,12 @@ public class WatchAppMakeDeviceUpdateVersionController extends BaseController {
 		String imei = jsonObject.getString("imei");
 		String operatorNumber = jsonObject.getString("operatorNumber");
 		String content = jsonObject.getString("content");
+		
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
-			bb.put("code", 0);
+			watchSetService.insertSmsSetLogInfo(imei, 0,operatorNumber, content);//0表示未发送
+			//String imei, Integer setStatus,String operatorNumber, String content
+			bb.put("code", 4);
 			return bb.toString();
 		}
 		String reps = "[YW*"+imei+"*0001*";
@@ -117,8 +120,10 @@ public class WatchAppMakeDeviceUpdateVersionController extends BaseController {
 			reps=reps+RadixUtil.changeRadix(msg)+"*"+msg+ "]";
 			socketLoginDto.getChannel().writeAndFlush(reps);
 			bb.put("code", 1);
+			watchSetService.insertSmsSetLogInfo(imei, 1,operatorNumber, content);
 		} else {
-			bb.put("code", 2);
+			watchSetService.insertSmsSetLogInfo(imei, 0,operatorNumber, content);
+			bb.put("code", 0);
 		}
 		return bb.toString();
 	}
@@ -169,7 +174,7 @@ public class WatchAppMakeDeviceUpdateVersionController extends BaseController {
 		
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
-			bb.put("code", 0);
+			bb.put("code", 4);
 			return bb.toString();
 		}
 		String reps = "[YW*"+imei+"*0001*0007*FACTORY]";
@@ -229,7 +234,7 @@ public class WatchAppMakeDeviceUpdateVersionController extends BaseController {
 		
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
-			bb.put("code", 2);
+			bb.put("code", 4);
 			return bb.toString();
 		}
 		String reps = "[YW*"+imei+"*0001*0002*TS]";

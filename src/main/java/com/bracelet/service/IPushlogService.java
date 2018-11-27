@@ -8,6 +8,6 @@ public interface IPushlogService {
 
 	Pagination<Pushlog> find(Long user_id, PageParam pageParam);
 
-	boolean insertPushMsg(String imei, String message, int i);
+	boolean insertPushMsg(String imei, String message, Integer status);
 
 }

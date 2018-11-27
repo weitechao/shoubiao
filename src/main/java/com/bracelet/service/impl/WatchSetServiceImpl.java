@@ -35,9 +35,9 @@ public class WatchSetServiceImpl implements WatchSetService {
 	public boolean insertSmsSetLogInfo(String imei, Integer setStatus,
 			String operatorNumber, String content) {
 		Timestamp now = Utils.getCurrentTimestamp();
-		int i = jdbcTemplate.update("insert into watch_setsms_log ( imei, set_status, o_number, content, createtime) values (?,?,?,?,?)",
-				new Object[] { imei, setStatus, operatorNumber, content, now },
-				new int[] { Types.VARCHAR, Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.TIMESTAMP });
+		int i = jdbcTemplate.update("insert into watch_setsms_log ( imei, set_status, o_number, content, createtime, updatetime) values (?,?,?,?,?,?)",
+				new Object[] { imei, setStatus, operatorNumber, content, now, now },
+				new int[] { Types.VARCHAR, Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.TIMESTAMP, Types.TIMESTAMP });
 		return i == 1;
 	}
 
@@ -136,10 +136,12 @@ public class WatchSetServiceImpl implements WatchSetService {
 	@Override
 	public boolean insertWatchDeviceSet(String imei, String data) {
 		Timestamp now = Utils.getCurrentTimestamp();
-		int i = jdbcTemplate.update("insert into watch_device_set ( imei, data, createtime) values (?,?,?)",
-				new Object[] { imei, data,now },
-				new int[] { Types.VARCHAR, Types.VARCHAR, Types.TIMESTAMP });
+		int i = jdbcTemplate.update("insert into watch_device_set ( imei, data, createtime, updatetime) values (?,?,?,?)",
+				new Object[] { imei, data,now ,now},
+				new int[] { Types.VARCHAR, Types.VARCHAR, Types.TIMESTAMP, Types.TIMESTAMP });
 		return i == 1;
 	}
+
+	
 	
 }

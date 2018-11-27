@@ -55,7 +55,7 @@ public class WatchAppContDeviceController extends BaseController {
 		
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
-			bb.put("code", 2);
+			bb.put("code", 4);
 			return bb.toString();
 		}
 		String reps = "[YW*"+imei+"*0001*0002*CR]";
@@ -82,7 +82,7 @@ public class WatchAppContDeviceController extends BaseController {
 		
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
-			bb.put("code", 0);
+			bb.put("code", 4);
 			return bb.toString();
 		}
 		String reps = "[YW*"+imei+"*0001*0008*POWEROFF]";
@@ -109,7 +109,7 @@ public class WatchAppContDeviceController extends BaseController {
 		
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
-			bb.put("code", 0);
+			bb.put("code", 4);
 			return bb.toString();
 		}
 		String reps = "[YW*"+imei+"*0001*0004*FIND]";
@@ -136,7 +136,7 @@ public class WatchAppContDeviceController extends BaseController {
 			
 			SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 			if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
-				bb.put("code", 0);
+				bb.put("code", 4);
 				return bb.toString();
 			}
 			if (socketLoginDto.getChannel().isActive()) {
@@ -168,7 +168,8 @@ public class WatchAppContDeviceController extends BaseController {
 		
 			SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 			if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
-				bb.put("code", 2);
+				pushMsgService.insertPushMsg(imei,message,0);
+				bb.put("code", 4);
 				return bb.toString();
 			}
 			if (socketLoginDto.getChannel().isActive()) {
@@ -203,7 +204,7 @@ public class WatchAppContDeviceController extends BaseController {
 		
 			SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 			if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
-				bb.put("code", 2);
+				bb.put("code", 4);
 				return bb.toString();
 			}
 			if (socketLoginDto.getChannel().isActive()) {

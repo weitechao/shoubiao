@@ -70,7 +70,7 @@ public class WatchAppSetController extends BaseController {
 		
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
-			bb.put("code", 2);
+			bb.put("code", 4);
 			return bb.toString();
 		}
 		if (socketLoginDto.getChannel().isActive()) {
@@ -98,7 +98,7 @@ public class WatchAppSetController extends BaseController {
 		
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
-			bb.put("code", 2);
+			bb.put("code", 4);
 			return bb.toString();
 		}
 		String reps = "[YW*" + imei + "*0001*0007*GUARD," + type + "]";
@@ -125,6 +125,14 @@ public class WatchAppSetController extends BaseController {
 		}
 		String imei = jsonObject.getString("imei");
 		String data = jsonObject.getString("data");
+		
+		WatchDeviceSet deviceSet = watchSetService.getDeviceSetByImei(imei);
+		if(deviceSet!=null){
+			watchSetService.updateWatchSet(deviceSet.getId(),data);
+		}else{
+			watchSetService.insertWatchDeviceSet(imei,data);
+		}
+		
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
 			bb.put("code", 2);
@@ -135,12 +143,7 @@ public class WatchAppSetController extends BaseController {
 			String reps = "[YW*"+imei+"*0001*"+RadixUtil.changeRadix(msg)+"*"+msg+"]";
 			socketLoginDto.getChannel().writeAndFlush(reps);
 			bb.put("code", 1);
-			WatchDeviceSet deviceSet = watchSetService.getDeviceSetByImei(imei);
-			if(deviceSet!=null){
-				watchSetService.updateWatchSet(deviceSet.getId(),data);
-			}else{
-				watchSetService.insertWatchDeviceSet(imei,data);
-			}
+			
 		} else {
 			bb.put("code", 0);
 		}
@@ -176,10 +179,16 @@ public class WatchAppSetController extends BaseController {
 	public String CommunicationSettings(@RequestBody String body) {
 		JSONObject jsonObject = (JSONObject) JSON.parse(body);
 		String token = jsonObject.getString("token");
+		
+		JSONObject bb = new JSONObject();
+		String userId = checkTokenWatchAndUser(token);
+		if ("0".equals(userId)) {
+			bb.put("code", -1);
+			return bb.toString();
+		}
 		String imei = jsonObject.getString("imei");
 		String data = jsonObject.getString("data");
 
-		JSONObject bb = new JSONObject();
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
 			bb.put("code", 0);

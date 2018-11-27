@@ -73,7 +73,7 @@ public class AppEnterExitController extends BaseController {
 		}
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
-			bb.put("code", 2);
+			bb.put("code", 4);
 			return bb.toString();
 		}
 

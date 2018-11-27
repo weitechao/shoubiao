@@ -28,5 +28,6 @@ public interface WatchSetService {
 	WatchDeviceSet getDeviceSetByImei(String imei);
 
 	boolean insertWatchDeviceSet(String imei, String data);
+
 	
 }

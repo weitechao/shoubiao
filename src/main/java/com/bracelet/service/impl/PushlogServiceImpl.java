@@ -37,12 +37,12 @@ public class PushlogServiceImpl implements IPushlogService {
 	}
 
 	@Override
-	public boolean insertPushMsg(String imei, String message, int status) {
+	public boolean insertPushMsg(String imei, String message, Integer status) {
 		Timestamp now = Utils.getCurrentTimestamp();
 		int i = jdbcTemplate.update(
-				"insert into push_message (imei, msg, status, createtime) values (?,?,?,?)",
-				new Object[] {  imei, message, status, now }, new int[] {  Types.VARCHAR, Types.VARCHAR,
-						Types.INTEGER, Types.TIMESTAMP });
+				"insert into push_message (imei, msg, status, createtime, updatetime) values (?,?,?,?,?)",
+				new Object[] {  imei, message, status, now, now }, new int[] {  Types.VARCHAR, Types.VARCHAR,
+						Types.INTEGER, Types.TIMESTAMP , Types.TIMESTAMP });
 		return i == 1;
 	}
 
