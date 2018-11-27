@@ -3,6 +3,7 @@ package com.bracelet.socket.business.impl;
 import io.netty.channel.Channel;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,9 +14,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.bracelet.dto.SocketBaseDto;
 import com.bracelet.dto.SocketLoginDto;
+import com.bracelet.dto.WatchLatestLocation;
 import com.bracelet.service.ILocationService;
 import com.bracelet.service.IVoltageService;
 import com.bracelet.socket.business.IService;
+import com.bracelet.util.ChannelMap;
 import com.bracelet.util.HttpClientGet;
 import com.bracelet.util.Utils;
 
@@ -78,6 +81,14 @@ public class LocationUdService extends AbstractBizService {
 					if (locationsArr.length == 2) {
 						locationService.insertUdInfo(imei, 1, locationsArr[1], locationsArr[0], status, time,
 								locationStyle);
+						
+						WatchLatestLocation watchlastlocation = new WatchLatestLocation();
+						watchlastlocation.setImei(imei);
+						watchlastlocation.setLat(locationsArr[1]);
+						watchlastlocation.setLng(locationsArr[0]);
+						watchlastlocation.setLocationType(1);
+						watchlastlocation.setTimestamp(new Date().getTime());
+						ChannelMap.addlocation(imei, watchlastlocation);
 					}
 				}
 				voltageService.insertDianLiang(imei, Integer.valueOf(energy));
@@ -154,6 +165,14 @@ public class LocationUdService extends AbstractBizService {
 							String lat1 = arr[1];
 							String lon = arr[0];
 							locationService.insertUdInfo(imei, 2, lat1, lon, status, time, locationStyle);
+							
+							WatchLatestLocation watchlastlocation = new WatchLatestLocation();
+							watchlastlocation.setImei(imei);
+							watchlastlocation.setLat(lat1);
+							watchlastlocation.setLng(lon);
+							watchlastlocation.setLocationType(2);
+							watchlastlocation.setTimestamp(new Date().getTime());
+							ChannelMap.addlocation(imei, watchlastlocation);
 						}
 					}
 				}
@@ -189,6 +208,14 @@ public class LocationUdService extends AbstractBizService {
 							String lat1 = arr[1];
 							String lon = arr[0];
 							locationService.insertUdInfo(imei, 3, lat1, lon, status, time, locationStyle);
+							
+							WatchLatestLocation watchlastlocation = new WatchLatestLocation();
+							watchlastlocation.setImei(imei);
+							watchlastlocation.setLat(lat1);
+							watchlastlocation.setLng(lon);
+							watchlastlocation.setLocationType(3);
+							watchlastlocation.setTimestamp(new Date().getTime());
+							ChannelMap.addlocation(imei, watchlastlocation);
 						}
 					}
 				}
