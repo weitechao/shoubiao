@@ -112,10 +112,10 @@ public class WatchSetServiceImpl implements WatchSetService {
 	public boolean updateWatchSet(Long id, String data) {
 		Timestamp now = Utils.getCurrentTimestamp();
 		int i = jdbcTemplate
-				.update("update watch_device_set  data=?,updatetime=? where id = ?",
+				.update("update watch_device_set  set data=?,updatetime=? where id = ?",
 						new Object[] { data, now, id }, new int[] {
 								Types.VARCHAR, Types.TIMESTAMP, 
-								Types.VARCHAR });
+								Types.INTEGER });
 		return i == 1;
 	}
 

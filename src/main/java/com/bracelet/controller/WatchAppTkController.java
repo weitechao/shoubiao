@@ -83,7 +83,7 @@ public class WatchAppTkController extends BaseController {
 		}
 		
 		if (socketLoginDto.getChannel().isActive()) {
-			String msg="TK,"+phone+","+sourceName+"1,1,"+voiceData;
+			String msg="TK,"+phone+","+sourceName+",1,1,"+voiceData;
 			String reps = "[YW*"+imei+"*0001*"+RadixUtil.changeRadix(msg)+"*"+msg+"]";
 			bb.put("code", 1);
 			//因为这里我觉得下发的时候需要增加一个消息号，设备再回复的时候，。把消息号带上，这个消息号永远唯一，消息号我随机生成

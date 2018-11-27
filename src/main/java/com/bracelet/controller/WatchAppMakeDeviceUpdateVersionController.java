@@ -116,7 +116,7 @@ public class WatchAppMakeDeviceUpdateVersionController extends BaseController {
 		}
 		String reps = "[YW*"+imei+"*0001*";
 		if (socketLoginDto.getChannel().isActive()) {
-			String msg = "COST1,"+reps + operatorNumber + "," + content ;
+			String msg = "COST1,"+ operatorNumber + "," + content ;
 			reps=reps+RadixUtil.changeRadix(msg)+"*"+msg+ "]";
 			socketLoginDto.getChannel().writeAndFlush(reps);
 			bb.put("code", 1);
