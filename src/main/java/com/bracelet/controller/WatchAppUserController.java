@@ -134,6 +134,19 @@ public class WatchAppUserController extends BaseController {
 		return bb.toString();
 	}
 
+	@ResponseBody
+	@RequestMapping(value = "/getAuthCode/{tel}", method = RequestMethod.GET)
+	public String getAuthCode(@PathVariable String tel) {
+		JSONObject bb = new JSONObject();
+		if (StringUtils.isEmpty(tel)) {
+			bb.put("code", 2);
+			return bb.toString();
+		}
+		this.authcodeService.sendAuthCode(tel);
+		bb.put("code", 1);
+		return bb.toString();
+	}
+
 	// 找回密码
 	@ResponseBody
 	@RequestMapping(value = "/findPwd", method = RequestMethod.POST)
@@ -143,13 +156,18 @@ public class WatchAppUserController extends BaseController {
 		// String token = jsonObject.getString("token");
 		String tel = jsonObject.getString("tel");
 		String password = jsonObject.getString("pwd");// 默认123456
+		String code = jsonObject.getString("code");// 验证码
 		JSONObject bb = new JSONObject();
-		UserInfo userInfo = userInfoService.getUserInfoByUsername(tel);
-		if (userInfo != null) {
-			userInfoService.updateUserPassword(userInfo.getUser_id(), password);
-			bb.put("code", 1);
+		if (this.authcodeService.verifyAuthCode(tel, code)) {
+			UserInfo userInfo = userInfoService.getUserInfoByUsername(tel);
+			if (userInfo != null) {
+				userInfoService.updateUserPassword(userInfo.getUser_id(), password);
+				bb.put("code", 1);
+			} else {
+				bb.put("code", 0);
+			}
 		} else {
-			bb.put("code", 0);
+			bb.put("code", 2);
 		}
 		return bb.toString();
 	}
@@ -187,7 +205,7 @@ public class WatchAppUserController extends BaseController {
 
 	// 获取绑定设备列表
 	@ResponseBody
-	@RequestMapping(value = "/getbindDeviceList/{token}", method = RequestMethod.GET)
+	@RequestMapping(value = "/getbindDeviceList/{token}", method = RequestMethod.GET,produces="text/html;charset=UTF-8")
 	public String getbindDeviceList(@PathVariable String token) {
 		JSONObject bb = new JSONObject();
 		String userId = checkTokenWatchAndUser(token);
@@ -196,7 +214,7 @@ public class WatchAppUserController extends BaseController {
 			return bb.toString();
 		}
 		long user_id = Long.valueOf(checkTokenWatchAndUser(token));
-		
+
 		List<BindDevice> bdList = userInfoService.getBindInfoById(user_id);
 		JSONArray jsonArray = new JSONArray();
 		if (bdList != null) {
@@ -210,28 +228,27 @@ public class WatchAppUserController extends BaseController {
 				jsonArray.add(dataMap);
 			}
 			bb.put("code", 1);
-		
+
 		} else {
 			bb.put("code", 0);
 		}
 		bb.put("result", jsonArray);
 		return bb.toString();
 	}
-	
-	
+
 	// 解除绑定
-		@ResponseBody
-		@RequestMapping(value = "/deleteDevice/{token}/{id}", method = RequestMethod.GET)
-		public String deleteDevice(@PathVariable String token,@PathVariable Long id) {
-			JSONObject bb = new JSONObject();
-			String userId = checkTokenWatchAndUser(token);
-			if ("0".equals(userId)) {
-				bb.put("code", -1);
-				return bb.toString();
-			}
-			userInfoService.deleteDeviceBind(id);
-			bb.put("code", 1);
+	@ResponseBody
+	@RequestMapping(value = "/deleteDevice/{token}/{id}", method = RequestMethod.GET)
+	public String deleteDevice(@PathVariable String token, @PathVariable Long id) {
+		JSONObject bb = new JSONObject();
+		String userId = checkTokenWatchAndUser(token);
+		if ("0".equals(userId)) {
+			bb.put("code", -1);
 			return bb.toString();
 		}
+		userInfoService.deleteDeviceBind(id);
+		bb.put("code", 1);
+		return bb.toString();
+	}
 
 }

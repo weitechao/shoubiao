@@ -201,8 +201,12 @@ public class WatchAppPhoneBookController extends BaseController {
 			return bb.toString();
 		}
 		memberService.deletePhonebookById(id);
-
+		
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
+		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
+			  bb.put("code", 4); 
+			  return bb.toString();
+		}
 
 		StringBuffer sb = new StringBuffer("[YW*" + imei + "*0001*");
 		if (socketLoginDto.getChannel().isActive()) {
@@ -284,6 +288,10 @@ public class WatchAppPhoneBookController extends BaseController {
 
 		memberService.updatePhonebookById(id, name, phone, cornet, headType);
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
+		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
+			  bb.put("code", 4); 
+			  return bb.toString();
+		}
 
 		StringBuffer sb = new StringBuffer("[YW*" + imei + "*0001*");
 		if (socketLoginDto.getChannel().isActive()) {

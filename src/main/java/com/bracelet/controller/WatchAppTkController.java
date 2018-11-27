@@ -77,7 +77,7 @@ public class WatchAppTkController extends BaseController {
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 		String numMessage=Utils.randomString(5);
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
-			watchtkService.insertVoiceInfo(phone, imei, sourceName, voiceData, 0,numMessage ,1,1);
+			watchtkService.insertVoiceInfo(phone, imei, sourceName, voiceData, 0,numMessage ,1, 1);
 			bb.put("code", 2);
 			return bb.toString();
 		}

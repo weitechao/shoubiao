@@ -57,17 +57,17 @@ public class DeviceServiceImpl implements IDeviceService {
 	public boolean insertNewImei(String imei, String phone, int typeOfOperator, String dv) {
 		Timestamp now = Utils.getCurrentTimestamp();
 		int i = jdbcTemplate.update(
-				"insert into device_watch_info (imei, phone, nickname, dv, createtime, type) values (?,?,?,?,?,?)",
-				new Object[] { imei, phone, imei, dv, now, typeOfOperator },
+				"insert into device_watch_info (imei, phone, nickname, dv, createtime, updatetime,type) values (?,?,?,?,?,?,?)",
+				new Object[] { imei, phone, imei, dv, now, now,typeOfOperator },
 				new int[] { java.sql.Types.VARCHAR, java.sql.Types.VARCHAR, java.sql.Types.VARCHAR,
-						java.sql.Types.VARCHAR, java.sql.Types.TIMESTAMP, java.sql.Types.INTEGER });
+						java.sql.Types.VARCHAR, java.sql.Types.TIMESTAMP, java.sql.Types.TIMESTAMP, java.sql.Types.INTEGER });
 		return i == 1;
 	}
 
 	@Override
 	public boolean updateImeiInfo(Long id, String phone, int typeOfOperator, String dv) {
 		Timestamp now = Utils.getCurrentTimestamp();
-		int i = jdbcTemplate.update("update device_watch_info set phone=? ,dv=?,type=?,createtime=? where id = ?",
+		int i = jdbcTemplate.update("update device_watch_info set phone=? ,dv=?,type=?,updatetime=? where id = ?",
 				new Object[] { phone, dv, typeOfOperator, now, id }, new int[] { Types.VARCHAR, Types.VARCHAR,
 						Types.INTEGER, java.sql.Types.TIMESTAMP, java.sql.Types.INTEGER });
 		return i == 1;

@@ -52,7 +52,7 @@ public class SecurityController extends BaseController {
 
 	/* 查找电子围栏 */
 	@ResponseBody
-	@RequestMapping(value = "/getwatchfence/{token}/{imei}", method = RequestMethod.GET)
+	@RequestMapping(value = "/getwatchfence/{token}/{imei}", method = RequestMethod.GET,produces="text/html;charset=UTF-8")
 	public String getwatchfence(@PathVariable String token, @PathVariable String imei) {
 		
 		JSONObject bb = new JSONObject();
@@ -72,6 +72,7 @@ public class SecurityController extends BaseController {
 			bb.put("createtime", fenone.getCreatetime().getTime());
 			bb.put("updatetime", fenone.getUpdatetime().getTime());
 			bb.put("code", 1);
+			bb.put("id",  fenone.getId());
 		} else {
 			bb.put("code", 0);
 		}
@@ -108,24 +109,25 @@ public class SecurityController extends BaseController {
 
 	/* 修改 */
 	@ResponseBody
-	@RequestMapping(value = "/udpatewatchfence", method = RequestMethod.POST)
+	@RequestMapping(value = "/updatewatchfence", method = RequestMethod.POST)
 	public String udpateWatchfence(@RequestBody String body) {
 		JSONObject bb = new JSONObject();
 		JSONObject jsonObject = (JSONObject) JSON.parse(body);
 		String token = jsonObject.getString("token");
 
-		String imei = jsonObject.getString("imei");
-		String name = jsonObject.getString("name");// 围栏名称
-		String lat = jsonObject.getString("lat");
-		String lng = jsonObject.getString("lng");
-		String radius = jsonObject.getString("radius");
-		Long id = Long.valueOf(jsonObject.getString("id"));
+		
 
 		String userId = checkTokenWatchAndUser(token);
 		if ("0".equals(userId)) {
 			bb.put("code", -1);
 			return bb.toString();
 		}
+		String imei = jsonObject.getString("imei");
+		String name = jsonObject.getString("name");// 围栏名称
+		String lat = jsonObject.getString("lat");
+		String lng = jsonObject.getString("lng");
+		String radius = jsonObject.getString("radius");
+		Long id = Long.valueOf(jsonObject.getString("id"));
 		if (this.fenceService.updateWatchFence(id, imei, name, lat, lng, radius)) {
 			bb.put("code", 1);
 		} else {

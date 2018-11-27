@@ -48,7 +48,7 @@ public class WatchDeviceInfoController extends BaseController {
 
 	/* 获取 */
 	@ResponseBody
-	@RequestMapping(value = "/get/{token}/{imei}", method = RequestMethod.GET)
+	@RequestMapping(value = "/get/{token}/{imei}", method = RequestMethod.GET ,produces="text/html;charset=UTF-8")
 	public String getwatchfence(@PathVariable String token, @PathVariable String imei) {
 
 		JSONObject bb = new JSONObject();
@@ -63,20 +63,20 @@ public class WatchDeviceInfoController extends BaseController {
 
 		if (watch != null) {
 			// bb.put("id",watch.getId() );
-			bb.put("phone", watch.getPhone());
-			bb.put("nickname", watch.getNickname());
+			bb.put("phone", watch.getPhone()+"");
+			bb.put("nickname", watch.getNickname()+"");
 			bb.put("createtime", watch.getCreatetime().getTime());
 			bb.put("updatetime", watch.getUpdatetime().getTime());
-			bb.put("dv", watch.getDv());
-			bb.put("type", watch.getType());
-			bb.put("sex", watch.getSex());
-			bb.put("birday", watch.getBirday());
-			bb.put("schoolAge", watch.getSchool_age());
-			bb.put("schoolInfo", watch.getSchool_info());
-			bb.put("homeInfo", watch.getHome_info());
-			bb.put("weight", watch.getWeight());
-			bb.put("height", watch.getHeight());
-			bb.put("head", watch.getHead());
+			bb.put("dv", watch.getDv()+"");
+			bb.put("type", watch.getType()+"");
+			bb.put("sex", watch.getSex()+"");
+			bb.put("birday", watch.getBirday()+"");
+			bb.put("schoolAge", watch.getSchool_age()+"");
+			bb.put("schoolInfo", watch.getSchool_info()+"");
+			bb.put("homeInfo", watch.getHome_info()+"");
+			bb.put("weight", watch.getWeight()+"");
+			bb.put("height", watch.getHeight()+"");
+			bb.put("head", watch.getHead()+"");
 			bb.put("code", 1);
 		} else {
 			bb.put("code", 0);

@@ -237,7 +237,8 @@ public class SmsUtil {
 	
 	public static void main(String[] args) throws ApiException {
 		SendSmsResponse result=	SmsUtil.sendWatchVerificationCode("短信验证码", "18735662247", "SMS_151771312", "{\"code\":\"" + 1234567 + "\"}");
-	/*	String a=useFingerprintOpenDoorSendMsg("123456","tete","18735662247");
+          System.out.println(result.getMessage());
+		/*	String a=useFingerprintOpenDoorSendMsg("123456","tete","18735662247");
 		System.out.println(a);
 		String b=pickALockSendMsg("123456","18735662247");
 		System.out.println(b);*/

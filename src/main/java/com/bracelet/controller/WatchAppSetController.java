@@ -150,7 +150,7 @@ public class WatchAppSetController extends BaseController {
 	
 	// 获取设备设置全部参数
 		@ResponseBody
-		@RequestMapping(value = "/getDeviceSet/{token}/{imei}", method = RequestMethod.GET)
+		@RequestMapping(value = "/getDeviceSet/{token}/{imei}", method = RequestMethod.GET,produces="text/html;charset=UTF-8")
 		public String getDeviceSet(@PathVariable String token,@PathVariable String imei) {
 			JSONObject bb = new JSONObject();
 			String userId = checkTokenWatchAndUser(token);
