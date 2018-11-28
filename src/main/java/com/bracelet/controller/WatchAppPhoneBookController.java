@@ -82,11 +82,13 @@ public class WatchAppPhoneBookController extends BaseController {
 		}
 
 		WatchPhoneBook phoneBook = memberService.getPhoneBookByImeiAndPhone(imei, phone);
-		if (phoneBook != null) {
+	/*	if (phoneBook != null) {
 			bb.put("code", 3);
 			return bb.toString();
+		}*/
+		if (phoneBook == null) {
+			memberService.insertPhoneBookInfo(imei, name, phone, cornet, headType, 1);
 		}
-		memberService.insertPhoneBookInfo(imei, name, phone, cornet, headType, 1);
 
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 
@@ -98,6 +100,7 @@ public class WatchAppPhoneBookController extends BaseController {
 		StringBuffer sb = new StringBuffer("[YW*" + imei + "*0001*");
 		if (socketLoginDto.getChannel().isActive()) {
 			StringBuffer sb1 = new StringBuffer("");
+			StringBuffer sb2 = new StringBuffer("");
 
 			List<WatchPhoneBook> watchbookList = memberService.getPhoneBookByImei(imei);
 
@@ -105,42 +108,42 @@ public class WatchAppPhoneBookController extends BaseController {
 				sb1.append(watchbookList.size());
 				sb1.append(",");
 				for (WatchPhoneBook WatchPhoneBook : watchbookList) {
-					if (sb1.toString().isEmpty()) {
-						sb1.append("1000000000");
-						sb1.append("-");
-						sb1.append(WatchPhoneBook.getName());
-						sb1.append("-");
-						sb1.append(WatchPhoneBook.getPhone());
-						sb1.append("-");
-						sb1.append(WatchPhoneBook.getCornet());
-						sb1.append("-");
-						sb1.append(WatchPhoneBook.getHeadtype());
-						sb1.append("-");
-						sb1.append("0000");
-						sb1.append("-");
-						sb1.append("95078001011");
+					if (sb2.toString().isEmpty()) {
+						sb2.append("1000000000");
+						sb2.append("-");
+						sb2.append(WatchPhoneBook.getName());
+						sb2.append("-");
+						sb2.append(WatchPhoneBook.getPhone());
+						sb2.append("-");
+						sb2.append(WatchPhoneBook.getCornet());
+						sb2.append("-");
+						sb2.append(WatchPhoneBook.getHeadtype());
+						sb2.append("-");
+						sb2.append("0000");
+						sb2.append("-");
+						sb2.append("95078001011");
 					} else {
-						sb1.append("|");
-						sb1.append("1000000000");
-						sb1.append("-");
-						sb1.append(WatchPhoneBook.getName());
-						sb1.append("-");
-						sb1.append(WatchPhoneBook.getPhone());
-						sb1.append("-");
-						sb1.append(WatchPhoneBook.getCornet());
-						sb1.append("-");
-						sb1.append(WatchPhoneBook.getHeadtype());
-						sb1.append("-");
-						sb1.append("0000");
-						sb1.append("-");
-						sb1.append("95078001011");
+						sb2.append("|");
+						sb2.append("1000000000");
+						sb2.append("-");
+						sb2.append(WatchPhoneBook.getName());
+						sb2.append("-");
+						sb2.append(WatchPhoneBook.getPhone());
+						sb2.append("-");
+						sb2.append(WatchPhoneBook.getCornet());
+						sb2.append("-");
+						sb2.append(WatchPhoneBook.getHeadtype());
+						sb2.append("-");
+						sb2.append("0000");
+						sb2.append("-");
+						sb2.append("95078001011");
 					}
 				}
 			} else {
 				sb1.append("0");
 			}
 			// PHB,1234, 001B*
-			String msg = "PHB,1234," + sb1.toString();
+			String msg = "PHB,1234," + sb1.toString()+sb2.toString();
 			sb.append(RadixUtil.changeRadix(msg));
 			sb.append("*");
 			sb.append(msg);
@@ -212,48 +215,49 @@ public class WatchAppPhoneBookController extends BaseController {
 		StringBuffer sb = new StringBuffer("[YW*" + imei + "*0001*");
 		if (socketLoginDto.getChannel().isActive()) {
 			StringBuffer sb1 = new StringBuffer("");
+			StringBuffer sb2 = new StringBuffer("");
 			List<WatchPhoneBook> watchbookList = memberService.getPhoneBookByImei(imei);
 
 			if (watchbookList.size() > 0) {
 				sb1.append(watchbookList.size());
 				sb1.append(",");
 				for (WatchPhoneBook WatchPhoneBook : watchbookList) {
-					if (sb1.toString().isEmpty()) {
-						sb1.append("1000000000");
-						sb1.append("-");
-						sb1.append(WatchPhoneBook.getName());
-						sb1.append("-");
-						sb1.append(WatchPhoneBook.getPhone());
-						sb1.append("-");
-						sb1.append(WatchPhoneBook.getCornet());
-						sb1.append("-");
-						sb1.append(WatchPhoneBook.getHeadtype());
-						sb1.append("-");
-						sb1.append("0000");
-						sb1.append("-");
-						sb1.append("95078001011");
+					if (sb2.toString().isEmpty()) {
+						sb2.append("1000000000");
+						sb2.append("-");
+						sb2.append(WatchPhoneBook.getName());
+						sb2.append("-");
+						sb2.append(WatchPhoneBook.getPhone());
+						sb2.append("-");
+						sb2.append(WatchPhoneBook.getCornet());
+						sb2.append("-");
+						sb2.append(WatchPhoneBook.getHeadtype());
+						sb2.append("-");
+						sb2.append("0000");
+						sb2.append("-");
+						sb2.append("95078001011");
 					} else {
-						sb1.append("|");
-						sb1.append("1000000000");
-						sb1.append("-");
-						sb1.append(WatchPhoneBook.getName());
-						sb1.append("-");
-						sb1.append(WatchPhoneBook.getPhone());
-						sb1.append("-");
-						sb1.append(WatchPhoneBook.getCornet());
-						sb1.append("-");
-						sb1.append(WatchPhoneBook.getHeadtype());
-						sb1.append("-");
-						sb1.append("0000");
-						sb1.append("-");
-						sb1.append("95078001011");
+						sb2.append("|");
+						sb2.append("1000000000");
+						sb2.append("-");
+						sb2.append(WatchPhoneBook.getName());
+						sb2.append("-");
+						sb2.append(WatchPhoneBook.getPhone());
+						sb2.append("-");
+						sb2.append(WatchPhoneBook.getCornet());
+						sb2.append("-");
+						sb2.append(WatchPhoneBook.getHeadtype());
+						sb2.append("-");
+						sb2.append("0000");
+						sb2.append("-");
+						sb2.append("95078001011");
 					}
 				}
 			} else {
 				sb1.append("0");
 			}
 			// PHB,1234, 001B*
-			String msg = "PHB,1234," + sb1.toString();
+			String msg = "PHB,1234," + sb1.toString()+sb2.toString();
 			sb.append(RadixUtil.changeRadix(msg));
 			sb.append("*");
 			sb.append(msg);
@@ -297,6 +301,7 @@ public class WatchAppPhoneBookController extends BaseController {
 		StringBuffer sb = new StringBuffer("[YW*" + imei + "*0001*");
 		if (socketLoginDto.getChannel().isActive()) {
 			StringBuffer sb1 = new StringBuffer("");
+			StringBuffer sb2 = new StringBuffer("");
 
 			List<WatchPhoneBook> watchbookList = memberService.getPhoneBookByImei(imei);
 
@@ -304,42 +309,42 @@ public class WatchAppPhoneBookController extends BaseController {
 				sb1.append(watchbookList.size());
 				sb1.append(",");
 				for (WatchPhoneBook WatchPhoneBook : watchbookList) {
-					if (sb1.toString().isEmpty()) {
-						sb1.append("1000000000");
-						sb1.append("-");
-						sb1.append(WatchPhoneBook.getName());
-						sb1.append("-");
-						sb1.append(WatchPhoneBook.getPhone());
-						sb1.append("-");
-						sb1.append(WatchPhoneBook.getCornet());
-						sb1.append("-");
-						sb1.append(WatchPhoneBook.getHeadtype());
-						sb1.append("-");
-						sb1.append("0000");
-						sb1.append("-");
-						sb1.append("95078001011");
+					if (sb2.toString().isEmpty()) {
+						sb2.append("1000000000");
+						sb2.append("-");
+						sb2.append(WatchPhoneBook.getName());
+						sb2.append("-");
+						sb2.append(WatchPhoneBook.getPhone());
+						sb2.append("-");
+						sb2.append(WatchPhoneBook.getCornet());
+						sb2.append("-");
+						sb2.append(WatchPhoneBook.getHeadtype());
+						sb2.append("-");
+						sb2.append("0000");
+						sb2.append("-");
+						sb2.append("95078001011");
 					} else {
-						sb1.append("|");
-						sb1.append("1000000000");
-						sb1.append("-");
-						sb1.append(WatchPhoneBook.getName());
-						sb1.append("-");
-						sb1.append(WatchPhoneBook.getPhone());
-						sb1.append("-");
-						sb1.append(WatchPhoneBook.getCornet());
-						sb1.append("-");
-						sb1.append(WatchPhoneBook.getHeadtype());
-						sb1.append("-");
-						sb1.append("0000");
-						sb1.append("-");
-						sb1.append("95078001011");
+						sb2.append("|");
+						sb2.append("1000000000");
+						sb2.append("-");
+						sb2.append(WatchPhoneBook.getName());
+						sb2.append("-");
+						sb2.append(WatchPhoneBook.getPhone());
+						sb2.append("-");
+						sb2.append(WatchPhoneBook.getCornet());
+						sb2.append("-");
+						sb2.append(WatchPhoneBook.getHeadtype());
+						sb2.append("-");
+						sb2.append("0000");
+						sb2.append("-");
+						sb2.append("95078001011");
 					}
 				}
 			} else {
 				sb1.append("0");
 			}
 			// PHB,1234, 001B*
-			String msg = "PHB,1234," + sb1.toString();
+			String msg = "PHB,1234," + sb1.toString()+sb2.toString();
 			sb.append(RadixUtil.changeRadix(msg));
 			sb.append("*");
 			sb.append(msg);
