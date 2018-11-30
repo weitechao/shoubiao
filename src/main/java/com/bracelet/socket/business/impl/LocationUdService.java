@@ -164,7 +164,23 @@ public class LocationUdService extends AbstractBizService {
 						if (arr.length == 2) {
 							String lat1 = arr[1];
 							String lon = arr[0];
-							locationService.insertUdInfo(imei, 2, lat1, lon, status, time, locationStyle);
+							
+							
+							WatchLatestLocation oldWatchLocation = ChannelMap.getlocation(imei);
+							if( oldWatchLocation != null ){
+								if((oldWatchLocation.getTimestamp()-new Date().getTime())/(60*1000)>=5){
+									locationService.insertUdInfo(imei, 2, lat1, lon, status, time, locationStyle);
+								}else{
+									double calcDistance = Utils.calcDistance(Double.valueOf(oldWatchLocation.getLng()), Double.valueOf(oldWatchLocation.getLat()),
+											Double.valueOf(lon), Double.valueOf(lat1));
+									if(calcDistance>=550){
+										locationService.insertUdInfo(imei, 2, lat1, lon, status, time, locationStyle);
+									}
+								}
+							}else{
+								locationService.insertUdInfo(imei, 2, lat1, lon, status, time, locationStyle);
+							}
+							
 							
 							WatchLatestLocation watchlastlocation = new WatchLatestLocation();
 							watchlastlocation.setImei(imei);
@@ -173,6 +189,9 @@ public class LocationUdService extends AbstractBizService {
 							watchlastlocation.setLocationType(2);
 							watchlastlocation.setTimestamp(new Date().getTime());
 							ChannelMap.addlocation(imei, watchlastlocation);
+							
+							
+							locationService.insertUdInfo(imei, 2, lat1, lon, status, time, locationStyle);
 						}
 					}
 				}
@@ -207,8 +226,22 @@ public class LocationUdService extends AbstractBizService {
 						if (arr.length == 2) {
 							String lat1 = arr[1];
 							String lon = arr[0];
-							locationService.insertUdInfo(imei, 3, lat1, lon, status, time, locationStyle);
 							
+							
+							WatchLatestLocation oldWatchLocation = ChannelMap.getlocation(imei);
+							if( oldWatchLocation != null ){
+								if((oldWatchLocation.getTimestamp()-new Date().getTime())/(60*1000)>=5){
+									locationService.insertUdInfo(imei, 2, lat1, lon, status, time, locationStyle);
+								}else{
+									double calcDistance = Utils.calcDistance(Double.valueOf(oldWatchLocation.getLng()), Double.valueOf(oldWatchLocation.getLat()),
+											Double.valueOf(lon), Double.valueOf(lat1));
+									if(calcDistance>=550){
+										locationService.insertUdInfo(imei, 3, lat1, lon, status, time, locationStyle);
+									}
+								}
+							}else{
+								locationService.insertUdInfo(imei, 3, lat1, lon, status, time, locationStyle);
+							}
 							WatchLatestLocation watchlastlocation = new WatchLatestLocation();
 							watchlastlocation.setImei(imei);
 							watchlastlocation.setLat(lat1);
