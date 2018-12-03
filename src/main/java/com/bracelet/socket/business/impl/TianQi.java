@@ -2,17 +2,23 @@ package com.bracelet.socket.business.impl;
 
 import io.netty.channel.Channel;
 
+import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.bracelet.dto.SocketBaseDto;
 import com.bracelet.dto.SocketLoginDto;
+import com.bracelet.dto.TianQiLatest;
+import com.bracelet.dto.WatchLatestLocation;
 import com.bracelet.service.ILocationService;
 import com.bracelet.service.IVoltageService;
+import com.bracelet.util.ChannelMap;
 import com.bracelet.util.HttpClientGet;
 import com.bracelet.util.RadixUtil;
 import com.bracelet.util.Utils;
@@ -36,6 +42,12 @@ public class TianQi extends AbstractBizService {
 	@Autowired
 	ILocationService locationService;
 
+	private static final String TianQiUrl = "https://restapi.amap.com/v3/weather/weatherInfo?key="
+			+ Utils.SSRH_TIANQI_KEY + "&extensions=base&output=json" + "&city=";
+
+	private static final String TianQiLocaiton = "http://apilocate.amap.com/position?key=" + Utils.SSRH_LOCATION_KEY
+			+ "&output=json&accesstype=0&cdma=0&tel=13537596170&network=GSM&imsi=";
+
 	@Override
 	protected SocketBaseDto process1(SocketLoginDto socketLoginDto, JSONObject jsonObject, Channel channel) {
 		// TODO Auto-generated method stub
@@ -47,130 +59,263 @@ public class TianQi extends AbstractBizService {
 		logger.info("天气获取=" + jsonInfo);
 		String[] shuzu = jsonInfo.split("\\*");
 		String imei = shuzu[1];// 设备imei
-		//String no = shuzu[2];// 流水号
+		// String no = shuzu[2];// 流水号
 		String info = shuzu[4];
-		String[] infoshuzu = info.split(",");
-		String time = infoshuzu[1] + "-" + infoshuzu[2];
-		//Integer wifiCount = Integer.valueOf(infoshuzu[39]);
 		String city = "深圳";
-		/*
-		 * UD,11102018,142013,V,0.000000,N,
-		 * 0.000000,E,0.00,0.0,0.0,0,100,100,0,0:0,00000000,6,1, 460,0, 19
-		 * 10173,4934,49, 10173,4263,34, 10173,4941,34, 10173,4931,31,
-		 * 10173,4943,27, 10173,4582,27, 0
-		 */
+		Integer locationStyle = 3;// 1正常2报警3天气4拍照
+		String[] infoshuzu = info.split(",");
+		String locationis = infoshuzu[3];// A定位 V不定位
+		if(locationis ==null||"".equals(locationis)){
+			locationis="V";
+		}
+		String time = infoshuzu[1] + "-" + infoshuzu[2];
+		String lat = infoshuzu[4];// 纬度
+		String lng = infoshuzu[6]; // 经度
+		String status = infoshuzu[16];
+		String energy = infoshuzu[13];
+		String locationStatus="0";
 
-		String aab = "460,0,";
-		StringBuffer sbb = new StringBuffer();
+		if ("A".equals(locationis)) {
 
-		sbb.append("bts=");
-		sbb.append(aab);
-		sbb.append(infoshuzu[21]).append(",").append(infoshuzu[22]).append(",")
-				.append((Integer.valueOf(infoshuzu[23]) * 2 - 113) + "");
-		StringBuffer sb = new StringBuffer();
-		sb.append("&nearbts=");
-		if (Integer.valueOf(infoshuzu[26]) > 30) {
-			sb.append(aab);
-			sb.append(infoshuzu[24]).append(",").append(infoshuzu[25]).append(",")
-					.append((Integer.valueOf(infoshuzu[26]) * 2 - 113) + "");
-		}
-		if (Integer.valueOf(infoshuzu[29]) > 30) {
-			sb.append("|");
-			sb.append(aab);
-			sb.append(infoshuzu[27]).append(",").append(infoshuzu[28]).append(",")
-					.append((Integer.valueOf(infoshuzu[29]) * 2 - 113) + "");
-		}
-		if (Integer.valueOf(infoshuzu[32]) > 30) {
-			sb.append("|");
-			sb.append(aab);
-			sb.append(infoshuzu[30]).append(",").append(infoshuzu[31]).append(",")
-					.append((Integer.valueOf(infoshuzu[32]) * 2 - 113) + "");
-		}
-		if (Integer.valueOf(infoshuzu[35]) > 30) {
-			sb.append("|");
-			sb.append(aab);
-			sb.append(infoshuzu[33]).append(",").append(infoshuzu[34]).append(",")
-					.append((Integer.valueOf(infoshuzu[35]) * 2 - 113) + "");
-		}
-		if (Integer.valueOf(infoshuzu[38]) > 30) {
-			sb.append("|");
-			sb.append(aab);
-			sb.append(infoshuzu[36]).append(",").append(infoshuzu[37]).append(",")
-					.append((Integer.valueOf(infoshuzu[38]) * 2 - 113) + "");
-		}
+			logger.info("imei=" + imei + ",lat=" + lat + ",lon=" + lng + ",time=" + time + ",status=" + status
+					+ ",energy=" + energy);
 
-		String url = "http://apilocate.amap.com/position?key=" + Utils.SSRH_LOCATION_KEY
-				+ "&output=json&accesstype=0&imsi=" + imei + "&cdma=0&tel=13537596170&network=GSM&" + sbb.toString()
-				+ sb.toString();
-		logger.info(url);
-		String responseJsonString = HttpClientGet.urlReturnParams(url);
+			if (!"0.000000".equals(lat) && !"0.000000".equals(lng)) {
+				String url = Utils.SSRH_GPS_URL + "?key=" + Utils.SSRH_TIANQI_KEY + "&coordsys=gps&locations=" + lng + "," + lat;
+				// http://restapi.amap.com/v3/assistant/coordinate/convert?key=c6a272fdecf96b343c31719d6b8cb0be&coordsys=gps&locations=114.0231567,22.5351085
+				logger.info("[LocationService]请求高德GPS位置转换,URL:" + url);
+				String responseJsonString = HttpClientGet.get(url);
+				logger.info("[LocationService]请求高德坐标转换，应答数据:" + responseJsonString);
 
-		String lat = "0.000000";
-		String lon = "0.000000";
-		String locationStatus = "0";
-		if (responseJsonString != null) {
-			JSONObject responseJsonObject = (JSONObject) JSON.parse(responseJsonString);
-			String status = responseJsonObject.getString("status");
-			// String info = responseJsonObject.getString("info");
-			if ("1".equals(status)) {
-				JSONObject resultJsonObject = responseJsonObject.getJSONObject("result");
-				city = resultJsonObject.getString("city");
-				String location = resultJsonObject.getString("location");
-				String[] arr = location.split(",");
-				if (arr.length == 2) {
-					lat = arr[1];
-					lon = arr[0];
-					locationService.insertUdInfo(imei, 2, lat, lon, status, time, 3);
+				JSONObject responseJsonObject = (JSONObject) JSON.parse(responseJsonString);
+				String locationstatus = responseJsonObject.getString("status");
+				// String info = responseJsonObject.getString("info");
+				String locations = responseJsonObject.getString("locations");
+				if ("1".equals(locationstatus) && locations != null) {
+					locations = locations.split(";")[0];
+					String[] locationsArr = locations.split(",");
+					if (locationsArr.length == 2) {
+						locationService.insertUdInfo(imei, 1, locationsArr[1], locationsArr[0], status, time,
+								locationStyle);
+
+						WatchLatestLocation watchlastlocation = new WatchLatestLocation();
+						watchlastlocation.setImei(imei);
+						watchlastlocation.setLat(locationsArr[1]);
+						watchlastlocation.setLng(locationsArr[0]);
+						watchlastlocation.setLocationType(1);
+						watchlastlocation.setTimestamp(new Date().getTime());
+						ChannelMap.addlocation(imei, watchlastlocation);
+					}
+				}
+				voltageService.insertDianLiang(imei, Integer.valueOf(energy));
+			} else {
+				logger.info("GPS定位失败=" + lat + "," + lng);
+				locationStatus="1";
+			}
+		} else if ("V".equals(locationis)) {
+			Integer lbsCount = Integer.valueOf(infoshuzu[17]);
+			Integer wifiCount = Integer.valueOf(infoshuzu[17+1+2+1+3*lbsCount]);
+			logger.info("lbsCount=" + lbsCount);
+			logger.info("wifiCount=" + wifiCount);
+			if (wifiCount == 0) {
+				String aab = "460,0,";
+				StringBuffer sbb = new StringBuffer();
+
+				sbb.append("bts=");
+				sbb.append(aab);
+				sbb.append(infoshuzu[21]).append(",").append(infoshuzu[22]).append(",")
+						.append((Integer.valueOf(infoshuzu[23]) * 2 - 113) + "");
+				StringBuffer sb = new StringBuffer();
+                  if(lbsCount>1){
+      			    	sb.append("&nearbts=");
+                	  for(int i =0;i<lbsCount*3;i=i+3){
+                		  if(i>1){
+                			  sb.append("|");
+                		  }
+                		  sb.append(aab);
+                		  sb.append(infoshuzu[21+i]).append(",").append(infoshuzu[22+i]).append(",")
+							.append((Integer.valueOf(infoshuzu[23+i]) * 2 - 113) + "");
+                	  }
+                  }
+
+				String url = "http://apilocate.amap.com/position?key=" + Utils.SSRH_LOCATION_KEY
+						+ "&output=json&accesstype=0&imsi=" + imei + "&cdma=0&tel=13537596170&network=GSM&"
+						+ sbb.toString() + sb.toString();
+				logger.info(url);
+				String responseJsonString = HttpClientGet.urlReturnParams(url);
+
+				if (responseJsonString != null) {
+					JSONObject responseJsonObject = (JSONObject) JSON.parse(responseJsonString);
+					String locationstatus = responseJsonObject.getString("status");
+					// String info = responseJsonObject.getString("info");
+					if ("1".equals(locationstatus)) {
+						JSONObject resultJsonObject = responseJsonObject.getJSONObject("result");
+						String location = resultJsonObject.getString("location");
+						city = resultJsonObject.getString("city");
+						String[] arr = location.split(",");
+						if (arr.length == 2) {
+							lat = arr[1];
+						    lng = arr[0];
+							WatchLatestLocation oldWatchLocation = ChannelMap.getlocation(imei);
+							if (oldWatchLocation != null) {
+								if(oldWatchLocation.getLocationType()==2){
+								if (((oldWatchLocation.getTimestamp() - new Date().getTime()) / (60 * 1000)) >= 3) {
+									locationService.insertUdInfo(imei, 2, lat, lng, status, time, locationStyle);
+								} else {
+									double calcDistance = Utils.calcDistance(Double.valueOf(oldWatchLocation.getLng()),
+											Double.valueOf(oldWatchLocation.getLat()), Double.valueOf(lng),
+											Double.valueOf(lat));
+									if (calcDistance > 550) {
+										locationService.insertUdInfo(imei, 2, lat, lng, status, time, locationStyle);
+									}
+								}
+								}else{
+									locationService.insertUdInfo(imei, 2, lat, lng, status, time, locationStyle);
+								}
+							} else {
+								locationService.insertUdInfo(imei, 2, lat, lng, status, time, locationStyle);
+							}
+
+							WatchLatestLocation watchlastlocation = new WatchLatestLocation();
+							watchlastlocation.setImei(imei);
+							watchlastlocation.setLat(lat);
+							watchlastlocation.setLng(lng);
+							watchlastlocation.setLocationType(2);
+							watchlastlocation.setTimestamp(new Date().getTime());
+							ChannelMap.addlocation(imei, watchlastlocation);
+						}
+					}
+				}else{
+					locationStatus="1";
 				}
 			} else {
-				locationStatus = "1";
+				String mmac = "";
+				String macs = "";
+				if (wifiCount > 0) {
+					mmac =  infoshuzu[23+3*lbsCount] + "," + infoshuzu[21+3+3*lbsCount] + ","+infoshuzu[22+3*lbsCount];
+//					mmac = infoshuzu[41] + "," + infoshuzu[42] + "," + infoshuzu[40];
+					logger.info("mmac="+mmac);
+					if (wifiCount > 1) {
+						for (int i = 0; i < wifiCount*3; i=i+3) {
+							if (i>1) {
+								macs +=  "|";
+							}
+							macs +=   infoshuzu[23+3*lbsCount+ i]+ ","+infoshuzu[21+3+3*lbsCount + i]+ ","+infoshuzu[22+3*lbsCount + i];
+						}
+					}
+
+				}
+
+				if (macs != null && !"".equals(macs) && mmac != null && !"".equals(mmac)) {
+					String url = "http://apilocate.amap.com/position?key=" + Utils.SSRH_LOCATION_KEY
+							+ "&output=json&accesstype=1&imei="+imei+"&mmac=" + mmac + "&macs=" + macs;
+					logger.info(url);
+					String responseJsonString = HttpClientGet.urlReturnParams(url);
+					if (responseJsonString != null) {
+						JSONObject responseJsonObject = (JSONObject) JSON.parse(responseJsonString);
+						String locationstatus = responseJsonObject.getString("status");
+						// String info = responseJsonObject.getString("info");
+						if ("1".equals(locationstatus)) {
+							JSONObject resultJsonObject = responseJsonObject.getJSONObject("result");
+							String location = resultJsonObject.getString("location");
+							city = resultJsonObject.getString("city");
+							String[] arr = location.split(",");
+							if (arr.length == 2) {
+								lat = arr[1];
+							    lng = arr[0];
+
+								
+							WatchLatestLocation oldWatchLocation = ChannelMap.getlocation(imei);
+						
+								if (oldWatchLocation != null) {
+									if(oldWatchLocation.getLocationType()==3){
+									if (((oldWatchLocation.getTimestamp() - new Date().getTime()) / (60 * 1000)) >= 3) {
+										locationService.insertUdInfo(imei, 3, lat, lng, status, time, locationStyle);
+									} else {
+										double calcDistance = Utils.calcDistance(
+												Double.valueOf(oldWatchLocation.getLng()),
+												Double.valueOf(oldWatchLocation.getLat()), Double.valueOf(lng),
+												Double.valueOf(lat));
+										if (calcDistance > 550) {
+											locationService.insertUdInfo(imei, 3, lat, lng, status, time,
+													locationStyle);
+										}
+									}
+									}else{
+										locationService.insertUdInfo(imei, 3, lat, lng, status, time, locationStyle);
+									}
+								} else {
+									locationService.insertUdInfo(imei, 3, lat, lng, status, time, locationStyle);
+								}
+								
+								WatchLatestLocation watchlastlocation = new WatchLatestLocation();
+								watchlastlocation.setImei(imei);
+								watchlastlocation.setLat(lat);
+								watchlastlocation.setLng(lng);
+								watchlastlocation.setLocationType(3);
+								watchlastlocation.setTimestamp(new Date().getTime());
+								ChannelMap.addlocation(imei, watchlastlocation);
+							}
+						}
+					}else{
+						locationStatus="1";
+					}
+				}
 			}
 		}
+
+		
+		
 		StringBuffer sbreponse = new StringBuffer("[YW*" + imei + "*0001*");
 
-		// api 地址 https://lbs.amap.com/api/webservice/guide/api/weatherinfo/
-		String responseJsonStringTianQi = HttpClientGet.get("https://restapi.amap.com/v3/weather/weatherInfo?key="
-				+ Utils.SSRH_TIANQI_KEY + "&city=" + city + "&extensions=base&output=json");
-		JSONObject responseJsonObject = (JSONObject) JSON.parse(responseJsonStringTianQi);
-		// {"status":"1","count":"1","info":"OK","infocode":"10000","lives":[{"province":"广东","city":"深圳市","adcode":"440300","weather":"晴","temperature":"25","winddirection":"东北","windpower":"6","humidity":"77","reporttime":"2018-11-16
-		// 16:00:00"}]}
-		String status = responseJsonObject.getString("status");
-		if ("1".equals(status)) {
-			JSONObject resultJsonObject = responseJsonObject.getJSONObject("lives");
-			String weather = resultJsonObject.getString("weather");
-			String temperature = resultJsonObject.getString("temperature");
-			String reporttime = resultJsonObject.getString("reporttime");
-			String message = "TQ," + locationStatus + ",“" + city + "”,“" + weather + "”,”" + temperature + "”," + lat
-					+ "," + lon;
+		TianQiLatest tianQi = ChannelMap.getCityTianQi(city+Utils.getRiQi());
+		if (tianQi != null) {
+			String message = "TQ," + locationStatus + ",\"" + city + "\",\"" + tianQi.getWeather() + "\",\""
+					+ tianQi.getTemperature() + "\"," + lat + "," + lng;
 			sbreponse.append(RadixUtil.changeRadix(message));
 			sbreponse.append("*");
 			sbreponse.append(message);
 			sbreponse.append("]");
 
-			// String resp = "[YW*" + imei + "*0001*0002*
-			// TQ,0,”承德”,”天气晴朗”,”25.3”,22.571707,113.8613968]";
+			logger.info("天气HashMap返回=" + sbreponse.toString());
+			return sbreponse.toString();
 		}
-		/*
-		 * {"status":"1","count":"1","info":"OK","infocode":"10000",
-		 * "forecasts":[{"city":"北京市","adcode":"110000","province":"北京",
-		 * "reporttime":"2018-09-21 11:00:00",
-		 * "casts":[{"date":"2018-09-21","week":"5","dayweather":"晴",
-		 * "nightweather":"晴","daytemp":"25",
-		 * "nighttemp":"14","daywind":"西北","nightwind":"西北","daypower":"5",
-		 * "nightpower":"≤3"},
-		 * {"date":"2018-09-22","week":"6","dayweather":"晴","nightweather":"晴",
-		 * "daytemp":"23",
-		 * "nighttemp":"13","daywind":"西北","nightwind":"西","daypower":"4",
-		 * "nightpower":"≤3"},
-		 * {"date":"2018-09-23","week":"7","dayweather":"晴","nightweather":"晴",
-		 * "daytemp":"24","nighttemp":"12",
-		 * "daywind":"西北","nightwind":"北","daypower":"5","nightpower":"≤3"},
-		 * {"date":"2018-09-24","week":"1","dayweather":"晴","nightweather":"晴",
-		 * "daytemp":"23","nighttemp":"11","daywind":"东南","nightwind":"西南",
-		 * "daypower":"≤3","nightpower":"≤3"}]}]}
-		 */
-		// 天气查询API
 
+		String responseJsonStringTianQi = HttpClientGet.get(TianQiUrl + city);
+		JSONObject responseJsonObject = (JSONObject) JSON.parse(responseJsonStringTianQi);
+		String statusTiQi = responseJsonObject.getString("status");
+		if ("1".equals(statusTiQi)) {
+			JSONArray jsonArray = responseJsonObject.getJSONArray("lives");
+			JSONObject jsonObject2 = (JSONObject) jsonArray.get(0);
+			String weather = jsonObject2.getString("weather");
+			String temperature = jsonObject2.getString("temperature");
+			String reporttime = jsonObject2.getString("reporttime");
+			String message = "TQ," + locationStatus + ",\"" + city + "\",\"" + weather + "\",\"" + temperature + "\","
+					+ lat + "," + lng;
+			sbreponse.append(RadixUtil.changeRadix(message));
+			sbreponse.append("*");
+			sbreponse.append(message);
+			sbreponse.append("]");
+
+			TianQiLatest cityTi = new TianQiLatest();
+			cityTi.setCity(city);
+			cityTi.setReporttime(reporttime);
+			cityTi.setTemperature(temperature);
+			cityTi.setWeather(weather);
+
+			ChannelMap.addCityQianQi(city+Utils.getRiQi(), cityTi);
+
+			logger.info("天气返回=" + sbreponse.toString());
+		}else{
+			String weather = "多云";
+			String temperature = "27";
+			String message = "TQ," + locationStatus + ",\"" + city + "\",\"" + weather + "\",\"" + temperature + "\","
+					+ lat + "," + lng;
+			sbreponse.append(RadixUtil.changeRadix(message));
+			sbreponse.append("*");
+			sbreponse.append(message);
+			sbreponse.append("]");
+		}
 		return sbreponse.toString();
 
 	}

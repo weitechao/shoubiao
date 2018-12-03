@@ -133,7 +133,7 @@ public class HttpClientGet {
 			int code = httpConnect.getResponseCode();
 			if (code == 200) {
 				in = new BufferedReader(new InputStreamReader(
-						connection.getInputStream()));
+						connection.getInputStream(),"utf-8"));
 				String line;
 				while ((line = in.readLine()) != null) {
 					sb.append(line);

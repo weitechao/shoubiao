@@ -87,7 +87,7 @@ public class BusinessHandler implements IBusinessHandler {
 	
 			incoming.writeAndFlush(reponse);
 		
-		apilogService.insert(serviceName, json, reponse, imei, rstatus, rmsg, time);
+		//apilogService.insert(serviceName, json, reponse, imei, rstatus, rmsg, time);
 	}
 	
 	

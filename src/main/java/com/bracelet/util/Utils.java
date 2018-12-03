@@ -73,6 +73,7 @@ public class Utils {
 	
 	public final static String SSRH_LOCATION_KEY = "93b4cf92ab27576506c6ea1edbe8bb54";
 	public final static String SSRH_TIANQI_KEY = "7d92f6b57a23743f6939c24714731a6a";
+	public final static String SSRH_GPS_URL = "http://restapi.amap.com/v3/assistant/coordinate/convert";
 	
 
 	public static String randomString(int len) {
@@ -450,6 +451,11 @@ public class Utils {
 		SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd,HH:mm:ss");
 		return ft.format(new Date());
 	}
+	
+	public static String getRiQi(){
+		SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
+		return ft.format(new Date());
+	}
 
 	
 	/**
@@ -494,6 +500,7 @@ public class Utils {
 	}
 	
 	public static void main(String[] args) throws UnsupportedEncodingException {
+		System.out.println(getRiQi());
 		 int valueTen = 6;
 	        //将其转换为十六进制并输出
 	        String strHex = Integer.toHexString(valueTen);
