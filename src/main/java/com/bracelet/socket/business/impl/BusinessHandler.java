@@ -51,6 +51,7 @@ public class BusinessHandler implements IBusinessHandler {
 			imei = socketLoginDto.getImei();
 		}
 		try {
+			if(json.contains("[YW*")){
 			String jsonInfo =json.replaceAll("\\[", "");
 			String[] shuzu=jsonInfo.split("\\*");
 			//String deviceid=shuzu[1];
@@ -59,6 +60,11 @@ public class BusinessHandler implements IBusinessHandler {
 			service = socketBusinessFactory.getService(cmd);
 			serviceName = service.getClass().getName();
 			reponse = service.process(jsonInfo, incoming);
+			}else{
+				service = socketBusinessFactory.getService("TK");
+				serviceName = service.getClass().getName();
+				reponse = service.process(json, incoming);
+			}
 		} catch (Exception e) {
 			logger.error("process error:", e);
 			rstatus = 1;
@@ -89,6 +95,5 @@ public class BusinessHandler implements IBusinessHandler {
 		
 		//apilogService.insert(serviceName, json, reponse, imei, rstatus, rmsg, time);
 	}
-	
 	
 }

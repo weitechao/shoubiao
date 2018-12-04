@@ -48,9 +48,9 @@ public class UploadPhotoServiceImpl implements IUploadPhotoService{
 	public boolean insertPhoto(String imei,  String source,String photoName, String dataInfo) {
 		Timestamp now = Utils.getCurrentTimestamp();
 		int i = jdbcTemplate
-				.update("insert into watch_upload_photo (imei, photo_name, source, data,createtime) values (?,?,?,?,?)",
-						new Object[] { imei, photoName, source, dataInfo, now},
-						new int[] { Types.VARCHAR, Types.VARCHAR,
+				.update("insert into watch_upload_photo (imei, photo_name, source, data, createtime) values (?,?,?,?,?)",
+						new Object[] { imei, photoName, source,dataInfo, now}, 
+						new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
 								Types.VARCHAR, Types.TIMESTAMP});
 		return i == 1;
 	}

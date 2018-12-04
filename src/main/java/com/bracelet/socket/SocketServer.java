@@ -34,7 +34,14 @@ public class SocketServer implements InitializingBean, DisposableBean{
 		workerGroup = new NioEventLoopGroup();
 		ServerBootstrap b = new ServerBootstrap();
 		b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class).childHandler(serverChannelInitializer)
-				.option(ChannelOption.SO_BACKLOG, 128).childOption(ChannelOption.SO_KEEPALIVE, true);
+				.option(ChannelOption.SO_BACKLOG, 128).
+				option(ChannelOption.SO_SNDBUF, 32 * 1024).
+				option(ChannelOption.SO_RCVBUF, 32*1024).
+				childOption(ChannelOption.SO_KEEPALIVE, true);
+		
+		
+		//  .option(ChannelOption.SO_SNDBUF, 32 * 1024) //设置发送数据缓冲大小.option(ChannelOption.SO_RCVBUF, 32 * 1024) //设置接受数据缓冲大小
+        
 		
 		/**
          * 对于ChannelOption.SO_BACKLOG的解释：

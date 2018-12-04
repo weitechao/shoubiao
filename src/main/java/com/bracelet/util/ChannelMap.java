@@ -27,6 +27,8 @@ public class ChannelMap {
 	private static Map<String, WatchLatestLocation> channelMap4 = new HashMap<String, WatchLatestLocation>();
 	
 	private static Map<String, TianQiLatest> channelMap5 = new HashMap<String, TianQiLatest>();
+	
+	private static Map<String, String> voiceNameMap = new HashMap<String, String>();
 
 	/**
 	 * 
@@ -88,5 +90,14 @@ public class ChannelMap {
 
 	public static TianQiLatest getCityTianQi(String city) {
 		return channelMap5.get(city);
+	}
+	
+	public static void addVoiceName(String imei, String voiceName) {
+		voiceNameMap.put(imei, voiceName);
+	}
+
+
+	public static String getVoiceName(String imei) {
+		return voiceNameMap.get(imei);
 	}
 }

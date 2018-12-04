@@ -65,7 +65,7 @@ public class LoginService implements IService {
 
 		WatchDevice watchd = ideviceService.getDeviceInfo(imei);
 		if(watchd != null){
-			ideviceService.updateImeiInfo(watchd.getId(), phone, TypeOfOperator, dv);
+			//ideviceService.updateImeiInfo(watchd.getId(), phone, TypeOfOperator, dv);
 		}else{
 			ideviceService.insertNewImei(imei, phone, TypeOfOperator, dv);
 		}

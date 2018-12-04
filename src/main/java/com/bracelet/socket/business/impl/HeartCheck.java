@@ -49,6 +49,18 @@ public class HeartCheck extends AbstractBizService {
 		String[] infoshuzu = info.split(",");
 		String energy = infoshuzu[1];
 		
+		
+		SocketLoginDto channelDto = new SocketLoginDto();
+		channelDto.setChannel(channel);
+		channelDto.setNo(no);
+		channelDto.setImei(imei);
+	
+		// channelDto.setUser_id(userInfo.getUser_id());
+
+		ChannelMap.addChannel(imei, channelDto);
+		ChannelMap.addChannel(channel, channelDto);
+		
+		
 		//还需要保存下电量
 		voltageService.insertDianLiang(imei, Integer.valueOf(energy));
 		logger.info("链路保持imei:" + imei + "," + ",no:" + no + ",电量:" + energy);

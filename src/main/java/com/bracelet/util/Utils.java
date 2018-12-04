@@ -75,6 +75,15 @@ public class Utils {
 	public final static String SSRH_TIANQI_KEY = "7d92f6b57a23743f6939c24714731a6a";
 	public final static String SSRH_GPS_URL = "http://restapi.amap.com/v3/assistant/coordinate/convert";
 	
+	
+	public final static String VOICE_FILE_lINUX = "/usr/local/resin/resin-pro-4.0.53-8080/webapps/GXCareDevice/watchvoice/device";
+	public final static String VOICE_FILE_WINDOWS = "F:/test";
+	public final static String VOICE_URL = "http://47.92.30.81:8080/GXCareDevice/watchvoice/device/";
+	
+	
+	public final static String PHOTO_FILE_lINUX = "/usr/local/resin/resin-pro-4.0.53-8080/webapps/GXCareDevice/watchphoto/device";
+	public final static String PHOTO_URL = "http://47.92.30.81:8080/GXCareDevice/watchphoto/device/";
+	
 
 	public static String randomString(int len) {
 		if (len <= 0) {
@@ -417,8 +426,8 @@ public class Utils {
 			byte[] content) {
 		try {
 			createFile(path);
-
-			FileOutputStream fos = new FileOutputStream(path + "/" + fileName);
+		
+			FileOutputStream fos = new FileOutputStream(path + "/" + fileName,true);
 			fos.write(content);
 			fos.close();
 		} catch (FileNotFoundException e) {

@@ -61,7 +61,7 @@ public class LocationUdService extends AbstractBizService {
 		return "";
 	}
 
-	public String chuliLocationInfo(String imei, String info, String no, Integer locationStyle) {
+	public void chuliLocationInfo(String imei, String info, String no, Integer locationStyle) {
 		String city="深圳市";
 
 		logger.info("imei=" + imei + ",info=" + info + ",no=" + no);
@@ -263,7 +263,6 @@ public class LocationUdService extends AbstractBizService {
 				}
 			}
 		}
-		return city;
 	}
 
 }

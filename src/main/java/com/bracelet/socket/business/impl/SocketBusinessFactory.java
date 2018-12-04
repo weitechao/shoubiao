@@ -121,6 +121,12 @@ public class SocketBusinessFactory {
         case "PHB":
             // 通讯录设置
             return resetService;
+        case "KB":
+            // 拨号键盘
+            return resetService;
+        case "ET":
+            // 进入退出
+            return resetService;
         case "TK":
             // 对讲群聊
             return tkService;
