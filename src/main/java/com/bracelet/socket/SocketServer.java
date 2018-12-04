@@ -35,8 +35,8 @@ public class SocketServer implements InitializingBean, DisposableBean{
 		ServerBootstrap b = new ServerBootstrap();
 		b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class).childHandler(serverChannelInitializer)
 				.option(ChannelOption.SO_BACKLOG, 128).
-				option(ChannelOption.SO_SNDBUF, 32 * 1024).
-				option(ChannelOption.SO_RCVBUF, 32*1024).
+				option(ChannelOption.SO_SNDBUF, 1024).
+				option(ChannelOption.SO_RCVBUF, 1024).
 				childOption(ChannelOption.SO_KEEPALIVE, true);
 		
 		

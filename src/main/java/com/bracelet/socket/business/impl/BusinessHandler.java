@@ -31,7 +31,7 @@ public class BusinessHandler implements IBusinessHandler {
 	IApilogService apilogService;
 
 	public void process(String json, Channel incoming) {
-		
+
 		IService service = null;
 		int type = 0;
 		int a = 0;
@@ -51,17 +51,25 @@ public class BusinessHandler implements IBusinessHandler {
 			imei = socketLoginDto.getImei();
 		}
 		try {
-			if(json.contains("[YW*")){
-			String jsonInfo =json.replaceAll("\\[", "");
-			String[] shuzu=jsonInfo.split("\\*");
-			//String deviceid=shuzu[1];
-			String info=shuzu[4];
-			 cmd =info.split(",")[0];
-			service = socketBusinessFactory.getService(cmd);
-			serviceName = service.getClass().getName();
-			reponse = service.process(jsonInfo, incoming);
-			}else{
-				service = socketBusinessFactory.getService("TK");
+			if (json.contains("[YW*")) {
+				String jsonInfo = json.replaceAll("\\[", "");
+				String[] shuzu = jsonInfo.split("\\*");
+				// String deviceid=shuzu[1];
+				String info = shuzu[4];
+				cmd = info.split(",")[0];
+				service = socketBusinessFactory.getService(cmd);
+				serviceName = service.getClass().getName();
+				reponse = service.process(jsonInfo, incoming);
+			} else {
+				String voiceName = ChannelMap.getVoiceName(socketLoginDto.getImei());
+				if(voiceName.contains(".amr")){
+					cmd="TK";
+					service = socketBusinessFactory.getService(cmd);
+				}else{
+					cmd="TPBK";
+					service = socketBusinessFactory.getService(cmd);
+				}
+			
 				serviceName = service.getClass().getName();
 				reponse = service.process(json, incoming);
 			}
@@ -86,14 +94,15 @@ public class BusinessHandler implements IBusinessHandler {
 			}
 		}
 		long time = System.currentTimeMillis() - startTime;
-		/*String responseJson = JSON.toJSONString(dto);
-		if (a == 0) { // 如果a是1，表示应答，则无需返回结果
-			incoming.writeAndFlush(responseJson + "\r\n");
-		}*/
-	
-			incoming.writeAndFlush(reponse);
-		
-		//apilogService.insert(serviceName, json, reponse, imei, rstatus, rmsg, time);
+		/*
+		 * String responseJson = JSON.toJSONString(dto); if (a == 0) { //
+		 * 如果a是1，表示应答，则无需返回结果 incoming.writeAndFlush(responseJson + "\r\n"); }
+		 */
+        logger.info("cmd:"+cmd+"=返回:"+reponse);
+		incoming.writeAndFlush(reponse);
+
+		// apilogService.insert(serviceName, json, reponse, imei, rstatus, rmsg,
+		// time);
 	}
-	
+
 }

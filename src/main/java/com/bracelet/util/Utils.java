@@ -508,6 +508,28 @@ public class Utils {
 		}
 	}
 	
+	
+	public static void base64StringToJpg(String base64String,String f) {
+		try {
+			createFile(f);
+			
+			byte[] bytes1 = decoder.decodeBuffer(base64String);
+ 
+			ByteArrayInputStream bais = new ByteArrayInputStream(bytes1);
+			BufferedImage bi1 = ImageIO.read(bais);
+			File w2 = new File(f);// 可以是jpg,png,gif格式
+			ImageIO.write(bi1, "jpg", w2);// 不管输出什么格式图片，此处不需改动
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	/*
+	 * createFile(path);
+		
+			FileOutputStream fos = new FileOutputStream(path + "/" + fileName,true);
+			fos.write(content);
+	 * */
+	
 	public static void main(String[] args) throws UnsupportedEncodingException {
 		System.out.println(getRiQi());
 		 int valueTen = 6;

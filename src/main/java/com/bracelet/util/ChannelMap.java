@@ -29,6 +29,8 @@ public class ChannelMap {
 	private static Map<String, TianQiLatest> channelMap5 = new HashMap<String, TianQiLatest>();
 	
 	private static Map<String, String> voiceNameMap = new HashMap<String, String>();
+	
+	//private static Map<String, String> photoNameMap = new HashMap<String, String>();
 
 	/**
 	 * 
@@ -96,8 +98,15 @@ public class ChannelMap {
 		voiceNameMap.put(imei, voiceName);
 	}
 
-
 	public static String getVoiceName(String imei) {
 		return voiceNameMap.get(imei);
 	}
+	
+	/*public static void addPhotoName(String imei, String photoName) {
+		photoNameMap.put(imei, photoName);
+	}
+
+	public static String getPhotoName(String imei) {
+		return photoNameMap.get(imei);
+	}*/
 }

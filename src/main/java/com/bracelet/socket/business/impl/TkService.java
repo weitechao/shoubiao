@@ -88,8 +88,11 @@ public class TkService extends AbstractBizService {
 					}
 
 					if (thisNumber == allNumber && allNumber != 0) {
+						//如果这个语音已经全部传完。就置空voiceName  不置空  可能还会有遗留
+						//ChannelMap.addVoiceName(imei, "");
 						watchtkService.insertVoiceInfo(imei, "1", Utils.VOICE_URL + voiceName, "1", 0, "1", 1, 1);
 					}
+					return	"[YW*" + imei + "*0001*0004*TK,1]";
 				} else {
 					return "";
 				}
@@ -99,6 +102,8 @@ public class TkService extends AbstractBizService {
 			//	byte[] voiceData = Base64.decodeBase64(jsonInfo);
 				byte[] voiceData = jsonInfo.getBytes("UTF-8");
 				Utils.createFileContent(Utils.VOICE_FILE_lINUX, voiceName, voiceData);
+				
+				return	"[YW*" + imei + "*0001*0004*TK,1]";
 			}
 
 		} catch (UnsupportedEncodingException e) {

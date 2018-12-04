@@ -22,7 +22,7 @@ public class BaseChannelHandler extends SimpleChannelInboundHandler<String> {
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
 		Channel incoming = ctx.channel();
-		logger.info("[" + incoming.remoteAddress() + "]发送信息:" + msg);
+		//logger.info("[" + incoming.remoteAddress() + "]发送信息:" + msg);
 		businessHandler.process(msg, incoming);
 	}
 

@@ -57,34 +57,48 @@ public class UploadPhoto extends AbstractBizService {
 
 		
 		logger.info("设备照片上传=" + jsonInfo);
-		String[] shuzu = jsonInfo.split("\\*");
-		String imei = shuzu[1];// 设备imei
-		String no = shuzu[2];// 流水号
-		String info = shuzu[4];
-		Integer locationStyle = 4;// 1正常2报警3天气4拍照
-		String[] infoshuzuMsg = info.split(",");
-		String source = infoshuzuMsg[1];// 文件-来源 如果是设备就填0，如果是App就填发的人的手机号码
-		String photoName = infoshuzuMsg[2];// 文件名
-		int thisNumber = Integer.valueOf(infoshuzuMsg[3]);// 当前包 如果是0就是定位
-															// 1就是照片数据
-		int allNumber = Integer.valueOf(infoshuzuMsg[4]);// 总包个数
-		//String dataInfo = "ud," + infoshuzuMsg[5];// thisNumber0位置数据--其他照片数据
+		
+		String imei = socketLoginDto.getImei();
 		
 		try{
+			if (jsonInfo.contains("YW*")) {
 			
-		
+			String[] shuzu = jsonInfo.split("\\*");
+			//String imei = shuzu[1];// 设备imei
+			String no = shuzu[2];// 流水号
+			String info = shuzu[4];
+			Integer locationStyle = 4;// 1正常2报警3天气4拍照
+			String[] infoshuzuMsg = info.split(",");
+			String source = infoshuzuMsg[1];// 文件-来源 如果是设备就填0，如果是App就填发的人的手机号码
+			String photoName = infoshuzuMsg[2];// 文件名
+			int thisNumber = Integer.valueOf(infoshuzuMsg[3]);// 当前包 如果是0就是定位
+																// 1就是照片数据
+			int allNumber = Integer.valueOf(infoshuzuMsg[4]);// 总包个数
+			//String dataInfo = "ud," + infoshuzuMsg[5];// thisNumber0位置数据--其他照片数据
 	
 
 		if (thisNumber != 0) {// 当前包 如果是0就是定位  1就是照片数据
+			ChannelMap.addVoiceName(imei, photoName);
 			
 			int intIndex = jsonInfo.indexOf(".jpg");
 			logger.info("jpg=" + jsonInfo.substring(intIndex + 9, jsonInfo.length()));
 			byte[] voiceData = jsonInfo.substring(intIndex+9, jsonInfo.length()).getBytes("UTF-8");
 			Utils.createFileContent(Utils.PHOTO_FILE_lINUX, photoName, voiceData);
 			
+		//	Utils.base64StringToJpg(jsonInfo.substring(intIndex + 9, jsonInfo.length()),Utils.PHOTO_FILE_lINUX+"/"+imei+photoName);
+			
 			if(thisNumber == allNumber&& allNumber!=0){
 				iUploadPhotoService.insertPhoto(imei, Utils.PHOTO_URL+ photoName, photoName, "1");
 			}
+			
+			String resp = "TPCF," + photoName + "," + thisNumber + "," + allNumber + ",1";
+			StringBuffer sb = new StringBuffer("[YW*" + imei + "*0002*");
+			sb.append(RadixUtil.changeRadix(resp));
+			sb.append("*");
+			sb.append(resp);
+			sb.append("]");
+			logger.info("设备拍照返回数据=" + sb.toString());
+			return sb.toString();
 			/*String photoInfo = infoshuzuMsg[5];
 			if (thisNumber == 1) {
 				iUploadPhotoService.insertPhoto(imei, source, photoName, photoInfo);
@@ -96,21 +110,43 @@ public class UploadPhoto extends AbstractBizService {
 			}*/
 		}else{
 			chuliLocationInfo(imei, info, no, locationStyle);
+			
+			
+			String resp = "TPCF," + photoName + "," + thisNumber + "," + allNumber + ",1";
+			StringBuffer sb = new StringBuffer("[YW*" + imei + "*0002*");
+			sb.append(RadixUtil.changeRadix(resp));
+			sb.append("*");
+			sb.append(resp);
+			sb.append("]");
+			logger.info("设备拍照返回数据=" + sb.toString());
+			return sb.toString();
 		}
-		iUploadPhotoService.insert(imei, photoName, source, thisNumber, allNumber);
+		
+		}else{
+			String photoName = ChannelMap.getVoiceName(imei);
+			logger.info("photoName=" + photoName);
+		//	byte[] voiceData = Base64.decodeBase64(jsonInfo);
+			byte[] phtotData = jsonInfo.getBytes("UTF-8");
+			Utils.createFileContent(Utils.PHOTO_FILE_lINUX, photoName, phtotData);
+			
+			//Utils.base64StringToJpg(jsonInfo,Utils.PHOTO_FILE_lINUX+"/"+imei+photoName);
+			
+			return "";
+		}
+		//iUploadPhotoService.insert(imei, photoName, source, thisNumber, allNumber);
 	} catch (UnsupportedEncodingException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
 		// [YW*YYYYYYYYYY*NNNN*LEN*TPCF, 文件名，当前包，总包个数，1]
-		String resp = "TPCF," + photoName + "," + thisNumber + "," + allNumber + ",1";
-		StringBuffer sb = new StringBuffer("[YW*" + imei + "*0001*");
+		/*String resp = "TPCF," + photoName + "," + thisNumber + "," + allNumber + ",1";
+		StringBuffer sb = new StringBuffer("[YW*" + imei + "*0002*");
 		sb.append(RadixUtil.changeRadix(resp));
 		sb.append("*");
 		sb.append(resp);
 		sb.append("]");
-		logger.info("设备拍照返回数据=" + sb.toString());
-		return sb.toString();
+		logger.info("设备拍照返回数据=" + sb.toString());*/
+		return "";
 	}
 
 
