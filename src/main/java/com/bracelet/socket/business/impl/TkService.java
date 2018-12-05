@@ -1,14 +1,10 @@
 package com.bracelet.socket.business.impl;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
 
 import io.netty.channel.Channel;
 
-import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +13,7 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSONObject;
 import com.bracelet.dto.SocketBaseDto;
 import com.bracelet.dto.SocketLoginDto;
-import com.bracelet.dto.TianQiLatest;
-import com.bracelet.entity.InsertFriend;
-import com.bracelet.entity.IpAddressInfo;
-import com.bracelet.entity.WatchDevice;
-import com.bracelet.entity.WatchVoiceInfo;
-import com.bracelet.service.IDeviceService;
-import com.bracelet.service.ILocationService;
-import com.bracelet.service.IVoltageService;
-import com.bracelet.service.IinsertFriendService;
+
 import com.bracelet.service.WatchTkService;
 import com.bracelet.util.ChannelMap;
 import com.bracelet.util.Utils;
@@ -44,11 +32,11 @@ public class TkService extends AbstractBizService {
 		String imei = socketLoginDto.getImei();
 		logger.info("从socketLoginDto里取出来的imei=" + imei);
 
-		try {
+	//	try {
 			if (jsonInfo.contains("YW*")) {
 				String[] shuzu = jsonInfo.split("\\*");
 				// imei = shuzu[1];// 设备imei
-				String no = shuzu[2];// 流水号
+				//String no = shuzu[2];// 流水号
 				String info = shuzu[4];
 				String[] infoshuzu = info.split(",");
 				Integer status = Integer.valueOf(infoshuzu[1]); // :1—成功 0—失败
@@ -57,11 +45,20 @@ public class TkService extends AbstractBizService {
 				String voiceName = infoshuzu[2];
 				Integer thisNumber = Integer.valueOf(infoshuzu[3]);
 				Integer allNumber = Integer.valueOf(infoshuzu[4]);
+				
+				  int insertNumber = 0;
+		            if(allNumber>9 && thisNumber>9 ){
+		            	insertNumber=2;
+		            }else if(allNumber>9 && thisNumber<9 ){
+		            	insertNumber=1;
+		            }
 
 				if (status == 0) {
 					logger.info("[voiceName]=" + voiceName);
 					if (voiceName == null || "".equals(voiceName)) {
 						voiceName = imei + "_" + new Date().getTime() + ".amr";
+					}else{
+						voiceName =imei + "_"+ voiceName; 
 					}
 					ChannelMap.addVoiceName(imei, voiceName);
 					logger.info("从hashmap里获取的voiceName" + ChannelMap.getVoiceName(imei));
@@ -76,14 +73,15 @@ public class TkService extends AbstractBizService {
 						// byte[] voiceData =
 						// Base64.decodeBase64(jsonInfo.substring(intIndex,
 						// jsonInfo.length()));
-						byte[] voiceData = jsonInfo.substring(intIndex, jsonInfo.length()).getBytes("UTF-8");
+						byte[] voiceData = jsonInfo.substring(intIndex, jsonInfo.length()).getBytes();
 						logger.info("voiceName(status=0)=" + voiceName);
 						Utils.createFileContent(Utils.VOICE_FILE_lINUX, voiceName, voiceData);
 					} else {
 						intIndex = jsonInfo.indexOf(".amr");
-						logger.info("无!#AMR=" + jsonInfo.substring(intIndex + 9, jsonInfo.length()));
+						logger.info("无!#AMR=" + jsonInfo.substring(intIndex + 9+insertNumber, jsonInfo.length()));
+                        logger.info("insertNumber="+insertNumber);
 						//byte[] voiceData = Base64.decodeBase64(jsonInfo.substring(intIndex + 9, jsonInfo.length()));
-						byte[] voiceData = jsonInfo.substring(intIndex+9, jsonInfo.length()).getBytes("UTF-8");
+						byte[] voiceData = jsonInfo.substring(intIndex+9+insertNumber, jsonInfo.length()).getBytes();
 						Utils.createFileContent(Utils.VOICE_FILE_lINUX, voiceName, voiceData);
 					}
 
@@ -100,16 +98,15 @@ public class TkService extends AbstractBizService {
 				String voiceName = ChannelMap.getVoiceName(imei);
 				logger.info("voiceName=" + voiceName);
 			//	byte[] voiceData = Base64.decodeBase64(jsonInfo);
-				byte[] voiceData = jsonInfo.getBytes("UTF-8");
+				byte[] voiceData = jsonInfo.getBytes();
 				Utils.createFileContent(Utils.VOICE_FILE_lINUX, voiceName, voiceData);
 				
 				return	"[YW*" + imei + "*0001*0004*TK,1]";
 			}
 
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		//} catch (UnsupportedEncodingException e) {
+		//	e.printStackTrace();
+	//	}
 
 		/*
 		 * if(status==1){
@@ -123,8 +120,10 @@ public class TkService extends AbstractBizService {
 		 * sb.append(wta.getVoice_content()); sb.append("]");
 		 * resp=resp.toString(); }
 		 */
-		String resp = "[YW*" + imei + "*0001*0004*TK,1]";
-		return resp;
+			
+			
+	    /*String resp = "[YW*" + imei + "*0001*0004*TK,1]";
+		return resp;*/
 	}
 
 	@Override

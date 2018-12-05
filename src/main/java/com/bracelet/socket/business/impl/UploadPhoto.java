@@ -76,13 +76,21 @@ public class UploadPhoto extends AbstractBizService {
 			int allNumber = Integer.valueOf(infoshuzuMsg[4]);// 总包个数
 			//String dataInfo = "ud," + infoshuzuMsg[5];// thisNumber0位置数据--其他照片数据
 	
-
+            int insertNumber = 0;
+            if(allNumber>9 && thisNumber>9 ){
+            	insertNumber=2;
+            }else if(allNumber>9 && thisNumber<9 ){
+            	insertNumber=1;
+            }
+            		
 		if (thisNumber != 0) {// 当前包 如果是0就是定位  1就是照片数据
+			photoName = imei+"_"+ photoName;
 			ChannelMap.addVoiceName(imei, photoName);
 			
 			int intIndex = jsonInfo.indexOf(".jpg");
-			logger.info("jpg=" + jsonInfo.substring(intIndex + 9, jsonInfo.length()));
-			byte[] voiceData = jsonInfo.substring(intIndex+9, jsonInfo.length()).getBytes("UTF-8");
+			   logger.info("insertNumber="+insertNumber);
+			logger.info("jpg=" + jsonInfo.substring(intIndex + 9+insertNumber, jsonInfo.length()));
+			byte[] voiceData = jsonInfo.substring(intIndex+9+insertNumber, jsonInfo.length()).getBytes("UTF-8");
 			Utils.createFileContent(Utils.PHOTO_FILE_lINUX, photoName, voiceData);
 			
 		//	Utils.base64StringToJpg(jsonInfo.substring(intIndex + 9, jsonInfo.length()),Utils.PHOTO_FILE_lINUX+"/"+imei+photoName);

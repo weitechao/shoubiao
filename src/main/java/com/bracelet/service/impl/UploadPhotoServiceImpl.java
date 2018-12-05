@@ -28,18 +28,18 @@ public class UploadPhotoServiceImpl implements IUploadPhotoService{
 			int thisNumber, int allNumber) {
 		Timestamp now = Utils.getCurrentTimestamp();
 		int i = jdbcTemplate
-				.update("insert into upload_photo (imei, photo_name, source, this_number, all_number,createtime) values (?,?,?,?,?,?)",
-						new Object[] { imei, photoName, source, thisNumber, allNumber, now},
+				.update("insert into upload_photo (imei, photo_name, source, this_number, all_number,createtime,status ,updatetime ) values (?,?,?,?,?,?,?,?)",
+						new Object[] { imei, photoName, source, thisNumber, allNumber, now, 0, now},
 						new int[] { Types.VARCHAR, Types.VARCHAR,
-								Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.TIMESTAMP});
+								Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.TIMESTAMP, Types.INTEGER, Types.TIMESTAMP});
 		return i == 1;
 	}
 
 	@Override
-	public List<DownLoadFileInfo> getphotoInfo(String imei) {
-		String sql = "select * from upload_photo where imei=? order by id desc ";
+	public List<DownLoadFileInfo> getphotoInfo(String imei,Integer status) {
+		String sql = "select * from upload_photo where imei=? and status = ? order by id desc ";
 		List<DownLoadFileInfo> list = jdbcTemplate
-				.query(sql, new Object[] { imei},
+				.query(sql, new Object[] { imei, status},
 						new BeanPropertyRowMapper<DownLoadFileInfo>(DownLoadFileInfo.class));
 		return list;
 	}
@@ -76,6 +76,16 @@ public class UploadPhotoServiceImpl implements IUploadPhotoService{
 				.update("update watch_upload_photo set data=?, createtime=? where id = ?",
 						new Object[] { string ,now, id }, new int[] {
 								Types.VARCHAR,Types.TIMESTAMP,Types.INTEGER });
+		return i == 1;
+	}
+
+	@Override
+	public boolean updateStatusById(Long id, Integer status) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate
+				.update("update watch_upload_photo set status=?, updatetime=? where id = ?",
+						new Object[] { status ,now, id }, new int[] {
+								Types.INTEGER,Types.TIMESTAMP,Types.INTEGER });
 		return i == 1;
 	}
 	

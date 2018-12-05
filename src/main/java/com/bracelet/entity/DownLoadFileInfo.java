@@ -12,8 +12,10 @@ public class DownLoadFileInfo {
 	private String photo_name;
 	private String source;
 	private Integer this_number;
+	private Integer status;
 	private Integer all_number;
 	private Timestamp createtime;
+	private Timestamp updatetime;
 	public Long getId() {
 		return id;
 	}
@@ -56,6 +58,17 @@ public class DownLoadFileInfo {
 	public void setCreatetime(Timestamp createtime) {
 		this.createtime = createtime;
 	}
-
+	public Integer getStatus() {
+		return status;
+	}
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+	public Timestamp getUpdatetime() {
+		return updatetime;
+	}
+	public void setUpdatetime(Timestamp updatetime) {
+		this.updatetime = updatetime;
+	}
 
 }

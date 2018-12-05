@@ -120,7 +120,8 @@ public class WatchAppSetController extends BaseController {
 		String token = jsonObject.getString("token");
 		String userId = checkTokenWatchAndUser(token);
 		if ("0".equals(userId)) {
-			bb.put("code", -1);
+			bb.put("Code", -1);
+			bb.put("Message", "");
 			return bb.toString();
 		}
 		String imei = jsonObject.getString("imei");
@@ -135,17 +136,20 @@ public class WatchAppSetController extends BaseController {
 		
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
-			bb.put("code", 2);
+			bb.put("Code", 2);
+			bb.put("Message", "");
 			return bb.toString();
 		}
 		if (socketLoginDto.getChannel().isActive()) {
 			String msg="SET,"+data;
 			String reps = "[YW*"+imei+"*0001*"+RadixUtil.changeRadix(msg)+"*"+msg+"]";
 			socketLoginDto.getChannel().writeAndFlush(reps);
-			bb.put("code", 1);
+			bb.put("Code", 1);
+			bb.put("Message", "");
 			
 		} else {
-			bb.put("code", 0);
+			bb.put("Code", 0);
+			bb.put("Message", "");
 		}
 		return bb.toString();
 	}
@@ -158,15 +162,51 @@ public class WatchAppSetController extends BaseController {
 			JSONObject bb = new JSONObject();
 			String userId = checkTokenWatchAndUser(token);
 			if ("0".equals(userId)) {
-				bb.put("code", -1);
+				bb.put("Code", -1);
 				return bb.toString();
 			}
 			WatchDeviceSet deviceSet = watchSetService.getDeviceSetByImei(imei);
 			if(deviceSet !=null){
 				bb.put("data", deviceSet.getData());
-				bb.put("code", 1);
+				bb.put("Code", 1);
+				
+				
+				bb.put("ActiveDate", "");
+				bb.put("BabyName", "");
+				bb.put("BindNumber", "");
+				bb.put("Birthday", "");
+				bb.put("CreateTime", "");
+				bb.put("CurrentFirmware", "");
+				bb.put("SetVersionNO", "");
+				bb.put("ContactVersionNO", "");
+				bb.put("OperatorType", "");
+				bb.put("SmsNumber", "");
+				bb.put("SmsBalanceKey", "");
+				bb.put("SmsFlowKey", "");
+				bb.put("DeviceID", "");
+				bb.put("UserId", "");
+				bb.put("DeviceModelID", "");
+				bb.put("Firmware", "");
+				bb.put("Gender", "");
+				bb.put("Grade", "");
+				bb.put("HireExpireDate", "");
+				bb.put("HireStartDate", "");
+				bb.put("HomeAddress", "");
+				bb.put("HomeLat", "");
+				bb.put("HomeLng", "");
+				bb.put("IsGuard", "");
+				bb.put("Password", "");
+				bb.put("PhoneCornet", "");
+				bb.put("PhoneNumber", "");
+				bb.put("Photo", "");
+				bb.put("SchoolAddress", "");
+				bb.put("SchoolLat", "");
+				bb.put("SchoolLng", "");
+				bb.put("SerialNumber", "");
+				bb.put("UpdateTime", "");
+				bb.put("LatestTime", "");
 			}else{
-				bb.put("code", 0);
+				bb.put("Code", 0);
 				bb.put("data", "");
 			}
 			return bb.toString();

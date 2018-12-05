@@ -11,7 +11,7 @@ public interface WatchTkService {
 	boolean insertVoiceInfo(String sender, String receiver, String sourceName,String voiceData, Integer status,String numMessage,Integer thisNubmer,Integer allNumber);
 
 
-	boolean updateStatusByNoAndImei(String voiceNo, String imei, Integer status);
+	boolean updateStatusById(Long id, Integer status);
 
 	WatchVoiceInfo getVoiceByNoAndImeiAndStatus(String voiceNo, String imei,Integer status);
 

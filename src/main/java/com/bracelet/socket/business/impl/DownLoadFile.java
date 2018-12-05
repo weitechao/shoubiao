@@ -51,7 +51,7 @@ public class DownLoadFile extends AbstractBizService {
 		String no = shuzu[2];// 流水号
 		String info = shuzu[4];
 
-		List<DownLoadFileInfo> doinfo = iUploadPhotoService.getphotoInfo(imei);
+		List<DownLoadFileInfo> doinfo = iUploadPhotoService.getphotoInfo(imei,0);
 		String resp = "";
 		if (doinfo.size() > 0) {
 			resp = "[YW*" + imei + "*NNNN*LEN*FILE,"

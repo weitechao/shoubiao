@@ -10,12 +10,14 @@ public interface IUploadPhotoService {
 	boolean insert(String imei, String photoName, String source, int thisNumber,
 			int allNumber);
 
-	List<DownLoadFileInfo> getphotoInfo(String imei);
+	List<DownLoadFileInfo> getphotoInfo(String imei,Integer status);
 
 	boolean insertPhoto(String imei, String source,String photoName, String dataInfo);
 
 	WatchUploadPhotoInfo getByPhotoNameAndImei(String imei, String photoName);
 
 	boolean updateById(Long id, String string);
+
+	boolean updateStatusById(Long id, Integer status);
 	
 }

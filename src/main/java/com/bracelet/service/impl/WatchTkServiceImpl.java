@@ -37,12 +37,12 @@ public class WatchTkServiceImpl implements WatchTkService {
 	}
 	
 	@Override
-	public boolean updateStatusByNoAndImei(String voiceNo, String imei,Integer status) {
+	public boolean updateStatusById(Long id, Integer status) {
 		Timestamp now = Utils.getCurrentTimestamp();
 		int i = jdbcTemplate
-				.update("update watch_voice_info set status=?, updatetime=? where receiver = ? and no = ?",
-						new Object[] { status ,now, imei,voiceNo }, new int[] {
-						Types.INTEGER,Types.TIMESTAMP,Types.VARCHAR,Types.VARCHAR });
+				.update("update watch_voice_info set status=?, updatetime=? where id = ?",
+						new Object[] { status ,now, id,}, new int[] {
+						Types.INTEGER,Types.TIMESTAMP,Types.INTEGER });
 		return i == 1;
 	}
 	@Override
@@ -61,7 +61,7 @@ public class WatchTkServiceImpl implements WatchTkService {
 	@Override
 	public List<WatchVoiceInfo> getVoiceListByImeiAndStatus(String imei,
 			Integer status) {
-		String sql = "select * from watch_voice_info where receiver=? and status=? ";
+		String sql = "select * from watch_voice_info where sender=? and status=? ";
 		List<WatchVoiceInfo> list = jdbcTemplate.query(sql, new Object[] { imei, status },
 				new BeanPropertyRowMapper<WatchVoiceInfo>(WatchVoiceInfo.class));
 		return list;

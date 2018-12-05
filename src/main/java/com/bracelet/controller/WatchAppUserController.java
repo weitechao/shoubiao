@@ -70,10 +70,20 @@ public class WatchAppUserController extends BaseController {
 
 			if (password.equalsIgnoreCase(userInfo.getPassword())) {
 				String token = tokenInfoService.genToken(userInfo.getUser_id());
-				bb.put("code", 1);// 1表示login succes
+				bb.put("Code", 1);// 1表示login succes
 				bb.put("token", token);
+				bb.put("LoginId", "");
+				bb.put("UserId", "");
+				bb.put("PhoneNumber", "");
+				bb.put("BindNumber", "");
+				bb.put("UserType", "");
+				bb.put("Name", "");
+				bb.put("Notification", "");
+				bb.put("NotificationSound", "");
+				bb.put("NotificationVibration", "");
 			} else {
-				bb.put("code", 2);// 2表示密码错误
+				bb.put("Code", 2);// 2表示密码错误
+				bb.put("Message", "");// 2表示密码错误
 			}
 		} else {
 			// UserInfo userInfoLuRu =
@@ -82,30 +92,18 @@ public class WatchAppUserController extends BaseController {
 			userInfoService.saveUserInfo(tel, "123456", 1);// 表示新注册
 
 			String token = tokenInfoService.genToken(userInfoService.getUserInfoByUsername(tel).getUser_id());
-			bb.put("code", 1);// 1表示login succes
-			// loginStatus=true;
+			bb.put("Code", 1);// 1表示login succes
 			bb.put("token", token);
-			// }else{
-			// bb.put("code", -1);//1表示login fail
-			// }
-			/*
-			 * } if(loginStatus){//登录成功才给设备发送定位指令 BindDevice bdd=
-			 * userInfoService.getBindInfoById(userId); SocketLoginDto
-			 * socketLoginDto = ChannelMap.getChannel(imei); if (socketLoginDto
-			 * == null || socketLoginDto.getChannel() == null) {
-			 * bb.put("deviceStatus", 0); } String reps =
-			 * "[YW*"+imei+"*0001*0002*CR]"; if
-			 * (socketLoginDto.getChannel().isActive()) { bb.put("deviceStatus",
-			 * 1); socketLoginDto.getChannel().writeAndFlush(reps);
-			 * bb.put("sendStatus", 1); } else { bb.put("deviceStatus", 0);
-			 * bb.put("sendStatus", 2); } LocationWatch location =
-			 * locationService.getLatest(imei);//这里需要修改为从redis里拿或者hashmap里
-			 * if(location!=null){ bb.put("locationLast", 1);//查询到 bb.put("lat",
-			 * location.getLat()); bb.put("lng", location.getLng());
-			 * bb.put("locationtype", location.getLocation_type());
-			 * bb.put("time", location.getUpload_time().getTime()); }else{
-			 * bb.put("locationLast", 0);//未查询到 } }
-			 */
+			bb.put("LoginId", "");
+			bb.put("UserId", "");
+			bb.put("PhoneNumber", "");
+			bb.put("BindNumber", "");
+			bb.put("UserType", "");
+			bb.put("Name", "");
+			bb.put("Notification", "");
+			bb.put("NotificationSound", "");
+			bb.put("NotificationVibration", "");
+			
 		}
 		return bb.toString();
 	}
@@ -190,14 +188,14 @@ public class WatchAppUserController extends BaseController {
 		BindDevice bd = userInfoService.getBindInfoByImeiAndStatus(imei, 1);
 		if (bd != null) {// 说明已有管理员
 			if (userInfoService.getBindInfoByImeiAndStatus(imei, 0) != null) {
-				bb.put("code", 0);
+				bb.put("Code", 0);
 			} else {
 				userInfoService.bindDevice(user_id, imei, 0, name);
-				bb.put("code", 1);
+				bb.put("Code", 1);
 			}
 		} else {
 			userInfoService.bindDevice(user_id, imei, 1, name);
-			bb.put("code", 2);
+			bb.put("Code", 2);
 		}
 
 		return bb.toString();
@@ -210,7 +208,7 @@ public class WatchAppUserController extends BaseController {
 		JSONObject bb = new JSONObject();
 		String userId = checkTokenWatchAndUser(token);
 		if ("0".equals(userId)) {
-			bb.put("code", -1);
+			bb.put("Code", -1);
 			return bb.toString();
 		}
 		long user_id = Long.valueOf(checkTokenWatchAndUser(token));
@@ -225,14 +223,99 @@ public class WatchAppUserController extends BaseController {
 				dataMap.put("status", location.getStatus());
 				dataMap.put("name", location.getName());
 				dataMap.put("timestamp", location.getCreatetime().getTime());
+				
+				
+				dataMap.put("ActiveDate", "");
+				dataMap.put("BabyName", location.getName());
+				dataMap.put("BindNumber", location.getImei());
+				dataMap.put("DeviceType", "");
+				dataMap.put("Birthday", "");
+				dataMap.put("CreateTime", "");
+				dataMap.put("CurrentFirmware", "");
+				dataMap.put("SetVersionNO", "");
+				dataMap.put("ContactVersionNO", "");
+				dataMap.put("OperatorType", "");
+				dataMap.put("SmsNumber", "");
+				dataMap.put("SmsBalanceKey", "");
+				dataMap.put("SmsFlowKey", "");
+				dataMap.put("DeviceID", "");
+				dataMap.put("UserId", "");
+				dataMap.put("DeviceModelID", "");
+				dataMap.put("Firmware", "");
+				dataMap.put("Gender", "");
+				dataMap.put("Grade", "");
+				dataMap.put("HireExpireDate", "");
+				dataMap.put("HireStartDate", "");
+				dataMap.put("HomeAddress", "");
+				dataMap.put("HomeLat", "");
+				dataMap.put("HomeLng", "");
+				dataMap.put("IsGuard", "");
+				dataMap.put("Password", "");
+				dataMap.put("PhoneCornet", "");
+				dataMap.put("PhoneNumber", "");
+				dataMap.put("Photo", "");
+				dataMap.put("SchoolAddress", "");
+				dataMap.put("SchoolLat", "");
+				dataMap.put("SchoolLng", "");
+				dataMap.put("SerialNumber", location.getImei());
+				dataMap.put("UpdateTime", "");
+				dataMap.put("CloudPlatform", "");
+				
+				JSONObject deviceSet = new JSONObject();
+				deviceSet.put("SetInfo", "");
+				deviceSet.put("ClassDisabled1", "");
+				deviceSet.put("ClassDisabled2", "");
+				deviceSet.put("WeekDisabled", "");
+				deviceSet.put("TimerOpen", "");
+				deviceSet.put("TimerClose", "");
+				deviceSet.put("BrightScreen", "");
+				deviceSet.put("WeekAlarm1", "");
+				deviceSet.put("WeekAlarm2", "");
+				deviceSet.put("WeekAlarm3", "");
+				deviceSet.put("Alarm1", "");
+				deviceSet.put("Alarm2", "");
+				deviceSet.put("Alarm3", "");
+				deviceSet.put("LocationMode", "");
+				deviceSet.put("LocationTime", "");
+				deviceSet.put("SleepCalculate", "");
+				deviceSet.put("StepCalculate", "");
+				deviceSet.put("HrCalculate", "");
+				deviceSet.put("SosMsgswitch", "");
+				deviceSet.put("CreateTime", "");
+				deviceSet.put("UpdateTime", "");
+				dataMap.put("DeviceSet",deviceSet.toString());
+				
+				
+				JSONObject deviceState = new JSONObject();
+				deviceState.put("Altitude", "");
+				deviceState.put("Course", "");
+				deviceState.put("LocationType", "");
+				deviceState.put("CreateTime", "");
+				deviceState.put("DeviceTime", "");
+				deviceState.put("Electricity", "");
+				deviceState.put("GSM", "");
+				deviceState.put("Step", "");
+				deviceState.put("Health", "");
+				deviceState.put("Latitude", "");
+				deviceState.put("Longitude", "");
+				deviceState.put("Online", "");
+				deviceState.put("SatelliteNumber", "");
+				deviceState.put("ServerTime", "");
+				deviceState.put("Speed", "");
+				deviceState.put("UpdateTime", "");
+				dataMap.put("DeviceState",deviceState.toString());
+				
+				JSONArray jsonArray1 = new JSONArray();
+				dataMap.put("ContactArr",jsonArray1);
+				
 				jsonArray.add(dataMap);
 			}
-			bb.put("code", 1);
+			bb.put("Code", 1);
 
 		} else {
-			bb.put("code", 0);
+			bb.put("Code", 0);
 		}
-		bb.put("result", jsonArray);
+		bb.put("deviceList", jsonArray);
 		return bb.toString();
 	}
 
@@ -243,11 +326,13 @@ public class WatchAppUserController extends BaseController {
 		JSONObject bb = new JSONObject();
 		String userId = checkTokenWatchAndUser(token);
 		if ("0".equals(userId)) {
-			bb.put("code", -1);
+			bb.put("Code", -1);
+			bb.put("Message", "");
 			return bb.toString();
 		}
 		userInfoService.deleteDeviceBind(id);
-		bb.put("code", 1);
+		bb.put("Code", 1);
+		bb.put("Message", "");
 		return bb.toString();
 	}
 

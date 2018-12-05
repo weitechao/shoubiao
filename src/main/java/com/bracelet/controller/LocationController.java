@@ -101,15 +101,25 @@ public class LocationController extends BaseController {
 		List<LocationWatch> locationList = locationService.getWatchFootprint(imei, starttime, endtime);
 		JSONArray jsonArray = new JSONArray();
 		if (locationList != null) {
+			bb.put("Total", locationList.size()+"");
 			for (LocationWatch location : locationList) {
 				JSONObject dataMap = new JSONObject();
 				dataMap.put("lat", location.getLat());
 				dataMap.put("lng", location.getLng());
 				dataMap.put("timestamp", location.getUpload_time().getTime());
+				dataMap.put("locationType", location.getLocation_type());
+				
+				dataMap.put("time", location.getUpload_time().getTime()+"");
+				dataMap.put("Status", "0");
+				dataMap.put("Latitude", location.getLat());
+				dataMap.put("Longitude", location.getLng());
+				dataMap.put("LocationType", location.getLocation_type()+"");
+				dataMap.put("CreateTime",location.getUpload_time().getTime()+"" );
+				dataMap.put("UpdateTime",location.getUpload_time().getTime()+"" );
 				jsonArray.add(dataMap);
 			}
-			bb.put("codes", 1);
-			bb.put("result", jsonArray);
+			bb.put("Code", 1);
+			bb.put("list", jsonArray);
 		} else {
 			bb.put("codes", 0);
 		}

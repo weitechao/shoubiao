@@ -52,7 +52,7 @@ public class BusinessHandler implements IBusinessHandler {
 		}
 		try {
 			if (json.contains("[YW*")) {
-				String jsonInfo = json.replaceAll("\\[", "");
+				String jsonInfo = json.substring(1, json.length());
 				String[] shuzu = jsonInfo.split("\\*");
 				// String deviceid=shuzu[1];
 				String info = shuzu[4];
@@ -103,6 +103,13 @@ public class BusinessHandler implements IBusinessHandler {
 
 		// apilogService.insert(serviceName, json, reponse, imei, rstatus, rmsg,
 		// time);
+	}
+	public static void main(String[] args) {
+		String json = "[qeyroahkldasjl";
+		String jsonInfo = json.replaceAll("\\[", "");
+		System.out.println(jsonInfo);
+		System.out.println(json.substring(0, json.length()));
+		System.out.println(json.substring(1, json.length()));
 	}
 
 }
