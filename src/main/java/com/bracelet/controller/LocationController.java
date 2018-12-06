@@ -110,10 +110,10 @@ public class LocationController extends BaseController {
 				dataMap.put("locationType", location.getLocation_type());
 				
 				dataMap.put("time", location.getUpload_time().getTime()+"");
-				dataMap.put("Status", "0");
+				dataMap.put("Status", 0);
 				dataMap.put("Latitude", location.getLat());
 				dataMap.put("Longitude", location.getLng());
-				dataMap.put("LocationType", location.getLocation_type()+"");
+				dataMap.put("LocationType", location.getLocation_type());
 				dataMap.put("CreateTime",location.getUpload_time().getTime()+"" );
 				dataMap.put("UpdateTime",location.getUpload_time().getTime()+"" );
 				jsonArray.add(dataMap);

@@ -62,23 +62,53 @@ public class TkService extends AbstractBizService {
 					}
 					ChannelMap.addVoiceName(imei, voiceName);
 					logger.info("从hashmap里获取的voiceName" + ChannelMap.getVoiceName(imei));
-					String len = shuzu[3];// 流水号
-					logger.info("十六进制转换后的长度=" + Integer.parseInt(len, 16));
-
+					Integer len = Integer.parseInt(shuzu[3], 16);// 流水号
+					logger.info("十六进制转换后的长度=" +len);
+                    //test.substring(test.indexOf("TK"), test.indexOf("ARM")
+					String qianbanduan= jsonInfo.substring(jsonInfo.indexOf("TK"), jsonInfo.indexOf("#!AMR"))+"#!AMR";
+					logger.info("前半段="+qianbanduan);
+					Integer voiceLen = len - qianbanduan.length();
+					logger.info("语音总长度="+voiceLen);
+					
 					int intIndex = jsonInfo.indexOf("#!AMR");
 					logger.info("#!AMR的位置=" + intIndex);
 					logger.info("语音json总长度=" + jsonInfo.length());
 					if (intIndex != -1) {
-						logger.info("ARM格式二进制音频数据=" + jsonInfo.substring(intIndex, jsonInfo.length()));
+						logger.info("ARM格式二进制音频数据=" + jsonInfo.substring(intIndex+5, jsonInfo.length()));
 						// byte[] voiceData =
 						// Base64.decodeBase64(jsonInfo.substring(intIndex,
 						// jsonInfo.length()));
-						byte[] voiceData = jsonInfo.substring(intIndex, jsonInfo.length()).getBytes();
-						logger.info("voiceName(status=0)=" + voiceName);
+						String voiceString = jsonInfo.substring(intIndex+5, jsonInfo.length());
+						Integer voiceStringLen = voiceString.length();
+						logger.info("直接获取到的语音长度="+voiceStringLen);
+						if(voiceStringLen != voiceLen){
+							voiceString+="]";
+							voiceStringLen=voiceString.length();
+							
+						}
+						logger.info("经过处理后的的语音长度="+voiceStringLen);
+						Integer shengyuLen =   voiceLen-voiceStringLen;
+						ChannelMap.addVoiceName(imei+"_voice_len", shengyuLen+"");
+						logger.info("剩余的语音长度为="+shengyuLen);
+						byte[] voiceData = voiceString.getBytes();
+					
 						Utils.createFileContent(Utils.VOICE_FILE_lINUX, voiceName, voiceData);
 					} else {
 						intIndex = jsonInfo.indexOf(".amr");
-						logger.info("无!#AMR=" + jsonInfo.substring(intIndex + 9+insertNumber, jsonInfo.length()));
+						String voiceString =jsonInfo.substring(intIndex + 9+insertNumber, jsonInfo.length());
+						logger.info("无!#AMR=" + voiceString);
+						
+						 int voiceSLen = voiceString.length();
+						 logger.info("无!#AMR语音长度="+voiceSLen);
+							
+						 Integer shengyL= Integer.valueOf(ChannelMap.getVoiceName(imei+"_voice_len"));
+						 if(voiceSLen!=shengyL){
+							 voiceString+="]";
+							 voiceSLen=voiceString.length();
+						 }
+						 shengyL= shengyL-voiceSLen;
+						 logger.info("无!#AMR 剩余长度="+shengyL);
+						 ChannelMap.addVoiceName(imei+"_voice_len", shengyL+"");
                         logger.info("insertNumber="+insertNumber);
 						//byte[] voiceData = Base64.decodeBase64(jsonInfo.substring(intIndex + 9, jsonInfo.length()));
 						byte[] voiceData = jsonInfo.substring(intIndex+9+insertNumber, jsonInfo.length()).getBytes();
@@ -98,6 +128,17 @@ public class TkService extends AbstractBizService {
 				String voiceName = ChannelMap.getVoiceName(imei);
 				logger.info("voiceName=" + voiceName);
 			//	byte[] voiceData = Base64.decodeBase64(jsonInfo);
+				
+				 Integer shengyL= Integer.valueOf(ChannelMap.getVoiceName(imei+"_voice_len"));
+				 logger.info("只有语音部分的原始剩余长度="+shengyL);
+				 if(jsonInfo.length()!=shengyL){
+					 jsonInfo+="]";
+					
+				 }
+				 shengyL= shengyL-jsonInfo.length();
+				 logger.info("只有语音部分的处理后的剩余长度="+shengyL);
+				 ChannelMap.addVoiceName(imei+"_voice_len", shengyL+"");
+				 
 				byte[] voiceData = jsonInfo.getBytes();
 				Utils.createFileContent(Utils.VOICE_FILE_lINUX, voiceName, voiceData);
 				
@@ -132,10 +173,13 @@ public class TkService extends AbstractBizService {
 	}
 
 	public static void main(String[] args) {
-		String a = "[YW*872018020142169*001F*042B*TPBK,18735662247,IMG20181205000600.jpg,1,6,MR<???g?F??E2";
+		String a = "[YW*872018020142169*001F*042B*TPBK,18735662247,IMG20181205000600.jpg#,!#AMR,1,6,MR<???g?F??E2";
 
-		int intIndex = a.indexOf(".jpg");
+		int intIndex = a.indexOf("!#AMR");
 		System.out.println(intIndex);
-		System.out.println(a.substring(intIndex + 9, a.length()));
+		System.out.println(a.substring(intIndex+5 , a.length()));
+		
+		String test = "[YW*YYYYYYYYYY*NNNN*LEN*TK,来源,文件名字,当前包,总分包数,ARM";
+		System.out.println(test.substring(test.indexOf("TK"), test.indexOf("ARM")));
 	}
 }

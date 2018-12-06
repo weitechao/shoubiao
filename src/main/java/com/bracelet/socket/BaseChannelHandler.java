@@ -1,13 +1,18 @@
 package com.bracelet.socket;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+
+import java.nio.charset.Charset;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import com.bracelet.socket.business.IBusinessHandler;
 import com.bracelet.util.ChannelMap;
 
@@ -22,7 +27,8 @@ public class BaseChannelHandler extends SimpleChannelInboundHandler<String> {
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
 		Channel incoming = ctx.channel();
-		//logger.info("[" + incoming.remoteAddress() + "]发送信息:" + msg);
+		logger.info("[" + incoming.remoteAddress() + "]原始发送信息:" + msg+"]");
+		logger.info("[" + incoming.remoteAddress() + "]原始信息总长度:" + (msg+"]").length());
 		businessHandler.process(msg, incoming);
 	}
 
@@ -44,6 +50,21 @@ public class BaseChannelHandler extends SimpleChannelInboundHandler<String> {
 	 */
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+		
+		ByteBuf body = (ByteBuf)msg;
+		if(body.readableBytes() <= 0){
+		ctx.fireChannelRead(msg);
+		}
+	
+		int nLength = body.readInt();
+		int nType = body.readInt();
+		int nDataSize = body.readableBytes();
+		byte [] aa = new byte[nDataSize];
+		body.readBytes(aa);
+		String myMsg = new String(aa,Charset.forName("utf-8"));
+		 
+		System.out.println("channelRead="+myMsg);
+		
 		super.channelRead(ctx, msg);
 	}
 

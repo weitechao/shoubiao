@@ -178,8 +178,8 @@ public class WatchAppSetController extends BaseController {
 				bb.put("CreateTime", "");
 				bb.put("CurrentFirmware", "");
 				bb.put("SetVersionNO", "");
-				bb.put("ContactVersionNO", "");
-				bb.put("OperatorType", "");
+				bb.put("ContactVersionNO", 0);
+				bb.put("OperatorType", 0);
 				bb.put("SmsNumber", "");
 				bb.put("SmsBalanceKey", "");
 				bb.put("SmsFlowKey", "");
@@ -187,14 +187,14 @@ public class WatchAppSetController extends BaseController {
 				bb.put("UserId", "");
 				bb.put("DeviceModelID", "");
 				bb.put("Firmware", "");
-				bb.put("Gender", "");
-				bb.put("Grade", "");
+				bb.put("Gender", 0);
+				bb.put("Grade", 0);
 				bb.put("HireExpireDate", "");
 				bb.put("HireStartDate", "");
 				bb.put("HomeAddress", "");
 				bb.put("HomeLat", "");
 				bb.put("HomeLng", "");
-				bb.put("IsGuard", "");
+				bb.put("IsGuard", 0);
 				bb.put("Password", "");
 				bb.put("PhoneCornet", "");
 				bb.put("PhoneNumber", "");
