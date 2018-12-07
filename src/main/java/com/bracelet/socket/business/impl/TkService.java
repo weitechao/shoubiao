@@ -32,7 +32,7 @@ public class TkService extends AbstractBizService {
 		String imei = socketLoginDto.getImei();
 		logger.info("从socketLoginDto里取出来的imei=" + imei);
 
-		try {
+	//	try {
 			String[] shuzu = jsonInfo.split("\\*");
 			String info = shuzu[4];
 			String[] infoshuzu = info.split(",");
@@ -45,12 +45,7 @@ public class TkService extends AbstractBizService {
 
 			if (status == 0) {
 				
-				 int insertNumber = 0;
-		            if(allNumber>9 && thisNumber>9 ){
-		            	insertNumber=2;
-		            }else if(allNumber>9 && thisNumber<9 ){
-		            	insertNumber=1;
-		            }
+				
 		            
 				logger.info("[voiceName]=" + voiceName);
 				if (voiceName == null || "".equals(voiceName)) {
@@ -59,21 +54,12 @@ public class TkService extends AbstractBizService {
 					voiceName = imei + "_" + voiceName;
 				}
 				ChannelMap.addVoiceName(imei, voiceName);
-				 Integer indexAmr = jsonInfo.indexOf("#!AMR");
-				 if(indexAmr != -1 ){
-					 String voiceString = jsonInfo.substring(indexAmr+insertNumber, jsonInfo.length());
-						logger.info(voiceName + "的有!#AMR语音文本=" + voiceString);
-						byte[] voiceData = voiceString.getBytes("UTF-8");
+				int indexamr = jsonInfo.indexOf(".amr");
+					 String voiceString =jsonInfo.substring(indexamr + 9, jsonInfo.length());
+						logger.info(voiceName + "语音文本=" + voiceString);
+						byte[] voiceData = voiceString.getBytes();
 						Utils.createFileContent(Utils.VOICE_FILE_lINUX, voiceName, voiceData);
-				 }else{
-					 indexAmr = jsonInfo.indexOf(".amr");
-					 String voiceString =jsonInfo.substring(indexAmr + 5 + insertNumber, jsonInfo.length());
-						logger.info(voiceName + "的无!#AMR语音文本=" + voiceString);
-						byte[] voiceData = voiceString.getBytes("UTF-8");
-						Utils.createFileContent(Utils.VOICE_FILE_lINUX, voiceName, voiceData);
-				 }
-				
-
+						
 				if (thisNumber == allNumber && allNumber != 0) {
 					// 如果这个语音已经全部传完。就置空voiceName 不置空 可能还会有遗留
 					// ChannelMap.addVoiceName(imei, "");
@@ -84,9 +70,9 @@ public class TkService extends AbstractBizService {
 				logger.info("语音status=" + status);
 			}
 
-		} catch (UnsupportedEncodingException e) {
+	/*	} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
-		}
+		}*/
 		return "";
 	}
 
@@ -98,11 +84,11 @@ public class TkService extends AbstractBizService {
 	public static void main(String[] args) {
 		
 		
-		String a = "[YW*872018020142169*001F*042B*TPBK,18735662247,IMG20181205000600.jpg#,.amr,1,6";
+		String a = ":YW*872018020142169*001C*00A5*TK,0,wetalk_20181208024058.amr,2,2,!#AMRvoice  e d< ?   99";
 
 		int intIndex = a.indexOf(".amr");
 		System.out.println(intIndex);
-		System.out.println(a.substring(intIndex+5, a.length()));
+		System.out.println(a.substring(intIndex+9, a.length()));
 		System.out.println(a.substring(intIndex+4, a.length()));
 
 		String test = "[YW*YYYYYYYYYY*NNNN*LEN*TK,来源,文件名字,当前包,总分包数,ARM";

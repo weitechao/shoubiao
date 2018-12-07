@@ -18,11 +18,7 @@ import io.netty.handler.timeout.ReadTimeoutHandler;
 @Service
 public class ServerChannelInitializer extends ChannelInitializer<SocketChannel> {
 	
-	private static final int MAX_FRAME_LENGTH = 1024 * 1024;
-    private static final int LENGTH_FIELD_LENGTH = 4;
-    private static final int LENGTH_FIELD_OFFSET = 2;
-    private static final int LENGTH_ADJUSTMENT = 0;
-    private static final int INITIAL_BYTES_TO_STRIP = 0;
+
 
 	@Autowired
 	BaseChannelHandler baseChannelHandler;

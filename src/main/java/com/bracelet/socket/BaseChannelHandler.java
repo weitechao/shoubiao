@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.bracelet.dto.DataBean;
 import com.bracelet.socket.business.IBusinessHandler;
 import com.bracelet.util.ChannelMap;
 import com.bracelet.util.Utils;
@@ -59,6 +60,9 @@ public class BaseChannelHandler extends SimpleChannelInboundHandler<String> {
 		// receiveMsgBytes 就收到了.
 		String hexString = Hex.encodeHexString(receiveMsgBytes);
 		logger.info("channelRead  16 hexString =" + hexString);
+		
+		DataBean data = new DataBean();
+		
 		if (hexString.length() >= 8) {
 			String kaiTou = Utils.hexStringToString(hexString.substring(0, 8));
 			logger.info("开头=" + kaiTou);
@@ -86,9 +90,9 @@ public class BaseChannelHandler extends SimpleChannelInboundHandler<String> {
 				// byte[] parseHexStr2Byte = Utils.hexStringToByte(hexString);
 
 			} else {
-				Integer syLength = Integer.valueOf(ChannelMap.getVoiceName(ctx.channel().remoteAddress() + "_len"))
+				int syLength = Integer.valueOf(ChannelMap.getVoiceName(ctx.channel().remoteAddress() + "_len"))
 						- receiveMsgBytes.length;
-				logger.info("剩余长度=" + syLength);
+				logger.info("开头不是YW的剩余长度=" + syLength);
 
 				if (syLength > 0) {
 					ChannelMap.addVoiceName(ctx.channel().remoteAddress() + "_voice",
@@ -98,8 +102,8 @@ public class BaseChannelHandler extends SimpleChannelInboundHandler<String> {
 				} else if (syLength == 0) {
 					super.channelRead(ctx,
 							ChannelMap.getVoiceName(ctx.channel().remoteAddress() + "_voice") + hexString);
-				} else if(syLength < 0){} {
-					logger.info("语音长度异常");
+				} else if(syLength < 0) {
+					logger.info("语音长度异常 开头不是YW的剩余长度");
 					super.channelRead(ctx,
 							ChannelMap.getVoiceName(ctx.channel().remoteAddress() + "_voice") + hexString);
 				
@@ -107,9 +111,9 @@ public class BaseChannelHandler extends SimpleChannelInboundHandler<String> {
 			}
 
 		} else {
-			Integer syLength = Integer.valueOf(ChannelMap.getVoiceName(ctx.channel().remoteAddress() + "_len"))
+			int syLength = Integer.valueOf(ChannelMap.getVoiceName(ctx.channel().remoteAddress() + "_len"))
 					- receiveMsgBytes.length;
-			logger.info("剩余长度=" + syLength);
+			logger.info("hexString.length() >= 8剩余长度=" + syLength);
 			if (syLength > 0) {
 				ChannelMap.addVoiceName(ctx.channel().remoteAddress() + "_voice",
 						ChannelMap.getVoiceName(ctx.channel().remoteAddress() + "_voice") + hexString + "5d");
@@ -118,7 +122,7 @@ public class BaseChannelHandler extends SimpleChannelInboundHandler<String> {
 			} else if (syLength == 0) {
 				super.channelRead(ctx, ChannelMap.getVoiceName(ctx.channel().remoteAddress() + "_voice") + hexString);
 			} else {
-				logger.info("语音获取异常");
+				logger.info("语音获取异常hexString.length() >= 8");
 			}
 		}
 
