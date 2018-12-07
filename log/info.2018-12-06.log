@@ -1,0 +1,451 @@
+2018-12-06 15:31:15,210 [main] INFO  SocketServer - ===start socket:7780
+2018-12-06 15:32:05,712 [http-8080-1] INFO  DruidDataSource - {dataSource-1} inited
+2018-12-06 15:32:05,742 [http-8080-1] INFO  WatchAppUserController - [checkTokenAndUser] 通过token检查userid不存在，token:123456
+2018-12-06 15:32:05,744 [http-8080-1] INFO  WatchAppUserController - [checkTokenAndUser] 通过token检查userid不存在，token:123456
+2018-12-06 17:51:41,642 [main] INFO  SocketServer - ===start socket:7780
+2018-12-06 17:52:15,604 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - add connect:/127.0.0.1:60549
+2018-12-06 17:52:15,605 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelActive:/127.0.0.1:60549在线
+2018-12-06 17:52:17,077 [nioEventLoopGroup-3-1] ERROR BaseChannelHandler - exceptioncaught,/127.0.0.1:60549
+io.netty.handler.codec.TooLongFrameException: Adjusted frame length exceeds 1024: 22884 - discarded
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.fail(LengthFieldBasedFrameDecoder.java:499)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.failIfNecessary(LengthFieldBasedFrameDecoder.java:477)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:403)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:343)
+	at io.netty.handler.codec.ByteToMessageDecoder.callDecode(ByteToMessageDecoder.java:411)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:248)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:373)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:359)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:351)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1334)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:373)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:359)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:926)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:129)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:651)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:574)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:488)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:450)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:873)
+	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:144)
+	at java.lang.Thread.run(Thread.java:748)
+2018-12-06 17:52:17,081 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelInactive:/127.0.0.1:60549掉线
+2018-12-06 17:52:17,081 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - remove connect:/127.0.0.1:60549
+2018-12-06 17:53:00,429 [main] INFO  SocketServer - ===start socket:7780
+2018-12-06 17:53:02,405 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - add connect:/127.0.0.1:60592
+2018-12-06 17:53:02,406 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelActive:/127.0.0.1:60592在线
+2018-12-06 17:53:27,806 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelInactive:/127.0.0.1:60592掉线
+2018-12-06 17:53:27,807 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - remove connect:/127.0.0.1:60592
+2018-12-06 18:28:16,764 [main] INFO  SocketServer - ===start socket:7780
+2018-12-06 18:28:17,365 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - add connect:/127.0.0.1:61338
+2018-12-06 18:28:17,366 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelActive:/127.0.0.1:61338在线
+2018-12-06 18:28:20,742 [nioEventLoopGroup-3-1] ERROR BaseChannelHandler - exceptioncaught,/127.0.0.1:61338
+io.netty.handler.codec.DecoderException: unsupported lengthFieldLength: 0 (expected: 1, 2, 3, 4, or 8)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.getUnadjustedFrameLength(LengthFieldBasedFrameDecoder.java:457)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:373)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:343)
+	at io.netty.handler.codec.ByteToMessageDecoder.callDecode(ByteToMessageDecoder.java:411)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:248)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:373)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:359)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:351)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1334)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:373)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:359)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:926)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:129)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:651)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:574)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:488)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:450)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:873)
+	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:144)
+	at java.lang.Thread.run(Thread.java:748)
+2018-12-06 18:28:20,743 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelInactive:/127.0.0.1:61338掉线
+2018-12-06 18:28:20,744 [nioEventLoopGroup-3-1] ERROR BaseChannelHandler - exceptioncaught,/127.0.0.1:61338
+io.netty.handler.codec.DecoderException: unsupported lengthFieldLength: 0 (expected: 1, 2, 3, 4, or 8)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.getUnadjustedFrameLength(LengthFieldBasedFrameDecoder.java:457)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:373)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:343)
+	at io.netty.handler.codec.ByteToMessageDecoder.callDecode(ByteToMessageDecoder.java:411)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelInputClosed(ByteToMessageDecoder.java:375)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelInputClosed(ByteToMessageDecoder.java:342)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelInactive(ByteToMessageDecoder.java:325)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:256)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:242)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelInactive(AbstractChannelHandlerContext.java:235)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelInactive(DefaultChannelPipeline.java:1329)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:256)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:242)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelInactive(DefaultChannelPipeline.java:908)
+	at io.netty.channel.AbstractChannel$AbstractUnsafe$7.run(AbstractChannel.java:744)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:163)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:418)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:454)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:873)
+	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:144)
+	at java.lang.Thread.run(Thread.java:748)
+2018-12-06 18:28:20,744 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - remove connect:/127.0.0.1:61338
+2018-12-06 18:28:53,552 [main] INFO  SocketServer - ===start socket:7780
+2018-12-06 18:28:56,267 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - add connect:/127.0.0.1:61378
+2018-12-06 18:28:56,267 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelActive:/127.0.0.1:61378在线
+2018-12-06 18:29:09,479 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelInactive:/127.0.0.1:61378掉线
+2018-12-06 18:29:09,480 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - remove connect:/127.0.0.1:61378
+2018-12-06 18:37:20,757 [main] INFO  SocketServer - ===start socket:7780
+2018-12-06 18:37:23,259 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - add connect:/127.0.0.1:61701
+2018-12-06 18:37:23,260 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelActive:/127.0.0.1:61701在线
+2018-12-06 18:39:54,063 [main] INFO  SocketServer - ===start socket:7780
+2018-12-06 18:39:57,666 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - add connect:/127.0.0.1:61769
+2018-12-06 18:39:57,667 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelActive:/127.0.0.1:61769在线
+2018-12-06 18:41:07,951 [main] INFO  SocketServer - ===start socket:7780
+2018-12-06 18:41:10,988 [nioEventLoopGroup-3-1] WARN  ChannelInitializer - Failed to initialize a channel. Closing: [id: 0xd709b631, L:/127.0.0.1:7780 - R:/127.0.0.1:61822]
+java.lang.IllegalArgumentException: lengthFieldOffset must be a non-negative integer: -8
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.<init>(LengthFieldBasedFrameDecoder.java:312)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.<init>(LengthFieldBasedFrameDecoder.java:268)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.<init>(LengthFieldBasedFrameDecoder.java:236)
+	at com.bracelet.socket.ServerChannelInitializer.initChannel(ServerChannelInitializer.java:31)
+	at com.bracelet.socket.ServerChannelInitializer.initChannel(ServerChannelInitializer.java:1)
+	at io.netty.channel.ChannelInitializer.initChannel(ChannelInitializer.java:113)
+	at io.netty.channel.ChannelInitializer.handlerAdded(ChannelInitializer.java:105)
+	at io.netty.channel.DefaultChannelPipeline.callHandlerAdded0(DefaultChannelPipeline.java:597)
+	at io.netty.channel.DefaultChannelPipeline.access$000(DefaultChannelPipeline.java:44)
+	at io.netty.channel.DefaultChannelPipeline$PendingHandlerAddedTask.execute(DefaultChannelPipeline.java:1387)
+	at io.netty.channel.DefaultChannelPipeline.callHandlerAddedForAllHandlers(DefaultChannelPipeline.java:1122)
+	at io.netty.channel.DefaultChannelPipeline.invokeHandlerAddedIfNeeded(DefaultChannelPipeline.java:647)
+	at io.netty.channel.AbstractChannel$AbstractUnsafe.register0(AbstractChannel.java:506)
+	at io.netty.channel.AbstractChannel$AbstractUnsafe.access$200(AbstractChannel.java:419)
+	at io.netty.channel.AbstractChannel$AbstractUnsafe$1.run(AbstractChannel.java:478)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:163)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:418)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:454)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:873)
+	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:144)
+	at java.lang.Thread.run(Thread.java:748)
+2018-12-06 18:41:13,025 [nioEventLoopGroup-3-2] WARN  ChannelInitializer - Failed to initialize a channel. Closing: [id: 0xe9487f11, L:/127.0.0.1:7780 - R:/127.0.0.1:61825]
+java.lang.IllegalArgumentException: lengthFieldOffset must be a non-negative integer: -8
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.<init>(LengthFieldBasedFrameDecoder.java:312)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.<init>(LengthFieldBasedFrameDecoder.java:268)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.<init>(LengthFieldBasedFrameDecoder.java:236)
+	at com.bracelet.socket.ServerChannelInitializer.initChannel(ServerChannelInitializer.java:31)
+	at com.bracelet.socket.ServerChannelInitializer.initChannel(ServerChannelInitializer.java:1)
+	at io.netty.channel.ChannelInitializer.initChannel(ChannelInitializer.java:113)
+	at io.netty.channel.ChannelInitializer.handlerAdded(ChannelInitializer.java:105)
+	at io.netty.channel.DefaultChannelPipeline.callHandlerAdded0(DefaultChannelPipeline.java:597)
+	at io.netty.channel.DefaultChannelPipeline.access$000(DefaultChannelPipeline.java:44)
+	at io.netty.channel.DefaultChannelPipeline$PendingHandlerAddedTask.execute(DefaultChannelPipeline.java:1387)
+	at io.netty.channel.DefaultChannelPipeline.callHandlerAddedForAllHandlers(DefaultChannelPipeline.java:1122)
+	at io.netty.channel.DefaultChannelPipeline.invokeHandlerAddedIfNeeded(DefaultChannelPipeline.java:647)
+	at io.netty.channel.AbstractChannel$AbstractUnsafe.register0(AbstractChannel.java:506)
+	at io.netty.channel.AbstractChannel$AbstractUnsafe.access$200(AbstractChannel.java:419)
+	at io.netty.channel.AbstractChannel$AbstractUnsafe$1.run(AbstractChannel.java:478)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:163)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:418)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:454)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:873)
+	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:144)
+	at java.lang.Thread.run(Thread.java:748)
+2018-12-06 18:55:12,967 [main] INFO  SocketServer - ===start socket:7780
+2018-12-06 18:55:21,708 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - add connect:/127.0.0.1:62222
+2018-12-06 18:55:21,709 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelActive:/127.0.0.1:62222在线
+2018-12-06 18:55:26,680 [nioEventLoopGroup-3-1] ERROR BaseChannelHandler - exceptioncaught,/127.0.0.1:62222
+io.netty.handler.codec.TooLongFrameException: Adjusted frame length exceeds 1024: 1462384701 - discarded
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.fail(LengthFieldBasedFrameDecoder.java:499)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.failIfNecessary(LengthFieldBasedFrameDecoder.java:477)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:403)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:343)
+	at io.netty.handler.codec.ByteToMessageDecoder.callDecode(ByteToMessageDecoder.java:411)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:248)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:373)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:359)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:351)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1334)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:373)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:359)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:926)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:129)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:651)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:574)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:488)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:450)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:873)
+	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:144)
+	at java.lang.Thread.run(Thread.java:748)
+2018-12-06 18:55:26,684 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelInactive:/127.0.0.1:62222掉线
+2018-12-06 18:55:26,685 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - remove connect:/127.0.0.1:62222
+2018-12-06 19:04:59,493 [main] INFO  SocketServer - ===start socket:7780
+2018-12-06 19:05:02,805 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - add connect:/127.0.0.1:62591
+2018-12-06 19:05:02,806 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelActive:/127.0.0.1:62591在线
+2018-12-06 19:05:11,386 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelInactive:/127.0.0.1:62591掉线
+2018-12-06 19:05:11,387 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - remove connect:/127.0.0.1:62591
+2018-12-06 19:05:24,431 [main] INFO  SocketServer - ===start socket:7780
+2018-12-06 19:05:27,852 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - add connect:/127.0.0.1:62637
+2018-12-06 19:05:27,853 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelActive:/127.0.0.1:62637在线
+2018-12-06 19:05:30,409 [nioEventLoopGroup-3-1] ERROR BaseChannelHandler - exceptioncaught,/127.0.0.1:62637
+io.netty.handler.codec.TooLongFrameException: Adjusted frame length exceeds 1024: 23387 - discarded
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.fail(LengthFieldBasedFrameDecoder.java:499)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.failIfNecessary(LengthFieldBasedFrameDecoder.java:477)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:403)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:343)
+	at io.netty.handler.codec.ByteToMessageDecoder.callDecode(ByteToMessageDecoder.java:411)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:248)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:373)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:359)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:351)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1334)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:373)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:359)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:926)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:129)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:651)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:574)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:488)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:450)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:873)
+	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:144)
+	at java.lang.Thread.run(Thread.java:748)
+2018-12-06 19:05:30,414 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelInactive:/127.0.0.1:62637掉线
+2018-12-06 19:05:30,414 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - remove connect:/127.0.0.1:62637
+2018-12-06 19:12:08,248 [main] INFO  SocketServer - ===start socket:7780
+2018-12-06 19:13:08,814 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - add connect:/127.0.0.1:62859
+2018-12-06 19:13:08,814 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelActive:/127.0.0.1:62859在线
+2018-12-06 19:13:13,448 [nioEventLoopGroup-3-1] ERROR BaseChannelHandler - exceptioncaught,/127.0.0.1:62859
+io.netty.handler.codec.TooLongFrameException: Adjusted frame length exceeds 1024: 707801159 - discarded
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.fail(LengthFieldBasedFrameDecoder.java:499)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.failIfNecessary(LengthFieldBasedFrameDecoder.java:477)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:403)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:343)
+	at io.netty.handler.codec.ByteToMessageDecoder.callDecode(ByteToMessageDecoder.java:411)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:248)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:373)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:359)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:351)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1334)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:373)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:359)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:926)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:129)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:651)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:574)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:488)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:450)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:873)
+	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:144)
+	at java.lang.Thread.run(Thread.java:748)
+2018-12-06 19:13:13,452 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelInactive:/127.0.0.1:62859掉线
+2018-12-06 19:13:13,453 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - remove connect:/127.0.0.1:62859
+2018-12-06 19:14:48,912 [main] INFO  SocketServer - ===start socket:7780
+2018-12-06 19:14:49,317 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - add connect:/127.0.0.1:62926
+2018-12-06 19:14:49,317 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelActive:/127.0.0.1:62926在线
+2018-12-06 19:14:53,505 [nioEventLoopGroup-3-1] ERROR BaseChannelHandler - exceptioncaught,/127.0.0.1:62926
+io.netty.handler.codec.TooLongFrameException: Adjusted frame length exceeds 1024: 23387 - discarded
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.fail(LengthFieldBasedFrameDecoder.java:499)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.failIfNecessary(LengthFieldBasedFrameDecoder.java:477)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:403)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:343)
+	at io.netty.handler.codec.ByteToMessageDecoder.callDecode(ByteToMessageDecoder.java:411)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:248)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:373)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:359)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:351)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1334)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:373)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:359)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:926)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:129)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:651)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:574)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:488)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:450)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:873)
+	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:144)
+	at java.lang.Thread.run(Thread.java:748)
+2018-12-06 19:14:53,509 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelInactive:/127.0.0.1:62926掉线
+2018-12-06 19:14:53,510 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - remove connect:/127.0.0.1:62926
+2018-12-06 19:16:46,133 [main] INFO  SocketServer - ===start socket:7780
+2018-12-06 19:16:49,629 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - add connect:/127.0.0.1:62995
+2018-12-06 19:16:49,630 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelActive:/127.0.0.1:62995在线
+2018-12-06 19:16:53,585 [nioEventLoopGroup-3-1] ERROR BaseChannelHandler - exceptioncaught,/127.0.0.1:62995
+io.netty.handler.codec.TooLongFrameException: Adjusted frame length exceeds 1024: 808464443 - discarded
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.fail(LengthFieldBasedFrameDecoder.java:499)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.failIfNecessary(LengthFieldBasedFrameDecoder.java:477)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:403)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:343)
+	at io.netty.handler.codec.ByteToMessageDecoder.callDecode(ByteToMessageDecoder.java:411)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:248)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:373)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:359)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:351)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1334)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:373)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:359)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:926)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:129)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:651)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:574)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:488)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:450)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:873)
+	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:144)
+	at java.lang.Thread.run(Thread.java:748)
+2018-12-06 19:16:53,589 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelInactive:/127.0.0.1:62995掉线
+2018-12-06 19:16:53,592 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - remove connect:/127.0.0.1:62995
+2018-12-06 19:18:33,267 [main] INFO  SocketServer - ===start socket:7780
+2018-12-06 19:18:37,445 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - add connect:/127.0.0.1:63066
+2018-12-06 19:18:37,446 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelActive:/127.0.0.1:63066在线
+2018-12-06 19:18:41,267 [nioEventLoopGroup-3-1] ERROR BaseChannelHandler - exceptioncaught,/127.0.0.1:63066
+io.netty.handler.codec.TooLongFrameException: Adjusted frame length exceeds 1024: 23387 - discarded
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.fail(LengthFieldBasedFrameDecoder.java:499)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.failIfNecessary(LengthFieldBasedFrameDecoder.java:477)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:403)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:343)
+	at io.netty.handler.codec.ByteToMessageDecoder.callDecode(ByteToMessageDecoder.java:411)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:248)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:373)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:359)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:351)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1334)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:373)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:359)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:926)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:129)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:651)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:574)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:488)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:450)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:873)
+	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:144)
+	at java.lang.Thread.run(Thread.java:748)
+2018-12-06 19:18:41,270 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelInactive:/127.0.0.1:63066掉线
+2018-12-06 19:18:41,273 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - remove connect:/127.0.0.1:63066
+2018-12-06 19:19:02,049 [main] INFO  SocketServer - ===start socket:7780
+2018-12-06 19:19:07,018 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - add connect:/127.0.0.1:63112
+2018-12-06 19:19:07,019 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelActive:/127.0.0.1:63112在线
+2018-12-06 19:21:21,149 [nioEventLoopGroup-3-1] ERROR BaseChannelHandler - exceptioncaught,/127.0.0.1:63112
+io.netty.handler.timeout.ReadTimeoutException: null
+2018-12-06 19:21:21,150 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelInactive:/127.0.0.1:63112掉线
+2018-12-06 19:21:21,150 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - remove connect:/127.0.0.1:63112
+2018-12-06 20:09:06,401 [main] INFO  SocketServer - ===start socket:7780
+2018-12-06 20:09:11,623 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - add connect:/127.0.0.1:64632
+2018-12-06 20:09:11,624 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelActive:/127.0.0.1:64632在线
+2018-12-06 20:09:16,934 [nioEventLoopGroup-3-1] ERROR BaseChannelHandler - exceptioncaught,/127.0.0.1:64632
+io.netty.handler.codec.TooLongFrameException: Adjusted frame length exceeds 1024: 23387 - discarded
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.fail(LengthFieldBasedFrameDecoder.java:499)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.failIfNecessary(LengthFieldBasedFrameDecoder.java:477)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:403)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:343)
+	at io.netty.handler.codec.ByteToMessageDecoder.callDecode(ByteToMessageDecoder.java:411)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:248)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:373)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:359)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:351)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1334)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:373)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:359)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:926)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:129)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:651)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:574)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:488)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:450)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:873)
+	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:144)
+	at java.lang.Thread.run(Thread.java:748)
+2018-12-06 20:09:16,938 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelInactive:/127.0.0.1:64632掉线
+2018-12-06 20:09:16,939 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - remove connect:/127.0.0.1:64632
+2018-12-06 20:19:42,824 [main] INFO  SocketServer - ===start socket:7780
+2018-12-06 20:19:49,876 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - add connect:/127.0.0.1:65067
+2018-12-06 20:19:49,877 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelActive:/127.0.0.1:65067在线
+2018-12-06 20:19:54,315 [nioEventLoopGroup-3-1] ERROR BaseChannelHandler - exceptioncaught,/127.0.0.1:65067
+io.netty.handler.codec.TooLongFrameException: Adjusted frame length exceeds 1024: 707801160 - discarded
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.fail(LengthFieldBasedFrameDecoder.java:499)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.failIfNecessary(LengthFieldBasedFrameDecoder.java:477)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:403)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:343)
+	at io.netty.handler.codec.ByteToMessageDecoder.callDecode(ByteToMessageDecoder.java:411)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:248)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:373)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:359)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:351)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1334)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:373)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:359)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:926)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:129)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:651)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:574)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:488)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:450)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:873)
+	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:144)
+	at java.lang.Thread.run(Thread.java:748)
+2018-12-06 20:19:54,319 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelInactive:/127.0.0.1:65067掉线
+2018-12-06 20:19:54,320 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - remove connect:/127.0.0.1:65067
+2018-12-06 20:20:24,111 [main] INFO  SocketServer - ===start socket:7780
+2018-12-06 20:20:26,650 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - add connect:/127.0.0.1:65120
+2018-12-06 20:20:26,651 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelActive:/127.0.0.1:65120在线
+2018-12-06 20:20:32,693 [nioEventLoopGroup-3-1] ERROR BaseChannelHandler - exceptioncaught,/127.0.0.1:65120
+io.netty.handler.codec.TooLongFrameException: Adjusted frame length exceeds 1024: 707801159 - discarded
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.fail(LengthFieldBasedFrameDecoder.java:499)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.failIfNecessary(LengthFieldBasedFrameDecoder.java:477)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:403)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:343)
+	at io.netty.handler.codec.ByteToMessageDecoder.callDecode(ByteToMessageDecoder.java:411)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:248)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:373)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:359)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:351)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1334)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:373)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:359)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:926)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:129)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:651)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:574)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:488)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:450)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:873)
+	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:144)
+	at java.lang.Thread.run(Thread.java:748)
+2018-12-06 20:20:32,697 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelInactive:/127.0.0.1:65120掉线
+2018-12-06 20:20:32,698 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - remove connect:/127.0.0.1:65120
+2018-12-06 20:20:45,109 [nioEventLoopGroup-3-2] INFO  BaseChannelHandler - add connect:/127.0.0.1:65128
+2018-12-06 20:20:45,109 [nioEventLoopGroup-3-2] INFO  BaseChannelHandler - channelActive:/127.0.0.1:65128在线
+2018-12-06 20:20:45,924 [nioEventLoopGroup-3-2] INFO  BaseChannelHandler - channelInactive:/127.0.0.1:65128掉线
+2018-12-06 20:20:45,925 [nioEventLoopGroup-3-2] INFO  BaseChannelHandler - remove connect:/127.0.0.1:65128
+2018-12-06 20:25:05,945 [main] INFO  SocketServer - ===start socket:7780
+2018-12-06 20:25:16,418 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - add connect:/127.0.0.1:65284
+2018-12-06 20:25:16,418 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelActive:/127.0.0.1:65284在线
+2018-12-06 20:25:20,789 [nioEventLoopGroup-3-1] ERROR BaseChannelHandler - exceptioncaught,/127.0.0.1:65284
+io.netty.handler.codec.TooLongFrameException: Adjusted frame length exceeds 1024: 808464444 - discarded
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.fail(LengthFieldBasedFrameDecoder.java:499)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.failIfNecessary(LengthFieldBasedFrameDecoder.java:477)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:403)
+	at io.netty.handler.codec.LengthFieldBasedFrameDecoder.decode(LengthFieldBasedFrameDecoder.java:343)
+	at io.netty.handler.codec.ByteToMessageDecoder.callDecode(ByteToMessageDecoder.java:411)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:248)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:373)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:359)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:351)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1334)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:373)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:359)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:926)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:129)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:651)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:574)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:488)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:450)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:873)
+	at io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run(DefaultThreadFactory.java:144)
+	at java.lang.Thread.run(Thread.java:748)
+2018-12-06 20:25:20,793 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelInactive:/127.0.0.1:65284掉线
+2018-12-06 20:25:20,793 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - remove connect:/127.0.0.1:65284
+2018-12-06 20:37:41,848 [main] INFO  SocketServer - ===start socket:7780
+2018-12-06 20:37:47,034 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - add connect:/127.0.0.1:49522
+2018-12-06 20:37:47,035 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelActive:/127.0.0.1:49522在线
+2018-12-06 20:38:07,175 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelInactive:/127.0.0.1:49522掉线
+2018-12-06 20:38:07,175 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - remove connect:/127.0.0.1:49522
+2018-12-06 20:38:40,780 [main] INFO  SocketServer - ===start socket:7780
+2018-12-06 20:38:52,993 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - add connect:/127.0.0.1:49593
+2018-12-06 20:38:52,994 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelActive:/127.0.0.1:49593在线
+2018-12-06 20:38:57,472 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelInactive:/127.0.0.1:49593掉线
+2018-12-06 20:38:57,472 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - remove connect:/127.0.0.1:49593

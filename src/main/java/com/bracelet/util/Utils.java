@@ -34,11 +34,11 @@ import com.taobao.api.ApiException;
 
 @SuppressWarnings({ "unused", "restriction" })
 public class Utils {
-	
+
 	public static BASE64Encoder encoder = new sun.misc.BASE64Encoder();
 	public static BASE64Decoder decoder = new sun.misc.BASE64Decoder();
 
-	public final static String accessKeyId = "LTAI8CmVtQhm7KSG";  
+	public final static String accessKeyId = "LTAI8CmVtQhm7KSG";
 	public final static String accessKeySecret = "c9wj4Lw22QmDLuQkx2l46xmfCD4H1e";
 	public final static String accessKeyIdOfBeidou = "LTAI7YNEkaz5J7Vy";
 	public final static String accessKeySecretOfBeidou = "EIHW3lpcPMXnxsdW7CW9jnriovXTch";
@@ -60,30 +60,25 @@ public class Utils {
 	public static final String pickALockSendMsg_SMSTEMPLATE_CODE = "SMS_91990103";// 使用指纹打开短信模板
 	public static final String fingerSosSendMsg_SMSTEMPLATE_CODE = "SMS_125735073";// 使用报警指纹打开短信模板
 	public static final String lowElectricSosMsgSendMsg_SMSTEMPLATE_CODE = "SMS_134515053";// 低电量报警
-	
-	
+
 	public static final String accessKeyIdOfWatch = "LTAIbB6A0M192V67";
 	public static final String accessKeySecretOfWatch = "0Sch7htDMfWXba1BwYbGMrWSfQDerY";
-	
 
 	public final static String USER_SAVE = "/upload/user/";
-	
+
 	public final static String dou = ",";
 	public final static String you = "]";
-	
+
 	public final static String SSRH_LOCATION_KEY = "93b4cf92ab27576506c6ea1edbe8bb54";
 	public final static String SSRH_TIANQI_KEY = "7d92f6b57a23743f6939c24714731a6a";
 	public final static String SSRH_GPS_URL = "http://restapi.amap.com/v3/assistant/coordinate/convert";
-	
-	
+
 	public final static String VOICE_FILE_lINUX = "/usr/local/resin/resin-pro-4.0.53-8080/webapps/GXCareDevice/watchvoice/device";
 	public final static String VOICE_FILE_WINDOWS = "F:/test";
 	public final static String VOICE_URL = "http://47.92.30.81:8080/GXCareDevice/watchvoice/device/";
-	
-	
+
 	public final static String PHOTO_FILE_lINUX = "/usr/local/resin/resin-pro-4.0.53-8080/webapps/GXCareDevice/watchphoto/device";
 	public final static String PHOTO_URL = "http://47.92.30.81:8080/GXCareDevice/watchphoto/device/";
-	
 
 	public static String randomString(int len) {
 		if (len <= 0) {
@@ -161,14 +156,11 @@ public class Utils {
 	 * @param latB
 	 * @return 单位：米
 	 */
-	public static double calcDistance(double lngA, double latA, double lngB,
-			double latB) {
+	public static double calcDistance(double lngA, double latA, double lngB, double latB) {
 		double earthR = 6371000;
-		double x = Math.cos(latA * Math.PI / 180.)
-				* Math.cos(latB * Math.PI / 180.)
+		double x = Math.cos(latA * Math.PI / 180.) * Math.cos(latB * Math.PI / 180.)
 				* Math.cos((lngA - lngB) * Math.PI / 180);
-		double y = Math.sin(latA * Math.PI / 180.)
-				* Math.sin(latB * Math.PI / 180.);
+		double y = Math.sin(latA * Math.PI / 180.) * Math.sin(latB * Math.PI / 180.);
 		double s = x + y;
 		if (s > 1)
 			s = 1;
@@ -195,8 +187,7 @@ public class Utils {
 	/**
 	 * 90mmHg<收缩压<140mmHg 60mmHg<舒张压<90mmHg
 	 */
-	public static List<Map<String, Object>> checkHeartPressure(
-			Integer maxHeartPressure, Integer minHeartPressure) {
+	public static List<Map<String, Object>> checkHeartPressure(Integer maxHeartPressure, Integer minHeartPressure) {
 		List<Map<String, Object>> resultList = new LinkedList<Map<String, Object>>();
 		Map<String, Object> maxResultMap = new HashMap<>();
 		if (maxHeartPressure < 90) {
@@ -252,8 +243,7 @@ public class Utils {
 	// 根据UnicodeBlock方法判断中文标点符号
 	public static boolean isChinesePunctuation(char c) {
 		Character.UnicodeBlock ub = Character.UnicodeBlock.of(c);
-		if (ub == Character.UnicodeBlock.GENERAL_PUNCTUATION
-				|| ub == Character.UnicodeBlock.CJK_SYMBOLS_AND_PUNCTUATION
+		if (ub == Character.UnicodeBlock.GENERAL_PUNCTUATION || ub == Character.UnicodeBlock.CJK_SYMBOLS_AND_PUNCTUATION
 				|| ub == Character.UnicodeBlock.HALFWIDTH_AND_FULLWIDTH_FORMS
 				|| ub == Character.UnicodeBlock.CJK_COMPATIBILITY_FORMS
 				|| ub == Character.UnicodeBlock.VERTICAL_FORMS) {
@@ -273,8 +263,7 @@ public class Utils {
 	 * @return 点在多边形内返回true,否则返回false
 	 * @author wei
 	 */
-	public static boolean IsPtInPoly(Point2D.Double point,
-			List<Point2D.Double> pts) {
+	public static boolean IsPtInPoly(Point2D.Double point, List<Point2D.Double> pts) {
 
 		int N = pts.size();
 		boolean boundOrVertex = true; // 如果点位于多边形的顶点或边上，也算做点在多边形内，直接返回true
@@ -325,8 +314,10 @@ public class Utils {
 							++intersectCount;
 						}
 					} else {// cross point on the left side
-						double xinters = (p.x - p1.x) * (p2.y - p1.y)
-								/ (p2.x - p1.x) + p1.y;// cross point of y
+						double xinters = (p.x - p1.x) * (p2.y - p1.y) / (p2.x - p1.x) + p1.y;// cross
+																								// point
+																								// of
+																								// y
 						if (Math.abs(p.y - xinters) < precision) {// overlies on
 																	// a ray
 							return boundOrVertex;
@@ -340,9 +331,12 @@ public class Utils {
 			} else {// special case when ray is crossing through the vertex
 				if (p.x == p2.x && p.y <= p2.y) {// p crossing over p2
 					Point2D.Double p3 = pts.get((i + 1) % N); // next vertex
-					if (p.x >= Math.min(p1.x, p3.x)
-							&& p.x <= Math.max(p1.x, p3.x)) {// p.x lies between
-																// p1.x & p3.x
+					if (p.x >= Math.min(p1.x, p3.x) && p.x <= Math.max(p1.x, p3.x)) {// p.x
+																						// lies
+																						// between
+																						// p1.x
+																						// &
+																						// p3.x
 						++intersectCount;
 					} else {
 						intersectCount += 2;
@@ -422,12 +416,11 @@ public class Utils {
 	 * @param content
 	 * @throws IOException
 	 */
-	public static void createFileContent(String path, String fileName,
-			byte[] content) {
+	public static void createFileContent(String path, String fileName, byte[] content) {
 		try {
 			createFile(path);
-		
-			FileOutputStream fos = new FileOutputStream(path + "/" + fileName,true);
+
+			FileOutputStream fos = new FileOutputStream(path + "/" + fileName, true);
 			fos.write(content);
 			fos.close();
 		} catch (FileNotFoundException e) {
@@ -455,18 +448,17 @@ public class Utils {
 		String tmp = url + port + path;
 		return tmp;
 	}
-	
-	public static String getTime(){
+
+	public static String getTime() {
 		SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd,HH:mm:ss");
 		return ft.format(new Date());
 	}
-	
-	public static String getRiQi(){
+
+	public static String getRiQi() {
 		SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
 		return ft.format(new Date());
 	}
 
-	
 	/**
 	 * 将图片转换成二进制
 	 * 
@@ -479,26 +471,25 @@ public class Utils {
 		try {
 			bi = ImageIO.read(f);
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ImageIO.write(bi, "jpg", baos);  //经测试转换的图片是格式这里就什么格式，否则会失真
+			ImageIO.write(bi, "jpg", baos); // 经测试转换的图片是格式这里就什么格式，否则会失真
 			byte[] bytes = baos.toByteArray();
- 
+
 			return encoder.encodeBuffer(bytes).trim();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
- 
+
 	/**
 	 * 将二进制转换为图片
 	 * 
 	 * @param base64String
 	 */
-	@SuppressWarnings("restriction")
 	public static void base64StringToImage(String base64String) {
 		try {
 			byte[] bytes1 = decoder.decodeBuffer(base64String);
- 
+
 			ByteArrayInputStream bais = new ByteArrayInputStream(bytes1);
 			BufferedImage bi1 = ImageIO.read(bais);
 			File w2 = new File("e://QQ.jpg");// 可以是jpg,png,gif格式
@@ -507,73 +498,130 @@ public class Utils {
 			e.printStackTrace();
 		}
 	}
-	
-	
-	
+
+	/**
+	 * 16进制转换成为string类型字符串
+	 * 
+	 * @param s
+	 * @return
+	 */
+	public static String hexStringToString(String s) {
+		if (s == null || s.equals("")) {
+			return null;
+		}
+		s = s.replace(" ", "");
+		byte[] baKeyword = new byte[s.length() / 2];
+		for (int i = 0; i < baKeyword.length; i++) {
+			try {
+				baKeyword[i] = (byte) (0xff & Integer.parseInt(s.substring(i * 2, i * 2 + 2), 16));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		try {
+			s = new String(baKeyword, "UTF-8");
+			new String();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		return s;
+	}
+
+	/**
+	 * @description 将16进制转换为二进制
+	 * 
+	 * @param hexStr
+	 * @return
+	 */
+
+	public static byte[] hexStringToByte(String hex) {
+		int len = (hex.length() / 2);
+		byte[] result = new byte[len];
+		char[] achar = hex.toCharArray();
+		for (int i = 0; i < len; i++) {
+			int pos = i * 2;
+			result[i] = (byte) (toByte(achar[pos]) << 4 | toByte(achar[pos + 1]));
+		}
+		return result;
+	}
+
+	private static byte toByte(char c) {
+		byte b = (byte) "0123456789abcdef".indexOf(c);
+		return b;
+	}
+
+	/*
+	 * int len = (hex.length() / 2); byte[] result = new byte[len]; char[] achar
+	 * = hex.toCharArray(); for (int i = 0; i < len; i++) { int pos = i * 2;
+	 * result[i] = (byte) (toByte(achar[pos]) << 4 | toByte(achar[pos + 1])); }
+	 * return result
+	 * 
+	 */
+
 	public static void main(String[] args) throws UnsupportedEncodingException {
 		System.out.println(getRiQi());
-		 int valueTen = 6;
-	        //将其转换为十六进制并输出
-	        String strHex = Integer.toHexString(valueTen);
-	        System.out.println(valueTen + " [十进制]---->[十六进制] " + strHex);
-	        //将十六进制格式化输出
-	        String strHex2 = String.format("%08x",valueTen);
-	        System.out.println(valueTen + " [十进制]---->[十六进制] " + strHex2);
+		int valueTen = 6;
+		// 将其转换为十六进制并输出
+		String strHex = Integer.toHexString(valueTen);
+		System.out.println(valueTen + " [十进制]---->[十六进制] " + strHex);
+		// 将十六进制格式化输出
+		String strHex2 = String.format("%08x", valueTen);
+		System.out.println(valueTen + " [十进制]---->[十六进制] " + strHex2);
 
-	        System.out.println("==========================================================");
-	        //定义一个十六进制值
-	        String strHex3 = "0002";
-	        //将十六进制转化成十进制
-	        int valueTen2 = Integer.parseInt(strHex3,16);
-	        System.out.println(strHex3 + " [十六进制]---->[十进制] " + valueTen2);
+		System.out.println("==========================================================");
+		// 定义一个十六进制值
+		String strHex3 = "0002";
+		// 将十六进制转化成十进制
+		int valueTen2 = Integer.parseInt(strHex3, 16);
+		System.out.println(strHex3 + " [十六进制]---->[十进制] " + valueTen2);
 
-	        System.out.println("==========================================================");
-	        //可以在声明十进制时，自动完成十六进制到十进制的转换
-	        int valueHex = 0x00001322;
-	        System.out.println("int valueHex = 0x00001322 --> " + valueHex);
-	        
-	    /*    65535 [十进制]---->[十六进制] ffff
-	        65535 [十进制]---->[十六进制] 0000ffff
-	        ==========================================================
-	        ffff [十六进制]---->[十进制] 65535
-	        ==========================================================
-	        int valueHex = 0x00001322 --> 4898*/
-	        
-	        System.out.println("测试".getBytes("ISO8859-1").length);
-	     // 运行结果：4
-	     System.out.println("测试".getBytes("GB2312").length);
-	     // 运行结果：4
-	     System.out.println("测试".getBytes("GBK").length);
-	     // 运行结果：6
-	     System.out.println("测试".getBytes("UTF-8").length);
-	     
-	     
-	     System.out.println("ab".getBytes("ISO8859-1").length);
-	     // 运行结果：4
-	     System.out.println("ab".getBytes("GB2312").length);
-	     // 运行结果：4
-	     System.out.println("ab".getBytes("GBK").length);
-	     // 运行结果：6
-	     System.out.println("ab".getBytes("UTF-8").length);
-	     
-			//语音转换
-			/*byte[] voiceData = Base64.decodeBase64("sdfasdfasfdfads");
-			
-			String fileName = "1.amr";
-			
-			createFileContent("E:/resin/resin-pro-4.0.53/webapps/GXCareDevice/voice", fileName,voiceData);*/
-	     
-	     byte[] voiceData = Base64.decodeBase64("sdfasdfasfdfads");
-			
-	     String xmlinfo="<ads><advertising><customerName>hahhaahahahah</customerName><advertisingUrl>https://www.baidu.com/</advertisingUrl><iconUrl>201809280516.png</iconUrl>"+
-"<lanugage>en</lanugage>"+
-"</advertising>"+
-"</ads>";
-			String fileName = "te.xml";
-			
-			createFileContent("E:/resin/resin-pro-4.0.53/webapps/GXCareDevice/voice", fileName,xmlinfo.getBytes("UTF-8"));
+		System.out.println("==========================================================");
+		// 可以在声明十进制时，自动完成十六进制到十进制的转换
+		int valueHex = 0x00001322;
+		System.out.println("int valueHex = 0x00001322 --> " + valueHex);
+
+		/*
+		 * 65535 [十进制]---->[十六进制] ffff 65535 [十进制]---->[十六进制] 0000ffff
+		 * ========================================================== ffff
+		 * [十六进制]---->[十进制] 65535
+		 * ========================================================== int
+		 * valueHex = 0x00001322 --> 4898
+		 */
+
+		System.out.println("测试".getBytes("ISO8859-1").length);
+		// 运行结果：4
+		System.out.println("测试".getBytes("GB2312").length);
+		// 运行结果：4
+		System.out.println("测试".getBytes("GBK").length);
+		// 运行结果：6
+		System.out.println("测试".getBytes("UTF-8").length);
+
+		System.out.println("ab".getBytes("ISO8859-1").length);
+		// 运行结果：4
+		System.out.println("ab".getBytes("GB2312").length);
+		// 运行结果：4
+		System.out.println("ab".getBytes("GBK").length);
+		// 运行结果：6
+		System.out.println("ab".getBytes("UTF-8").length);
+
+		// 语音转换
+		/*
+		 * byte[] voiceData = Base64.decodeBase64("sdfasdfasfdfads");
+		 * 
+		 * String fileName = "1.amr";
+		 * 
+		 * createFileContent(
+		 * "E:/resin/resin-pro-4.0.53/webapps/GXCareDevice/voice",
+		 * fileName,voiceData);
+		 */
+
+		byte[] voiceData = Base64.decodeBase64("sdfasdfasfdfads");
+
+		String xmlinfo = "<ads><advertising><customerName>hahhaahahahah</customerName><advertisingUrl>https://www.baidu.com/</advertisingUrl><iconUrl>201809280516.png</iconUrl>"
+				+ "<lanugage>en</lanugage>" + "</advertising>" + "</ads>";
+		String fileName = "te.xml";
+
+		createFileContent("E:/resin/resin-pro-4.0.53/webapps/GXCareDevice/voice", fileName, xmlinfo.getBytes("UTF-8"));
 	}
-	
-	
-  
+
 }

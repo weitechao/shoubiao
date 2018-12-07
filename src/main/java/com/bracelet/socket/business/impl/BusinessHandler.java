@@ -18,6 +18,7 @@ import com.bracelet.exception.BizException;
 import com.bracelet.service.IApilogService;
 import com.bracelet.util.ChannelMap;
 import com.bracelet.util.RespCode;
+import com.bracelet.util.Utils;
 import com.bracelet.socket.business.IBusinessHandler;
 import com.bracelet.socket.business.IService;
 
@@ -51,7 +52,9 @@ public class BusinessHandler implements IBusinessHandler {
 			imei = socketLoginDto.getImei();
 		}
 		try {
-			if (json.contains("[YW*")) {
+			json = Utils.hexStringToString(json);
+			logger.info("[" + incoming.remoteAddress() + "]原始发送信息字符串:" + json + "]");
+			
 				String jsonInfo = json.substring(1, json.length());
 				String[] shuzu = jsonInfo.split("\\*");
 				// String deviceid=shuzu[1];
@@ -60,19 +63,7 @@ public class BusinessHandler implements IBusinessHandler {
 				service = socketBusinessFactory.getService(cmd);
 				serviceName = service.getClass().getName();
 				reponse = service.process(jsonInfo, incoming);
-			} else {
-				String voiceName = ChannelMap.getVoiceName(socketLoginDto.getImei());
-				if(voiceName.contains(".amr")){
-					cmd="TK";
-					service = socketBusinessFactory.getService(cmd);
-				}else{
-					cmd="TPBK";
-					service = socketBusinessFactory.getService(cmd);
-				}
 			
-				serviceName = service.getClass().getName();
-				reponse = service.process(json, incoming);
-			}
 		} catch (Exception e) {
 			logger.error("process error:", e);
 			rstatus = 1;

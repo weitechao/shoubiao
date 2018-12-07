@@ -33,12 +33,15 @@ public class ServerChannelInitializer extends ChannelInitializer<SocketChannel> 
 	   // pipeline.addLast("framer", new DelimiterBasedFrameDecoder(8192, Delimiters.lineDelimiter()));
 	//	pipeline.addLast("framer", new DelimiterBasedFrameDecoder(8192, Unpooled.wrappedBuffer(new byte[] { ']'})));
 	  //	pipeline.addLast("decoder", new StringDecoder());
-		pipeline.addLast(new LengthFieldBasedFrameDecoder(1024,20,4,-19,0));
+		//pipeline.addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE,0,4,0,4));
 		/*
 		 *  int maxFrameLength,
             int lengthFieldOffset, int lengthFieldLength,
             int lengthAdjustment, int initialBytesToStrip
 		 * */
+		pipeline.addLast("framer", new DelimiterBasedFrameDecoder(8192, Unpooled.wrappedBuffer(new byte[] { ']'})));
+		//pipeline.addLast("decoder", new StringDecoder());
+		pipeline.addLast("encoder", new StringEncoder());
 		pipeline.addLast("readTimeoutHandler", new ReadTimeoutHandler(130));
 		pipeline.addLast("handler", baseChannelHandler);
 	}
