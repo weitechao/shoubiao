@@ -37,7 +37,7 @@ public class UploadPhotoServiceImpl implements IUploadPhotoService{
 
 	@Override
 	public List<DownLoadFileInfo> getphotoInfo(String imei,Integer status) {
-		String sql = "select * from upload_photo where imei=? and status = ? order by id desc ";
+		String sql = "select * from watch_upload_photo where imei=? and status = ? order by id desc ";
 		List<DownLoadFileInfo> list = jdbcTemplate
 				.query(sql, new Object[] { imei, status},
 						new BeanPropertyRowMapper<DownLoadFileInfo>(DownLoadFileInfo.class));

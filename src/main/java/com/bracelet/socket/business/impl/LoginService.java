@@ -78,7 +78,7 @@ public class LoginService implements IService {
 		channelDto.setNo(no);
 		channelDto.setImei(imei);
 		channelDto.setPhone(phone);
-		// channelDto.setUser_id(userInfo.getUser_id());
+		channelDto.setUser_id(watchd.getId());
 
 		logger.info("保存手表登录信息,no:" + no + ",imei" + imei);
 		ChannelMap.addChannel(imei, channelDto);

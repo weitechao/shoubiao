@@ -73,7 +73,7 @@ public class WatchAppUserController extends BaseController {
 				bb.put("Code", 1);// 1表示login succes
 				bb.put("token", token);
 				bb.put("LoginId", "0");
-				bb.put("UserId", "0");
+				bb.put("UserId", userInfo.getUser_id());
 				bb.put("PhoneNumber", "0");
 				bb.put("BindNumber", "0");
 				bb.put("UserType", 0);
@@ -96,6 +96,11 @@ public class WatchAppUserController extends BaseController {
 			bb.put("token", token);
 			bb.put("LoginId", "0");
 			bb.put("UserId", "0");
+			UserInfo userInfoo = userInfoService.getUserInfoByUsername(tel);
+			if(userInfoo!=null){
+				bb.put("UserId", userInfoo.getUser_id());
+			}
+			
 			bb.put("PhoneNumber", "0");
 			bb.put("BindNumber", "0");
 			bb.put("UserType", 0);
@@ -238,7 +243,7 @@ public class WatchAppUserController extends BaseController {
 				dataMap.put("SmsNumber", "0");
 				dataMap.put("SmsBalanceKey", "0");
 				dataMap.put("SmsFlowKey", "0");
-				dataMap.put("DeviceID", "0");
+				dataMap.put("DeviceID", location.getId());
 				dataMap.put("UserId", "0");
 				dataMap.put("DeviceModelID", "10000100");
 				dataMap.put("Firmware", "0");

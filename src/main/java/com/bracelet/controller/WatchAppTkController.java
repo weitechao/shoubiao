@@ -62,7 +62,7 @@ public class WatchAppTkController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/tkToDevice", method = RequestMethod.POST)
-	public String addfriend(@RequestBody String body) {
+	public String tkToDevice(@RequestBody String body) {
 		JSONObject jsonObject = (JSONObject) JSON.parse(body);
 		JSONObject bb = new JSONObject();
 		String token = jsonObject.getString("token");
@@ -108,67 +108,96 @@ public class WatchAppTkController extends BaseController {
 
 	/* 获取 */
 	@ResponseBody
-	@RequestMapping(value = "/getDeviceTk/{token}/{imei}", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	@RequestMapping(value = "/getDevicePhoto/{token}/{imei}", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
 	public String getDeviceTk(@PathVariable String token, @PathVariable String imei) {
 
 		JSONObject bb = new JSONObject();
 
 		String userId = checkTokenWatchAndUser(token);
 		if ("0".equals(userId)) {
-			bb.put("code", -1);
+			bb.put("Code", -1);
 			return bb.toString();
 		}
 
 		List<DownLoadFileInfo>list = iUploadPhotoService.getphotoInfo(imei,0);
 		JSONArray jsonArray = new JSONArray();
 		if (list != null) {
+			SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 			for (DownLoadFileInfo fileInfo : list) {
 				JSONObject dataMap = new JSONObject();
 				dataMap.put("photoUrl", fileInfo.getSource());
 				dataMap.put("createtime", fileInfo.getCreatetime().getTime());
 				dataMap.put("photoName", fileInfo.getPhoto_name());
+				dataMap.put("DevicePhotoId", fileInfo.getId());
+				dataMap.put("DeviceID", "");
+				if(socketLoginDto != null){
+					dataMap.put("DeviceID", socketLoginDto.getUser_id());
+				}
+				dataMap.put("Source", "");
+				dataMap.put("DeviceTime", "");
+				dataMap.put("Latitude", "");
+				dataMap.put("Longitude", "");
+				dataMap.put("Mark", "");
+				dataMap.put("Path", fileInfo.getSource());
+				dataMap.put("Thumb", "");
+				dataMap.put("CreateTime", "");
+				dataMap.put("UpdateTime", "");
 				jsonArray.add(dataMap);
 				iUploadPhotoService.updateStatusById(fileInfo.getId(), 1);
 			}
-			bb.put("result", jsonArray);
 			bb.put("Code", 1);
 		}else{
 			bb.put("Code", 0);
 		}
+		bb.put("List", jsonArray);
 
 		return bb.toString();
 	}
 	
 	
-	/* 获取 */
+	/* 获取语音列表 */
 	@ResponseBody
-	@RequestMapping(value = "/getDevicePhoto/{token}/{imei}", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
-	public String getDevicePhoto(@PathVariable String token, @PathVariable String imei) {
+	@RequestMapping(value = "/getDeviceVoice/{token}/{imei}", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	public String getVoice(@PathVariable String token, @PathVariable String imei) {
 
 		JSONObject bb = new JSONObject();
 
 		String userId = checkTokenWatchAndUser(token);
 		if ("0".equals(userId)) {
-			bb.put("code", -1);
+			bb.put("Code", -1);
 			return bb.toString();
 		}
 
 		List<WatchVoiceInfo> list = watchtkService.getVoiceListByImeiAndStatus(imei, 0);
 		JSONArray jsonArray = new JSONArray();
 		if (list != null) {
+			SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 			for (WatchVoiceInfo WatchVoiceInfo : list) {
 				JSONObject dataMap = new JSONObject();
 				dataMap.put("voiceUrl", WatchVoiceInfo.getSource_name());
 				dataMap.put("createtime", WatchVoiceInfo.getCreatetime().getTime());
+				dataMap.put("DeviceVoiceId", WatchVoiceInfo.getId());
+				dataMap.put("DeviceID", 0);
+				if(socketLoginDto != null){
+					dataMap.put("DeviceID", socketLoginDto.getUser_id());
+				}
+				dataMap.put("State", 1);
+				dataMap.put("Type", 3);
+				dataMap.put("MsgType", 0);
+				dataMap.put("ObjectId", "");
+				dataMap.put("Mark", "");
+				dataMap.put("Path", WatchVoiceInfo.getSource_name());
+				dataMap.put("Length", 0);
+				dataMap.put("CreateTime", "");
+				dataMap.put("UpdateTime", "");
 				jsonArray.add(dataMap);
 				watchtkService.updateStatusById(WatchVoiceInfo.getId(), 1);
 			}
-			bb.put("result", jsonArray);
 			bb.put("Code", 1);
 		}else{
 			bb.put("Code", 0);
 		}
-
+		bb.put("VoiceList", jsonArray);
 		return bb.toString();
 	}
 

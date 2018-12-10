@@ -58,18 +58,61 @@ public class LocationController extends BaseController {
 
 		String user_id = checkTokenWatchAndUser(token);
 		if ("0".equals(user_id)) {
-			bb.put("code", -1);
+			bb.put("Code", -1);
 			return bb.toString();
 		}
 
 		WatchLatestLocation watchlocaiton = ChannelMap.getlocation(imei);
-
 		if (watchlocaiton != null) {
 			bb.put("lat", watchlocaiton.getLat());
 			bb.put("lng", watchlocaiton.getLng());
 			bb.put("locationType", watchlocaiton.getLocationType());
 			bb.put("uploadtime", watchlocaiton.getTimestamp());
-			bb.put("code", 1);
+			bb.put("Code", 1);
+			
+			JSONObject dataMap = new JSONObject();
+			dataMap.put("DeviceID", "");
+			dataMap.put("Message", 0);
+			dataMap.put("Voice", 0);
+			dataMap.put("SMS", 0);
+			dataMap.put("Photo", 0);
+			JSONArray jsonArray = new JSONArray();
+			jsonArray.add(dataMap);
+			bb.put("NewList", jsonArray);
+			
+			
+			JSONObject dataMap1 = new JSONObject();
+			dataMap1.put("DeviceID", "");
+			dataMap1.put("Altitude", 0);
+			dataMap1.put("Course", 0);
+			dataMap1.put("Course", 0);
+			dataMap1.put("LocationType", watchlocaiton.getLocationType());
+			dataMap1.put("wifi", "");
+			dataMap1.put("CreateTime", "");
+			dataMap1.put("Electricity", 100);
+			SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
+			if (socketLoginDto != null) {
+				dataMap1.put("Electricity", socketLoginDto.getEnergy());
+			}
+			dataMap1.put("GSM", 94);
+			dataMap1.put("Step", 0);
+			dataMap1.put("Health", "0.0");
+			dataMap1.put("Latitude", watchlocaiton.getLat());
+			dataMap1.put("Longitude", watchlocaiton.getLng());
+			dataMap1.put("Online", 0);
+			if (socketLoginDto != null) {
+				dataMap1.put("Electricity", socketLoginDto.getEnergy());
+				dataMap1.put("Online", 1);				
+			}
+			dataMap1.put("SatelliteNumber", 0);				
+			dataMap1.put("ServerTime", "");				
+			dataMap1.put("Speed", 0);				
+			dataMap1.put("UpdateTime", "");				
+			
+			JSONArray jsonArray1 = new JSONArray();
+			jsonArray1.add(dataMap1);
+			bb.put("DeviceState", jsonArray);
+			
 		} else {
 			LocationWatch locationWatch = locationService.getLatest(imei);
 			if (locationWatch != null) {
@@ -77,9 +120,53 @@ public class LocationController extends BaseController {
 				bb.put("lng", locationWatch.getLng());
 				bb.put("locationType", locationWatch.getLocation_type());
 				bb.put("uploadtime", locationWatch.getUpload_time().getTime());
-				bb.put("code", 1);
+				bb.put("Code", 1);
+				
+				JSONObject dataMap = new JSONObject();
+				dataMap.put("DeviceID", "");
+				dataMap.put("Message", 0);
+				dataMap.put("Voice", 0);
+				dataMap.put("SMS", 0);
+				dataMap.put("Photo", 0);
+				JSONArray jsonArray = new JSONArray();
+				jsonArray.add(dataMap);
+				bb.put("NewList", jsonArray);
+				
+				
+				JSONObject dataMap1 = new JSONObject();
+				dataMap1.put("DeviceID", "");
+				dataMap1.put("Altitude", 0);
+				dataMap1.put("Course", 0);
+				dataMap1.put("Course", 0);
+				dataMap1.put("LocationType", locationWatch.getLocation_type());
+				dataMap1.put("wifi", "");
+				dataMap1.put("CreateTime", "");
+				dataMap1.put("Electricity", 100);
+				SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
+				if (socketLoginDto != null) {
+					dataMap1.put("Electricity", socketLoginDto.getEnergy());
+				}
+				dataMap1.put("GSM", 94);
+				dataMap1.put("Step", 0);
+				dataMap1.put("Health", "0.0");
+				dataMap1.put("Latitude", locationWatch.getLat());
+				dataMap1.put("Longitude", locationWatch.getLng());
+				dataMap1.put("Online", 0);
+				if (socketLoginDto != null) {
+					dataMap1.put("Electricity", socketLoginDto.getEnergy());
+					dataMap1.put("Online", 1);				
+				}
+				dataMap1.put("SatelliteNumber", 0);				
+				dataMap1.put("ServerTime", "");				
+				dataMap1.put("Speed", 0);				
+				dataMap1.put("UpdateTime", "");				
+				
+				JSONArray jsonArray1 = new JSONArray();
+				jsonArray1.add(dataMap1);
+				bb.put("DeviceState", jsonArray);
+				
 			} else {
-				bb.put("code", 0);
+				bb.put("Code", 0);
 			}
 		}
 
