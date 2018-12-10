@@ -35,14 +35,14 @@ public class BusinessHandler implements IBusinessHandler {
 
 		IService service = null;
 		int type = 0;
-		int a = 0;
+		//int a = 0;
 		String no = null;
 		String reponse = null;
 		SocketBaseDto dto = null;
 		logger.info(json);
 		long startTime = System.currentTimeMillis();
 		String serviceName = "";
-		String resp = "";
+	//	String resp = "";
 		int rstatus = 0;
 		String rmsg = "";
 		String imei = "";
@@ -91,16 +91,9 @@ public class BusinessHandler implements IBusinessHandler {
 		 */
         logger.info("cmd:"+cmd+"=返回:"+reponse);
 		incoming.writeAndFlush(reponse);
-
-		// apilogService.insert(serviceName, json, reponse, imei, rstatus, rmsg,
-		// time);
-	}
-	public static void main(String[] args) {
-		String json = "[qeyroahkldasjl";
-		String jsonInfo = json.replaceAll("\\[", "");
-		System.out.println(jsonInfo);
-		System.out.println(json.substring(0, json.length()));
-		System.out.println(json.substring(1, json.length()));
+         if(!"LK".equals(cmd)){
+        	 apilogService.insert(serviceName, json, reponse, imei, rstatus, rmsg,time);
+         }
 	}
 
 }

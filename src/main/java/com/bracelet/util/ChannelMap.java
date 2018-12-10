@@ -30,6 +30,8 @@ public class ChannelMap {
 	
 	private static Map<String, String> voiceNameMap = new HashMap<String, String>();
 	
+	private static Map<String, byte[]> byteMap = new HashMap<String, byte[]>();
+	
 	//private static Map<String, String> photoNameMap = new HashMap<String, String>();
 
 	/**
@@ -100,6 +102,16 @@ public class ChannelMap {
 
 	public static String getVoiceName(String imei) {
 		return voiceNameMap.get(imei);
+	}
+	
+	
+	
+	public static void addbyte(String imei, byte[] voiceName) {
+		byteMap.put(imei, voiceName);
+	}
+
+	public static byte[] getByte(String imei) {
+		return byteMap.get(imei);
 	}
 	
 	/*public static void addPhotoName(String imei, String photoName) {

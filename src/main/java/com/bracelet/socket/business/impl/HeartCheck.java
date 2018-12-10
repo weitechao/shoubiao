@@ -54,6 +54,7 @@ public class HeartCheck extends AbstractBizService {
 		channelDto.setChannel(channel);
 		channelDto.setNo(no);
 		channelDto.setImei(imei);
+		channelDto.setEnergy(energy);
 	
 		// channelDto.setUser_id(userInfo.getUser_id());
 
@@ -62,7 +63,7 @@ public class HeartCheck extends AbstractBizService {
 		
 		
 		//还需要保存下电量
-		voltageService.insertDianLiang(imei, Integer.valueOf(energy));
+	//	voltageService.insertDianLiang(imei, Integer.valueOf(energy));
 		logger.info("链路保持imei:" + imei + "," + ",no:" + no + ",电量:" + energy);
 	     
 		String resp = "[YW*"+imei+"*0001*0016*LK,"+Utils.getTime()+"]";

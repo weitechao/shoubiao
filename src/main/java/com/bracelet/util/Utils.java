@@ -32,6 +32,9 @@ import sun.misc.BASE64Encoder;
 
 import com.taobao.api.ApiException;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+
 @SuppressWarnings({ "unused", "restriction" })
 public class Utils {
 
@@ -549,6 +552,40 @@ public class Utils {
 		byte b = (byte) "0123456789abcdef".indexOf(c);
 		return b;
 	}
+	
+	
+	  //System.arraycopy()方法   数组合并
+    public static byte[] byteMerger(byte[] bt1, byte[] bt2){  
+        byte[] bt3 = new byte[bt1.length+bt2.length];  
+        System.arraycopy(bt1, 0, bt3, 0, bt1.length);  
+        System.arraycopy(bt2, 0, bt3, bt1.length, bt2.length);  
+        return bt3;  
+    } 
+    
+    
+    
+
+    /**
+	 * 截取byte数组   不改变原数组
+	 * @param b 原数组
+	 * @param off 偏差值（索引）
+	 * @param length 长度
+	 * @return 截取后的数组
+	 */
+	public static byte[] subByte(byte[] src, int begin, int count){
+		 byte[] bs = new byte[count];
+	        System.arraycopy(src, begin, bs, 0, count);
+	        return bs;
+	}
+    
+    
+    public static byte[] getRightLast(){  
+    	ByteBuf buff =	Unpooled.wrappedBuffer(new byte[] { ']'});
+    	byte[] rightLast = new byte[buff.readableBytes()];
+        return rightLast;  
+    } 
+    
+    
 
 	/*
 	 * int len = (hex.length() / 2); byte[] result = new byte[len]; char[] achar

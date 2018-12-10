@@ -119,12 +119,13 @@ public class LocationController extends BaseController {
 				jsonArray.add(dataMap);
 			}
 			bb.put("Code", 1);
-			bb.put("list", jsonArray);
+		//	bb.put("list", jsonArray.toString());
 		} else {
-			bb.put("codes", 0);
+			bb.put("Code", 0);
+			
 		}
 
-		bb.put("result", jsonArray);
+		bb.put("List", jsonArray);
 		return bb.toString();
 	}
 
