@@ -4,10 +4,7 @@ import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.List;
 
-import com.bracelet.entity.SensitivePointLog;
-import com.bracelet.entity.Voltage;
 import com.bracelet.entity.WatchVoiceInfo;
-import com.bracelet.service.WatchSetService;
 import com.bracelet.service.WatchTkService;
 import com.bracelet.util.Utils;
 
@@ -26,12 +23,12 @@ public class WatchTkServiceImpl implements WatchTkService {
 	
 	
 	@Override
-	public boolean insertVoiceInfo(String imei, String phone, String sourceName, String voiceData, Integer status,String numMessage,Integer thisNubmer,Integer allNumber) {
+	public boolean insertVoiceInfo(String sender, String receiver, String sourceName,String voiceData, Integer status,String numMessage,Integer thisNubmer,Integer allNumber) {
 		Timestamp now = Utils.getCurrentTimestamp();
 		//status 0表示新增  1表示已阅读
 		int i = jdbcTemplate
 				.update("insert into watch_voice_info (sender, receiver, voice_content, status, source_name, createtime,no,updatetime,this_number,all_number) values (?,?,?,?,?,?,?,?,?,?)",
-						new Object[] { imei, phone,  voiceData, status, sourceName, now, numMessage, now, thisNubmer, allNumber}, new int[] {
+						new Object[] { sender, receiver,  voiceData, status, sourceName, now, numMessage, now, thisNubmer, allNumber}, new int[] {
 								Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.VARCHAR,Types.TIMESTAMP , Types.VARCHAR,Types.TIMESTAMP , Types.INTEGER, Types.INTEGER});
 		return i == 1;
 	}
@@ -65,6 +62,17 @@ public class WatchTkServiceImpl implements WatchTkService {
 		List<WatchVoiceInfo> list = jdbcTemplate.query(sql, new Object[] { imei, status },
 				new BeanPropertyRowMapper<WatchVoiceInfo>(WatchVoiceInfo.class));
 		return list;
+	}
+
+	@Override
+	public boolean insertAppVoiceInfo(String sender, String receiver, String sourceName,String voiceData, Integer status,String numMessage,Integer thisNubmer,Integer allNumber) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		//status 0表示新增  1表示已阅读
+		int i = jdbcTemplate
+				.update("insert into app_voice_info (sender, receiver, voice_content, status, source_name, createtime,no,updatetime,this_number,all_number) values (?,?,?,?,?,?,?,?,?,?)",
+						new Object[] { sender, receiver,  voiceData, status, sourceName, now, numMessage, now, thisNubmer, allNumber}, new int[] {
+								Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.VARCHAR,Types.TIMESTAMP , Types.VARCHAR,Types.TIMESTAMP , Types.INTEGER, Types.INTEGER});
+		return i == 1;
 	}
 	
 }

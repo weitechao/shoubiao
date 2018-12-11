@@ -84,7 +84,7 @@ public class LoginService implements IService {
 		ChannelMap.addChannel(imei, channelDto);
 		ChannelMap.addChannel(channel, channelDto);
 		
-		LocationWatch locationWatch = locationService.getLatest(imei);
+		/*LocationWatch locationWatch = locationService.getLatest(imei);
 		if(locationWatch != null){
 			WatchLatestLocation watchlastlocation = new WatchLatestLocation();
 			watchlastlocation.setImei(imei);
@@ -93,7 +93,7 @@ public class LoginService implements IService {
 			watchlastlocation.setLocationType(locationWatch.getLocation_type());
 			watchlastlocation.setTimestamp(locationWatch.getUpload_time().getTime());
 			ChannelMap.addlocation(imei, watchlastlocation);
-		}
+		}*/
 		
 
 		String resp = "[YW*"+imei+"*0001*0006*INIT,1]";

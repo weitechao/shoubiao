@@ -13,8 +13,10 @@ import com.bracelet.entity.NoticeInfo;
 import com.bracelet.entity.UserInfo;
 import com.bracelet.entity.VersionInfo;
 import com.bracelet.entity.WatchAppVersionInfo;
+import com.bracelet.entity.WatchDevice;
 import com.bracelet.exception.BizException;
 import com.bracelet.service.IAuthcodeService;
+import com.bracelet.service.IDeviceService;
 import com.bracelet.service.ILocationService;
 import com.bracelet.service.IOpenDoorService;
 import com.bracelet.service.IUserInfoService;
@@ -47,11 +49,14 @@ public class WatchAppUserController extends BaseController {
 	IAuthcodeService authcodeService;
 	@Autowired
 	IVoltageService voltageService;
-
 	@Autowired
 	IOpenDoorService openService;
 	@Autowired
 	ILocationService locationService;
+	
+	@Autowired
+	IDeviceService ideviceService;
+	@SuppressWarnings("unused")
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	// 登录
@@ -243,7 +248,16 @@ public class WatchAppUserController extends BaseController {
 				dataMap.put("SmsNumber", "0");
 				dataMap.put("SmsBalanceKey", "0");
 				dataMap.put("SmsFlowKey", "0");
-				dataMap.put("DeviceID", location.getId());
+				dataMap.put("DeviceID", "");
+				
+				SocketLoginDto socketLoginDto = ChannelMap.getChannel(location.getImei());
+				if(socketLoginDto == null || socketLoginDto.getChannel() == null){
+					WatchDevice watchd = ideviceService.getDeviceInfo(location.getImei());
+					dataMap.put("DeviceID",watchd.getId());
+				}else{
+					dataMap.put("DeviceID", socketLoginDto.getUser_id());
+				}
+				
 				dataMap.put("UserId", "0");
 				dataMap.put("DeviceModelID", "10000100");
 				dataMap.put("Firmware", "0");

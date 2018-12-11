@@ -116,6 +116,16 @@ public class LocationController extends BaseController {
 		} else {
 			LocationWatch locationWatch = locationService.getLatest(imei);
 			if (locationWatch != null) {
+				
+				WatchLatestLocation watchlastlocation = new WatchLatestLocation();
+				watchlastlocation.setImei(imei);
+				watchlastlocation.setLat(locationWatch.getLat());
+				watchlastlocation.setLng(locationWatch.getLng());
+				watchlastlocation.setLocationType(locationWatch.getLocation_type());
+				watchlastlocation.setTimestamp(locationWatch.getUpload_time().getTime());
+				ChannelMap.addlocation(imei, watchlastlocation);
+				
+				
 				bb.put("lat", locationWatch.getLat());
 				bb.put("lng", locationWatch.getLng());
 				bb.put("locationType", locationWatch.getLocation_type());

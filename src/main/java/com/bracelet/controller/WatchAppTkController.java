@@ -18,6 +18,7 @@ import com.bracelet.entity.WatchDevice;
 import com.bracelet.entity.WatchFriend;
 import com.bracelet.entity.WatchVoiceInfo;
 import com.bracelet.exception.BizException;
+import com.bracelet.service.IDeviceService;
 import com.bracelet.service.ILocationService;
 import com.bracelet.service.IStepService;
 import com.bracelet.service.IUploadPhotoService;
@@ -42,6 +43,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -54,7 +56,8 @@ public class WatchAppTkController extends BaseController {
 	WatchTkService watchtkService;
 	@Autowired
 	IUploadPhotoService iUploadPhotoService;
-	
+	@Autowired
+	IDeviceService ideviceService;
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	/*
@@ -62,7 +65,7 @@ public class WatchAppTkController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/tkToDevice", method = RequestMethod.POST)
-	public String tkToDevice(@RequestBody String body) {
+	public String tkToDevice(@RequestBody String body) throws UnsupportedEncodingException {
 		JSONObject jsonObject = (JSONObject) JSON.parse(body);
 		JSONObject bb = new JSONObject();
 		String token = jsonObject.getString("token");
@@ -78,29 +81,55 @@ public class WatchAppTkController extends BaseController {
 		String voiceData = jsonObject.getString("voiceData");// 语音内容 base64转字符串
 		String sourceName = jsonObject.getString("sourceName");// 文件名字
 
-		// byte[] voiceData = Base64.decodeBase64(voiceContent);
+		 byte[] voicebyte = Base64.decodeBase64(voiceData);
 		// insertVoiceInfo(String sender, String receiver, String
 		// sourceName,String voiceData, Integer status,String numMessage);
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 		String numMessage = Utils.randomString(5);
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
-			watchtkService.insertVoiceInfo(phone, imei, sourceName, voiceData, 0, numMessage, 1, 1);
+			watchtkService.insertAppVoiceInfo(phone, imei, sourceName, voiceData, 0, numMessage, 1, 1);
 			bb.put("code", 2);
 			return bb.toString();
 		}
 
 		if (socketLoginDto.getChannel().isActive()) {
-			String msg = "TK," + phone + "," + sourceName + ",1,1," + voiceData;
-			String reps = "[YW*" + imei + "*0001*" + RadixUtil.changeRadix(msg) + "*" + msg + "]";
 			bb.put("code", 1);
+			if(voicebyte.length>1024){
+				Integer zheng = voicebyte.length/1024;
+				Integer shengyu = voicebyte.length%1024;
+				if(shengyu>0){
+					zheng+=1;
+				}
+				for(int i =0;i<zheng;i++){
+					if(i-zheng != -1){
+						String msg = "TK," + phone + "," + sourceName + ","+ (i+1) +","+zheng+",";
+						String reps = "[YW*" + imei + "*0003*" + RadixUtil.changeRadix(msg.length()+1024) + "*";
+						socketLoginDto.getChannel().writeAndFlush(reps);
+						byte[] voiceSubByte = Utils.subByte(voicebyte, 1024*i, 1024*(i+1));
+						socketLoginDto.getChannel().writeAndFlush(voiceSubByte);
+					}else{
+						String msg = "TK," + phone + "," + sourceName + ","+ (i+1) +","+zheng+",";
+						String reps = "[YW*" + imei + "*0003*" + RadixUtil.changeRadix(msg.length()+(voicebyte.length-i*1024)) + "*";
+						socketLoginDto.getChannel().writeAndFlush(reps);
+						byte[] voiceSubByte = Utils.subByte(voicebyte, 1024*i, voicebyte.length-i*1024);
+						socketLoginDto.getChannel().writeAndFlush(voiceSubByte);
+					}
+				}
+			}else{
+				String msg = "TK," + phone + "," + sourceName + ","+ 1 +","+1+",";
+				String reps = "[YW*" + imei + "*0003*" + RadixUtil.changeRadix(msg.length()+voicebyte.length) + "*";
+				socketLoginDto.getChannel().writeAndFlush(reps);
+				socketLoginDto.getChannel().writeAndFlush(voicebyte);
+			}
+			
 			// 因为这里我觉得下发的时候需要增加一个消息号，设备再回复的时候，。把消息号带上，这个消息号永远唯一，消息号我随机生成
-			socketLoginDto.getChannel().writeAndFlush(reps);
+			
 			// byte[] voiceDatat = Base64.decodeBase64(voiceData);
 			// socketLoginDto.getChannel().writeAndFlush(voiceDatat); 调试有可能是这种
 
-			watchtkService.insertVoiceInfo(phone, imei, sourceName, voiceData, 1, numMessage, 1, 1);
+			watchtkService.insertAppVoiceInfo(phone, imei, sourceName, voiceData, 1, numMessage, 1, 1);
 		} else {
-			watchtkService.insertVoiceInfo(phone, imei, sourceName, voiceData, 0, numMessage, 1, 1);
+			watchtkService.insertAppVoiceInfo(phone, imei, sourceName, voiceData, 0, numMessage, 1, 1);
 			bb.put("code", 0);
 		}
 		return bb.toString();
@@ -130,7 +159,10 @@ public class WatchAppTkController extends BaseController {
 				dataMap.put("photoName", fileInfo.getPhoto_name());
 				dataMap.put("DevicePhotoId", fileInfo.getId());
 				dataMap.put("DeviceID", "");
-				if(socketLoginDto != null){
+				if(socketLoginDto == null || socketLoginDto.getChannel() == null){
+					WatchDevice watchd = ideviceService.getDeviceInfo(imei);
+					dataMap.put("DeviceID",watchd.getId());
+				}else{
 					dataMap.put("DeviceID", socketLoginDto.getUser_id());
 				}
 				dataMap.put("Source", "");
@@ -174,11 +206,14 @@ public class WatchAppTkController extends BaseController {
 			SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 			for (WatchVoiceInfo WatchVoiceInfo : list) {
 				JSONObject dataMap = new JSONObject();
-				dataMap.put("voiceUrl", WatchVoiceInfo.getSource_name());
+				dataMap.put("voiceUrl", "");
 				dataMap.put("createtime", WatchVoiceInfo.getCreatetime().getTime());
 				dataMap.put("DeviceVoiceId", WatchVoiceInfo.getId());
 				dataMap.put("DeviceID", 0);
-				if(socketLoginDto != null){
+				if(socketLoginDto == null || socketLoginDto.getChannel() == null){
+					WatchDevice watchd = ideviceService.getDeviceInfo(imei);
+					dataMap.put("DeviceID",watchd.getId());
+				}else{
 					dataMap.put("DeviceID", socketLoginDto.getUser_id());
 				}
 				dataMap.put("State", 1);
@@ -200,5 +235,6 @@ public class WatchAppTkController extends BaseController {
 		bb.put("VoiceList", jsonArray);
 		return bb.toString();
 	}
+	
 
 }
