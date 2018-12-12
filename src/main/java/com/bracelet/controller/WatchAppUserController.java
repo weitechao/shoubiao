@@ -92,7 +92,7 @@ public class WatchAppUserController extends BaseController {
 				bb.put("NotificationVibration", "True");
 				bb.put("ip", "47.92.30.81:8088");
 				String ipport = limitCache.getRedisKeyValue(tel);
-				if(ipport!=null&&!"".equals(ipport)){
+				if(ipport!=null && !"".equals(ipport)){
 					bb.put("ip", ipport);
 				}
 			} else {

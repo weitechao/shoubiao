@@ -101,4 +101,40 @@ public class DeviceServiceImpl implements IDeviceService {
 		return i == 1;
 	}
 
+	@Override
+	public boolean updateImeiHeadInfo(Long id, String head) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate.update(
+				"update device_watch_info set  head=? , updatetime=? where id = ?",
+				new Object[] {  head, now, id },
+				new int[] { Types.VARCHAR, java.sql.Types.TIMESTAMP,
+						java.sql.Types.INTEGER });
+		return i == 1;
+	}
+
+	@Override
+	public boolean updateImeiHomeAndFamilyInfo(Long id, String school_info, String home_info) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate.update(
+				"update device_watch_info set  school_info=?, home_info=? updatetime=? where id = ?",
+				new Object[] {  school_info, home_info, now, id },
+				new int[] { Types.VARCHAR, Types.VARCHAR, java.sql.Types.TIMESTAMP,
+						java.sql.Types.INTEGER });
+		return i == 1;
+	}
+
+	@Override
+	public boolean updateImeiNotHomeAndFamilyInfo(Long id, String imei, String phone, String nickname, Integer sex,
+			String birday, String school_age, String weight, String height, String head) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate.update(
+				"update device_watch_info set phone=? ,nickname=?,sex=?,birday=?, school_age=?, weight=?, height=?, head=? , updatetime=? where id = ?",
+				new Object[] { phone, nickname, sex, birday, school_age, weight, height, head,
+						now, id },
+				new int[] { Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
+						Types.VARCHAR, Types.VARCHAR, java.sql.Types.TIMESTAMP,
+						java.sql.Types.INTEGER });
+		return i == 1;
+	}
+
 }

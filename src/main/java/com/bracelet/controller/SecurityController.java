@@ -1,6 +1,7 @@
 package com.bracelet.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.bracelet.dto.HttpBaseDto;
 import com.bracelet.dto.SocketLoginDto;
@@ -59,22 +60,38 @@ public class SecurityController extends BaseController {
 
 		String userId = checkTokenWatchAndUser(token);
 		if ("0".equals(userId)) {
-			bb.put("code", -1);
+			bb.put("Code", -1);
 			return bb.toString();
 		}
 
 		Fence fenone = fenceService.getWatchOne(imei);
 		if (fenone != null) {
-			bb.put("lat", fenone.getLat());
-			bb.put("lng", fenone.getLng());
+			bb.put("Code", 1);
+			
+			JSONObject dataMap = new JSONObject();
+			dataMap.put("GeofenceID", fenone.getId());
+			dataMap.put("FenceName", fenone.getName());
+			dataMap.put("Entry", 0);
+			dataMap.put("Exit", 0);
+			dataMap.put("CreateTime", "");
+			dataMap.put("UpdateTime", "");
+			dataMap.put("Enable", 0);
+			dataMap.put("Description", "");
+			dataMap.put("Lat", fenone.getLat());
+			dataMap.put("Lng", fenone.getLng());
+			dataMap.put("Radii", fenone.getRadius());
+			JSONArray jsonArray = new JSONArray();
+			jsonArray.add(dataMap);
+			bb.put("GeoFenceList", jsonArray);
+			
+			
 			bb.put("radius", fenone.getRadius());
 			bb.put("name", fenone.getName());
 			bb.put("createtime", fenone.getCreatetime().getTime());
 			bb.put("updatetime", fenone.getUpdatetime().getTime());
-			bb.put("code", 1);
 			bb.put("id",  fenone.getId());
 		} else {
-			bb.put("code", 0);
+			bb.put("Code", 0);
 		}
 		return bb.toString();
 	}
@@ -93,16 +110,18 @@ public class SecurityController extends BaseController {
 		String lat = jsonObject.getString("lat");
 		String lng = jsonObject.getString("lng");
 		String radius = jsonObject.getString("radius");
+		//Integer entry = jsonObject.getInteger("entry");
+		//Integer exit = jsonObject.getInteger("exit");
 
 		String userId = checkTokenWatchAndUser(token);
 		if ("0".equals(userId)) {
-			bb.put("code", -1);
+			bb.put("Code", -1);
 			return bb.toString();
 		}
 		if (this.fenceService.insert(imei, name, lat, lng, radius)) {
-			bb.put("code", 1);
+			bb.put("Code", 1);
 		} else {
-			bb.put("code", 0);
+			bb.put("Code", 0);
 		}
 		return bb.toString();
 	}
@@ -119,7 +138,7 @@ public class SecurityController extends BaseController {
 
 		String userId = checkTokenWatchAndUser(token);
 		if ("0".equals(userId)) {
-			bb.put("code", -1);
+			bb.put("Code", -1);
 			return bb.toString();
 		}
 		String imei = jsonObject.getString("imei");
@@ -129,9 +148,9 @@ public class SecurityController extends BaseController {
 		String radius = jsonObject.getString("radius");
 		Long id = Long.valueOf(jsonObject.getString("id"));
 		if (this.fenceService.updateWatchFence(id, imei, name, lat, lng, radius)) {
-			bb.put("code", 1);
+			bb.put("Code", 1);
 		} else {
-			bb.put("code", 0);
+			bb.put("Code", 0);
 		}
 		return bb.toString();
 	}
@@ -144,13 +163,13 @@ public class SecurityController extends BaseController {
 
 		String userId = checkTokenWatchAndUser(token);
 		if ("0".equals(userId)) {
-			bb.put("code", -1);
+			bb.put("Code", -1);
 			return bb.toString();
 		}
 		if (this.fenceService.deleteWatchFence(id)) {
-			bb.put("code", 1);
+			bb.put("Code", 1);
 		} else {
-			bb.put("code", 0);
+			bb.put("Code", 0);
 		}
 		return bb.toString();
 	}
