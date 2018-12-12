@@ -49,7 +49,7 @@ public class WatchDeviceInfoController extends BaseController {
 	/* 获取 */
 	@ResponseBody
 	@RequestMapping(value = "/get/{token}/{imei}", method = RequestMethod.GET ,produces="text/html;charset=UTF-8")
-	public String getwatchfence(@PathVariable String token, @PathVariable String imei) {
+	public String getBabyInfo(@PathVariable String token, @PathVariable String imei) {
 
 		JSONObject bb = new JSONObject();
 
@@ -87,7 +87,7 @@ public class WatchDeviceInfoController extends BaseController {
 	/* 修改 */
 	@ResponseBody
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String udpateWatchInfo(@RequestBody String body) {
+	public String updateBabyInfo(@RequestBody String body) {
 		JSONObject bb = new JSONObject();
 		JSONObject jsonObject = (JSONObject) JSON.parse(body);
 		String token = jsonObject.getString("token");
