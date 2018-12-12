@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.bracelet.redis.LimitCache;
 import com.bracelet.socket.business.IBusinessHandler;
 import com.bracelet.util.ChannelMap;
 import com.bracelet.util.Utils;
@@ -26,7 +27,7 @@ public class BaseChannelHandler extends SimpleChannelInboundHandler<String> {
 
 	@Autowired
 	private IBusinessHandler businessHandler;
-
+	
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
 		Channel incoming = ctx.channel();

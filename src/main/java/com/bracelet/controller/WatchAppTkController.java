@@ -72,7 +72,7 @@ public class WatchAppTkController extends BaseController {
 
 		String user_id = checkTokenWatchAndUser(token);
 		if ("0".equals(user_id)) {
-			bb.put("code", -1);
+			bb.put("Code", -1);
 			return bb.toString();
 		}
 
@@ -88,12 +88,12 @@ public class WatchAppTkController extends BaseController {
 		String numMessage = Utils.randomString(5);
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
 			watchtkService.insertAppVoiceInfo(phone, imei, sourceName, voiceData, 0, numMessage, 1, 1);
-			bb.put("code", 2);
+			bb.put("Code", 2);
 			return bb.toString();
 		}
 
 		if (socketLoginDto.getChannel().isActive()) {
-			bb.put("code", 1);
+			bb.put("Code", 1);
 			if(voicebyte.length>1024){
 				Integer zheng = voicebyte.length/1024;
 				Integer shengyu = voicebyte.length%1024;
@@ -130,7 +130,7 @@ public class WatchAppTkController extends BaseController {
 			watchtkService.insertAppVoiceInfo(phone, imei, sourceName, voiceData, 1, numMessage, 1, 1);
 		} else {
 			watchtkService.insertAppVoiceInfo(phone, imei, sourceName, voiceData, 0, numMessage, 1, 1);
-			bb.put("code", 0);
+			bb.put("Code", 0);
 		}
 		return bb.toString();
 	}

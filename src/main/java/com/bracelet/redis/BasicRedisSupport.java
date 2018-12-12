@@ -1,15 +1,15 @@
 package com.bracelet.redis;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 public class BasicRedisSupport {
-	private static Log logger = LogFactory.getLog(BasicRedisSupport.class.getName());
+	//private static Log logger = LogFactory.getLog(BasicRedisSupport.class.getName());
+	private Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired
 	private JedisPool jedisPool;
 	@Autowired
@@ -25,7 +25,7 @@ public class BasicRedisSupport {
 //从池中获取一个jedis对象
 	public Jedis getJedis() {
 		try {
-			logger.info("getResource redis size is -------->>>"+jedisPool.getNumActive() +" getNumIdle: " + jedisPool.getNumIdle() + " getNumWaiters: " + jedisPool.getNumWaiters() );
+			//logger.info("getResource redis size is -------->>>"+jedisPool.getNumActive() +" getNumIdle: " + jedisPool.getNumIdle() + " getNumWaiters: " + jedisPool.getNumWaiters() );
 			return jedisPool.getResource();
 		} catch (Exception e) {
 			logger.error("getRedisClent error : " + e.getMessage());
@@ -34,10 +34,10 @@ public class BasicRedisSupport {
 	}
 //释放对象池
 	public void returnResource(Jedis jedis) {
-		logger.info("before close redis size is -------->>>"+jedisPool.getNumActive() +" getNumIdle: " + jedisPool.getNumIdle() + " getNumWaiters: " + jedisPool.getNumWaiters() );
+		//logger.info("before close redis size is -------->>>"+jedisPool.getNumActive() +" getNumIdle: " + jedisPool.getNumIdle() + " getNumWaiters: " + jedisPool.getNumWaiters() );
 		if (jedis != null) {
 			jedis.close();
 		}
-		logger.info("after close redis size is -------->>>"+jedisPool.getNumActive() +" getNumIdle: " + jedisPool.getNumIdle() + " getNumWaiters: " + jedisPool.getNumWaiters() );
+		//logger.info("after close redis size is -------->>>"+jedisPool.getNumActive() +" getNumIdle: " + jedisPool.getNumIdle() + " getNumWaiters: " + jedisPool.getNumWaiters() );
 	}
 }

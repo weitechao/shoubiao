@@ -127,17 +127,23 @@ public class WatchAppUserController extends BaseController {
 		String token = jsonObject.getString("token");
 		String user_id = checkTokenWatchAndUser(token);
 		if ("0".equals(user_id)) {
-			bb.put("code", 2);
+			bb.put("Code", 2);
 			return bb.toString();
 		}
 		String tel = jsonObject.getString("tel");
 		String password = jsonObject.getString("pwd");// 默认123456
+		String oldPassword = jsonObject.getString("oldpwd");
 		UserInfo userInfo = userInfoService.getUserInfoByUsername(tel);
 		if (userInfo != null) {
-			userInfoService.updateUserPassword(userInfo.getUser_id(), password);
-			bb.put("code", 1);
+			if(userInfo.getPassword().equals(password)){
+				userInfoService.updateUserPassword(userInfo.getUser_id(), oldPassword);
+				bb.put("Code", 1);
+			}else{
+				bb.put("Code", -1);
+			}
+			
 		} else {
-			bb.put("code", 0);
+			bb.put("Code", 0);
 		}
 		return bb.toString();
 	}

@@ -16,10 +16,10 @@ import redis.clients.jedis.Jedis;
  * Company:
  * </p>
  *
- * @author yehb
- * @date 2016年5月17日 上午10:54:02
+ * @author weitechao
+ * @date 2018年12月12日 上午10:54:02
  */
-//@Service("limitCache")
+// @Service("limitCache")
 @Repository("limitCache")
 public class LimitCache extends BasicRedisSupport {
 
@@ -56,6 +56,14 @@ public class LimitCache extends BasicRedisSupport {
 		flag = jedis.exists(key);
 		returnResource(jedis);
 		return flag;
+	}
+
+	// 得到 value
+	public String getRedisKeyValue(String key) {
+		Jedis jedis = getJedis();
+		String value = jedis.get(key);
+		returnResource(jedis);
+		return value;
 	}
 
 	// 删除key

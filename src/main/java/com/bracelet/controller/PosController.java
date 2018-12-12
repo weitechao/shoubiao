@@ -183,7 +183,23 @@ public class PosController extends BaseController {
 		logger.info("b=" + b);
 		Long size = limitCache.getSize();
 		logger.info("size=" + size);
+		limitCache.addKey("123456", "47.123.456.123:8080");
+		logger.info(limitCache.getRedisKeyValue("123456"));
+		logger.info(limitCache.getRedisKeyValue("12345sada6"));
+		
+		logger.info(limitCache.getSize()+"");
+		
 		return "1";
+	}
+	
+	
+	/* 获取 */
+	@ResponseBody
+	@RequestMapping(value = "/get/{imei}", method = RequestMethod.GET ,produces="text/html;charset=UTF-8")
+	public String getImeiIpPort(@PathVariable String imei) {
+		logger.info(limitCache.getRedisKeyValue(imei));
+		logger.info(limitCache.getRedisKeyValue("weitechao"));
+		return limitCache.getRedisKeyValue(imei);
 	}
 
 }

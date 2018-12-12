@@ -64,21 +64,21 @@ public class WatchAppSetController extends BaseController {
 		
 		String user_id = checkTokenWatchAndUser(token);
 		if ("0".equals(user_id)) {
-			bb.put("code", -1);
+			bb.put("Code", -1);
 			return bb.toString();
 		}
 		
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
-			bb.put("code", 4);
+			bb.put("Code", 4);
 			return bb.toString();
 		}
 		if (socketLoginDto.getChannel().isActive()) {
 			String reps = "[YW*" + imei + "*0001*0007*TRACKER]";
 			socketLoginDto.getChannel().writeAndFlush(reps);
-			bb.put("code", 1);
+			bb.put("Code", 1);
 		} else {
-			bb.put("code", 0);
+			bb.put("Code", 0);
 		}
 		return bb.toString();
 	}
@@ -92,21 +92,21 @@ public class WatchAppSetController extends BaseController {
 		
 		String user_id = checkTokenWatchAndUser(token);
 		if ("0".equals(user_id)) {
-			bb.put("code", -1);
+			bb.put("Code", -1);
 			return bb.toString();
 		}
 		
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
-			bb.put("code", 4);
+			bb.put("Code", 4);
 			return bb.toString();
 		}
 		String reps = "[YW*" + imei + "*0001*0007*GUARD," + type + "]";
 		if (socketLoginDto.getChannel().isActive()) {
 			socketLoginDto.getChannel().writeAndFlush(reps);
-			bb.put("code", 1);
+			bb.put("Code", 1);
 		} else {
-			bb.put("code", 0);
+			bb.put("Code", 0);
 		}
 		return bb.toString();
 	}
@@ -223,7 +223,7 @@ public class WatchAppSetController extends BaseController {
 		JSONObject bb = new JSONObject();
 		String userId = checkTokenWatchAndUser(token);
 		if ("0".equals(userId)) {
-			bb.put("code", -1);
+			bb.put("Code", -1);
 			return bb.toString();
 		}
 		String imei = jsonObject.getString("imei");
@@ -231,7 +231,7 @@ public class WatchAppSetController extends BaseController {
 
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
-			bb.put("code", 0);
+			bb.put("Code", 0);
 			return bb.toString();
 		}
 		
@@ -239,9 +239,9 @@ public class WatchAppSetController extends BaseController {
 			String msg="PHB,"+data;
 			String reps = "[YW*"+imei+"*0001*"+RadixUtil.changeRadix(msg)+"*"+msg+"]";
 			socketLoginDto.getChannel().writeAndFlush(reps);
-			bb.put("code", 1);
+			bb.put("Code", 1);
 		} else {
-			bb.put("code", 0);
+			bb.put("Code", 0);
 		}
 		return bb.toString();
 	}

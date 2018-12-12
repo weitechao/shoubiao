@@ -64,7 +64,7 @@ public class WatchAppMakeDeviceUpdateVersionController extends BaseController {
 		JSONObject bb = new JSONObject();
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
-			bb.put("code", 0);
+			bb.put("Code", 0);
 			setStatus = 0;
 			watchSetService.insertInfo(imei,setStatus,1);
 			return bb.toString();
@@ -79,11 +79,11 @@ public class WatchAppMakeDeviceUpdateVersionController extends BaseController {
 				reps = reps + "1234,http://www.baidu.com/updata.bin]";
 			}
 			socketLoginDto.getChannel().writeAndFlush(reps);
-			bb.put("code", 1);
+			bb.put("Code", 1);
 			setStatus=1;
 		} else {
 			setStatus=0;
-			bb.put("code", 0);
+			bb.put("Code", 0);
 		}
 		watchSetService.insertInfo(imei,setStatus,1);
 		return bb.toString();
@@ -99,7 +99,7 @@ public class WatchAppMakeDeviceUpdateVersionController extends BaseController {
 		
 		String user_id = checkTokenWatchAndUser(token);
 		if ("0".equals(user_id)) {
-			bb.put("code", -1);
+			bb.put("Code", -1);
 			return bb.toString();
 		}
 		
@@ -111,7 +111,7 @@ public class WatchAppMakeDeviceUpdateVersionController extends BaseController {
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
 			watchSetService.insertSmsSetLogInfo(imei, 0,operatorNumber, content);//0表示未发送
 			//String imei, Integer setStatus,String operatorNumber, String content
-			bb.put("code", 4);
+			bb.put("Code", 4);
 			return bb.toString();
 		}
 		String reps = "[YW*"+imei+"*0001*";
@@ -119,11 +119,11 @@ public class WatchAppMakeDeviceUpdateVersionController extends BaseController {
 			String msg = "COST1,"+ operatorNumber + "," + content ;
 			reps=reps+RadixUtil.changeRadix(msg)+"*"+msg+ "]";
 			socketLoginDto.getChannel().writeAndFlush(reps);
-			bb.put("code", 1);
+			bb.put("Code", 1);
 			watchSetService.insertSmsSetLogInfo(imei, 1,operatorNumber, content);
 		} else {
 			watchSetService.insertSmsSetLogInfo(imei, 0,operatorNumber, content);
-			bb.put("code", 0);
+			bb.put("Code", 0);
 		}
 		return bb.toString();
 	}
@@ -137,7 +137,7 @@ public class WatchAppMakeDeviceUpdateVersionController extends BaseController {
 		String token = jsonObject.getString("token");
 		String user_id = checkTokenWatchAndUser(token);
 		if ("0".equals(user_id)) {
-			bb.put("code", -1);
+			bb.put("Code", -1);
 			return bb.toString();
 		}
 		String imei = jsonObject.getString("imei");
@@ -145,16 +145,16 @@ public class WatchAppMakeDeviceUpdateVersionController extends BaseController {
 		String port = jsonObject.getString("port");
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
-			bb.put("code", 0);
+			bb.put("Code", 0);
 			return bb.toString();
 		}
 		String reps = "[YW*"+imei+"*0001*0014*IP,";
 		if (socketLoginDto.getChannel().isActive()) {
 			reps = reps + ip + "," + port + "]";
 			socketLoginDto.getChannel().writeAndFlush(reps);
-			bb.put("code", 1);
+			bb.put("Code", 1);
 		} else {
-			bb.put("code", 2);
+			bb.put("Code", 2);
 		}
 		return bb.toString();
 	}
@@ -168,21 +168,21 @@ public class WatchAppMakeDeviceUpdateVersionController extends BaseController {
 		
 		String user_id = checkTokenWatchAndUser(token);
 		if ("0".equals(user_id)) {
-			bb.put("code", -1);
+			bb.put("Code", -1);
 			return bb.toString();
 		}
 		
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
-			bb.put("code", 4);
+			bb.put("Code", 4);
 			return bb.toString();
 		}
 		String reps = "[YW*"+imei+"*0001*0007*FACTORY]";
 		if (socketLoginDto.getChannel().isActive()) {
 			socketLoginDto.getChannel().writeAndFlush(reps);
-			bb.put("code", 1);
+			bb.put("Code", 1);
 		} else {
-			bb.put("code", 0);
+			bb.put("Code", 0);
 		}
 		return bb.toString();
 	}
@@ -202,7 +202,7 @@ public class WatchAppMakeDeviceUpdateVersionController extends BaseController {
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
 			setStatus = 0;
-			bb.put("code", 0);
+			bb.put("Code", 0);
 			watchSetService.insertApnSetLog(imei,apnName,username,password,data,setStatus);
 			return bb.toString();
 		}
@@ -211,10 +211,10 @@ public class WatchAppMakeDeviceUpdateVersionController extends BaseController {
 			reps = reps + apnName + Utils.dou + username + Utils.dou +password + Utils.dou + data + Utils.you;
 			socketLoginDto.getChannel().writeAndFlush(reps);
 			setStatus = 1;
-			bb.put("code", 1);
+			bb.put("Code", 1);
 		} else {
 			setStatus = 0;
-			bb.put("code", 0);
+			bb.put("Code", 0);
 		}
 		watchSetService.insertApnSetLog(imei,apnName,username,password,data,setStatus);
 		return bb.toString();
@@ -228,21 +228,21 @@ public class WatchAppMakeDeviceUpdateVersionController extends BaseController {
 		
 		String user_id = checkTokenWatchAndUser(token);
 		if ("0".equals(user_id)) {
-			bb.put("code", -1);
+			bb.put("Code", -1);
 			return bb.toString();
 		}
 		
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
-			bb.put("code", 4);
+			bb.put("Code", 4);
 			return bb.toString();
 		}
 		String reps = "[YW*"+imei+"*0001*0002*TS]";
 		if (socketLoginDto.getChannel().isActive()) {
 			socketLoginDto.getChannel().writeAndFlush(reps);
-			bb.put("code", 1);
+			bb.put("Code", 1);
 		} else {
-			bb.put("code", 0);
+			bb.put("Code", 0);
 		}
 		return bb.toString();
 	}
@@ -257,21 +257,21 @@ public class WatchAppMakeDeviceUpdateVersionController extends BaseController {
 		
 		String user_id = checkTokenWatchAndUser(token);
 		if ("0".equals(user_id)) {
-			bb.put("code", -1);
+			bb.put("Code", -1);
 			return bb.toString();
 		}
 		
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
-			bb.put("code", 2);
+			bb.put("Code", 2);
 			return bb.toString();
 		}
 		String reps = "[YW*"+imei+"*0001*0005*RESET]";
 		if (socketLoginDto.getChannel().isActive()) {
 			socketLoginDto.getChannel().writeAndFlush(reps);
-			bb.put("code", 1);
+			bb.put("Code", 1);
 		} else {
-			bb.put("code", 0);
+			bb.put("Code", 0);
 		}
 		return bb.toString();
 	}

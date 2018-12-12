@@ -77,13 +77,13 @@ public class WatchAppPhoneBookController extends BaseController {
 
 		String userId = checkTokenWatchAndUser(token);
 		if ("0".equals(userId)) {
-			bb.put("code", -1);
+			bb.put("Code", -1);
 			return bb.toString();
 		}
 
 		WatchPhoneBook phoneBook = memberService.getPhoneBookByImeiAndPhone(imei, phone);
 	/*	if (phoneBook != null) {
-			bb.put("code", 3);
+			bb.put("Code", 3);
 			return bb.toString();
 		}*/
 		if (phoneBook == null) {
@@ -93,7 +93,7 @@ public class WatchAppPhoneBookController extends BaseController {
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
-			bb.put("code", 4);
+			bb.put("Code", 4);
 			return bb.toString();
 		}
 
@@ -149,9 +149,9 @@ public class WatchAppPhoneBookController extends BaseController {
 			sb.append(msg);
 			sb.append("]");
 			socketLoginDto.getChannel().writeAndFlush(sb.toString());
-			bb.put("code", 1);
+			bb.put("Code", 1);
 		} else {
-			bb.put("code", 2);
+			bb.put("Code", 2);
 		}
 
 		return bb.toString();
@@ -164,7 +164,7 @@ public class WatchAppPhoneBookController extends BaseController {
 		JSONObject bb = new JSONObject();
 		String userId = checkTokenWatchAndUser(token);
 		if ("0".equals(userId)) {
-			bb.put("code", -1);
+			bb.put("Code", -1);
 			return bb.toString();
 		}
 
@@ -184,10 +184,10 @@ public class WatchAppPhoneBookController extends BaseController {
 				jsonArray.add(dataMap);
 			}
 
-			bb.put("code", 1);
+			bb.put("Code", 1);
 			bb.put("result", jsonArray);
 		} else {
-			bb.put("code", 0);
+			bb.put("Code", 0);
 		}
 
 		return bb.toString();
@@ -201,14 +201,14 @@ public class WatchAppPhoneBookController extends BaseController {
 
 		String userId = checkTokenWatchAndUser(token);
 		if ("0".equals(userId)) {
-			bb.put("code", -1);
+			bb.put("Code", -1);
 			return bb.toString();
 		}
 		memberService.deletePhonebookById(id);
 
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
-			bb.put("code", 4);
+			bb.put("Code", 4);
 			return bb.toString();
 		}
 
@@ -263,9 +263,9 @@ public class WatchAppPhoneBookController extends BaseController {
 			sb.append(msg);
 			sb.append("]");
 			socketLoginDto.getChannel().writeAndFlush(sb.toString());
-			bb.put("code", 1);
+			bb.put("Code", 1);
 		} else {
-			bb.put("code", 2);
+			bb.put("Code", 2);
 		}
 
 		return bb.toString();
@@ -287,14 +287,14 @@ public class WatchAppPhoneBookController extends BaseController {
 
 		String userId = checkTokenWatchAndUser(token);
 		if ("0".equals(userId)) {
-			bb.put("code", -1);
+			bb.put("Code", -1);
 			return bb.toString();
 		}
 
 		memberService.updatePhonebookById(id, name, phone, cornet, headType);
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
-			bb.put("code", 4);
+			bb.put("Code", 4);
 			return bb.toString();
 		}
 
@@ -350,9 +350,9 @@ public class WatchAppPhoneBookController extends BaseController {
 			sb.append(msg);
 			sb.append("]");
 			socketLoginDto.getChannel().writeAndFlush(sb.toString());
-			bb.put("code", 1);
+			bb.put("Code", 1);
 		} else {
-			bb.put("code", 2);
+			bb.put("Code", 2);
 		}
 
 		return bb.toString();

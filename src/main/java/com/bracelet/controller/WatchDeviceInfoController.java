@@ -55,7 +55,7 @@ public class WatchDeviceInfoController extends BaseController {
 
 		String userId = checkTokenWatchAndUser(token);
 		if ("0".equals(userId)) {
-			bb.put("code", -1);
+			bb.put("Code", -1);
 			return bb.toString();
 		}
 
@@ -77,9 +77,9 @@ public class WatchDeviceInfoController extends BaseController {
 			bb.put("weight", watch.getWeight()+"");
 			bb.put("height", watch.getHeight()+"");
 			bb.put("head", watch.getHead()+"");
-			bb.put("code", 1);
+			bb.put("Code", 1);
 		} else {
-			bb.put("code", 0);
+			bb.put("Code", 0);
 		}
 		return bb.toString();
 	}
@@ -94,7 +94,7 @@ public class WatchDeviceInfoController extends BaseController {
 
 		String userId = checkTokenWatchAndUser(token);
 		if ("0".equals(userId)) {
-			bb.put("code", -1);
+			bb.put("Code", -1);
 			return bb.toString();
 		}
 
@@ -114,16 +114,16 @@ public class WatchDeviceInfoController extends BaseController {
 		if (watch != null) {
 			if (this.ideviceService.updateImeiInfo(watch.getId(), imei, phone, nickname, sex, birday, school_age,
 					school_info, home_info, weight, height, head)) {
-				bb.put("code", 1);
+				bb.put("Code", 1);
 			} else {
-				bb.put("code", 0);
+				bb.put("Code", 0);
 			}
 		} else {
 			if (this.ideviceService.insertDeviceImeiInfo(imei, phone, nickname, sex, birday, school_age, school_info,
 					home_info, weight, height, head)) {
-				bb.put("code", 1);
+				bb.put("Code", 1);
 			} else {
-				bb.put("code", 0);
+				bb.put("Code", 0);
 			}
 		}
 

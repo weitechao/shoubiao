@@ -15,6 +15,7 @@ import com.bracelet.dto.SocketLoginDto;
 import com.bracelet.entity.InsertFriend;
 import com.bracelet.entity.IpAddressInfo;
 import com.bracelet.entity.WatchDevice;
+import com.bracelet.redis.LimitCache;
 import com.bracelet.service.IDeviceService;
 import com.bracelet.service.ILocationService;
 import com.bracelet.service.IVoltageService;
@@ -28,6 +29,8 @@ public class GetIpService implements IService {
 	private Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
 	IDeviceService ideviceService;
+    @Autowired
+	LimitCache limitCache;
     @Override
 	public String process(String jsonInfo, Channel channel) {
 
@@ -38,24 +41,45 @@ public class GetIpService implements IService {
 		String no = shuzu[2];// 流水号
 		String info = shuzu[4];
 		logger.info("imei=" + imei + ",info=" + info + ",no=" + no);
-		List<IpAddressInfo> list = ideviceService.getipinfo();
-		int count = list.size();
+		//List<IpAddressInfo> list = ideviceService.getipinfo();
+		//int count = list.size();
+		Integer im = Integer.valueOf(imei.substring(imei.length()-3, imei.length()));
+		im = im % 3;
 		StringBuffer sb = new StringBuffer("[YW*" + imei + "*0001*");//0002*
         StringBuffer add=new StringBuffer("IPREQ,");
-		add.append(count);
-		if (count > 0) {
-			for (IpAddressInfo infoo : list) {
-				add.append(",");
-				add.append(infoo.getIp());
-				add.append(",");
-				add.append(infoo.getPort());
-			}
+		add.append(1);
+		add.append(",");
+		String ip = null;
+		String port = null;
+		
+		if(im == 0){
+			ip = "47.92.30.81";
+			port = "7780";
+			add.append(ip);
+			add.append(",");
+			add.append(port);
+		}else if(im == 1){
+			ip = "47.92.30.81";
+			port = "7780";
+			add.append(ip);
+			add.append(",");
+			add.append(port);
+		}else if(im == 2){
+			ip = "47.92.30.81";
+			port = "7780";
+			add.append(ip);
+			add.append(",");
+			add.append(port);
 		}
+		
 		sb.append(RadixUtil.changeRadix(add.toString()));
 		sb.append("*");
 		sb.append(add.toString());
 		sb.append("]");
 		logger.info("获取服务器ip端口返回"+sb.toString());
+		String ipt =  ip+":"+port;
+		logger.info(imei+"计算imei最后三位="+im+"|分配的ip port="+ipt);
+		limitCache.addKey(imei,ipt);
 		return sb.toString();
 	}
     @Override
