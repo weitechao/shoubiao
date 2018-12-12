@@ -27,7 +27,7 @@ public class BaseChannelHandler extends SimpleChannelInboundHandler<String> {
 
 	@Autowired
 	private IBusinessHandler businessHandler;
-	
+
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
 		Channel incoming = ctx.channel();
@@ -61,8 +61,7 @@ public class BaseChannelHandler extends SimpleChannelInboundHandler<String> {
 		// receiveMsgBytes 就收到了.
 		String hexString = Hex.encodeHexString(receiveMsgBytes);
 		logger.info("channelRead  16 hexString =" + hexString);
-		
-		
+
 		if (hexString.length() >= 8) {
 			String kaiTou = Utils.hexStringToString(hexString.substring(0, 8));
 			logger.info("开头=" + kaiTou);
@@ -77,15 +76,15 @@ public class BaseChannelHandler extends SimpleChannelInboundHandler<String> {
 					super.channelRead(ctx, hexString);
 				} else {
 					String cmd = Utils.hexStringToString(hexString.substring(60, 64));
-					logger.info("CMD=" + cmd);
-					if ("TK".equals(cmd)) {
-						ChannelMap.addVoiceName(ctx.channel().remoteAddress() + "_voice", hexString + "5d");
-						ChannelMap.addVoiceName(ctx.channel().remoteAddress() + "_len",
-								(len + 30 - receiveMsgBytes.length - 2) + "");
-						
-						byte[] addLast = Utils.byteMerger(receiveMsgBytes,Utils.getRightLast());
+					logger.info("不等于0的CMD=" + cmd);
+					if ("TK".equals(cmd) || "TPBK".equals(cmd)) {
+						ChannelMap.addContent(ctx.channel().remoteAddress() + "_voice", hexString + "5d");
+						ChannelMap.addInteger(ctx.channel().remoteAddress() + "_len",
+								len + 30 - receiveMsgBytes.length - 2);
+
+						byte[] addLast = Utils.byteMerger(receiveMsgBytes, Utils.getRightLast());
 						logger.info("加5D后长度剩余=" + (len + 30 - receiveMsgBytes.length - 2));
-						
+
 						ChannelMap.addbyte(ctx.channel().remoteAddress() + "_byte", addLast);
 						logger.info("byte长度" + ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte").length);
 					}
@@ -96,84 +95,66 @@ public class BaseChannelHandler extends SimpleChannelInboundHandler<String> {
 				// byte[] parseHexStr2Byte = Utils.hexStringToByte(hexString);
 
 			} else {
-				int syLength = Integer.valueOf(ChannelMap.getVoiceName(ctx.channel().remoteAddress() + "_len"))
+				Integer syLength = ChannelMap.getInteger(ctx.channel().remoteAddress() + "_len")
 						- receiveMsgBytes.length;
 				logger.info("开头不是YW的剩余长度=" + syLength);
-				
-				
+
 				if (syLength > 0) {
-					ChannelMap.addVoiceName(ctx.channel().remoteAddress() + "_voice",
-							ChannelMap.getVoiceName(ctx.channel().remoteAddress() + "_voice") + hexString + "5d");
-					ChannelMap.addVoiceName(ctx.channel().remoteAddress() + "_len", (syLength - 2) + "");
-					logger.info("减2剩余长度=" + ChannelMap.getVoiceName(ctx.channel().remoteAddress() + "_len"));
-					
-					byte[] addLast = Utils.byteMerger(receiveMsgBytes,Utils.getRightLast());
-					
-					logger.info("不是YW开头byte syLength > 0 未增加前的长度" + ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte").length);
-					ChannelMap.addbyte(ctx.channel().remoteAddress() + "_byte", Utils.byteMerger(ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte"),addLast));
-					logger.info("不是YW开头byte syLength > 0   增加] 后的长度" + ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte").length);
-					
-				}else{
-					ChannelMap.addbyte(ctx.channel().remoteAddress() + "_byte", Utils.byteMerger(ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte"),receiveMsgBytes));
-					logger.info("不是YW开头byte syLength = 0  的长度" + ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte").length);
-					super.channelRead(ctx,
-							ChannelMap.getVoiceName(ctx.channel().remoteAddress() + "_voice") + hexString);
-					
-					
+					//ChannelMap.addVoiceName(ctx.channel().remoteAddress() + "_voice",ChannelMap.getVoiceName(ctx.channel().remoteAddress() + "_voice") + hexString + "5d");
+
+					ChannelMap.addInteger(ctx.channel().remoteAddress() + "_len", syLength - 2);
+					logger.info("减2剩余长度=" + ChannelMap.getInteger(ctx.channel().remoteAddress() + "_len"));
+
+					byte[] addLast = Utils.byteMerger(receiveMsgBytes, Utils.getRightLast());
+
+					logger.info("不是YW开头byte syLength > 0 未增加前的长度"
+							+ ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte").length);
+					ChannelMap.addbyte(ctx.channel().remoteAddress() + "_byte",
+							Utils.byteMerger(ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte"), addLast));
+					logger.info("不是YW开头byte syLength > 0   增加] 后的长度"
+							+ ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte").length);
+
+				} else {
+					ChannelMap.addbyte(ctx.channel().remoteAddress() + "_byte", Utils
+							.byteMerger(ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte"), receiveMsgBytes));
+					logger.info("不是YW开头byte syLength = 0  的长度"
+							+ ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte").length);
+					//super.channelRead(ctx,ChannelMap.getContent(ctx.channel().remoteAddress() + "_voice") + hexString);
+					super.channelRead(ctx,ChannelMap.getContent(ctx.channel().remoteAddress() + "_voice"));
+
 				}
-				
-				
-				
-				/*else if (syLength == 0) {
-					ChannelMap.addbyte(ctx.channel().remoteAddress() + "_byte", Utils.byteMerger(ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte"),receiveMsgBytes));
-					logger.info("不是YW开头byte syLength = 0  的长度" + ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte").length);
-					super.channelRead(ctx,
-							ChannelMap.getVoiceName(ctx.channel().remoteAddress() + "_voice") + hexString);
-					
-					
-				} else if(syLength < 0) {
-					logger.info("语音长度异常 开头不是YW的剩余长度");
-					ChannelMap.addbyte(ctx.channel().remoteAddress() + "_byte", Utils.byteMerger(ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte"),receiveMsgBytes));
-					logger.info("不是YW开头byte syLength = 0  的长度" + ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte").length);
-					
-					super.channelRead(ctx,
-							ChannelMap.getVoiceName(ctx.channel().remoteAddress() + "_voice") + hexString);
-				
-				}*/
+
 			}
 
 		} else {
-			int syLength = Integer.valueOf(ChannelMap.getVoiceName(ctx.channel().remoteAddress() + "_len"))
-					- receiveMsgBytes.length;
+			Integer syLength = ChannelMap.getInteger(ctx.channel().remoteAddress() + "_len") - receiveMsgBytes.length;
 			logger.info("hexString.length() >= 8剩余长度=" + syLength);
-			if (syLength > 0) {
-				ChannelMap.addVoiceName(ctx.channel().remoteAddress() + "_voice",
-						ChannelMap.getVoiceName(ctx.channel().remoteAddress() + "_voice") + hexString + "5d");
-				ChannelMap.addVoiceName(ctx.channel().remoteAddress() + "_len", (syLength - 2) + "");
-				logger.info("减2剩余长度=" + ChannelMap.getVoiceName(ctx.channel().remoteAddress() + "_len"));
-				
-				byte[] addLast = Utils.byteMerger(receiveMsgBytes,Utils.getRightLast());
-				
-				logger.info("开头长度小于8 syLength > 0 未增加前的长度" + ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte").length);
-				ChannelMap.addbyte(ctx.channel().remoteAddress() + "_byte", Utils.byteMerger(ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte"),addLast));
-				logger.info("开头长度小于8 syLength > 0   增加] 后的长度" + ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte").length);
-				
-			}else{
-
-				ChannelMap.addbyte(ctx.channel().remoteAddress() + "_byte", Utils.byteMerger(ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte"),receiveMsgBytes));
-				logger.info("不是YW开头byte syLength = 0  的长度" + ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte").length);
-				
-				super.channelRead(ctx, ChannelMap.getVoiceName(ctx.channel().remoteAddress() + "_voice") + hexString);
 			
-			}
-			/* else if (syLength == 0) {
-				ChannelMap.addbyte(ctx.channel().remoteAddress() + "_byte", Utils.byteMerger(ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte"),receiveMsgBytes));
-				logger.info("不是YW开头byte syLength = 0  的长度" + ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte").length);
-				
-				super.channelRead(ctx, ChannelMap.getVoiceName(ctx.channel().remoteAddress() + "_voice") + hexString);
+			if (syLength > 0) {
+				//ChannelMap.addContent(ctx.channel().remoteAddress() + "_voice",ChannelMap.getContent(ctx.channel().remoteAddress() + "_voice") + hexString + "5d");
+				ChannelMap.addInteger(ctx.channel().remoteAddress() + "_len", syLength - 2);
+				logger.info("减2剩余长度=" + ChannelMap.getInteger(ctx.channel().remoteAddress() + "_len"));
+
+				byte[] addLast = Utils.byteMerger(receiveMsgBytes, Utils.getRightLast());
+
+				logger.info("开头长度小于8 syLength > 0 未增加前的长度"
+						+ ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte").length);
+				ChannelMap.addbyte(ctx.channel().remoteAddress() + "_byte",
+						Utils.byteMerger(ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte"), addLast));
+				logger.info("开头长度小于8 syLength > 0   增加] 后的长度"
+						+ ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte").length);
+
 			} else {
-				logger.info("语音获取异常hexString.length() >= 8");
-			}*/
+
+				ChannelMap.addbyte(ctx.channel().remoteAddress() + "_byte",
+						Utils.byteMerger(ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte"), receiveMsgBytes));
+				logger.info("不是YW开头byte syLength = 0  的长度"
+						+ ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte").length);
+
+				//super.channelRead(ctx, ChannelMap.getContent(ctx.channel().remoteAddress() + "_voice") + hexString);
+				super.channelRead(ctx, ChannelMap.getContent(ctx.channel().remoteAddress() + "_voice"));
+
+			}
 		}
 
 	}

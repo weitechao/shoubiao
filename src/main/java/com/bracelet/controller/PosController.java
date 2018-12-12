@@ -193,12 +193,11 @@ public class PosController extends BaseController {
 	}
 	
 	
-	/* 获取 */
+	/* 获取imei ip 和端口 */
 	@ResponseBody
 	@RequestMapping(value = "/get/{imei}", method = RequestMethod.GET ,produces="text/html;charset=UTF-8")
 	public String getImeiIpPort(@PathVariable String imei) {
 		logger.info(limitCache.getRedisKeyValue(imei));
-		logger.info(limitCache.getRedisKeyValue("weitechao"));
 		return limitCache.getRedisKeyValue(imei);
 	}
 

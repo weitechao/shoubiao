@@ -55,13 +55,20 @@ public class UploadPhoto extends AbstractBizService {
 	@Override
 	protected String process2(SocketLoginDto socketLoginDto, String jsonInfo, Channel channel) {
 
+		/* [YW*YYYYYYYYYY*NNNN*LEN*TK,来源,文件名字,当前包,总分包数,ARM格式二进制音频数据]
+		 *
+		 * 
+		 * 后面的传图片数据,起始包是1
+[YW*YYYYYYYYYY*NNNN*LEN*TPBK,来源,文件名字,当前包,总分包数,XX格式二进制图片数据]
+		 * */
+		 
 		
 		logger.info("设备照片上传=" + jsonInfo);
 		
 		String imei = socketLoginDto.getImei();
 		
-		try{
-			if (jsonInfo.contains("YW*")) {
+		
+		
 			
 			String[] shuzu = jsonInfo.split("\\*");
 			//String imei = shuzu[1];// 设备imei
@@ -76,24 +83,21 @@ public class UploadPhoto extends AbstractBizService {
 			int allNumber = Integer.valueOf(infoshuzuMsg[4]);// 总包个数
 			//String dataInfo = "ud," + infoshuzuMsg[5];// thisNumber0位置数据--其他照片数据
 	
-            int insertNumber = 0;
-            if(allNumber>9 && thisNumber>9 ){
-            	insertNumber=2;
-            }else if(allNumber>9 && thisNumber<9 ){
-            	insertNumber=1;
-            }
+          
             		
 		if (thisNumber != 0) {// 当前包 如果是0就是定位  1就是照片数据
-			photoName = imei+"_"+ photoName;
-			ChannelMap.addVoiceName(imei, photoName);
-			
-			int intIndex = jsonInfo.indexOf(".jpg");
-			   logger.info("insertNumber="+insertNumber);
-			logger.info("jpg=" + jsonInfo.substring(intIndex + 9+insertNumber, jsonInfo.length()));
-			byte[] voiceData = jsonInfo.substring(intIndex+9+insertNumber, jsonInfo.length()).getBytes("UTF-8");
-			Utils.createFileContent(Utils.PHOTO_FILE_lINUX, photoName, voiceData);
-			
-		//	Utils.base64StringToJpg(jsonInfo.substring(intIndex + 9, jsonInfo.length()),Utils.PHOTO_FILE_lINUX+"/"+imei+photoName);
+			logger.info("[photoName]=" + photoName);
+			if (photoName == null || "".equals(photoName)) {
+				photoName = imei + "_" + new Date().getTime() + ".jpg";
+			} else {
+				photoName = imei + "_" + photoName;
+			}
+
+			byte[] vocieByte = ChannelMap.getByte(channel.remoteAddress() + "_byte");
+
+			byte[] voiceSubByte = Utils.subByte(vocieByte, 65, vocieByte.length - 65);
+
+			Utils.createFileContent(Utils.PHOTO_FILE_lINUX, photoName, voiceSubByte);
 			
 			if(thisNumber == allNumber&& allNumber!=0){
 				iUploadPhotoService.insertPhoto(imei, Utils.PHOTO_URL+ photoName, photoName, "1");
@@ -107,19 +111,8 @@ public class UploadPhoto extends AbstractBizService {
 			sb.append("]");
 			logger.info("设备拍照返回数据=" + sb.toString());
 			return sb.toString();
-			/*String photoInfo = infoshuzuMsg[5];
-			if (thisNumber == 1) {
-				iUploadPhotoService.insertPhoto(imei, source, photoName, photoInfo);
-			} else {
-				WatchUploadPhotoInfo waUpInfo = iUploadPhotoService.getByPhotoNameAndImei(imei, photoName);
-				if (waUpInfo != null) {
-					iUploadPhotoService.updateById(waUpInfo.getId(), waUpInfo.getData() + photoInfo);
-				}
-			}*/
 		}else{
 			chuliLocationInfo(imei, info, no, locationStyle);
-			
-			
 			String resp = "TPCF," + photoName + "," + thisNumber + "," + allNumber + ",1";
 			StringBuffer sb = new StringBuffer("[YW*" + imei + "*0002*");
 			sb.append(RadixUtil.changeRadix(resp));
@@ -130,34 +123,9 @@ public class UploadPhoto extends AbstractBizService {
 			return sb.toString();
 		}
 		
-		}else{
-			String photoName = ChannelMap.getVoiceName(imei);
-			logger.info("photoName=" + photoName);
-		//	byte[] voiceData = Base64.decodeBase64(jsonInfo);
-			byte[] phtotData = jsonInfo.getBytes("UTF-8");
-			Utils.createFileContent(Utils.PHOTO_FILE_lINUX, photoName, phtotData);
-			
-			//Utils.base64StringToJpg(jsonInfo,Utils.PHOTO_FILE_lINUX+"/"+imei+photoName);
-			
-			return "";
-		}
+		
 		//iUploadPhotoService.insert(imei, photoName, source, thisNumber, allNumber);
-	} catch (UnsupportedEncodingException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
 	}
-		// [YW*YYYYYYYYYY*NNNN*LEN*TPCF, 文件名，当前包，总包个数，1]
-		/*String resp = "TPCF," + photoName + "," + thisNumber + "," + allNumber + ",1";
-		StringBuffer sb = new StringBuffer("[YW*" + imei + "*0002*");
-		sb.append(RadixUtil.changeRadix(resp));
-		sb.append("*");
-		sb.append(resp);
-		sb.append("]");
-		logger.info("设备拍照返回数据=" + sb.toString());*/
-		return "";
-	}
-
-
 	
 	public void chuliLocationInfo(String imei, String info, String no, Integer locationStyle) {
 

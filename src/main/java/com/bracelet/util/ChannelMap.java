@@ -22,26 +22,23 @@ public class ChannelMap {
 	 * key:channel,value:SocketLoginDto
 	 */
 	private static Map<Channel, SocketLoginDto> channelMap3 = new HashMap<Channel, SocketLoginDto>();
-	
-	
+
 	private static Map<String, WatchLatestLocation> channelMap4 = new HashMap<String, WatchLatestLocation>();
-	
+
 	private static Map<String, TianQiLatest> channelMap5 = new HashMap<String, TianQiLatest>();
-	
-	private static Map<String, String> voiceNameMap = new HashMap<String, String>();
-	
+
 	private static Map<String, byte[]> byteMap = new HashMap<String, byte[]>();
-	
-	//private static Map<String, String> photoNameMap = new HashMap<String, String>();
+
+	private static Map<String, Integer> IntegerMap = new HashMap<String, Integer>();
+
+	private static Map<String, String> contentMap = new HashMap<String, String>();
 
 	/**
 	 * 
 	 * add channelInfo
 	 * 
 	 * @param imei
-	 * @param dto
-	 * @return void
-	 * @exception
+	 * 			@param dto @return void @exception
 	 */
 	public static void addChannel(String imei, SocketLoginDto dto) {
 		channelMap2.put(imei, dto);
@@ -75,37 +72,31 @@ public class ChannelMap {
 
 		channelMap3.remove(channel);
 	}
-	
-	
+
 	public static void addlocation(String imei, WatchLatestLocation dto) {
 		channelMap4.put(imei, dto);
 	}
 
-
 	public static WatchLatestLocation getlocation(String imei) {
 		return channelMap4.get(imei);
 	}
-	
-	
+
 	public static void addCityQianQi(String city, TianQiLatest dto) {
 		channelMap5.put(city, dto);
 	}
 
-
 	public static TianQiLatest getCityTianQi(String city) {
 		return channelMap5.get(city);
 	}
-	
-	public static void addVoiceName(String imei, String voiceName) {
-		voiceNameMap.put(imei, voiceName);
+
+	public static void addContent(String imei, String voiceName) {
+		contentMap.put(imei, voiceName);
 	}
 
-	public static String getVoiceName(String imei) {
-		return voiceNameMap.get(imei);
+	public static String getContent(String imei) {
+		return contentMap.get(imei);
 	}
-	
-	
-	
+
 	public static void addbyte(String imei, byte[] voiceName) {
 		byteMap.put(imei, voiceName);
 	}
@@ -113,12 +104,13 @@ public class ChannelMap {
 	public static byte[] getByte(String imei) {
 		return byteMap.get(imei);
 	}
-	
-	/*public static void addPhotoName(String imei, String photoName) {
-		photoNameMap.put(imei, photoName);
+
+	public static void addInteger(String imei, Integer cout) {
+		IntegerMap.put(imei, cout);
 	}
 
-	public static String getPhotoName(String imei) {
-		return photoNameMap.get(imei);
-	}*/
+	public static Integer getInteger(String imei) {
+		return IntegerMap.get(imei);
+	}
+
 }
