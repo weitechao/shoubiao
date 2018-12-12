@@ -128,8 +128,15 @@ public class LocationServiceImpl implements ILocationService {
 	public boolean insertUdInfo(String imei, Integer locationType, String lat,
 			String lon, String status, String time,Integer locationStyle) {
 		Timestamp now = Utils.getCurrentTimestamp();
+		// 1正常2报警3天气4拍照
+		String table = "location_watchinfo";
+		if(locationStyle == 2){
+			table = "sos_location_watchinfo";
+		}else if(locationStyle == 4){
+			table = "photo_location_watchinfo";
+		}
 		int i = jdbcTemplate
-				.update("insert into location_watchinfo (imei, location_type, lat, lng, status, location_time, upload_time, location_style) values (?,?,?,?,?,?,?,?)",
+				.update("insert into  "+ table +"   (imei, location_type, lat, lng, status, location_time, upload_time, location_style) values (?,?,?,?,?,?,?,?)",
 						new Object[] { imei, locationType ,lat, lon, status, time, now,  locationStyle}, new int[] {
 								Types.VARCHAR, Types.INTEGER, Types.VARCHAR,Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
 								Types.TIMESTAMP, Types.INTEGER });
