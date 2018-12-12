@@ -15,6 +15,7 @@ import com.bracelet.entity.VersionInfo;
 import com.bracelet.entity.WatchAppVersionInfo;
 import com.bracelet.entity.WatchDevice;
 import com.bracelet.exception.BizException;
+import com.bracelet.redis.LimitCache;
 import com.bracelet.service.IAuthcodeService;
 import com.bracelet.service.IDeviceService;
 import com.bracelet.service.ILocationService;
@@ -55,6 +56,9 @@ public class WatchAppUserController extends BaseController {
 	ILocationService locationService;
 	
 	@Autowired
+	LimitCache limitCache;
+	
+	@Autowired
 	IDeviceService ideviceService;
 	@SuppressWarnings("unused")
 	private Logger logger = LoggerFactory.getLogger(getClass());
@@ -86,6 +90,11 @@ public class WatchAppUserController extends BaseController {
 				bb.put("Notification", "True");
 				bb.put("NotificationSound", "True");
 				bb.put("NotificationVibration", "True");
+				bb.put("ip", "47.92.30.81:8088");
+				String ipport = limitCache.getRedisKeyValue(tel);
+				if(ipport!=null&&!"".equals(ipport)){
+					bb.put("ip", ipport);
+				}
 			} else {
 				bb.put("Code", 2);// 2表示密码错误
 				bb.put("Message", "");// 2表示密码错误

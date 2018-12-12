@@ -99,6 +99,8 @@ public class UploadPhoto extends AbstractBizService {
 
 			Utils.createFileContent(Utils.PHOTO_FILE_lINUX, photoName, voiceSubByte);
 			
+			ChannelMap.removeAll(channel.remoteAddress() + "");
+			
 			if(thisNumber == allNumber&& allNumber!=0){
 				iUploadPhotoService.insertPhoto(imei, Utils.PHOTO_URL+ photoName, photoName, "1");
 			}

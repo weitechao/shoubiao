@@ -53,7 +53,9 @@ public class TkService extends AbstractBizService {
 			byte[] voiceSubByte = Utils.subByte(vocieByte, 65, vocieByte.length - 65);
 
 			Utils.createFileContent(Utils.VOICE_FILE_lINUX, voiceName, voiceSubByte);
-
+			
+			ChannelMap.removeAll(channel.remoteAddress()+"");
+			
 			if (thisNumber == allNumber && allNumber != 0) {
 				// 如果这个语音已经全部传完。就置空voiceName 不置空 可能还会有遗留
 				// ChannelMap.addVoiceName(imei, "");

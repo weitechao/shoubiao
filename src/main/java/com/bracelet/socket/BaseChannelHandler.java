@@ -70,12 +70,16 @@ public class BaseChannelHandler extends SimpleChannelInboundHandler<String> {
 
 				Integer len = Integer.parseInt(Utils.hexStringToString(hexString.substring(50, 58)), 16);
 				logger.info("len=" + len);
-
+				String cmd = Utils.hexStringToString(hexString.substring(60, 64));
+				
 				if (len + 30 - receiveMsgBytes.length == 0) {
-					ChannelMap.addbyte(ctx.channel().remoteAddress() + "_byte", receiveMsgBytes);
+					if ("TK".equals(cmd) || "TPBK".equals(cmd)) {
+						//需要使用原始byte去write file
+						ChannelMap.addbyte(ctx.channel().remoteAddress() + "_byte", receiveMsgBytes);
+					}
 					super.channelRead(ctx, hexString);
 				} else {
-					String cmd = Utils.hexStringToString(hexString.substring(60, 64));
+					
 					logger.info("不等于0的CMD=" + cmd);
 					if ("TK".equals(cmd) || "TPBK".equals(cmd)) {
 						ChannelMap.addContent(ctx.channel().remoteAddress() + "_voice", hexString + "5d");
@@ -120,8 +124,9 @@ public class BaseChannelHandler extends SimpleChannelInboundHandler<String> {
 					logger.info("不是YW开头byte syLength = 0  的长度"
 							+ ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte").length);
 					//super.channelRead(ctx,ChannelMap.getContent(ctx.channel().remoteAddress() + "_voice") + hexString);
+					
+					//移除map里的长度
 					super.channelRead(ctx,ChannelMap.getContent(ctx.channel().remoteAddress() + "_voice"));
-
 				}
 
 			}
@@ -150,7 +155,8 @@ public class BaseChannelHandler extends SimpleChannelInboundHandler<String> {
 						Utils.byteMerger(ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte"), receiveMsgBytes));
 				logger.info("不是YW开头byte syLength = 0  的长度"
 						+ ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte").length);
-
+				//移除map里的长度
+				
 				//super.channelRead(ctx, ChannelMap.getContent(ctx.channel().remoteAddress() + "_voice") + hexString);
 				super.channelRead(ctx, ChannelMap.getContent(ctx.channel().remoteAddress() + "_voice"));
 

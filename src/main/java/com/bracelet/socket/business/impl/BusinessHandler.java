@@ -91,7 +91,7 @@ public class BusinessHandler implements IBusinessHandler {
 		 */
         logger.info("cmd:"+cmd+"=返回:"+reponse);
 		incoming.writeAndFlush(reponse);
-         if(!"LK".equals(cmd)){
+		if(!"LK".equals(cmd)){
         	 apilogService.insert(serviceName, json, reponse, imei, rstatus, rmsg,time);
          }
 	}

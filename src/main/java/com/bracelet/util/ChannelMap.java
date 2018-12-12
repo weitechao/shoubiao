@@ -96,6 +96,11 @@ public class ChannelMap {
 	public static String getContent(String imei) {
 		return contentMap.get(imei);
 	}
+	
+	
+	public static void removeContent(String imei) {
+		contentMap.remove(imei);
+	}
 
 	public static void addbyte(String imei, byte[] voiceName) {
 		byteMap.put(imei, voiceName);
@@ -104,6 +109,11 @@ public class ChannelMap {
 	public static byte[] getByte(String imei) {
 		return byteMap.get(imei);
 	}
+	
+	public static void removeByte(String imei) {
+		byteMap.remove(imei);
+	}
+	
 
 	public static void addInteger(String imei, Integer cout) {
 		IntegerMap.put(imei, cout);
@@ -111,6 +121,15 @@ public class ChannelMap {
 
 	public static Integer getInteger(String imei) {
 		return IntegerMap.get(imei);
+	}
+	public static void removeInteger(String imei) {
+		IntegerMap.remove(imei);
+	}
+	
+	public static void removeAll(String remoteAddress) {
+		IntegerMap.remove(remoteAddress+"_len");
+		byteMap.remove(remoteAddress+"_byte");
+		contentMap.remove(remoteAddress+"_voice");
 	}
 
 }
