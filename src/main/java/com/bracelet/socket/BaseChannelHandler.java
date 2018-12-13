@@ -81,7 +81,7 @@ public class BaseChannelHandler extends SimpleChannelInboundHandler<String> {
 				} else {
 					
 					logger.info("不等于0的CMD=" + cmd);
-					if ("TK".equals(cmd) || "TPBK".equals(cmd)) {
+					if ("TK".equals(cmd) || "TP".equals(cmd)) {
 						ChannelMap.addContent(ctx.channel().remoteAddress() + "_voice", hexString + "5d");
 						ChannelMap.addInteger(ctx.channel().remoteAddress() + "_len",
 								len + 30 - receiveMsgBytes.length - 2);

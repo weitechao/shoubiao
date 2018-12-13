@@ -211,7 +211,7 @@ public class WatchAppContDeviceController extends BaseController {
 			}
 			if (socketLoginDto.getChannel().isActive()) {
 				String msg="CAPT,"+come;
-				String reps = "[YW*"+imei+"*0001*"+RadixUtil.changeRadix(msg)+"*"+msg+"]";
+				String reps = "[YW*"+imei+"*0002*"+RadixUtil.changeRadix(msg)+"*"+msg+"]";
 				socketLoginDto.getChannel().writeAndFlush(reps);
 				bb.put("Code", 1);
 			} else {

@@ -47,7 +47,7 @@ public class TkService extends AbstractBizService {
 			} else {
 				voiceName = imei + "_" + voiceName;
 			}
-
+			logger.info("amr的位置和65比较="+jsonInfo.lastIndexOf(".amr")+"");
 			byte[] vocieByte = ChannelMap.getByte(channel.remoteAddress() + "_byte");
 
 			byte[] voiceSubByte = Utils.subByte(vocieByte, 65, vocieByte.length - 65);
@@ -76,5 +76,6 @@ public class TkService extends AbstractBizService {
 	protected SocketBaseDto process1(SocketLoginDto socketLoginDto, JSONObject jsonObject, Channel channel) {
 		return null;
 	}
+	
 
 }

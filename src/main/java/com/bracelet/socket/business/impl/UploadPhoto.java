@@ -60,6 +60,9 @@ public class UploadPhoto extends AbstractBizService {
 		 * 
 		 * 后面的传图片数据,起始包是1
 [YW*YYYYYYYYYY*NNNN*LEN*TPBK,来源,文件名字,当前包,总分包数,XX格式二进制图片数据]
+[YW*872018020142169*002E*0423*TK,0,wetalk_20181214000413.amr,1,2,#!AMR
+[YW*872018020142169*0007*042B*TPBK,18735662247,IMG20181214002304.jpg,1,8,����C
+
 		 * */
 		 
 		
@@ -93,9 +96,24 @@ public class UploadPhoto extends AbstractBizService {
 				photoName = imei + "_" + photoName;
 			}
 
+			Integer jpgL = jsonInfo.lastIndexOf(".jpg");
+			if(jpgL  == -1){
+				String resp = "TPCF," + photoName + "," + thisNumber + "," + allNumber + ",0";
+				StringBuffer sb = new StringBuffer("[YW*" + imei + "*0002*");
+				sb.append(RadixUtil.changeRadix(resp));
+				sb.append("*");
+				sb.append(resp);
+				sb.append("]");
+				logger.info("设备拍照返回数据=" + sb.toString());
+				return sb.toString();
+			}
+			
+			
+			jpgL+=10;
+			
 			byte[] vocieByte = ChannelMap.getByte(channel.remoteAddress() + "_byte");
 
-			byte[] voiceSubByte = Utils.subByte(vocieByte, 65, vocieByte.length - 65);
+			byte[] voiceSubByte = Utils.subByte(vocieByte, jpgL, vocieByte.length - jpgL);
 
 			Utils.createFileContent(Utils.PHOTO_FILE_lINUX, photoName, voiceSubByte);
 			

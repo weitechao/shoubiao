@@ -37,7 +37,7 @@ public class TkqService extends AbstractBizService {
 		String[] shuzu = jsonInfo.split("\\*");
 		String imei = shuzu[1];// 设备imei
 		String no = shuzu[2];// 流水号
-		List<WatchVoiceInfo> wtalist = watchtkService.getVoiceListByImeiAndStatus(imei, 0);
+		/*List<WatchVoiceInfo> wtalist = watchtkService.getVoiceListByImeiAndStatus(imei, 0);
 		if (wtalist.size() > 0) {
 			for (WatchVoiceInfo wta : wtalist) {
 
@@ -46,7 +46,7 @@ public class TkqService extends AbstractBizService {
 				String reps = "[YW*" + imei + "*0001*" + RadixUtil.changeRadix(msg) + "*" + msg + "]";
 				channel.writeAndFlush(reps);
 			}
-		}
+		}*/
 		return "";
 	}
 
