@@ -54,13 +54,12 @@ public class WatchAppUserController extends BaseController {
 	IOpenDoorService openService;
 	@Autowired
 	ILocationService locationService;
-	
+
 	@Autowired
 	LimitCache limitCache;
-	
+
 	@Autowired
 	IDeviceService ideviceService;
-	@SuppressWarnings("unused")
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	// 登录
@@ -75,6 +74,7 @@ public class WatchAppUserController extends BaseController {
 
 		// 先检查登录表，如果登录表里有，检查密码，如果密码正确则登录OK，判断设备是否在线，在线，则发送定位请求，不在线则查询最后一次定位，
 		UserInfo userInfo = userInfoService.getUserInfoByUsername(tel);
+		String ipport = limitCache.getRedisKeyValue(tel);
 		if (userInfo != null) {
 
 			if (password.equalsIgnoreCase(userInfo.getPassword())) {
@@ -91,9 +91,22 @@ public class WatchAppUserController extends BaseController {
 				bb.put("NotificationSound", "True");
 				bb.put("NotificationVibration", "True");
 				bb.put("ip", "47.92.30.81:8088");
-				String ipport = limitCache.getRedisKeyValue(tel);
-				if(ipport!=null && !"".equals(ipport)){
+
+				if (ipport != null && !"".equals(ipport)) {
 					bb.put("ip", ipport);
+				}
+
+			/*	SocketLoginDto socketLoginDto = ChannelMap.getChannel(tel);
+				if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
+					WatchDevice watchd = ideviceService.getDeviceInfo(tel);
+					bb.put("DeviceID", watchd.getId());
+				} else {
+					bb.put("DeviceID", socketLoginDto.getUser_id());
+				}*/
+
+				WatchDevice watchd = ideviceService.getDeviceInfo(tel);
+				if (watchd != null) {
+					bb.put("DeviceID", watchd.getId());
 				}
 			} else {
 				bb.put("Code", 2);// 2表示密码错误
@@ -111,10 +124,10 @@ public class WatchAppUserController extends BaseController {
 			bb.put("LoginId", "0");
 			bb.put("UserId", "0");
 			UserInfo userInfoo = userInfoService.getUserInfoByUsername(tel);
-			if(userInfoo!=null){
-				bb.put("UserId", userInfoo.getUser_id());
+			if (userInfoo != null) {
+				bb.put("UserId", userInfoo.getUser_id() + "");
 			}
-			
+
 			bb.put("PhoneNumber", "0");
 			bb.put("BindNumber", "0");
 			bb.put("UserType", 0);
@@ -122,7 +135,22 @@ public class WatchAppUserController extends BaseController {
 			bb.put("Notification", "True");
 			bb.put("NotificationSound", "True");
 			bb.put("NotificationVibration", "True");
+			bb.put("ip", "47.92.30.81:8088");
+			if (ipport != null && !"".equals(ipport)) {
+				bb.put("ip", ipport);
+			}
 			
+			WatchDevice watchd = ideviceService.getDeviceInfo(tel);
+			if (watchd != null) {
+				bb.put("DeviceID", watchd.getId());
+			}else{
+				ideviceService.insertNewImei(tel, "1", 0, "1");
+				WatchDevice watchdd = ideviceService.getDeviceInfo(tel);
+				if(watchdd!=null){
+					bb.put("DeviceID", watchdd.getId());
+				}
+			}
+
 		}
 		return bb.toString();
 	}
@@ -144,13 +172,13 @@ public class WatchAppUserController extends BaseController {
 		String oldPassword = jsonObject.getString("oldpwd");
 		UserInfo userInfo = userInfoService.getUserInfoByUsername(tel);
 		if (userInfo != null) {
-			if(userInfo.getPassword().equals(oldPassword)){
+			if (userInfo.getPassword().equals(oldPassword)) {
 				userInfoService.updateUserPassword(userInfo.getUser_id(), password);
 				bb.put("Code", 1);
-			}else{
+			} else {
 				bb.put("Code", -1);
 			}
-			
+
 		} else {
 			bb.put("Code", 0);
 		}
@@ -228,7 +256,7 @@ public class WatchAppUserController extends BaseController {
 
 	// 获取绑定设备列表
 	@ResponseBody
-	@RequestMapping(value = "/getbindDeviceList/{token}", method = RequestMethod.GET,produces="text/html;charset=UTF-8")
+	@RequestMapping(value = "/getbindDeviceList/{token}", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
 	public String getbindDeviceList(@PathVariable String token) {
 		JSONObject bb = new JSONObject();
 		String userId = checkTokenWatchAndUser(token);
@@ -248,8 +276,7 @@ public class WatchAppUserController extends BaseController {
 				dataMap.put("status", location.getStatus());
 				dataMap.put("name", location.getName());
 				dataMap.put("timestamp", location.getCreatetime().getTime());
-				
-				
+
 				dataMap.put("ActiveDate", "");
 				dataMap.put("BabyName", location.getName());
 				dataMap.put("BindNumber", location.getImei());
@@ -264,15 +291,29 @@ public class WatchAppUserController extends BaseController {
 				dataMap.put("SmsBalanceKey", "0");
 				dataMap.put("SmsFlowKey", "0");
 				dataMap.put("DeviceID", "");
-				
-				SocketLoginDto socketLoginDto = ChannelMap.getChannel(location.getImei());
-				if(socketLoginDto == null || socketLoginDto.getChannel() == null){
-					WatchDevice watchd = ideviceService.getDeviceInfo(location.getImei());
-					dataMap.put("DeviceID",watchd.getId());
-				}else{
-					dataMap.put("DeviceID", socketLoginDto.getUser_id());
+
+				/*
+				 * SocketLoginDto socketLoginDto =
+				 * ChannelMap.getChannel(location.getImei()); if (socketLoginDto
+				 * == null || socketLoginDto.getChannel() == null) { WatchDevice
+				 * watchd = ideviceService.getDeviceInfo(location.getImei());
+				 * dataMap.put("DeviceID", watchd.getId()); } else {
+				 * dataMap.put("DeviceID", socketLoginDto.getUser_id()); }
+				 */
+
+				WatchDevice watchd = ideviceService.getDeviceInfo(location.getImei());
+				if (watchd != null) {
+					dataMap.put("DeviceID", watchd.getId());
 				}
 				
+				/*SocketLoginDto socketLoginDto = ChannelMap.getChannel(location.getImei());
+				if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
+					WatchDevice watchd = ideviceService.getDeviceInfo(location.getImei());
+					dataMap.put("DeviceID", watchd.getId());
+				} else {
+					dataMap.put("DeviceID", socketLoginDto.getUser_id());
+				}*/
+
 				dataMap.put("UserId", "0");
 				dataMap.put("DeviceModelID", "10000100");
 				dataMap.put("Firmware", "0");
@@ -295,7 +336,7 @@ public class WatchAppUserController extends BaseController {
 				dataMap.put("LatestTime", "0");
 				dataMap.put("UpdateTime", "0");
 				dataMap.put("CloudPlatform", 0);
-				
+
 				JSONObject deviceSet = new JSONObject();
 				deviceSet.put("SetInfo", "1-1-1-1-0-0-0-0-1-0-1-0");
 				deviceSet.put("ClassDisabled1", "0");
@@ -319,9 +360,8 @@ public class WatchAppUserController extends BaseController {
 				deviceSet.put("SosMsgswitch", "0");
 				deviceSet.put("CreateTime", "0");
 				deviceSet.put("UpdateTime", "0");
-				dataMap.put("DeviceSet",deviceSet);
-				
-				
+				dataMap.put("DeviceSet", deviceSet);
+
 				JSONObject deviceState = new JSONObject();
 				deviceState.put("Altitude", 0);
 				deviceState.put("Course", 0);
@@ -339,11 +379,11 @@ public class WatchAppUserController extends BaseController {
 				deviceState.put("ServerTime", "");
 				deviceState.put("Speed", 0);
 				deviceState.put("UpdateTime", "");
-				dataMap.put("DeviceState",deviceState);
-				
+				dataMap.put("DeviceState", deviceState);
+
 				JSONArray jsonArray1 = new JSONArray();
-				dataMap.put("ContactArr",jsonArray1);
-				
+				dataMap.put("ContactArr", jsonArray1);
+
 				jsonArray.add(dataMap);
 			}
 			bb.put("Code", 1);

@@ -198,7 +198,7 @@ public class DeviceServiceImpl implements IDeviceService {
 
 	@Override
 	public WatchDevice getDeviceBakInfo(String imei) {
-		String sql = "select * from device_watch_info where imei=? LIMIT 1";
+		String sql = "select * from device_watch_bak_info where imei=? LIMIT 1";
 		List<WatchDevice> list = jdbcTemplate.query(sql, new Object[] { imei },
 				new BeanPropertyRowMapper<WatchDevice>(WatchDevice.class));
 

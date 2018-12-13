@@ -39,7 +39,6 @@ public class LoginService implements IService {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
-
 	/*
 	 * 终端发送:
 	 * [YW*YYYYYYYYYY*NNNN*LEN*INIT,电话号码,运营商类型,固件版本号,全部参数设置次数流水号,通信录设置次数流水号
@@ -64,7 +63,7 @@ public class LoginService implements IService {
 		String dv = infoshuzu[3];// 设备固件版本
 
 		WatchDevice watchd = ideviceService.getDeviceBakInfo(imei);
-		if(watchd != null){
+		if (watchd != null) {
 			SocketLoginDto channelDto = new SocketLoginDto();
 			channelDto.setChannel(channel);
 			channelDto.setNo(no);
@@ -72,53 +71,64 @@ public class LoginService implements IService {
 			channelDto.setPhone(phone);
 			channelDto.setUser_id(watchd.getD_id());
 
-			logger.info("保存手表登录信息,no:" + no + ",imei" + imei);
+			logger.info("保存手表登录信息,no:" + no + ",imei" + imei + "deviceid=" + watchd.getD_id());
 			ChannelMap.addChannel(imei, channelDto);
 			ChannelMap.addChannel(channel, channelDto);
-			
-			//ideviceService.updateImeiInfo(watchd.getId(), phone, TypeOfOperator, dv);
-		}else{
-			ideviceService.insertNewImei(imei, phone, TypeOfOperator, dv);
-			WatchDevice watchCopy = ideviceService.getDeviceInfo(imei);
-			if(watchCopy != null){
-				ideviceService.insertNewImeiCopy(watchCopy.getId(), imei, phone, TypeOfOperator, dv);
-				
+
+			// ideviceService.updateImeiInfo(watchd.getId(), phone,
+			// TypeOfOperator, dv);
+		} else {
+			WatchDevice watchSelect = ideviceService.getDeviceInfo(imei);
+			if (watchSelect == null) {
+				ideviceService.insertNewImei(imei, phone, TypeOfOperator, dv);
+				WatchDevice watchCopy = ideviceService.getDeviceInfo(imei);
+				if (watchCopy != null) {
+					ideviceService.insertNewImeiCopy(watchCopy.getId(), imei, phone, TypeOfOperator, dv);
+
+					SocketLoginDto channelDto = new SocketLoginDto();
+					channelDto.setChannel(channel);
+					channelDto.setNo(no);
+					channelDto.setImei(imei);
+					channelDto.setPhone(phone);
+					channelDto.setUser_id(watchCopy.getId());
+
+					logger.info("保存手表登录信息,no:" + no + ",imei" + imei);
+					ChannelMap.addChannel(imei, channelDto);
+					ChannelMap.addChannel(channel, channelDto);
+				}
+			} else {
+				ideviceService.insertNewImeiCopy(watchSelect.getId(), imei, phone, TypeOfOperator, dv);
+
 				SocketLoginDto channelDto = new SocketLoginDto();
 				channelDto.setChannel(channel);
 				channelDto.setNo(no);
 				channelDto.setImei(imei);
 				channelDto.setPhone(phone);
-				channelDto.setUser_id(watchCopy.getId());
-
+				channelDto.setUser_id(watchSelect.getId());
 				logger.info("保存手表登录信息,no:" + no + ",imei" + imei);
 				ChannelMap.addChannel(imei, channelDto);
 				ChannelMap.addChannel(channel, channelDto);
 			}
 		}
-		
 
 		logger.info("设备初始化登录dv:" + dv + "," + ",no:" + no + ",imei:" + imei);
 
-	
-		
-		/*LocationWatch locationWatch = locationService.getLatest(imei);
-		if(locationWatch != null){
-			WatchLatestLocation watchlastlocation = new WatchLatestLocation();
-			watchlastlocation.setImei(imei);
-			watchlastlocation.setLat(locationWatch.getLat());
-			watchlastlocation.setLng(locationWatch.getLng());
-			watchlastlocation.setLocationType(locationWatch.getLocation_type());
-			watchlastlocation.setTimestamp(locationWatch.getUpload_time().getTime());
-			ChannelMap.addlocation(imei, watchlastlocation);
-		}*/
-		
+		/*
+		 * LocationWatch locationWatch = locationService.getLatest(imei);
+		 * if(locationWatch != null){ WatchLatestLocation watchlastlocation =
+		 * new WatchLatestLocation(); watchlastlocation.setImei(imei);
+		 * watchlastlocation.setLat(locationWatch.getLat());
+		 * watchlastlocation.setLng(locationWatch.getLng());
+		 * watchlastlocation.setLocationType(locationWatch.getLocation_type());
+		 * watchlastlocation.setTimestamp(locationWatch.getUpload_time().getTime
+		 * ()); ChannelMap.addlocation(imei, watchlastlocation); }
+		 */
 
-		String resp = "[YW*"+imei+"*0001*0006*INIT,1]";
-		logger.info("返回设备登录信息="+resp);
+		String resp = "[YW*" + imei + "*0001*0006*INIT,1]";
+		logger.info("返回设备登录信息=" + resp);
 		return resp;
 	}
-	
-	
+
 	public SocketBaseDto process(JSONObject jsonObject, Channel channel) {
 		JSONObject jsonObject2 = (JSONObject) jsonObject.get("data");
 		if (jsonObject2 == null) {
@@ -143,8 +153,7 @@ public class LoginService implements IService {
 		channelDto.setImei(imei);
 		channelDto.setUser_id(userInfo.getUser_id());
 
-		logger.info("保存手环登录信息,no:" + no + ",imei" + imei + ",user_id:"
-				+ userInfo.getUser_id());
+		logger.info("保存手环登录信息,no:" + no + ",imei" + imei + ",user_id:" + userInfo.getUser_id());
 		ChannelMap.addChannel(imei, channelDto);
 		ChannelMap.addChannel(channel, channelDto);
 

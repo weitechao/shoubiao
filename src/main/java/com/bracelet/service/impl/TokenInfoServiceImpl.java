@@ -22,7 +22,7 @@ public class TokenInfoServiceImpl implements ITokenInfoService {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	public Long getUserIdByToken(String token) {
-		String sql = "select * from token_info where token=? order by createtime LIMIT 1";
+		String sql = "select t_id,token,user_id,createtime  from token_info where token=? order by createtime LIMIT 1";
 		List<TokenInfo> list = jdbcTemplate.query(sql, new Object[] { token },
 				new BeanPropertyRowMapper<TokenInfo>(TokenInfo.class));
 		if (list != null && !list.isEmpty()) {
