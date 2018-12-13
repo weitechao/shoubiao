@@ -1,5 +1,7 @@
 package com.bracelet.service;
 
+import java.util.List;
+
 import com.bracelet.entity.Fence;
 import com.bracelet.entity.OddShape;
 
@@ -30,5 +32,7 @@ public interface IFenceService {
 	boolean deleteWatchFence(Long id);
 	
 	Fence getWatchOne(String imei);
+
+	List<Fence> getWatchFenceList(String imei);
 
 }

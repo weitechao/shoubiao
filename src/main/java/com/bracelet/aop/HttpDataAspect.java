@@ -15,6 +15,7 @@ import com.bracelet.dto.HttpBaseDto;
 import com.bracelet.exception.BizException;
 import com.bracelet.service.IApilogService;
 import com.bracelet.util.RespCode;
+import com.bracelet.util.Utils;
 
 @Aspect
 @Component
@@ -59,7 +60,11 @@ public class HttpDataAspect {
 		long time = System.currentTimeMillis() - startTime;
 		resp = JSON.toJSONString(result);
 		//logger.info("[HTTP] process info: [name:" + name + "][reqParams:" + reqParams + "][resp:" + resp + "][rstatus:" + rstatus + "][rmsg:" + rmsg + "][time:" + time + "]");
-		apilogService.insert(name, reqParams, resp, "", rstatus, rmsg, time);
+		if(Utils.METHOD_NAME.equals(name)){
+			apilogService.insert(name, "head", resp, "", rstatus, rmsg, time);
+		}else{
+			apilogService.insert(name, reqParams, resp, "", rstatus, rmsg, time);
+		}
 		return result;
 	}
 

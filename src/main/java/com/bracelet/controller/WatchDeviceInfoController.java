@@ -25,6 +25,7 @@ import com.bracelet.util.RadixUtil;
 import com.bracelet.util.RespCode;
 import com.bracelet.util.Utils;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +34,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -237,8 +239,13 @@ public class WatchDeviceInfoController extends BaseController {
 
 		Long id = jsonObject.getLong("id");
 		String head = jsonObject.getString("head");
-
-		if (this.ideviceService.updateImeiHeadInfo(id, head)) {
+        logger.info("头像="+head);
+        
+        byte[] headByte= Base64.decodeBase64(head);
+        String photoName = id+"_"+new Date().getTime() + ".jpg";
+        Utils.createFileContent(Utils.PHOTT_FILE_lINUX, photoName, headByte);
+        
+		if (this.ideviceService.updateImeiHeadInfo(id, Utils.APP_PHOTO_UTL+photoName)) {
 			bb.put("Code", 1);
 		} else {
 			bb.put("Code", 0);

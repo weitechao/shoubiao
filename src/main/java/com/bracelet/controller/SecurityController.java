@@ -7,6 +7,7 @@ import com.bracelet.dto.HttpBaseDto;
 import com.bracelet.dto.SocketLoginDto;
 import com.bracelet.entity.Fence;
 import com.bracelet.entity.Fencelog;
+import com.bracelet.entity.LocationWatch;
 import com.bracelet.entity.OddShape;
 import com.bracelet.entity.SensitivePoint;
 import com.bracelet.entity.SensitivePointLog;
@@ -64,35 +65,32 @@ public class SecurityController extends BaseController {
 			return bb.toString();
 		}
 
-		Fence fenone = fenceService.getWatchOne(imei);
-		if (fenone != null) {
+		List<Fence> fenoneList = fenceService.getWatchFenceList(imei);
+		JSONArray jsonArray = new JSONArray();
+		if (fenoneList != null) {
+			for (Fence fenone : fenoneList) {
+				JSONObject dataMap = new JSONObject();
+				dataMap.put("GeofenceID", fenone.getId());
+				dataMap.put("FenceName", fenone.getName()+"");
+				dataMap.put("Entry", 0);
+				dataMap.put("Exit", 0);
+				dataMap.put("CreateTime", "");
+				dataMap.put("UpdateTime", "");
+				dataMap.put("Enable", 0);
+				dataMap.put("Description", "");
+				dataMap.put("Lat", fenone.getLat());
+				dataMap.put("Lng", fenone.getLng());
+				dataMap.put("Radii", fenone.getRadius());
+				dataMap.put("createtime", fenone.getCreatetime().getTime());
+				dataMap.put("updatetime", fenone.getUpdatetime().getTime());
+				dataMap.put("id",  fenone.getId());
+				jsonArray.add(dataMap);
+			}
 			bb.put("Code", 1);
-			
-			JSONObject dataMap = new JSONObject();
-			dataMap.put("GeofenceID", fenone.getId());
-			dataMap.put("FenceName", fenone.getName());
-			dataMap.put("Entry", 0);
-			dataMap.put("Exit", 0);
-			dataMap.put("CreateTime", "");
-			dataMap.put("UpdateTime", "");
-			dataMap.put("Enable", 0);
-			dataMap.put("Description", "");
-			dataMap.put("Lat", fenone.getLat());
-			dataMap.put("Lng", fenone.getLng());
-			dataMap.put("Radii", fenone.getRadius());
-			JSONArray jsonArray = new JSONArray();
-			jsonArray.add(dataMap);
-			bb.put("GeoFenceList", jsonArray);
-			
-			
-			bb.put("radius", fenone.getRadius());
-			bb.put("name", fenone.getName());
-			bb.put("createtime", fenone.getCreatetime().getTime());
-			bb.put("updatetime", fenone.getUpdatetime().getTime());
-			bb.put("id",  fenone.getId());
-		} else {
+		}else{
 			bb.put("Code", 0);
 		}
+		bb.put("GeoFenceList", jsonArray);
 		return bb.toString();
 	}
 

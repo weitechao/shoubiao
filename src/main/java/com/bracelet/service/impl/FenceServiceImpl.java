@@ -47,11 +47,11 @@ public class FenceServiceImpl implements IFenceService {
 
 	@Override
 	public boolean insert(Long user_id, String lat, String lng, Integer radius) {
-		Fence fence = this.getOne(user_id);
+		/*Fence fence = this.getOne(user_id);
 		if (fence != null) {
 			logger.warn("用户[" + user_id + "]已经设置过电子围栏[" + lat + "][" + lng + "][" + radius + "]!");
 			return false;
-		}
+		}*/
 
 		Timestamp now = Utils.getCurrentTimestamp();
 		int i = jdbcTemplate.update(
@@ -157,11 +157,11 @@ public class FenceServiceImpl implements IFenceService {
 
 	@Override
 	public boolean insert(String imei, String name, String lat, String lng, String radius) {
-		Fence fence = this.getWatchOne(imei);
+	/*	Fence fence = this.getWatchOne(imei);
 		if (fence != null) {
 			logger.warn("imei[" + imei + "]已经设置过电子围栏[" + lat + "][" + lng + "][" + radius + "]!");
 			return false;
-		}
+		}*/
 
 		Timestamp now = Utils.getCurrentTimestamp();
 		int i = jdbcTemplate.update(
@@ -201,6 +201,13 @@ public class FenceServiceImpl implements IFenceService {
 			logger.info("get return null.user_id:" + imei);
 		}
 		return null;
+	}
+
+	@Override
+	public List<Fence> getWatchFenceList(String imei) {
+		String sql = "select * from watch_fence where imei=?";
+		List<Fence> list = jdbcTemplate.query(sql, new Object[] { imei }, new BeanPropertyRowMapper<Fence>(Fence.class));
+		return list;
 	}
 
 }
