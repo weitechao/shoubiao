@@ -4,10 +4,13 @@ import java.util.List;
 
 import com.bracelet.entity.IpAddressInfo;
 import com.bracelet.entity.WatchDevice;
+import com.bracelet.entity.WatchDeviceHomeSchool;
 
 public interface IDeviceService {
 
 	WatchDevice getDeviceInfo(String addimei);
+	
+	WatchDeviceHomeSchool getDeviceHomeAndFamilyInfo(Long id);
 
 	List<IpAddressInfo> getipinfo();
 
@@ -29,6 +32,18 @@ public interface IDeviceService {
 
 	boolean updateImeiNotHomeAndFamilyInfo(Long id, String imei, String phone, String nickname, Integer sex,
 			String birday, String school_age, String weight, String height, String head);
+
+	boolean insertDeviceHomeAndFamilyInfo(Long id, String imei, String schoolAddress, String classDisable1, String classDisable2,
+			String weekDisable1, String schoolLat, String schoolLng, String latestTime, String homeAddress, String homeLng,
+			String homeLat);
+
+	boolean updateImeiHomeAndFamilyInfoById(Long id, String classDisable1, String classDisable2, String weekDisable,
+			String schoolAddress, String schoolLat, String schoolLng, String latestTime, String homeAddress,
+			String homeLat, String homeLng);
+
+	boolean insertNewImeiCopy(Long id, String imei, String phone, int typeOfOperator, String dv);
+
+	WatchDevice getDeviceBakInfo(String imei);
 
 
 

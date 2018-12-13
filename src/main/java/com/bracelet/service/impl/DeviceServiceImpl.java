@@ -2,6 +2,7 @@ package com.bracelet.service.impl;
 
 import com.bracelet.entity.IpAddressInfo;
 import com.bracelet.entity.WatchDevice;
+import com.bracelet.entity.WatchDeviceHomeSchool;
 import com.bracelet.service.IDeviceService;
 import com.bracelet.util.Utils;
 
@@ -136,5 +137,78 @@ public class DeviceServiceImpl implements IDeviceService {
 						java.sql.Types.INTEGER });
 		return i == 1;
 	}
+
+	@Override
+	public WatchDeviceHomeSchool getDeviceHomeAndFamilyInfo(Long id) {
+		String sql = "select * from device_watch_hf_info where w_id=? LIMIT 1";
+		List<WatchDeviceHomeSchool> list = jdbcTemplate.query(sql, new Object[] { id },
+				new BeanPropertyRowMapper<WatchDeviceHomeSchool>(WatchDeviceHomeSchool.class));
+
+		if (list != null && !list.isEmpty()) {
+			return list.get(0);
+		} else {
+			logger.info("get getDeviceInfo imei:" + id);
+		}
+		return null;
+	}
+
+	@Override
+	public boolean insertDeviceHomeAndFamilyInfo(Long id, String imei, String schoolAddress, String classDisable1,
+			String classDisable2, String weekDisable1, String schoolLat, String schoolLng, String latestTime,
+			String homeAddress, String homeLng, String homeLat) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate.update(
+				"insert into device_watch_hf_info (w_id, imei, createtime, updatetime, schoolAddress, classDisable1, classDisable2, weekDisable1, schoolLat, schoolLng, latestTime, homeAddress, homeLng, homeLat) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+				new Object[] { id, imei, now, now, schoolAddress, classDisable1, classDisable2, weekDisable1, schoolLat, schoolLng, latestTime, homeAddress, homeLng, homeLat },
+				new int[] { java.sql.Types.INTEGER, java.sql.Types.VARCHAR, java.sql.Types.TIMESTAMP, java.sql.Types.TIMESTAMP,
+						java.sql.Types.VARCHAR, java.sql.Types.VARCHAR,
+						java.sql.Types.VARCHAR, java.sql.Types.VARCHAR,
+						java.sql.Types.VARCHAR, java.sql.Types.VARCHAR,
+						java.sql.Types.VARCHAR, java.sql.Types.VARCHAR,
+						java.sql.Types.VARCHAR, java.sql.Types.VARCHAR });
+		return i == 1;
+	}
+
+	@Override
+	public boolean updateImeiHomeAndFamilyInfoById(Long id, String classDisable1, String classDisable2,
+			String weekDisable, String schoolAddress, String schoolLat, String schoolLng, String latestTime,
+			String homeAddress, String homeLat, String homeLng) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate.update(
+				"update device_watch_hf_info set updatetime=?, schoolAddress=?, classDisable1=?, classDisable2=?, weekDisable1=?, schoolLat=?, schoolLng=?, latestTime=?, homeAddress=?, homeLng=?, homeLat=? where w_id = ?",
+				new Object[] { now, schoolAddress, classDisable1, classDisable2, weekDisable, schoolLat, schoolLng, latestTime, homeAddress, homeLng, homeLat, id},
+				new int[] { Types.TIMESTAMP, 
+						Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,
+						Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,
+						Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,
+						java.sql.Types.INTEGER });
+		return i == 1;
+	}
+
+	@Override
+	public boolean insertNewImeiCopy(Long id, String imei, String phone, int typeOfOperator, String dv) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate.update(
+				"insert into device_watch_bak_info (d_id, imei, phone, nickname, dv, createtime, updatetime,type) values (?,?,?,?,?,?,?,?)",
+				new Object[] { id, imei, phone, imei, dv, now, now,typeOfOperator },
+				new int[] { java.sql.Types.INTEGER, java.sql.Types.VARCHAR, java.sql.Types.VARCHAR, java.sql.Types.VARCHAR,
+						java.sql.Types.VARCHAR, java.sql.Types.TIMESTAMP, java.sql.Types.TIMESTAMP, java.sql.Types.INTEGER });
+		return i == 1;
+	}
+
+	@Override
+	public WatchDevice getDeviceBakInfo(String imei) {
+		String sql = "select * from device_watch_info where imei=? LIMIT 1";
+		List<WatchDevice> list = jdbcTemplate.query(sql, new Object[] { imei },
+				new BeanPropertyRowMapper<WatchDevice>(WatchDevice.class));
+
+		if (list != null && !list.isEmpty()) {
+			return list.get(0);
+		} else {
+			logger.info("get getDeviceInfo imei:" + imei);
+		}
+		return null;
+	}
+	
 
 }

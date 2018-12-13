@@ -106,12 +106,15 @@ public class SecurityController extends BaseController {
 		String token = jsonObject.getString("token");
 
 		String imei = jsonObject.getString("imei");
-		String name = jsonObject.getString("name");// 围栏名称
+		String name = jsonObject.getString("fenceName");// 围栏名称
 		String lat = jsonObject.getString("lat");
 		String lng = jsonObject.getString("lng");
 		String radius = jsonObject.getString("radius");
-		//Integer entry = jsonObject.getInteger("entry");
-		//Integer exit = jsonObject.getInteger("exit");
+		
+		//String entry = jsonObject.getString("entry");
+	//	String exit = jsonObject.getString("exit");
+		//String enable = jsonObject.getString("enable");
+		
 
 		String userId = checkTokenWatchAndUser(token);
 		if ("0".equals(userId)) {
@@ -142,11 +145,16 @@ public class SecurityController extends BaseController {
 			return bb.toString();
 		}
 		String imei = jsonObject.getString("imei");
-		String name = jsonObject.getString("name");// 围栏名称
+		String name = jsonObject.getString("fenceName");// 围栏名称
 		String lat = jsonObject.getString("lat");
 		String lng = jsonObject.getString("lng");
 		String radius = jsonObject.getString("radius");
 		Long id = Long.valueOf(jsonObject.getString("id"));
+		
+		//String entry = jsonObject.getString("entry");
+		//String exit = jsonObject.getString("exit");
+		//String enable = jsonObject.getString("enable");
+		
 		if (this.fenceService.updateWatchFence(id, imei, name, lat, lng, radius)) {
 			bb.put("Code", 1);
 		} else {

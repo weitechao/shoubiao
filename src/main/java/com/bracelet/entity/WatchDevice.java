@@ -15,10 +15,15 @@ public class WatchDevice {
     private String birday;
     private String school_age;
     private String school_info;
-    private String home_info;
     private String weight;
     private String height;
     private String head;
+    private String home_info;
+   
+    
+    private Long d_id;
+    
+    
     
 	public Long getId() {
 		return id;
@@ -115,6 +120,12 @@ public class WatchDevice {
 	}
 	public void setHead(String head) {
 		this.head = head;
+	}
+	public Long getD_id() {
+		return d_id;
+	}
+	public void setD_id(Long d_id) {
+		this.d_id = d_id;
 	}
 	
 }

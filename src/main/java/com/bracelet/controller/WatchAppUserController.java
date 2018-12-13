@@ -144,8 +144,8 @@ public class WatchAppUserController extends BaseController {
 		String oldPassword = jsonObject.getString("oldpwd");
 		UserInfo userInfo = userInfoService.getUserInfoByUsername(tel);
 		if (userInfo != null) {
-			if(userInfo.getPassword().equals(password)){
-				userInfoService.updateUserPassword(userInfo.getUser_id(), oldPassword);
+			if(userInfo.getPassword().equals(oldPassword)){
+				userInfoService.updateUserPassword(userInfo.getUser_id(), password);
 				bb.put("Code", 1);
 			}else{
 				bb.put("Code", -1);

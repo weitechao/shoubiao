@@ -52,7 +52,7 @@ public class Tk2Service extends AbstractBizService {
 		// 发送语音格式[YW*YYYYYYYYYY*NNNN*LEN*TK,来源,文件名字,当前包,总分包数,ARM格式二进制音频数据]
 		SocketLoginDto socketLoginDtoto = ChannelMap.getChannel(receiver);
 		String noo = Utils.randomString(5);
-		if (socketLoginDtoto == null || socketLoginDtoto.getChannel() == null) {
+	/*	if (socketLoginDtoto == null || socketLoginDtoto.getChannel() == null) {
 			watchtkService.insertVoiceInfo(imei, receiver, sourceName, voiceContent, 0, noo, thisNumber, allNumber);
 			return "[YW*" + imei + "*0001*0005*TK2,1]";
 		}
@@ -63,7 +63,7 @@ public class Tk2Service extends AbstractBizService {
 			watchtkService.insertVoiceInfo(imei, receiver, sourceName, voiceContent, 1, noo, thisNumber, allNumber);
 		} else {
 			watchtkService.insertVoiceInfo(imei, receiver, sourceName, voiceContent, 0, noo, thisNumber, allNumber);
-		}
+		}*/
 		return "[YW*" + imei + "*0001*0005*TK2,1]";
 	}
 

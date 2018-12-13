@@ -176,9 +176,9 @@ public class FenceServiceImpl implements IFenceService {
 	public boolean updateWatchFence(Long id, String imei, String name, String lat, String lng, String radius) {
 		Timestamp now = Utils.getCurrentTimestamp();
 		int i = jdbcTemplate.update(
-				"update watch_fence set name = ?, lat = ?, lng = ?, radius = ?, updatetime = ? where id = ? and imei = ?",
-				new Object[] { name, lat, lng, radius, now, id, imei },
-				new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.TIMESTAMP, Types.INTEGER, Types.VARCHAR });
+				"update watch_fence set name = ?, lat = ?, lng = ?, radius = ?, updatetime = ? where id = ? ",
+				new Object[] { name, lat, lng, radius, now, id },
+				new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.TIMESTAMP, Types.INTEGER});
 		return i == 1;
 	}
 

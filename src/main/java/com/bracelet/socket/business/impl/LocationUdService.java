@@ -28,8 +28,9 @@ public class LocationUdService extends AbstractBizService {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired
 	ILocationService locationService;
-	@Autowired
-	IVoltageService voltageService;
+	/*
+	 * @Autowired IVoltageService voltageService;
+	 */
 	private static final String GPS_URL = "http://restapi.amap.com/v3/assistant/coordinate/convert";
 
 	@Override
@@ -62,7 +63,7 @@ public class LocationUdService extends AbstractBizService {
 	}
 
 	public void chuliLocationInfo(String imei, String info, String no, Integer locationStyle) {
-		String city="深圳市";
+		String city = "深圳市";
 
 		logger.info("imei=" + imei + ",info=" + info + ",no=" + no);
 		String[] infoshuzu = info.split(",");
@@ -108,7 +109,8 @@ public class LocationUdService extends AbstractBizService {
 						ChannelMap.addlocation(imei, watchlastlocation);
 					}
 				}
-				voltageService.insertDianLiang(imei, Integer.valueOf(energy));
+				// voltageService.insertDianLiang(imei,
+				// Integer.valueOf(energy));
 			} else {
 				logger.info("GPS定位失败=" + lat + "," + lng);
 			}
@@ -156,26 +158,32 @@ public class LocationUdService extends AbstractBizService {
 							String lat1 = arr[1];
 							String lon = arr[0];
 
-							WatchLatestLocation oldWatchLocation = ChannelMap.getlocation(imei);
-							if (oldWatchLocation != null) {
-								if (oldWatchLocation.getLocationType() == 2) {
-									if (((oldWatchLocation.getTimestamp() - new Date().getTime()) / (60 * 1000)) >= 3) {
-										locationService.insertUdInfo(imei, 2, lat1, lon, status, time, locationStyle);
-									} else {
-										double calcDistance = Utils.calcDistance(
-												Double.valueOf(oldWatchLocation.getLng()),
-												Double.valueOf(oldWatchLocation.getLat()), Double.valueOf(lon),
-												Double.valueOf(lat1));
-										if (calcDistance > 550) {
+							if (locationStyle == 2) {
+								locationService.insertUdInfo(imei, 2, lat1, lon, status, time, locationStyle);
+							} else {
+								WatchLatestLocation oldWatchLocation = ChannelMap.getlocation(imei);
+								if (oldWatchLocation != null) {
+									if (oldWatchLocation.getLocationType() == 2) {
+										if (((oldWatchLocation.getTimestamp() - new Date().getTime())
+												/ (60 * 1000)) >= 3) {
 											locationService.insertUdInfo(imei, 2, lat1, lon, status, time,
 													locationStyle);
+										} else {
+											double calcDistance = Utils.calcDistance(
+													Double.valueOf(oldWatchLocation.getLng()),
+													Double.valueOf(oldWatchLocation.getLat()), Double.valueOf(lon),
+													Double.valueOf(lat1));
+											if (calcDistance > 550) {
+												locationService.insertUdInfo(imei, 2, lat1, lon, status, time,
+														locationStyle);
+											}
 										}
+									} else {
+										locationService.insertUdInfo(imei, 2, lat1, lon, status, time, locationStyle);
 									}
 								} else {
 									locationService.insertUdInfo(imei, 2, lat1, lon, status, time, locationStyle);
 								}
-							} else {
-								locationService.insertUdInfo(imei, 2, lat1, lon, status, time, locationStyle);
 							}
 
 							WatchLatestLocation watchlastlocation = new WatchLatestLocation();
@@ -225,31 +233,37 @@ public class LocationUdService extends AbstractBizService {
 								String lat1 = arr[1];
 								String lon = arr[0];
 
-								WatchLatestLocation oldWatchLocation = ChannelMap.getlocation(imei);
+								if (locationStyle == 2) {
 
-								if (oldWatchLocation != null) {
-									if (oldWatchLocation.getLocationType() == 3) {
-										if (((oldWatchLocation.getTimestamp() - new Date().getTime())
-												/ (60 * 1000)) >= 3) {
-											locationService.insertUdInfo(imei, 3, lat1, lon, status, time,
-													locationStyle);
-										} else {
-											double calcDistance = Utils.calcDistance(
-													Double.valueOf(oldWatchLocation.getLng()),
-													Double.valueOf(oldWatchLocation.getLat()), Double.valueOf(lon),
-													Double.valueOf(lat1));
-											if (calcDistance > 550) {
+									locationService.insertUdInfo(imei, 3, lat1, lon, status, time, locationStyle);
+								} else {
+
+									WatchLatestLocation oldWatchLocation = ChannelMap.getlocation(imei);
+
+									if (oldWatchLocation != null) {
+										if (oldWatchLocation.getLocationType() == 3) {
+											if (((oldWatchLocation.getTimestamp() - new Date().getTime())
+													/ (60 * 1000)) >= 3) {
 												locationService.insertUdInfo(imei, 3, lat1, lon, status, time,
 														locationStyle);
+											} else {
+												double calcDistance = Utils.calcDistance(
+														Double.valueOf(oldWatchLocation.getLng()),
+														Double.valueOf(oldWatchLocation.getLat()), Double.valueOf(lon),
+														Double.valueOf(lat1));
+												if (calcDistance > 550) {
+													locationService.insertUdInfo(imei, 3, lat1, lon, status, time,
+															locationStyle);
+												}
 											}
+										} else {
+											locationService.insertUdInfo(imei, 3, lat1, lon, status, time,
+													locationStyle);
 										}
 									} else {
 										locationService.insertUdInfo(imei, 3, lat1, lon, status, time, locationStyle);
 									}
-								} else {
-									locationService.insertUdInfo(imei, 3, lat1, lon, status, time, locationStyle);
 								}
-
 								WatchLatestLocation watchlastlocation = new WatchLatestLocation();
 								watchlastlocation.setImei(imei);
 								watchlastlocation.setLat(lat1);

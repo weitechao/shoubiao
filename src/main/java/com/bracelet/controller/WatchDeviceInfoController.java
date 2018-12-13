@@ -10,6 +10,7 @@ import com.bracelet.entity.OddShape;
 import com.bracelet.entity.SensitivePoint;
 import com.bracelet.entity.SensitivePointLog;
 import com.bracelet.entity.WatchDevice;
+import com.bracelet.entity.WatchDeviceHomeSchool;
 import com.bracelet.entity.WatchPhoneBook;
 import com.bracelet.exception.BizException;
 import com.bracelet.service.IDeviceService;
@@ -63,21 +64,62 @@ public class WatchDeviceInfoController extends BaseController {
 
 		if (watch != null) {
 			bb.put("id", watch.getId());
-			bb.put("phone", watch.getPhone() + "");
-			bb.put("nickname", watch.getNickname() + "");
-			bb.put("createtime", watch.getCreatetime().getTime());
+		/*	bb.put("phone", watch.getPhone() + "");
 			bb.put("updatetime", watch.getUpdatetime().getTime());
 			bb.put("dv", watch.getDv() + "");
 			bb.put("type", watch.getType() + "");
 			bb.put("sex", watch.getSex() + "");
 			bb.put("birday", watch.getBirday() + "");
-			bb.put("schoolAge", watch.getSchool_age() + "");
-			bb.put("schoolInfo", watch.getSchool_info() + "");
-			bb.put("homeInfo", watch.getHome_info() + "");
 			bb.put("weight", watch.getWeight() + "");
-			bb.put("height", watch.getHeight() + "");
+			bb.put("height", watch.getHeight() + "");*/
 			bb.put("head", watch.getHead() + "");
+			
 			bb.put("Code", 1);
+			bb.put("ActiveDate",  "");
+			bb.put("BabyName",  watch.getNickname()+"");
+			bb.put("BindNumber",  "");
+			bb.put("CreateTime",  watch.getCreatetime().getTime());
+			bb.put("CurrentFirmware",  "");
+			bb.put("SetVersionNO",  1);
+			bb.put("ContactVersionNO",  1);
+			bb.put("OperatorType",  1);
+			bb.put("SmsNumber",  "10086");
+			bb.put("SmsBalanceKey",  101);
+			bb.put("DeviceID",  watch.getId());
+			bb.put("UserId",  "");
+			bb.put("DeviceModelID",  "");
+			bb.put("Firmware",  "");
+			bb.put("Gender",  0);
+			bb.put("Grade",  0);
+			bb.put("HireExpireDate",  "");
+			bb.put("HireStartDate",  "");
+			bb.put("IsGuard",  "");
+			bb.put("Password",  "");
+			bb.put("PhoneNumber",  "");
+			bb.put("Photo",  "");
+			
+			bb.put("SchoolAddress",  "");
+			bb.put("SchoolLat",  "");
+			bb.put("SchoolLng",  "");
+			bb.put("SerialNumber",  imei);
+			bb.put("UpdateTime",  "");
+			bb.put("LatestTime",  "");
+			bb.put("HomeAddress", "");
+			bb.put("HomeLat",  "");
+			bb.put("HomeLng",  "");
+			
+			WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfo(watch.getId());
+			if( whsc != null){
+				bb.put("SchoolAddress",  whsc.getSchoolAddress());
+				bb.put("SchoolLat",  whsc.getSchoolLat());
+				bb.put("SchoolLng",  whsc.getSchoolLng());
+				bb.put("UpdateTime",  whsc.getUpdatetime().getTime());
+				bb.put("LatestTime",  whsc.getLatestTime());
+				bb.put("HomeAddress",  whsc.getHomeAddress());
+				bb.put("HomeLat",  whsc.getHomeLat());
+				bb.put("HomeLng",  whsc.getHomeLng());
+			}
+			
 		} else {
 
 			if (this.ideviceService.insertDeviceImeiInfo(imei, "", "", 1, "", "", "", "", "", "", "")) {
@@ -97,7 +139,47 @@ public class WatchDeviceInfoController extends BaseController {
 				bb.put("weight", watchh.getWeight() + "");
 				bb.put("height", watchh.getHeight() + "");
 				bb.put("head", watchh.getHead() + "");
+				
+				WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfo(watchh.getId());
+				if(whsc == null){
+					ideviceService.insertDeviceHomeAndFamilyInfo(watchh.getId(),imei, "", "", "", "", "", "", "", "", "", "");
+				}
 				bb.put("Code", 1);
+				
+				
+				bb.put("ActiveDate",  "");
+				bb.put("BabyName",  watchh.getNickname()+"");
+				bb.put("BindNumber",  "");
+				bb.put("CreateTime",  watchh.getCreatetime().getTime());
+				bb.put("CurrentFirmware",  "");
+				bb.put("SetVersionNO",  1);
+				bb.put("ContactVersionNO",  1);
+				bb.put("OperatorType",  1);
+				bb.put("SmsNumber",  "10086");
+				bb.put("SmsBalanceKey",  101);
+				bb.put("DeviceID",  watchh.getId());
+				bb.put("UserId",  "");
+				bb.put("DeviceModelID",  "");
+				bb.put("Firmware",  "");
+				bb.put("Gender",  0);
+				bb.put("Grade",  0);
+				bb.put("HireExpireDate",  "");
+				bb.put("HireStartDate",  "");
+				bb.put("IsGuard",  "");
+				bb.put("Password",  "");
+				bb.put("PhoneNumber",  "");
+				bb.put("Photo",  "");
+				
+				bb.put("SchoolAddress",  "");
+				bb.put("SchoolLat",  "");
+				bb.put("SchoolLng",  "");
+				bb.put("SerialNumber",  imei);
+				bb.put("UpdateTime",  "");
+				bb.put("LatestTime",  "");
+				bb.put("HomeAddress", "");
+				bb.put("HomeLat",  "");
+				bb.put("HomeLng",  "");
+				
 			} else {
 				bb.put("Code", 0);
 			}
@@ -180,10 +262,33 @@ public class WatchDeviceInfoController extends BaseController {
 
 		Long id = jsonObject.getLong("id");
 
-		String school_info = jsonObject.getString("school_info");
-		String home_info = jsonObject.getString("home_info");
+		/*
+		 * 学校信息参数：
+		 * 时间
+		 * classDisable1，
+		 * classDisable2，
+		 * weekDisable 位置
+		 * schoolAddress，
+		 * schoolLat，
+		 * schoolLng家庭信息参数：时间
+		 * latestTime位置
+		 * homeAddress，
+		 * homeLat，
+		 * homeLng
+		 * */
+		String classDisable1 = jsonObject.getString("classDisable1");
+		String classDisable2 = jsonObject.getString("classDisable2");
+		String weekDisable = jsonObject.getString("weekDisable");
+		String schoolAddress = jsonObject.getString("schoolAddress");
+		String schoolLat = jsonObject.getString("schoolLat");
+		String schoolLng = jsonObject.getString("schoolLng");
+		
+		String latestTime = jsonObject.getString("latestTime");
+		String homeAddress = jsonObject.getString("homeAddress");
+		String homeLat = jsonObject.getString("homeLat");
+		String homeLng = jsonObject.getString("homeLng");
 
-		if (this.ideviceService.updateImeiHomeAndFamilyInfo(id, school_info, home_info)) {
+		if (this.ideviceService.updateImeiHomeAndFamilyInfoById(id, classDisable1, classDisable2,weekDisable,schoolAddress,schoolLat,schoolLng,latestTime,homeAddress,homeLat,homeLng)) {
 			bb.put("Code", 1);
 		} else {
 			bb.put("Code", 0);

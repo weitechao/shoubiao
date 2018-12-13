@@ -111,7 +111,7 @@ public class LocationController extends BaseController {
 			
 			JSONArray jsonArray1 = new JSONArray();
 			jsonArray1.add(dataMap1);
-			bb.put("DeviceState", jsonArray);
+			bb.put("DeviceState", jsonArray1);
 			
 		} else {
 			LocationWatch locationWatch = locationService.getLatest(imei);
@@ -173,7 +173,7 @@ public class LocationController extends BaseController {
 				
 				JSONArray jsonArray1 = new JSONArray();
 				jsonArray1.add(dataMap1);
-				bb.put("DeviceState", jsonArray);
+				bb.put("DeviceState", jsonArray1);
 				
 			} else {
 				bb.put("Code", 0);

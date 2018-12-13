@@ -36,8 +36,9 @@ public class BaseController {
 		}*/
 		Long user_id = tokenInfoService.getUserIdByToken(token);
 		if (user_id != null) {
-			logger.info("[checkTokenAndUser] 通过token检查userid不存在，token:" + token);
 			reponse=user_id+"";
+		}else{
+			logger.info("[checkTokenAndUser] 通过token检查userid不存在，token:" + token);
 		}
 		return reponse;
 	}

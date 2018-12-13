@@ -34,4 +34,7 @@ public interface ILocationService {
 
 	List<LocationWatch> getWatchFootprint(String imei, String starttime, String endtime);
 
+	boolean insertUdPhotoInfo(String imei, Integer locationType, String lat,
+			String lon, String status, String time,Integer locationStyle, String photoName);
+
 }

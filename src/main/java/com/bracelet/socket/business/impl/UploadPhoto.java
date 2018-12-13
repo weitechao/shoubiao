@@ -114,7 +114,7 @@ public class UploadPhoto extends AbstractBizService {
 			logger.info("设备拍照返回数据=" + sb.toString());
 			return sb.toString();
 		}else{
-			chuliLocationInfo(imei, info, no, locationStyle);
+			chuliLocationInfo(imei, info, no, locationStyle,photoName);
 			String resp = "TPCF," + photoName + "," + thisNumber + "," + allNumber + ",1";
 			StringBuffer sb = new StringBuffer("[YW*" + imei + "*0002*");
 			sb.append(RadixUtil.changeRadix(resp));
@@ -129,7 +129,7 @@ public class UploadPhoto extends AbstractBizService {
 		//iUploadPhotoService.insert(imei, photoName, source, thisNumber, allNumber);
 	}
 	
-	public void chuliLocationInfo(String imei, String info, String no, Integer locationStyle) {
+	public void chuliLocationInfo(String imei, String info, String no, Integer locationStyle,String photoName) {
 
 		logger.info("imei=" + imei + ",info=" + info + ",no=" + no);
 		String[] infoshuzu = info.split(",");
@@ -163,8 +163,8 @@ public class UploadPhoto extends AbstractBizService {
 					locations = locations.split(";")[0];
 					String[] locationsArr = locations.split(",");
 					if (locationsArr.length == 2) {
-						locationService.insertUdInfo(imei, 1, locationsArr[1], locationsArr[0], status, time,
-								locationStyle);
+						locationService.insertUdPhotoInfo(imei, 1, locationsArr[1], locationsArr[0], status, time,
+								locationStyle,photoName);
 
 						WatchLatestLocation watchlastlocation = new WatchLatestLocation();
 						watchlastlocation.setImei(imei);
@@ -222,8 +222,9 @@ public class UploadPhoto extends AbstractBizService {
 						if (arr.length == 2) {
 							String lat1 = arr[1];
 							String lon = arr[0];
-
-							WatchLatestLocation oldWatchLocation = ChannelMap.getlocation(imei);
+							locationService.insertUdPhotoInfo(imei, 2, lat1, lon, status, time, locationStyle,photoName);
+							
+							/*WatchLatestLocation oldWatchLocation = ChannelMap.getlocation(imei);
 							if (oldWatchLocation != null) {
 								if (oldWatchLocation.getLocationType() == 2) {
 									if (((oldWatchLocation.getTimestamp() - new Date().getTime()) / (60 * 1000)) >= 3) {
@@ -243,7 +244,7 @@ public class UploadPhoto extends AbstractBizService {
 								}
 							} else {
 								locationService.insertUdInfo(imei, 2, lat1, lon, status, time, locationStyle);
-							}
+							}*/
 
 							WatchLatestLocation watchlastlocation = new WatchLatestLocation();
 							watchlastlocation.setImei(imei);
@@ -292,7 +293,7 @@ public class UploadPhoto extends AbstractBizService {
 								String lat1 = arr[1];
 								String lon = arr[0];
 
-								WatchLatestLocation oldWatchLocation = ChannelMap.getlocation(imei);
+							/*	WatchLatestLocation oldWatchLocation = ChannelMap.getlocation(imei);
 
 								if (oldWatchLocation != null) {
 									if (oldWatchLocation.getLocationType() == 3) {
@@ -315,8 +316,10 @@ public class UploadPhoto extends AbstractBizService {
 									}
 								} else {
 									locationService.insertUdInfo(imei, 3, lat1, lon, status, time, locationStyle);
-								}
-
+								}*/
+								
+								locationService.insertUdPhotoInfo(imei, 3, lat1, lon, status, time, locationStyle,photoName);
+								
 								WatchLatestLocation watchlastlocation = new WatchLatestLocation();
 								watchlastlocation.setImei(imei);
 								watchlastlocation.setLat(lat1);

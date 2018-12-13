@@ -165,4 +165,17 @@ public class LocationServiceImpl implements ILocationService {
 						LocationWatch.class));
 		return list;
 	}
+
+	@Override
+	public boolean insertUdPhotoInfo(String imei, Integer locationType, String lat,
+			String lon, String status, String time,Integer locationStyle, String photoName) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		
+		int i = jdbcTemplate
+				.update("insert into  photo_location_watchinfo  (imei, location_type, lat, lng, status, location_time, upload_time, location_style,photo_name) values (?,?,?,?,?,?,?,?,?)",
+						new Object[] { imei, locationType ,lat, lon, status, time, now,  locationStyle, photoName}, new int[] {
+								Types.VARCHAR, Types.INTEGER, Types.VARCHAR,Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
+								Types.TIMESTAMP, Types.INTEGER, Types.VARCHAR });
+		return i == 1;
+	}
 }

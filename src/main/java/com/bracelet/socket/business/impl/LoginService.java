@@ -63,26 +63,43 @@ public class LoginService implements IService {
 		int TypeOfOperator = Integer.valueOf(infoshuzu[2]);// 运营商类型:1表示移动2表示联通、3表示电信,0xFF表示其他
 		String dv = infoshuzu[3];// 设备固件版本
 
-		WatchDevice watchd = ideviceService.getDeviceInfo(imei);
+		WatchDevice watchd = ideviceService.getDeviceBakInfo(imei);
 		if(watchd != null){
+			SocketLoginDto channelDto = new SocketLoginDto();
+			channelDto.setChannel(channel);
+			channelDto.setNo(no);
+			channelDto.setImei(imei);
+			channelDto.setPhone(phone);
+			channelDto.setUser_id(watchd.getD_id());
+
+			logger.info("保存手表登录信息,no:" + no + ",imei" + imei);
+			ChannelMap.addChannel(imei, channelDto);
+			ChannelMap.addChannel(channel, channelDto);
+			
 			//ideviceService.updateImeiInfo(watchd.getId(), phone, TypeOfOperator, dv);
 		}else{
 			ideviceService.insertNewImei(imei, phone, TypeOfOperator, dv);
+			WatchDevice watchCopy = ideviceService.getDeviceInfo(imei);
+			if(watchCopy != null){
+				ideviceService.insertNewImeiCopy(watchCopy.getId(), imei, phone, TypeOfOperator, dv);
+				
+				SocketLoginDto channelDto = new SocketLoginDto();
+				channelDto.setChannel(channel);
+				channelDto.setNo(no);
+				channelDto.setImei(imei);
+				channelDto.setPhone(phone);
+				channelDto.setUser_id(watchCopy.getId());
+
+				logger.info("保存手表登录信息,no:" + no + ",imei" + imei);
+				ChannelMap.addChannel(imei, channelDto);
+				ChannelMap.addChannel(channel, channelDto);
+			}
 		}
 		
 
 		logger.info("设备初始化登录dv:" + dv + "," + ",no:" + no + ",imei:" + imei);
 
-		SocketLoginDto channelDto = new SocketLoginDto();
-		channelDto.setChannel(channel);
-		channelDto.setNo(no);
-		channelDto.setImei(imei);
-		channelDto.setPhone(phone);
-		channelDto.setUser_id(watchd.getId());
-
-		logger.info("保存手表登录信息,no:" + no + ",imei" + imei);
-		ChannelMap.addChannel(imei, channelDto);
-		ChannelMap.addChannel(channel, channelDto);
+	
 		
 		/*LocationWatch locationWatch = locationService.getLatest(imei);
 		if(locationWatch != null){
