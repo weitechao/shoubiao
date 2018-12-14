@@ -1,7 +1,9 @@
 package com.bracelet.service.impl;
 
+import com.bracelet.datasource.DataSourceChange;
 import com.bracelet.entity.IpAddressInfo;
 import com.bracelet.entity.WatchDevice;
+import com.bracelet.entity.WatchDeviceBak;
 import com.bracelet.entity.WatchDeviceHomeSchool;
 import com.bracelet.service.IDeviceService;
 import com.bracelet.util.Utils;
@@ -24,6 +26,7 @@ public class DeviceServiceImpl implements IDeviceService {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Override
+	@DataSourceChange(slave = true)
 	public WatchDevice getDeviceInfo(String addimei) {
 		String sql = "select * from device_watch_info where imei=? LIMIT 1";
 		List<WatchDevice> list = jdbcTemplate.query(sql, new Object[] { addimei },
@@ -38,6 +41,7 @@ public class DeviceServiceImpl implements IDeviceService {
 	}
 
 	@Override
+	@DataSourceChange(slave = true)
 	public List<IpAddressInfo> getipinfo() {
 		String sql = "select * from ip_info where status=1  LIMIT 5";
 		List<IpAddressInfo> list = jdbcTemplate.query(sql, new Object[] {},
@@ -59,9 +63,10 @@ public class DeviceServiceImpl implements IDeviceService {
 		Timestamp now = Utils.getCurrentTimestamp();
 		int i = jdbcTemplate.update(
 				"insert into device_watch_info (imei, phone, nickname, dv, createtime, updatetime,type) values (?,?,?,?,?,?,?)",
-				new Object[] { imei, phone, imei, dv, now, now,typeOfOperator },
+				new Object[] { imei, phone, imei, dv, now, now, typeOfOperator },
 				new int[] { java.sql.Types.VARCHAR, java.sql.Types.VARCHAR, java.sql.Types.VARCHAR,
-						java.sql.Types.VARCHAR, java.sql.Types.TIMESTAMP, java.sql.Types.TIMESTAMP, java.sql.Types.INTEGER });
+						java.sql.Types.VARCHAR, java.sql.Types.TIMESTAMP, java.sql.Types.TIMESTAMP,
+						java.sql.Types.INTEGER });
 		return i == 1;
 	}
 
@@ -94,22 +99,21 @@ public class DeviceServiceImpl implements IDeviceService {
 		Timestamp now = Utils.getCurrentTimestamp();
 		int i = jdbcTemplate.update(
 				"insert into device_watch_info (imei, phone, nickname, sex, birday, school_age, school_info, home_info, head, weight, height, createtime, updatetime) values (?,?,?,?,?,?,?,?,?,?,?,?,?)",
-				new Object[] { imei, phone, nickname, sex, birday, school_age, school_info, home_info, head, weight,height,now, now },
-				new int[] { java.sql.Types.VARCHAR, java.sql.Types.VARCHAR,java.sql.Types.VARCHAR,java.sql.Types.INTEGER,
-						java.sql.Types.VARCHAR,java.sql.Types.VARCHAR,java.sql.Types.VARCHAR,java.sql.Types.VARCHAR,
-						java.sql.Types.VARCHAR,java.sql.Types.VARCHAR,java.sql.Types.VARCHAR,java.sql.Types.TIMESTAMP,
-						java.sql.Types.TIMESTAMP });
+				new Object[] { imei, phone, nickname, sex, birday, school_age, school_info, home_info, head, weight,
+						height, now, now },
+				new int[] { java.sql.Types.VARCHAR, java.sql.Types.VARCHAR, java.sql.Types.VARCHAR,
+						java.sql.Types.INTEGER, java.sql.Types.VARCHAR, java.sql.Types.VARCHAR, java.sql.Types.VARCHAR,
+						java.sql.Types.VARCHAR, java.sql.Types.VARCHAR, java.sql.Types.VARCHAR, java.sql.Types.VARCHAR,
+						java.sql.Types.TIMESTAMP, java.sql.Types.TIMESTAMP });
 		return i == 1;
 	}
 
 	@Override
 	public boolean updateImeiHeadInfo(Long id, String head) {
 		Timestamp now = Utils.getCurrentTimestamp();
-		int i = jdbcTemplate.update(
-				"update device_watch_info set  head=? , updatetime=? where id = ?",
-				new Object[] {  head, now, id },
-				new int[] { Types.VARCHAR, java.sql.Types.TIMESTAMP,
-						java.sql.Types.INTEGER });
+		int i = jdbcTemplate.update("update device_watch_info set  head=? , updatetime=? where id = ?",
+				new Object[] { head, now, id },
+				new int[] { Types.VARCHAR, java.sql.Types.TIMESTAMP, java.sql.Types.INTEGER });
 		return i == 1;
 	}
 
@@ -118,9 +122,8 @@ public class DeviceServiceImpl implements IDeviceService {
 		Timestamp now = Utils.getCurrentTimestamp();
 		int i = jdbcTemplate.update(
 				"update device_watch_info set  school_info=?, home_info=? updatetime=? where id = ?",
-				new Object[] {  school_info, home_info, now, id },
-				new int[] { Types.VARCHAR, Types.VARCHAR, java.sql.Types.TIMESTAMP,
-						java.sql.Types.INTEGER });
+				new Object[] { school_info, home_info, now, id },
+				new int[] { Types.VARCHAR, Types.VARCHAR, java.sql.Types.TIMESTAMP, java.sql.Types.INTEGER });
 		return i == 1;
 	}
 
@@ -128,17 +131,17 @@ public class DeviceServiceImpl implements IDeviceService {
 	public boolean updateImeiNotHomeAndFamilyInfo(Long id, String imei, String phone, String nickname, Integer sex,
 			String birday, String school_age, String weight, String height, String head) {
 		Timestamp now = Utils.getCurrentTimestamp();
-		int i = jdbcTemplate.update(
-				"update device_watch_info set phone=? ,nickname=?,sex=?,birday=?, school_age=?, weight=?, height=?, head=? , updatetime=? where id = ?",
-				new Object[] { phone, nickname, sex, birday, school_age, weight, height, head,
-						now, id },
-				new int[] { Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
-						Types.VARCHAR, Types.VARCHAR, java.sql.Types.TIMESTAMP,
-						java.sql.Types.INTEGER });
+		int i = jdbcTemplate
+				.update("update device_watch_info set phone=? ,nickname=?,sex=?,birday=?, school_age=?, weight=?, height=?, head=? , updatetime=? where id = ?",
+						new Object[] { phone, nickname, sex, birday, school_age, weight, height, head, now, id },
+						new int[] { Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.VARCHAR, Types.VARCHAR,
+								Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, java.sql.Types.TIMESTAMP,
+								java.sql.Types.INTEGER });
 		return i == 1;
 	}
 
 	@Override
+	@DataSourceChange(slave = true)
 	public WatchDeviceHomeSchool getDeviceHomeAndFamilyInfo(Long id) {
 		String sql = "select * from device_watch_hf_info where w_id=? LIMIT 1";
 		List<WatchDeviceHomeSchool> list = jdbcTemplate.query(sql, new Object[] { id },
@@ -159,13 +162,13 @@ public class DeviceServiceImpl implements IDeviceService {
 		Timestamp now = Utils.getCurrentTimestamp();
 		int i = jdbcTemplate.update(
 				"insert into device_watch_hf_info (w_id, imei, createtime, updatetime, schoolAddress, classDisable1, classDisable2, weekDisable1, schoolLat, schoolLng, latestTime, homeAddress, homeLng, homeLat) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-				new Object[] { id, imei, now, now, schoolAddress, classDisable1, classDisable2, weekDisable1, schoolLat, schoolLng, latestTime, homeAddress, homeLng, homeLat },
-				new int[] { java.sql.Types.INTEGER, java.sql.Types.VARCHAR, java.sql.Types.TIMESTAMP, java.sql.Types.TIMESTAMP,
-						java.sql.Types.VARCHAR, java.sql.Types.VARCHAR,
-						java.sql.Types.VARCHAR, java.sql.Types.VARCHAR,
-						java.sql.Types.VARCHAR, java.sql.Types.VARCHAR,
-						java.sql.Types.VARCHAR, java.sql.Types.VARCHAR,
-						java.sql.Types.VARCHAR, java.sql.Types.VARCHAR });
+				new Object[] { id, imei, now, now, schoolAddress, classDisable1, classDisable2, weekDisable1, schoolLat,
+						schoolLng, latestTime, homeAddress, homeLng, homeLat },
+				new int[] { java.sql.Types.INTEGER, java.sql.Types.VARCHAR, java.sql.Types.TIMESTAMP,
+						java.sql.Types.TIMESTAMP, java.sql.Types.VARCHAR, java.sql.Types.VARCHAR,
+						java.sql.Types.VARCHAR, java.sql.Types.VARCHAR, java.sql.Types.VARCHAR, java.sql.Types.VARCHAR,
+						java.sql.Types.VARCHAR, java.sql.Types.VARCHAR, java.sql.Types.VARCHAR,
+						java.sql.Types.VARCHAR });
 		return i == 1;
 	}
 
@@ -176,31 +179,39 @@ public class DeviceServiceImpl implements IDeviceService {
 		Timestamp now = Utils.getCurrentTimestamp();
 		int i = jdbcTemplate.update(
 				"update device_watch_hf_info set updatetime=?, schoolAddress=?, classDisable1=?, classDisable2=?, weekDisable1=?, schoolLat=?, schoolLng=?, latestTime=?, homeAddress=?, homeLng=?, homeLat=? where w_id = ?",
-				new Object[] { now, schoolAddress, classDisable1, classDisable2, weekDisable, schoolLat, schoolLng, latestTime, homeAddress, homeLng, homeLat, id},
-				new int[] { Types.TIMESTAMP, 
-						Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,
-						Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,
-						Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,
+				new Object[] { now, schoolAddress, classDisable1, classDisable2, weekDisable, schoolLat, schoolLng,
+						latestTime, homeAddress, homeLng, homeLat, id },
+				new int[] { Types.TIMESTAMP, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
+						Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
 						java.sql.Types.INTEGER });
 		return i == 1;
 	}
 
 	@Override
-	public boolean insertNewImeiCopy(Long id, String imei, String phone, int typeOfOperator, String dv) {
+	public boolean insertNewImeiBak(Long id, String imei) {
 		Timestamp now = Utils.getCurrentTimestamp();
-		int i = jdbcTemplate.update(
-				"insert into device_watch_bak_info (d_id, imei, phone, nickname, dv, createtime, updatetime,type) values (?,?,?,?,?,?,?,?)",
-				new Object[] { id, imei, phone, imei, dv, now, now,typeOfOperator },
-				new int[] { java.sql.Types.INTEGER, java.sql.Types.VARCHAR, java.sql.Types.VARCHAR, java.sql.Types.VARCHAR,
-						java.sql.Types.VARCHAR, java.sql.Types.TIMESTAMP, java.sql.Types.TIMESTAMP, java.sql.Types.INTEGER });
+		int i = jdbcTemplate.update("insert into device_watch_bak_info (d_id, imei, createtime) values (?,?,?)",
+				new Object[] { id, imei, now },
+				new int[] { java.sql.Types.INTEGER, java.sql.Types.VARCHAR, java.sql.Types.TIMESTAMP });
 		return i == 1;
 	}
 
 	@Override
-	public WatchDevice getDeviceBakInfo(String imei) {
-		String sql = "select * from device_watch_bak_info where imei=? LIMIT 1";
-		List<WatchDevice> list = jdbcTemplate.query(sql, new Object[] { imei },
-				new BeanPropertyRowMapper<WatchDevice>(WatchDevice.class));
+	public boolean updateImeiNumberById(Long id, String familyNumber, String shortNumber) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate.update(
+				"update device_watch_info set  short_number=?, family_number=? updatetime=? where id = ?",
+				new Object[] { shortNumber, familyNumber, now, id },
+				new int[] { Types.VARCHAR, Types.VARCHAR, java.sql.Types.TIMESTAMP, java.sql.Types.INTEGER });
+		return i == 1;
+	}
+
+	@Override
+	@DataSourceChange(slave = true)
+	public WatchDeviceBak getDeviceBakInfo(String imei) {
+		String sql = "select id, d_id, imei ,createtime   from device_watch_bak_info where imei=? LIMIT 1";
+		List<WatchDeviceBak> list = jdbcTemplate.query(sql, new Object[] { imei },
+				new BeanPropertyRowMapper<WatchDeviceBak>(WatchDeviceBak.class));
 
 		if (list != null && !list.isEmpty()) {
 			return list.get(0);
@@ -211,15 +222,41 @@ public class DeviceServiceImpl implements IDeviceService {
 	}
 
 	@Override
-	public boolean updateImeiNumberById(Long id, String familyNumber, String shortNumber) {
+	public boolean updateImeiHeadInfoByImei(String imei, String head) {
 		Timestamp now = Utils.getCurrentTimestamp();
-		int i = jdbcTemplate.update(
-				"update device_watch_info set  short_number=?, family_number=? updatetime=? where id = ?",
-				new Object[] {  shortNumber, familyNumber, now, id },
-				new int[] { Types.VARCHAR, Types.VARCHAR, java.sql.Types.TIMESTAMP,
-						java.sql.Types.INTEGER });
+		int i = jdbcTemplate.update("update device_watch_info set  head=? , updatetime=? where imei = ?",
+				new Object[] { head, now, imei },
+				new int[] { Types.VARCHAR, java.sql.Types.TIMESTAMP, java.sql.Types.VARCHAR });
 		return i == 1;
 	}
-	
 
+	@Override
+	public boolean updateWatchImeiInfoByImei(String imei, String phone, String nickname, Integer sex, String birday,
+			String school_age, String weight, String height, String familyNumber, String shortNumber) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate.update(
+				"update device_watch_info set phone=? ,nickname=?, sex=?, birday=?, school_age=?, weight=?, height=?, short_number=?, family_number=? , updatetime=? where imei = ?",
+				new Object[] { phone, nickname, sex, birday, school_age,
+						weight, height, shortNumber,familyNumber,now,
+						imei },
+				new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, 
+						Types.VARCHAR,Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, 
+						java.sql.Types.TIMESTAMP ,Types.VARCHAR});
+		return i == 1;
+	}
+
+	@Override
+	public WatchDeviceHomeSchool getDeviceHomeAndFamilyInfoByImei(String imei) {
+		String sql = "select * from device_watch_hf_info where imei=? LIMIT 1";
+		List<WatchDeviceHomeSchool> list = jdbcTemplate.query(sql, new Object[] { imei },
+				new BeanPropertyRowMapper<WatchDeviceHomeSchool>(WatchDeviceHomeSchool.class));
+
+		if (list != null && !list.isEmpty()) {
+			return list.get(0);
+		} else {
+			logger.info("get getDeviceHomeAndFamilyInfoByImei imei:" + imei);
+		}
+		return null;
+	}
+	
 }

@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import com.bracelet.datasource.DataSourceChange;
 import com.bracelet.entity.DownLoadFileInfo;
 import com.bracelet.entity.InsertFriend;
 import com.bracelet.entity.Sys;
@@ -36,6 +37,7 @@ public class UploadPhotoServiceImpl implements IUploadPhotoService{
 	}
 
 	@Override
+	@DataSourceChange(slave = true)
 	public List<DownLoadFileInfo> getphotoInfo(String imei,Integer status) {
 		String sql = "select * from watch_upload_photo where imei=? and status = ? order by id desc ";
 		List<DownLoadFileInfo> list = jdbcTemplate
@@ -56,6 +58,7 @@ public class UploadPhotoServiceImpl implements IUploadPhotoService{
 	}
 
 	@Override
+	@DataSourceChange(slave = true)
 	public WatchUploadPhotoInfo getByPhotoNameAndImei(String imei,
 			String photoName) {
 		String sql = "select * from watch_upload_photo where imei=? and photo_name=? order by id desc LIMIT 1";

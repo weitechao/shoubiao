@@ -1,5 +1,6 @@
 package com.bracelet.service.impl;
 
+import com.bracelet.datasource.DataSourceChange;
 import com.bracelet.entity.Fence;
 import com.bracelet.entity.OddShape;
 import com.bracelet.entity.UserInfo;
@@ -33,6 +34,7 @@ public class FenceServiceImpl implements IFenceService {
 	IFencelogService fencelogService;
 
 	@Override
+	@DataSourceChange(slave = true)
 	public Fence getOne(Long user_id) {
 		String sql = "select * from fence where user_id=? LIMIT 1";
 		List<Fence> list = jdbcTemplate.query(sql, new Object[] { user_id }, new BeanPropertyRowMapper<Fence>(Fence.class));
@@ -136,6 +138,7 @@ public class FenceServiceImpl implements IFenceService {
 	}
 
 	@Override
+	@DataSourceChange(slave = true)
 	public OddShape getOddShape(Long user_id) {
 		String sql = "select * from odd_shape where user_id=? LIMIT 1";
 		List<OddShape> list = jdbcTemplate.query(sql, new Object[] { user_id }, new BeanPropertyRowMapper<OddShape>(OddShape.class));
@@ -191,6 +194,7 @@ public class FenceServiceImpl implements IFenceService {
 	}
 
 	@Override
+	@DataSourceChange(slave = true)
 	public Fence getWatchOne(String imei) {
 		String sql = "select * from watch_fence where imei=? LIMIT 1";
 		List<Fence> list = jdbcTemplate.query(sql, new Object[] { imei }, new BeanPropertyRowMapper<Fence>(Fence.class));
@@ -204,6 +208,7 @@ public class FenceServiceImpl implements IFenceService {
 	}
 
 	@Override
+	@DataSourceChange(slave = true)
 	public List<Fence> getWatchFenceList(String imei) {
 		String sql = "select * from watch_fence where imei=?";
 		List<Fence> list = jdbcTemplate.query(sql, new Object[] { imei }, new BeanPropertyRowMapper<Fence>(Fence.class));

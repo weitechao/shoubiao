@@ -16,8 +16,11 @@ import com.bracelet.dto.WatchLatestLocation;
 import com.bracelet.entity.LocationWatch;
 import com.bracelet.entity.UserInfo;
 import com.bracelet.entity.WatchDevice;
+import com.bracelet.entity.WatchDeviceBak;
 import com.bracelet.exception.BizException;
+import com.bracelet.redis.LimitCache;
 import com.bracelet.util.RespCode;
+import com.bracelet.util.Utils;
 import com.bracelet.service.IDeviceService;
 import com.bracelet.service.ILocationService;
 import com.bracelet.service.IUserInfoService;
@@ -36,6 +39,9 @@ public class LoginService implements IService {
 	IDeviceService ideviceService;
 	@Autowired
 	ILocationService locationService;
+	
+	 @Autowired
+	 LimitCache limitCache;
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -62,7 +68,7 @@ public class LoginService implements IService {
 		int TypeOfOperator = Integer.valueOf(infoshuzu[2]);// 运营商类型:1表示移动2表示联通、3表示电信,0xFF表示其他
 		String dv = infoshuzu[3];// 设备固件版本
 
-		WatchDevice watchd = ideviceService.getDeviceBakInfo(imei);
+		WatchDeviceBak watchd = ideviceService.getDeviceBakInfo(imei);
 		if (watchd != null) {
 			SocketLoginDto channelDto = new SocketLoginDto();
 			channelDto.setChannel(channel);
@@ -83,7 +89,7 @@ public class LoginService implements IService {
 				ideviceService.insertNewImei(imei, phone, TypeOfOperator, dv);
 				WatchDevice watchCopy = ideviceService.getDeviceInfo(imei);
 				if (watchCopy != null) {
-					ideviceService.insertNewImeiCopy(watchCopy.getId(), imei, phone, TypeOfOperator, dv);
+					ideviceService.insertNewImeiBak(watchCopy.getId(), imei);
 
 					SocketLoginDto channelDto = new SocketLoginDto();
 					channelDto.setChannel(channel);
@@ -97,7 +103,7 @@ public class LoginService implements IService {
 					ChannelMap.addChannel(channel, channelDto);
 				}
 			} else {
-				ideviceService.insertNewImeiCopy(watchSelect.getId(), imei, phone, TypeOfOperator, dv);
+				ideviceService.insertNewImeiBak(watchSelect.getId(), imei);
 
 				SocketLoginDto channelDto = new SocketLoginDto();
 				channelDto.setChannel(channel);
@@ -110,20 +116,8 @@ public class LoginService implements IService {
 				ChannelMap.addChannel(channel, channelDto);
 			}
 		}
-
-		logger.info("设备初始化登录dv:" + dv + ","  + ",imei:" + imei);
-
-		/*
-		 * LocationWatch locationWatch = locationService.getLatest(imei);
-		 * if(locationWatch != null){ WatchLatestLocation watchlastlocation =
-		 * new WatchLatestLocation(); watchlastlocation.setImei(imei);
-		 * watchlastlocation.setLat(locationWatch.getLat());
-		 * watchlastlocation.setLng(locationWatch.getLng());
-		 * watchlastlocation.setLocationType(locationWatch.getLocation_type());
-		 * watchlastlocation.setTimestamp(locationWatch.getUpload_time().getTime
-		 * ()); ChannelMap.addlocation(imei, watchlastlocation); }
-		 */
-
+		
+		limitCache.addKey(imei, Utils.IP+","+ Utils.PORT);
 		String resp = "[YW*" + imei + "*0001*0006*INIT,1]";
 		logger.info("返回设备登录信息=" + resp);
 		return resp;

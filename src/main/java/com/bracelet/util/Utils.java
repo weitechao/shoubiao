@@ -76,15 +76,7 @@ public class Utils {
 	public final static String SSRH_TIANQI_KEY = "7d92f6b57a23743f6939c24714731a6a";
 	public final static String SSRH_GPS_URL = "http://restapi.amap.com/v3/assistant/coordinate/convert";
 
-	public final static String VOICE_FILE_lINUX = "/usr/local/resin/resin-pro-4.0.53-8080/webapps/GXCareDevice/watchvoice/device";
-	public final static String PHOTT_FILE_lINUX = "/usr/local/resin/resin-pro-4.0.53-8080/webapps/GXCareDevice/headPhoto/appset";
-	public final static String VOICE_FILE_WINDOWS = "F:/test";
-	public final static String VOICE_URL = "http://47.92.30.81:8080/GXCareDevice/watchvoice/device/";
-
-	public final static String PHOTO_FILE_lINUX = "/usr/local/resin/resin-pro-4.0.53-8080/webapps/GXCareDevice/watchphoto/device";
-	public final static String PHOTO_URL = "http://47.92.30.81:8080/GXCareDevice/watchphoto/device/";
-
-	public final static String APP_PHOTO_UTL = "http://47.92.30.81:8080/GXCareDevice/headPhoto/appset/";
+	
 
 	public final static String METHOD_NAME = "WatchDeviceInfoController.updateBabyHead(..)";
 	public final static String METHOD_TkService = "com.bracelet.socket.business.impl.TkService";
@@ -93,7 +85,22 @@ public class Utils {
 
 	public static final String GPS_URL = "http://restapi.amap.com/v3/assistant/coordinate/convert";
 
-	public static final String IP_PORT_URL = "http://47.92.183.190/shoubiao/slb/getiport/1";
+	public static final String IP_PORT_URL = "http://47.92.183.190/shoubiao/slb/getiport/1";//这个是负载均衡的ip 使用了80代理  8088  这个不用修改
+	public final static String VOICE_FILE_WINDOWS = "F:/test";
+	
+	/*更换服务器部署一定要修改这两个参数*/
+	public static final String IP = "47.92.30.81";
+	public static final String PORT = "7780";
+	
+	//LINUX voice上传地址和URL
+	public final static String VOICE_FILE_lINUX = "/usr/local/resin/resin-pro-4.0.53-8080/webapps/GXCareDevice/watchvoice/device";
+	public final static String VOICE_URL = "http://47.92.30.81:8080/GXCareDevice/watchvoice/device/";
+	//LINUX 设备上传图片 和URL
+	public final static String PHOTO_FILE_lINUX = "/usr/local/resin/resin-pro-4.0.53-8080/webapps/GXCareDevice/watchphoto/device";
+	public final static String PHOTO_URL = "http://47.92.30.81:8080/GXCareDevice/watchphoto/device/";
+	// app头像图片地址和url
+	public final static String APP_PHOTO_UTL = "http://47.92.30.81:8080/GXCareDevice/headPhoto/appset/";
+	public final static String PHOTT_FILE_lINUX = "/usr/local/resin/resin-pro-4.0.53-8080/webapps/GXCareDevice/headPhoto/appset";
 
 	public static String randomString(int len) {
 		if (len <= 0) {

@@ -1,5 +1,6 @@
 package com.bracelet.service.impl;
 
+import com.bracelet.datasource.DataSourceChange;
 import com.bracelet.entity.TokenInfo;
 import com.bracelet.service.ITokenInfoService;
 import com.bracelet.util.Utils;
@@ -49,6 +50,7 @@ public class TokenInfoServiceImpl implements ITokenInfoService {
 	}
 
 	@Override
+	@DataSourceChange(slave = true)
 	public String genToken(Long userId) {
 		long timestamp = new Date().getTime();
 		int randomCode = Utils.randomInt(10, 10000);

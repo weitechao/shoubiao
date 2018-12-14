@@ -58,10 +58,8 @@ public class GetIpService implements IService {
 			add.append(responseJsonString);
 			limitCache.addKey(imei,responseJsonString);
 		}else{
-			add.append("47.92.30.81");
-			add.append(",");
-			add.append(7780);
-			limitCache.addKey(imei,"47.92.30.81,7780");
+			add.append(Utils.IP+","+ Utils.PORT);
+			limitCache.addKey(imei, Utils.IP+","+ Utils.PORT);
 		}
 		sb.append(RadixUtil.changeRadix(add.toString()));
 		sb.append("*");

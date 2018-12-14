@@ -170,25 +170,31 @@ public class WatchAppPhoneBookController extends BaseController {
 
 		List<WatchPhoneBook> watchbookList = memberService.getPhoneBookByImei(imei);
 
+		JSONArray jsonArray = new JSONArray();
 		if (watchbookList.size() > 0 && watchbookList != null) {
-			JSONArray jsonArray = new JSONArray();
 			for (WatchPhoneBook location : watchbookList) {
 				JSONObject dataMap = new JSONObject();
-				dataMap.put("id", location.getId());
-				dataMap.put("cornet", location.getCornet());
+				dataMap.put("DeviceContactId", location.getId());
+				dataMap.put("PhoneShort", location.getCornet()+"");
 				dataMap.put("headtype", location.getHeadtype());
 				dataMap.put("imei", location.getImei());
 				dataMap.put("phone", location.getPhone());
-				dataMap.put("name", location.getName());
+				dataMap.put("Relationship", location.getName());
 				dataMap.put("timestamp", location.getCreatetime().getTime());
+				dataMap.put("ObjectId", 0);
+				dataMap.put("Photo","");
+				dataMap.put("PhoneNumber",location.getCornet()+"");
+				dataMap.put("Type",1);
+				dataMap.put("HeadImg",1);
+				
 				jsonArray.add(dataMap);
 			}
 
 			bb.put("Code", 1);
-			bb.put("result", jsonArray);
 		} else {
 			bb.put("Code", 0);
 		}
+		bb.put("ContactArr", jsonArray);
 
 		return bb.toString();
 	}

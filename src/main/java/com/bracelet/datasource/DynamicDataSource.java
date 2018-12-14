@@ -20,6 +20,7 @@ import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
  */
 public class DynamicDataSource extends AbstractRoutingDataSource{
     private static final Logger LOGGER = LoggerFactory.getLogger(DynamicDataSource.class);
+    //private Logger logger = LoggerFactory.getLogger(getClass());
 
     private DataSource master; // 主库，只允许有一个
     private List<DataSource> slaves; // 从库，允许有多个

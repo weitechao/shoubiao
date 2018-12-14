@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.List;
 
+import com.bracelet.datasource.DataSourceChange;
 import com.bracelet.entity.DownLoadFileInfo;
 import com.bracelet.entity.WatchFriend;
 import com.bracelet.service.WatchFriendService;
@@ -36,6 +37,7 @@ public class WatchFriendServiceImpl implements WatchFriendService {
 	}
 
 	@Override
+	@DataSourceChange(slave = true)
 	public List<WatchFriend> getFriendByImei(String imei) {
 		String sql = "select * from watch_friend_info where imei=? ";
 		List<WatchFriend> list = jdbcTemplate.query(sql, new Object[] { imei },

@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import com.bracelet.datasource.DataSourceChange;
 import com.bracelet.entity.Location;
 import com.bracelet.entity.LocationOld;
 import com.bracelet.entity.LocationWatch;
@@ -25,7 +26,8 @@ public class LocationServiceImpl implements ILocationService {
 
 	@Autowired
 	JdbcTemplate jdbcTemplate;
-
+	
+	@DataSourceChange(slave = true)
 	public List<Location> getFootprint(Long user_id, String type) {
 		Calendar calendar = Calendar.getInstance();
 		if ("2".equals(type)) {
@@ -42,7 +44,7 @@ public class LocationServiceImpl implements ILocationService {
 				Location.class));
 		return list;
 	}
-
+	@DataSourceChange(slave = true)
 	public Location getLatest(Long user_id) {
 		String sql = "select * from location where user_id=? order by upload_time desc LIMIT 1";
 		List<Location> list = jdbcTemplate.query(sql, new Object[] { user_id },
@@ -55,7 +57,7 @@ public class LocationServiceImpl implements ILocationService {
 		}
 		return null;
 	}
-
+	@DataSourceChange(slave = true)
 	public Location getRealtimeLocation(Long user_id, Integer status) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.SECOND, -15);
@@ -98,6 +100,7 @@ public class LocationServiceImpl implements ILocationService {
 	}
 
 	@Override
+	@DataSourceChange(slave = true)
 	public LocationOld getOldLocationLatest(String phone) {
 		String sql = "select * from location_old where phone=? order by id desc LIMIT 1";
 		List<LocationOld> list = jdbcTemplate.query(sql,
@@ -113,6 +116,7 @@ public class LocationServiceImpl implements ILocationService {
 	}
 
 	@Override
+	@DataSourceChange(slave = true)
 	public List<LocationOld> getOldPhoneFootprint(String imei, String startime,
 			String endtime) {
 		String sql = "select * from location_old where phone=? and upload_time > ? and upload_time < ? order by upload_time asc";
@@ -144,6 +148,7 @@ public class LocationServiceImpl implements ILocationService {
 	}
 
 	@Override
+	@DataSourceChange(slave = true)
 	public LocationWatch getLatest(String imei) {
 		String sql = "select * from location_watchinfo where imei=? order by upload_time desc LIMIT 1";
 		List<LocationWatch> list = jdbcTemplate.query(sql, new Object[] { imei },
@@ -158,6 +163,7 @@ public class LocationServiceImpl implements ILocationService {
 	}
 
 	@Override
+	@DataSourceChange(slave = true)
 	public List<LocationWatch> getWatchFootprint(String imei, String starttime, String endtime) {
 		String sql = "select * from location_watchinfo where imei=? and upload_time > ? and upload_time < ? order by upload_time asc";
 		List<LocationWatch> list = jdbcTemplate.query(sql, new Object[] { imei,

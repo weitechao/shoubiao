@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.List;
 
+import com.bracelet.datasource.DataSourceChange;
 import com.bracelet.entity.MomentPwdInfo;
 import com.bracelet.entity.WatchDeviceSet;
 import com.bracelet.service.WatchSetService;
@@ -120,6 +121,7 @@ public class WatchSetServiceImpl implements WatchSetService {
 	}
 
 	@Override
+	@DataSourceChange(slave = true)
 	public WatchDeviceSet getDeviceSetByImei(String imei) {
 		String sql = "select * from watch_device_set where  imei=? limit 1";
 		List<WatchDeviceSet> list = jdbcTemplate.query(sql, new Object[] {

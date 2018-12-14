@@ -1,13 +1,13 @@
-ÏîÄ¿´ò°ü  mvn package Éú³Éwar°ü Ö±½Ó·ÅÔÚtomcat µÄwebapp ÏÂÔËĞĞtomcat¾Í¿ÉÒÔÁË
+é¡¹ç›®æ‰“åŒ… mvn package ç”ŸæˆwaråŒ… ç›´æ¥æ”¾åœ¨tomcat çš„webapp ä¸‹è¿è¡Œtomcatå°±å¯ä»¥äº†
 
-Èç¹ûÖ±½ÓÔÚmyeclipseÔËĞĞÖ±½Ótomcat:run
+å¦‚æœç›´æ¥åœ¨myeclipseè¿è¡Œç›´æ¥tomcat:run
 
-ÅäÖÃ¶ÁĞ´·ÖÀëĞèÒªÔÚ½Ó¿ÚÖĞµÄ·½·¨ÉÏÔö¼ÓÏÂÃæÕâ¾ä×¢½â£¬ÊµÏÖÀïÒ²Òª¼Ó
-    @DataSourceChange(slave = true)
+é…ç½®è¯»å†™åˆ†ç¦»éœ€è¦åœ¨æ¥å£ä¸­çš„æ–¹æ³•ä¸Šå¢åŠ ä¸‹é¢è¿™å¥æ³¨è§£ï¼Œå®ç°é‡Œä¹Ÿè¦åŠ  @DataSourceChange(slave = true)
 
-http://localhost:8080/bracelet-server/druid/index.html
-¿É²é¿´druidµÄÒ»Ğ©ÏêÏ¸ĞÅÏ¢  
+http://localhost:8080/bracelet-server/druid/index.html å¯æŸ¥çœ‹druidçš„ä¸€äº›è¯¦ç»†ä¿¡æ¯
 
-ÔÚ²éÑ¯µÄ·½·¨ÉÏÔö¼Ó
-@DataSourceChange(slave = true)
+åœ¨æŸ¥è¯¢çš„æ–¹æ³•ä¸Šå¢åŠ  @DataSourceChange(slave = true)
+
+
+æ›´æ¢æœåŠ¡å™¨éƒ¨ç½²ä¸€å®šè¦ä¿®æ”¹è¿™ä¸¤ä¸ªå‚æ•°
 

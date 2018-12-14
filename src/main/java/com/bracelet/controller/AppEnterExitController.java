@@ -18,20 +18,20 @@ public class AppEnterExitController extends BaseController {
 		JSONObject bb = new JSONObject();
 		String user_id = checkTokenWatchAndUser(token);
 		if ("0".equals(user_id)) {
-			bb.put("code", -1);
+			bb.put("Code", -1);
 			return bb.toString();
 		}
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
-			bb.put("code", 2);
+			bb.put("Code", 2);
 			return bb.toString();
 		}
 		if (socketLoginDto.getChannel().isActive()) {
 			String reps = "[YW*"+imei+"*0001*0004*ET,1]";
 			socketLoginDto.getChannel().writeAndFlush(reps);
-			bb.put("code", 1);
+			bb.put("Code", 1);
 		} else {
-			bb.put("code", 0);
+			bb.put("Code", 0);
 		}
 		return bb.toString();
 	}
@@ -43,20 +43,20 @@ public class AppEnterExitController extends BaseController {
 
 		String user_id = checkTokenWatchAndUser(token);
 		if ("0".equals(user_id)) {
-			bb.put("code", -1);
+			bb.put("Code", -1);
 			return bb.toString();
 		}
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
-			bb.put("code", 2);
+			bb.put("Code", 2);
 			return bb.toString();
 		}
 		if (socketLoginDto.getChannel().isActive()) {
 			String reps = "[YW*"+imei+"*0001*0004*ET,0]";
 			socketLoginDto.getChannel().writeAndFlush(reps);
-			bb.put("code", 1);
+			bb.put("Code", 1);
 		} else {
-			bb.put("code", 0);
+			bb.put("Code", 0);
 		}
 		return bb.toString();
 	}
@@ -68,12 +68,12 @@ public class AppEnterExitController extends BaseController {
 
 		String user_id = checkTokenWatchAndUser(token);
 		if ("0".equals(user_id)) {
-			bb.put("code", -1);
+			bb.put("Code", -1);
 			return bb.toString();
 		}
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
-			bb.put("code", 4);
+			bb.put("Code", 4);
 			return bb.toString();
 		}
 
@@ -85,9 +85,9 @@ public class AppEnterExitController extends BaseController {
 				reps = "[YW*"+imei+"*0001*0004*KB,0]";
 			}
 			socketLoginDto.getChannel().writeAndFlush(reps);
-			bb.put("code", 1);
+			bb.put("Code", 1);
 		} else {
-			bb.put("code", 0);
+			bb.put("Code", 0);
 		}
 		
 		return bb.toString();

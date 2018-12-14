@@ -2,14 +2,18 @@ package com.bracelet.service;
 
 import java.util.List;
 
+import com.bracelet.datasource.DataSourceChange;
 import com.bracelet.entity.IpAddressInfo;
 import com.bracelet.entity.WatchDevice;
+import com.bracelet.entity.WatchDeviceBak;
 import com.bracelet.entity.WatchDeviceHomeSchool;
 
 public interface IDeviceService {
-
+	
+	@DataSourceChange(slave = true)
 	WatchDevice getDeviceInfo(String addimei);
 	
+	@DataSourceChange(slave = true)
 	WatchDeviceHomeSchool getDeviceHomeAndFamilyInfo(Long id);
 
 	List<IpAddressInfo> getipinfo();
@@ -41,11 +45,19 @@ public interface IDeviceService {
 			String schoolAddress, String schoolLat, String schoolLng, String latestTime, String homeAddress,
 			String homeLat, String homeLng);
 
-	boolean insertNewImeiCopy(Long id, String imei, String phone, int typeOfOperator, String dv);
-
-	WatchDevice getDeviceBakInfo(String imei);
+	boolean insertNewImeiBak(Long id, String imei);
+	
+	@DataSourceChange(slave = true)
+	WatchDeviceBak getDeviceBakInfo(String imei);
 
 	boolean updateImeiNumberById(Long id, String familyNumber, String shortNumber);
+
+	boolean updateImeiHeadInfoByImei(String id, String string);
+
+	boolean updateWatchImeiInfoByImei(String imei, String phone, String nickname, Integer sex, String birday,
+			String school_age, String weight, String height, String familyNumber, String shortNumber);
+
+	WatchDeviceHomeSchool getDeviceHomeAndFamilyInfoByImei(String imei);
 
 
 
