@@ -97,6 +97,8 @@ public class UploadPhoto extends AbstractBizService {
 			}
 
 			Integer jpgL = jsonInfo.lastIndexOf(".jpg");
+			logger.info(".jpg的位置="+jpgL);
+			
 			if(jpgL  == -1){
 				String resp = "TPCF," + photoName + "," + thisNumber + "," + allNumber + ",0";
 				StringBuffer sb = new StringBuffer("[YW*" + imei + "*0002*");
@@ -109,11 +111,12 @@ public class UploadPhoto extends AbstractBizService {
 			}
 			
 			
-			jpgL+=10;
+			
+			logger.info("jpgL加10后数字为="+jpgL);
 			
 			byte[] vocieByte = ChannelMap.getByte(channel.remoteAddress() + "_byte");
 
-			byte[] voiceSubByte = Utils.subByte(vocieByte, jpgL, vocieByte.length - jpgL);
+			byte[] voiceSubByte = Utils.subByte(vocieByte, jpgL+10, vocieByte.length - jpgL-10);
 
 			Utils.createFileContent(Utils.PHOTO_FILE_lINUX, photoName, voiceSubByte);
 			
@@ -132,7 +135,7 @@ public class UploadPhoto extends AbstractBizService {
 			logger.info("设备拍照返回数据=" + sb.toString());
 			return sb.toString();
 		}else{
-			chuliLocationInfo(imei, info, no, locationStyle,photoName);
+			chuliLocationInfo(imei, info, no, locationStyle,imei+"_"+photoName);
 			String resp = "TPCF," + photoName + "," + thisNumber + "," + allNumber + ",1";
 			StringBuffer sb = new StringBuffer("[YW*" + imei + "*0002*");
 			sb.append(RadixUtil.changeRadix(resp));

@@ -58,9 +58,10 @@ public class HttpDataAspect {
 			}
 		}
 		long time = System.currentTimeMillis() - startTime;
-		resp = JSON.toJSONString(result);
+		//resp = JSON.toJSONString(result);
+		resp=result+"";
 		//logger.info("[HTTP] process info: [name:" + name + "][reqParams:" + reqParams + "][resp:" + resp + "][rstatus:" + rstatus + "][rmsg:" + rmsg + "][time:" + time + "]");
-		if(Utils.METHOD_NAME.equals(name)){
+		if(name.equals(Utils.METHOD_NAME)){ 
 			apilogService.insert(name, "head", resp, "", rstatus, rmsg, time);
 		}else{
 			if(!Utils.METHOD_SLBTEST.equals(name)){

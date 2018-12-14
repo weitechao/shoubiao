@@ -73,7 +73,7 @@ public class BaseChannelHandler extends SimpleChannelInboundHandler<String> {
 				String cmd = Utils.hexStringToString(hexString.substring(60, 64));
 				
 				if (len + 30 - receiveMsgBytes.length == 0) {
-					if ("TK".equals(cmd) || "TPBK".equals(cmd)) {
+					if ("TK".equals(cmd) || "TP".equals(cmd)) {
 						//需要使用原始byte去write file
 						ChannelMap.addbyte(ctx.channel().remoteAddress() + "_byte", receiveMsgBytes);
 					}

@@ -87,6 +87,8 @@ public class Utils {
 	public final static String APP_PHOTO_UTL = "http://47.92.30.81:8080/GXCareDevice/headPhoto/appset/";
 
 	public final static String METHOD_NAME = "WatchDeviceInfoController.updateBabyHead(..)";
+	public final static String METHOD_TkService = "com.bracelet.socket.business.impl.TkService";
+	public final static String METHOD_UploadPhoto = "com.bracelet.socket.business.impl.UploadPhoto";
 	public final static String METHOD_SLBTEST = "PosController.testslb(..)";
 
 	public static final String GPS_URL = "http://restapi.amap.com/v3/assistant/coordinate/convert";
