@@ -31,7 +31,6 @@ public class LocationUdService extends AbstractBizService {
 	/*
 	 * @Autowired IVoltageService voltageService;
 	 */
-	private static final String GPS_URL = "http://restapi.amap.com/v3/assistant/coordinate/convert";
 
 	@Override
 	protected SocketBaseDto process1(SocketLoginDto socketLoginDto, JSONObject jsonObject, Channel channel) {
@@ -83,7 +82,7 @@ public class LocationUdService extends AbstractBizService {
 					+ ",energy=" + energy);
 
 			if (!"0.000000".equals(lat) && !"0.000000".equals(lng)) {
-				String url = GPS_URL + "?key=" + Utils.SSRH_TIANQI_KEY + "&coordsys=gps&locations=" + lng + "," + lat;
+				String url = Utils.GPS_URL + "?key=" + Utils.SSRH_TIANQI_KEY + "&coordsys=gps&locations=" + lng + "," + lat;
 				// http://restapi.amap.com/v3/assistant/coordinate/convert?key=c6a272fdecf96b343c31719d6b8cb0be&coordsys=gps&locations=114.0231567,22.5351085
 				logger.info("[LocationService]请求高德GPS位置转换,URL:" + url);
 				String responseJsonString = HttpClientGet.get(url);

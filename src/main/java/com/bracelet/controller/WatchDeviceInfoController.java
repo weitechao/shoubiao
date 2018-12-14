@@ -98,6 +98,7 @@ public class WatchDeviceInfoController extends BaseController {
 			bb.put("IsGuard",  "");
 			bb.put("Password",  "");
 			bb.put("PhoneNumber",  "");
+			bb.put("PhoneCornet",  watch.getShort_number()+","+watch.getFamily_number());
 			bb.put("Photo",  "");
 			
 			bb.put("SchoolAddress",  "");
@@ -170,6 +171,7 @@ public class WatchDeviceInfoController extends BaseController {
 				bb.put("IsGuard",  "");
 				bb.put("Password",  "");
 				bb.put("PhoneNumber",  "");
+				bb.put("PhoneCornet",  watchh.getShort_number()+","+watchh.getFamily_number());
 				bb.put("Photo",  "");
 				
 				bb.put("SchoolAddress",  "");
@@ -301,6 +303,36 @@ public class WatchDeviceInfoController extends BaseController {
 			bb.put("Code", 0);
 		}
 
+		return bb.toString();
+	}
+	
+	
+	
+	/* 修改短号和亲情号*/
+	@ResponseBody
+	@RequestMapping(value = "/updateCornet", method = RequestMethod.POST)
+	public String updateBabyCornet(@RequestBody String body) {
+		JSONObject bb = new JSONObject();
+		JSONObject jsonObject = (JSONObject) JSON.parse(body);
+		String token = jsonObject.getString("token");
+
+		String userId = checkTokenWatchAndUser(token);
+		if ("0".equals(userId)) {
+			bb.put("Code", -1);
+			return bb.toString();
+		}
+
+		Long id = jsonObject.getLong("id");
+		String familyNumber = jsonObject.getString("familyNumber");
+		String shortNumber = jsonObject.getString("shortNumber");
+        
+     
+        
+		if (this.ideviceService.updateImeiNumberById(id, familyNumber, shortNumber)) {
+			bb.put("Code", 1);
+		} else {
+			bb.put("Code", 0);
+		}
 		return bb.toString();
 	}
 

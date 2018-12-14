@@ -4,6 +4,7 @@ import java.util.List;
 
 import io.netty.channel.Channel;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import com.bracelet.service.ILocationService;
 import com.bracelet.service.IVoltageService;
 import com.bracelet.service.IinsertFriendService;
 import com.bracelet.socket.business.IService;
+import com.bracelet.util.HttpClientGet;
 import com.bracelet.util.RadixUtil;
 import com.bracelet.util.Utils;
 
@@ -43,43 +45,30 @@ public class GetIpService implements IService {
 		logger.info("imei=" + imei + ",info=" + info + ",no=" + no);
 		//List<IpAddressInfo> list = ideviceService.getipinfo();
 		//int count = list.size();
-		Integer im = Integer.valueOf(imei.substring(imei.length()-3, imei.length()));
-		im = im % 3;
 		StringBuffer sb = new StringBuffer("[YW*" + imei + "*0001*");//0002*
         StringBuffer add=new StringBuffer("IPREQ,");
 		add.append(1);
 		add.append(",");
-		String ip = null;
-		String port = null;
-		
-		if(im == 0){
-			ip = "47.92.30.81";
-			port = "7780";
-			add.append(ip);
+		String responseJsonString = HttpClientGet.get(Utils.IP_PORT_URL);
+		/*
+		 * 分配逻辑
+		 * 先通过请求slb 80 端口  slb 自己去获取到后端业务的一个ip和端口返回
+		 * */
+		if (!StringUtils.isEmpty(responseJsonString)) {
+			add.append(responseJsonString);
+			limitCache.addKey(imei,responseJsonString);
+		}else{
+			add.append("47.92.30.81");
 			add.append(",");
-			add.append(port);
-		}else if(im == 1){
-			ip = "47.92.30.81";
-			port = "7780";
-			add.append(ip);
-			add.append(",");
-			add.append(port);
-		}else if(im == 2){
-			ip = "47.92.30.81";
-			port = "7780";
-			add.append(ip);
-			add.append(",");
-			add.append(port);
+			add.append(7780);
+			limitCache.addKey(imei,"47.92.30.81,7780");
 		}
-		
 		sb.append(RadixUtil.changeRadix(add.toString()));
 		sb.append("*");
 		sb.append(add.toString());
 		sb.append("]");
 		logger.info("获取服务器ip端口返回"+sb.toString());
-		String ipt =  ip+":"+port;
-		logger.info(imei+"计算imei最后三位="+im+"|分配的ip port="+ipt);
-		limitCache.addKey(imei,ipt);
+	
 		return sb.toString();
 	}
     @Override

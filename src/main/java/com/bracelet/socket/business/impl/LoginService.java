@@ -54,7 +54,7 @@ public class LoginService implements IService {
 
 		String[] shuzu = jsonInfo.split("\\*");
 		String imei = shuzu[1];// 设备imei
-		String no = shuzu[2];// 流水号
+		//String no = shuzu[2];// 流水号
 		String info = shuzu[4];
 
 		String[] infoshuzu = info.split(",");
@@ -66,12 +66,12 @@ public class LoginService implements IService {
 		if (watchd != null) {
 			SocketLoginDto channelDto = new SocketLoginDto();
 			channelDto.setChannel(channel);
-			channelDto.setNo(no);
+			channelDto.setNo("1");
 			channelDto.setImei(imei);
 			channelDto.setPhone(phone);
 			channelDto.setUser_id(watchd.getD_id());
 
-			logger.info("保存手表登录信息,no:" + no + ",imei" + imei + "deviceid=" + watchd.getD_id());
+			logger.info("保存手表登录信息" + ",imei" + imei + "deviceid=" + watchd.getD_id());
 			ChannelMap.addChannel(imei, channelDto);
 			ChannelMap.addChannel(channel, channelDto);
 
@@ -87,12 +87,12 @@ public class LoginService implements IService {
 
 					SocketLoginDto channelDto = new SocketLoginDto();
 					channelDto.setChannel(channel);
-					channelDto.setNo(no);
+					channelDto.setNo("1");
 					channelDto.setImei(imei);
 					channelDto.setPhone(phone);
 					channelDto.setUser_id(watchCopy.getId());
 
-					logger.info("保存手表登录信息,no:" + no + ",imei" + imei);
+					logger.info("保存手表登录信息,"+imei);
 					ChannelMap.addChannel(imei, channelDto);
 					ChannelMap.addChannel(channel, channelDto);
 				}
@@ -101,17 +101,17 @@ public class LoginService implements IService {
 
 				SocketLoginDto channelDto = new SocketLoginDto();
 				channelDto.setChannel(channel);
-				channelDto.setNo(no);
+				channelDto.setNo("1");
 				channelDto.setImei(imei);
 				channelDto.setPhone(phone);
 				channelDto.setUser_id(watchSelect.getId());
-				logger.info("保存手表登录信息,no:" + no + ",imei" + imei);
+				logger.info("保存手表登录信息"+imei);
 				ChannelMap.addChannel(imei, channelDto);
 				ChannelMap.addChannel(channel, channelDto);
 			}
 		}
 
-		logger.info("设备初始化登录dv:" + dv + "," + ",no:" + no + ",imei:" + imei);
+		logger.info("设备初始化登录dv:" + dv + ","  + ",imei:" + imei);
 
 		/*
 		 * LocationWatch locationWatch = locationService.getLatest(imei);

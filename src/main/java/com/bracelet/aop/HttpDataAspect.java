@@ -63,7 +63,9 @@ public class HttpDataAspect {
 		if(Utils.METHOD_NAME.equals(name)){
 			apilogService.insert(name, "head", resp, "", rstatus, rmsg, time);
 		}else{
-			apilogService.insert(name, reqParams, resp, "", rstatus, rmsg, time);
+			if(!Utils.METHOD_SLBTEST.equals(name)){
+				apilogService.insert(name, reqParams, resp, "", rstatus, rmsg, time);
+			}
 		}
 		return result;
 	}

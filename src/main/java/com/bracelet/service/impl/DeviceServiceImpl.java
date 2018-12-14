@@ -209,6 +209,17 @@ public class DeviceServiceImpl implements IDeviceService {
 		}
 		return null;
 	}
+
+	@Override
+	public boolean updateImeiNumberById(Long id, String familyNumber, String shortNumber) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate.update(
+				"update device_watch_info set  short_number=?, family_number=? updatetime=? where id = ?",
+				new Object[] {  shortNumber, familyNumber, now, id },
+				new int[] { Types.VARCHAR, Types.VARCHAR, java.sql.Types.TIMESTAMP,
+						java.sql.Types.INTEGER });
+		return i == 1;
+	}
 	
 
 }

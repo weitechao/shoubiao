@@ -43,28 +43,30 @@ public class HeartCheck extends AbstractBizService {
 		logger.info("链路保持="+jsonInfo);
 		String[] shuzu = jsonInfo.split("\\*");
 		String imei = shuzu[1];// 设备imei
-		String no = shuzu[2];// 流水号
+		
 		String info = shuzu[4];
 
 		String[] infoshuzu = info.split(",");
 		String energy = infoshuzu[1];
 		
 		
-		SocketLoginDto channelDto = new SocketLoginDto();
+	/*	SocketLoginDto channelDto = new SocketLoginDto();
 		channelDto.setChannel(channel);
-		channelDto.setNo(no);
+		channelDto.setNo("1");
 		channelDto.setImei(imei);
 		channelDto.setEnergy(energy);
 	
-		// channelDto.setUser_id(userInfo.getUser_id());
+	
 
 		ChannelMap.addChannel(imei, channelDto);
-		ChannelMap.addChannel(channel, channelDto);
+		ChannelMap.addChannel(channel, channelDto);*/
+		
+		ChannelMap.addEnergy(imei,energy);
 		
 		
 		//还需要保存下电量
 	//	voltageService.insertDianLiang(imei, Integer.valueOf(energy));
-		logger.info("链路保持imei:" + imei + "," + ",no:" + no + ",电量:" + energy);
+		logger.info("链路保持imei:" + imei  + ",电量:" + energy);
 	     
 		String resp = "[YW*"+imei+"*0001*0016*LK,"+Utils.getTime()+"]";
 		logger.info("心跳返回="+resp);

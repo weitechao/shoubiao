@@ -19,6 +19,8 @@ public class WatchDevice {
     private String height;
     private String head;
     private String home_info;
+    private String short_number;
+    private String family_number;
    
     
     private Long d_id;
@@ -126,6 +128,18 @@ public class WatchDevice {
 	}
 	public void setD_id(Long d_id) {
 		this.d_id = d_id;
+	}
+	public String getShort_number() {
+		return short_number;
+	}
+	public void setShort_number(String short_number) {
+		this.short_number = short_number;
+	}
+	public String getFamily_number() {
+		return family_number;
+	}
+	public void setFamily_number(String family_number) {
+		this.family_number = family_number;
 	}
 	
 }

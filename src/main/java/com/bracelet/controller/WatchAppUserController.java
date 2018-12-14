@@ -90,7 +90,7 @@ public class WatchAppUserController extends BaseController {
 				bb.put("Notification", "True");
 				bb.put("NotificationSound", "True");
 				bb.put("NotificationVibration", "True");
-				bb.put("ip", "47.92.30.81:8088");
+				bb.put("ip", "47.92.30.81,7780");
 
 				if (ipport != null && !"".equals(ipport)) {
 					bb.put("ip", ipport);
@@ -135,7 +135,7 @@ public class WatchAppUserController extends BaseController {
 			bb.put("Notification", "True");
 			bb.put("NotificationSound", "True");
 			bb.put("NotificationVibration", "True");
-			bb.put("ip", "47.92.30.81:8088");
+			bb.put("ip", "47.92.30.81,7780");
 			if (ipport != null && !"".equals(ipport)) {
 				bb.put("ip", ipport);
 			}

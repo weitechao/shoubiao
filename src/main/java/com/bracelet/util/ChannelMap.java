@@ -32,6 +32,8 @@ public class ChannelMap {
 	private static Map<String, Integer> IntegerMap = new HashMap<String, Integer>();
 
 	private static Map<String, String> contentMap = new HashMap<String, String>();
+	
+	private static Map<String, String> energyMap = new HashMap<String, String>();
 
 	/**
 	 * 
@@ -130,6 +132,15 @@ public class ChannelMap {
 		IntegerMap.remove(remoteAddress+"_len");
 		byteMap.remove(remoteAddress+"_byte");
 		contentMap.remove(remoteAddress+"_voice");
+	}
+	
+	
+	public static void addEnergy(String imei, String energy) {
+		energyMap.put(imei, energy);
+	}
+	
+	public static void getEnergy(String imei) {
+		energyMap.get(imei);
 	}
 
 }

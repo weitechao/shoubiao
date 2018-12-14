@@ -83,10 +83,15 @@ public class Utils {
 
 	public final static String PHOTO_FILE_lINUX = "/usr/local/resin/resin-pro-4.0.53-8080/webapps/GXCareDevice/watchphoto/device";
 	public final static String PHOTO_URL = "http://47.92.30.81:8080/GXCareDevice/watchphoto/device/";
-	
+
 	public final static String APP_PHOTO_UTL = "http://47.92.30.81:8080/GXCareDevice/headPhoto/appset/";
-	
+
 	public final static String METHOD_NAME = "WatchDeviceInfoController.updateBabyHead(..)";
+	public final static String METHOD_SLBTEST = "PosController.testslb(..)";
+
+	public static final String GPS_URL = "http://restapi.amap.com/v3/assistant/coordinate/convert";
+
+	public static final String IP_PORT_URL = "http://47.92.183.190/shoubiao/slb/getiport/1";
 
 	public static String randomString(int len) {
 		if (len <= 0) {
@@ -557,40 +562,37 @@ public class Utils {
 		byte b = (byte) "0123456789abcdef".indexOf(c);
 		return b;
 	}
-	
-	
-	  //System.arraycopy()方法   数组合并
-    public static byte[] byteMerger(byte[] bt1, byte[] bt2){  
-        byte[] bt3 = new byte[bt1.length+bt2.length];  
-        System.arraycopy(bt1, 0, bt3, 0, bt1.length);  
-        System.arraycopy(bt2, 0, bt3, bt1.length, bt2.length);  
-        return bt3;  
-    } 
-    
-    
-    
 
-    /**
-	 * 截取byte数组   不改变原数组
-	 * @param b 原数组
-	 * @param off 偏差值（索引）
-	 * @param length 长度
+	// System.arraycopy()方法 数组合并
+	public static byte[] byteMerger(byte[] bt1, byte[] bt2) {
+		byte[] bt3 = new byte[bt1.length + bt2.length];
+		System.arraycopy(bt1, 0, bt3, 0, bt1.length);
+		System.arraycopy(bt2, 0, bt3, bt1.length, bt2.length);
+		return bt3;
+	}
+
+	/**
+	 * 截取byte数组 不改变原数组
+	 * 
+	 * @param b
+	 *            原数组
+	 * @param off
+	 *            偏差值（索引）
+	 * @param length
+	 *            长度
 	 * @return 截取后的数组
 	 */
-	public static byte[] subByte(byte[] src, int begin, int count){
-		 byte[] bs = new byte[count];
-	        System.arraycopy(src, begin, bs, 0, count);
-	        return bs;
+	public static byte[] subByte(byte[] src, int begin, int count) {
+		byte[] bs = new byte[count];
+		System.arraycopy(src, begin, bs, 0, count);
+		return bs;
 	}
-    
-    
-    public static byte[] getRightLast(){  
-    	ByteBuf buff =	Unpooled.wrappedBuffer(new byte[] { ']'});
-    	byte[] rightLast = new byte[buff.readableBytes()];
-        return rightLast;  
-    } 
-    
-    
+
+	public static byte[] getRightLast() {
+		ByteBuf buff = Unpooled.wrappedBuffer(new byte[] { ']' });
+		byte[] rightLast = new byte[buff.readableBytes()];
+		return rightLast;
+	}
 
 	/*
 	 * int len = (hex.length() / 2); byte[] result = new byte[len]; char[] achar

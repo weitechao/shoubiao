@@ -200,5 +200,12 @@ public class PosController extends BaseController {
 		logger.info(limitCache.getRedisKeyValue(imei));
 		return limitCache.getRedisKeyValue(imei);
 	}
-
+	
+	
+	//slb  测试
+	@ResponseBody
+	@RequestMapping(value = "/testslb/{imei}", method = RequestMethod.GET ,produces="text/html;charset=UTF-8")
+	public String testslb(@PathVariable String imei) {
+		return imei;
+	}
 }

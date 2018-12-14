@@ -45,6 +45,8 @@ public interface IDeviceService {
 
 	WatchDevice getDeviceBakInfo(String imei);
 
+	boolean updateImeiNumberById(Long id, String familyNumber, String shortNumber);
+
 
 
 }
