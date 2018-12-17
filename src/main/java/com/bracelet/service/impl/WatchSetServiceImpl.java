@@ -144,6 +144,42 @@ public class WatchSetServiceImpl implements WatchSetService {
 		return i == 1;
 	}
 
+	@Override
+	public boolean updateWatchSet(Long id, String setInfo, String infoVibration, String infoVoice,
+			String phoneComeVibration, String phoneComeVoice, String watchOffAlarm, String rejectStrangers,
+			String timerSwitch, String disabledInClass, String reserveEmergencyPower, String somatosensory,
+			String reportCallLocation, String automaticAnswering, String sosMsgswitch, String flowerNumber,
+			String brightScreen, String language, String timeZone, String locationMode, String locationTime) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate
+				.update("update watch_device_set set updatetime=? ,setInfo=?, infoVibration=?, infoVoice=?, phoneComeVibration=?, phoneComeVoice=?, watchOffAlarm=?, rejectStrangers=?, timerSwitch=?, disabledInClass=?, reserveEmergencyPower=?, somatosensory=?, reportCallLocation=?, automaticAnswering=?, sosMsgswitch=?, flowerNumber=?, brightScreen=?,  language=?, timeZone=?, locationMode=?, locationTime=?  where id = ?",
+						new Object[] {  now, setInfo, infoVibration, infoVoice, phoneComeVibration,  phoneComeVoice, watchOffAlarm, rejectStrangers, timerSwitch, disabledInClass, reserveEmergencyPower, somatosensory, reportCallLocation, automaticAnswering, sosMsgswitch, flowerNumber, brightScreen, language, timeZone, locationMode, locationTime, id }, new int[] {
+								Types.TIMESTAMP, 
+								Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, 
+								Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, 
+								Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, 
+								Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, 
+								Types.INTEGER });
+		return i == 1;
+	}
+
+	@Override
+	public boolean insertWatchDeviceSet(String imei, String setInfo, String infoVibration, String infoVoice,
+			String phoneComeVibration, String phoneComeVoice, String watchOffAlarm, String rejectStrangers,
+			String timerSwitch, String disabledInClass, String reserveEmergencyPower, String somatosensory,
+			String reportCallLocation, String automaticAnswering, String sosMsgswitch, String flowerNumber,
+			String brightScreen, String language, String timeZone, String locationMode, String locationTime) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate.update("insert into watch_device_set ( imei, setInfo, infoVibration, infoVoice, phoneComeVibration, phoneComeVoice, watchOffAlarm, rejectStrangers, timerSwitch, disabledInClass, reserveEmergencyPower, somatosensory, reportCallLocation, automaticAnswering, sosMsgswitch, flowerNumber, brightScreen,  language, timeZone, locationMode, locationTime, createtime, updatetime) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+				new Object[] { imei, setInfo, infoVibration, infoVoice, phoneComeVibration,  phoneComeVoice, watchOffAlarm, rejectStrangers, timerSwitch, disabledInClass, reserveEmergencyPower, somatosensory, reportCallLocation, automaticAnswering, sosMsgswitch, flowerNumber, brightScreen, language, timeZone, locationMode, locationTime, now, now },
+				new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
+						Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
+						Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
+						Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
+						Types.VARCHAR, Types.TIMESTAMP, Types.TIMESTAMP });
+		return i == 1;
+	}
+
 	
 	
 }

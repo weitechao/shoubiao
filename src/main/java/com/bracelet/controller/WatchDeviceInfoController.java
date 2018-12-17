@@ -228,13 +228,20 @@ public class WatchDeviceInfoController extends BaseController {
 
 		// if (this.ideviceService.updateImeiNotHomeAndFamilyInfo(id, imei,
 		// phone, nickname, sex, birday, school_age, weight, height, head)) {
-		if (this.ideviceService.updateWatchImeiInfoByImei(imei, phone, nickname, sex, birday, school_age, weight,
-				height, familyNumber, shortNumber)) {
-			bb.put("Code", 1);
-		} else {
-			bb.put("Code", 0);
-		}
 
+		WatchDevice watch = ideviceService.getDeviceInfo(imei);
+		if (watch != null) {
+			if (this.ideviceService.updateWatchImeiInfoById(watch.getId(), phone, nickname, sex, birday, school_age,
+					weight, height, familyNumber, shortNumber)) {
+				bb.put("Code", 1);
+			} else {
+				bb.put("Code", 0);
+			}
+		} else {
+			ideviceService.insertDeviceImeiInfo(imei, phone, nickname, sex, birday, school_age, "", "", weight, height,
+					"");
+			bb.put("Code", 1);
+		}
 		return bb.toString();
 	}
 
@@ -252,20 +259,29 @@ public class WatchDeviceInfoController extends BaseController {
 			return bb.toString();
 		}
 
-		String id = jsonObject.getString("id");
+		String imei = jsonObject.getString("id");
 		String head = jsonObject.getString("head");
 		logger.info("头像=" + head);
 
 		byte[] headByte = Base64.decodeBase64(head);
-		String photoName = id + "_" + new Date().getTime() + ".jpg";
+		String photoName = imei + "_" + new Date().getTime() + ".jpg";
 		Utils.createFileContent(Utils.PHOTT_FILE_lINUX, photoName, headByte);
 
 		// if (this.ideviceService.updateImeiHeadInfo(id,
 		// Utils.APP_PHOTO_UTL+photoName)) {
-		if (this.ideviceService.updateImeiHeadInfoByImei(id, Utils.APP_PHOTO_UTL + photoName)) {
-			bb.put("Code", 1);
+
+		WatchDevice watch = ideviceService.getDeviceInfo(imei);
+		if (watch != null) {
+
+			if (this.ideviceService.updateImeiHeadInfoByImei(watch.getId(), Utils.APP_PHOTO_UTL + photoName)) {
+				bb.put("Code", 1);
+			} else {
+				bb.put("Code", 0);
+			}
 		} else {
-			bb.put("Code", 0);
+			ideviceService.insertDeviceImeiInfo(imei, "", "", 1, "", "", "", "", "", "", head);
+			bb.put("Code", 1);
+
 		}
 		return bb.toString();
 	}

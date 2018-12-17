@@ -52,12 +52,15 @@ public interface IDeviceService {
 
 	boolean updateImeiNumberById(Long id, String familyNumber, String shortNumber);
 
-	boolean updateImeiHeadInfoByImei(String id, String string);
+	boolean updateImeiHeadInfoByImei(Long id, String string);
 
 	boolean updateWatchImeiInfoByImei(String imei, String phone, String nickname, Integer sex, String birday,
 			String school_age, String weight, String height, String familyNumber, String shortNumber);
 
 	WatchDeviceHomeSchool getDeviceHomeAndFamilyInfoByImei(String imei);
+
+	boolean updateWatchImeiInfoById(Long id, String phone, String nickname, Integer sex, String birday,
+			String school_age, String weight, String height, String familyNumber, String shortNumber);
 
 
 

@@ -222,11 +222,11 @@ public class DeviceServiceImpl implements IDeviceService {
 	}
 
 	@Override
-	public boolean updateImeiHeadInfoByImei(String imei, String head) {
+	public boolean updateImeiHeadInfoByImei(Long id, String head) {
 		Timestamp now = Utils.getCurrentTimestamp();
-		int i = jdbcTemplate.update("update device_watch_info set  head=? , updatetime=? where imei = ?",
-				new Object[] { head, now, imei },
-				new int[] { Types.VARCHAR, java.sql.Types.TIMESTAMP, java.sql.Types.VARCHAR });
+		int i = jdbcTemplate.update("update device_watch_info set  head=? , updatetime=? where id = ?",
+				new Object[] { head, now, id },
+				new int[] { Types.VARCHAR, java.sql.Types.TIMESTAMP, java.sql.Types.INTEGER });
 		return i == 1;
 	}
 
@@ -239,7 +239,7 @@ public class DeviceServiceImpl implements IDeviceService {
 				new Object[] { phone, nickname, sex, birday, school_age,
 						weight, height, shortNumber,familyNumber,now,
 						imei },
-				new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, 
+				new int[] { Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.VARCHAR, Types.VARCHAR, 
 						Types.VARCHAR,Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, 
 						java.sql.Types.TIMESTAMP ,Types.VARCHAR});
 		return i == 1;
@@ -258,5 +258,22 @@ public class DeviceServiceImpl implements IDeviceService {
 		}
 		return null;
 	}
+
+	@Override
+	public boolean updateWatchImeiInfoById(Long id, String phone, String nickname, Integer sex, String birday,
+			String school_age, String weight, String height, String familyNumber, String shortNumber) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate.update(
+				"update device_watch_info set phone=? ,nickname=?, sex=?, birday=?, school_age=?, weight=?, height=?, short_number=?, family_number=? , updatetime=? where id = ?",
+				new Object[] { phone, nickname, sex, birday, school_age,
+						weight, height, shortNumber,familyNumber,now,
+						id },
+				new int[] { Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.VARCHAR, Types.VARCHAR, 
+						Types.VARCHAR,Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, 
+						java.sql.Types.TIMESTAMP ,Types.INTEGER});
+		return i == 1;
+	}
+
+	
 	
 }

@@ -149,32 +149,52 @@ public class WatchAppSetController extends BaseController {
 		String infoVoice = jsonObject.getString("infoVoice");//手表信息声音
 		String phoneComeVibration = jsonObject.getString("phoneComeVibration");//手表来电话震动
 		String phoneComeVoice = jsonObject.getString("phoneComeVoice");//手表来电话声音
-		String phoneComeVoice = jsonObject.getString("phoneComeVoice");//手表来电话声音
-		String sosMsgswitch = jsonObject.getString("sosMsgswitch");
+		String watchOffAlarm = jsonObject.getString("watchOffAlarm");//手表脱落报警
+		String rejectStrangers = jsonObject.getString("rejectStrangers");//拒绝陌生人来电
+		String timerSwitch = jsonObject.getString("timerSwitch");//定时开关机
+		String disabledInClass = jsonObject.getString("disabledInClass");//上课禁用
+		String reserveEmergencyPower = jsonObject.getString("reserveEmergencyPower");//预留紧急电量6
+		String somatosensory = jsonObject.getString("somatosensory");//体感接听 
+		String reportCallLocation = jsonObject.getString("reportCallLocation");//报告通话位置
+		String automaticAnswering = jsonObject.getString("automaticAnswering");//自动接听
+		String sosMsgswitch = jsonObject.getString("sosMsgswitch");//sos开关
+		String flowerNumber = jsonObject.getString("flowerNumber");//爱心奖励
+		String brightScreen = jsonObject.getString("brightScreen");//亮屏时间
+		String language = jsonObject.getString("language");//语言
+		String timeZone = jsonObject.getString("timeZone");//时区
+		String locationMode = jsonObject.getString("locationMode");//工作模式
+		String locationTime = jsonObject.getString("locationTime");//工作时长
 
 		WatchDeviceSet deviceSet = watchSetService.getDeviceSetByImei(imei);
 		if (deviceSet != null) {
-			watchSetService.updateWatchSet(deviceSet.getId(), data);
+			watchSetService.updateWatchSet(deviceSet.getId(), setInfo, infoVibration,infoVoice, phoneComeVibration, phoneComeVoice
+					,watchOffAlarm,rejectStrangers,timerSwitch,disabledInClass,reserveEmergencyPower,somatosensory
+					,reportCallLocation,automaticAnswering,sosMsgswitch,flowerNumber,brightScreen,language,timeZone
+					,locationMode,locationTime
+					);
 		} else {
-			watchSetService.insertWatchDeviceSet(imei, data);
+			watchSetService.insertWatchDeviceSet(imei, setInfo, infoVibration,infoVoice, phoneComeVibration, phoneComeVoice
+					,watchOffAlarm,rejectStrangers,timerSwitch,disabledInClass,reserveEmergencyPower,somatosensory
+					,reportCallLocation,automaticAnswering,sosMsgswitch,flowerNumber,brightScreen,language,timeZone
+					,locationMode,locationTime);
 		}
 
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
-			bb.put("Code", 2);
-			bb.put("Message", "");
+			bb.put("Code", 4);
+			//bb.put("Message", "");
 			return bb.toString();
 		}
 		if (socketLoginDto.getChannel().isActive()) {
-			String msg = "SET," + data;
+			String msg = "SET," + "1";
 			String reps = "[YW*" + imei + "*0001*" + RadixUtil.changeRadix(msg) + "*" + msg + "]";
 			socketLoginDto.getChannel().writeAndFlush(reps);
 			bb.put("Code", 1);
-			bb.put("Message", "");
+			//bb.put("Message", "");
 
 		} else {
-			bb.put("Code", 0);
-			bb.put("Message", "");
+			bb.put("Code", 2);
+			//bb.put("Message", "");
 		}
 		return bb.toString();
 	}
@@ -223,28 +243,41 @@ public class WatchAppSetController extends BaseController {
 			bb.put("SosMsgswitch", "");
 			bb.put("CreateTime", deviceSet.getCreatetime().getTime());
 			bb.put("UpdateTime", deviceSet.getUpdatetime().getTime());
-
-			/*
-			 * bb.put("ActiveDate", ""); bb.put("BabyName", "");
-			 * bb.put("BindNumber", ""); bb.put("Birthday", "");
-			 * bb.put("CreateTime", ""); bb.put("CurrentFirmware", "");
-			 * bb.put("SetVersionNO", ""); bb.put("ContactVersionNO", 0);
-			 * bb.put("OperatorType", 0); bb.put("SmsNumber", "");
-			 * bb.put("SmsBalanceKey", ""); bb.put("SmsFlowKey", "");
-			 * bb.put("DeviceID", ""); bb.put("UserId", "");
-			 * bb.put("DeviceModelID", ""); bb.put("Firmware", "");
-			 * bb.put("Gender", 0); bb.put("Grade", 0); bb.put("HireExpireDate",
-			 * ""); bb.put("HireStartDate", ""); bb.put("HomeAddress", "");
-			 * bb.put("HomeLat", ""); bb.put("HomeLng", ""); bb.put("IsGuard",
-			 * 0); bb.put("Password", ""); bb.put("PhoneCornet", "");
-			 * bb.put("PhoneNumber", ""); bb.put("Photo", "");
-			 * bb.put("SchoolAddress", ""); bb.put("SchoolLat", "");
-			 * bb.put("SchoolLng", ""); bb.put("SerialNumber", "");
-			 * bb.put("UpdateTime", ""); bb.put("LatestTime", "");
-			 */
+			
+			
+			WatchDeviceSet deviceSetInfo = watchSetService.getDeviceSetByImei(imei);
+            if(deviceSetInfo != null){
+            	bb.put("BrightScreen", deviceSetInfo.getBrightScreen()+"");
+            	bb.put("LocationMode", deviceSetInfo.getLocationMode()+"");
+    			bb.put("LocationTime", deviceSetInfo.getLocationTime()+"");
+    			bb.put("FlowerNumber", deviceSetInfo.getFlowerNumber()+"");
+    			bb.put("SosMsgswitch", deviceSetInfo.getSosMsgswitch()+"");
+            }
+		
 		} else {
 			bb.put("Code", 0);
-			bb.put("data", "");
+			bb.put("SetInfo", "1-1-1-1-0-0-0-0-1-0-1-0");
+			bb.put("ClassDisabled1", "08:00-12:00");
+			bb.put("ClassDisabled2", "14:00-17:00");
+			bb.put("WeekDisabled", "");
+			bb.put("TimerOpen", "07:00");
+			bb.put("TimerClose", "00:00");
+			bb.put("BrightScreen", "10");
+			bb.put("WeekAlarm1", "");
+			bb.put("WeekAlarm2", "");
+			bb.put("WeekAlarm3", "");
+			bb.put("Alarm1", "");
+			bb.put("Alarm2", "");
+			bb.put("Alarm3", "");
+			bb.put("LocationMode", "");
+			bb.put("LocationTime", "");
+			bb.put("FlowerNumber", "");
+			bb.put("SleepCalculate", "");
+			bb.put("StepCalculate", "");
+			bb.put("HrCalculate", "");
+			bb.put("SosMsgswitch", "");
+			bb.put("CreateTime", "");
+			bb.put("UpdateTime", "");
 		}
 		return bb.toString();
 	}

@@ -30,5 +30,17 @@ public interface WatchSetService {
 
 	boolean insertWatchDeviceSet(String imei, String data);
 
+	boolean updateWatchSet(Long id, String setInfo, String infoVibration, String infoVoice, String phoneComeVibration,
+			String phoneComeVoice, String watchOffAlarm, String rejectStrangers, String timerSwitch,
+			String disabledInClass, String reserveEmergencyPower, String somatosensory, String reportCallLocation,
+			String automaticAnswering, String sosMsgswitch, String flowerNumber, String brightScreen, String language,
+			String timeZone, String locationMode, String locationTime);
+
+	boolean insertWatchDeviceSet(String imei, String setInfo, String infoVibration, String infoVoice,
+			String phoneComeVibration, String phoneComeVoice, String watchOffAlarm, String rejectStrangers,
+			String timerSwitch, String disabledInClass, String reserveEmergencyPower, String somatosensory,
+			String reportCallLocation, String automaticAnswering, String sosMsgswitch, String flowerNumber,
+			String brightScreen, String language, String timeZone, String locationMode, String locationTime);
+
 	
 }
