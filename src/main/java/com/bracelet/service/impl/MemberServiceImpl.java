@@ -126,11 +126,12 @@ public class MemberServiceImpl implements IMemService {
 	public boolean insertPhoneBookInfo(String imei, String name, String phone, String cornet, String headType,Integer status) {
 		Timestamp now = Utils.getCurrentTimestamp();
 		int i = jdbcTemplate
-				.update("insert into watch_phonebook_info ( imei, name, phone, cornet, headType, createtime, status) values (?,?,?,?,?,?,?)",
-						new Object[] { imei, name, phone, cornet, headType, now ,status},
+				.update("insert into watch_phonebook_info ( imei, name, phone, cornet, headType, createtime, status, updatetime) values (?,?,?,?,?,?,?,?)",
+						new Object[] { imei, name, phone, cornet, headType, now ,status, now},
 						new int[] { Types.VARCHAR, Types.VARCHAR,
 								Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
-								Types.TIMESTAMP,Types.INTEGER });
+								Types.TIMESTAMP,Types.INTEGER ,
+								Types.TIMESTAMP});
 		return i == 1;
 	}
 
@@ -157,6 +158,16 @@ public class MemberServiceImpl implements IMemService {
 				.update("update watch_phonebook_info set name=?, phone=?, cornet=?,headtype=?,updatetime=? where id = ?",
 						new Object[] { name,phone,cornet,headType ,now, id }, new int[] {
 								Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.TIMESTAMP,Types.INTEGER });
+		return i == 1;
+	}
+
+	@Override
+	public boolean updatePhonebookHeadImgById(Long deviceContactId, String photoImg) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate
+				.update("update watch_phonebook_info set headImg=?,updatetime=? where id = ?",
+						new Object[] { photoImg ,now, deviceContactId }, new int[] {
+								Types.VARCHAR, Types.TIMESTAMP, Types.INTEGER });
 		return i == 1;
 	}
 

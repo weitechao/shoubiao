@@ -14,6 +14,7 @@ public class WatchPhoneBook {
 	private Integer status;
 	private Timestamp createtime;
 	private Timestamp updatetime;
+	private String headImg;
 	
 	public Integer getId() {
 		return id;
@@ -69,6 +70,12 @@ public class WatchPhoneBook {
 	}
 	public void setUpdatetime(Timestamp updatetime) {
 		this.updatetime = updatetime;
+	}
+	public String getHeadImg() {
+		return headImg;
+	}
+	public void setHeadImg(String headImg) {
+		this.headImg = headImg;
 	}
 	
 }

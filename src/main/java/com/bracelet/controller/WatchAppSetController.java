@@ -186,8 +186,16 @@ public class WatchAppSetController extends BaseController {
 			return bb.toString();
 		}
 		if (socketLoginDto.getChannel().isActive()) {
-			String msg = "SET," + "1";
+			String msg = "SET," +""+",123456,F48,"+disabledInClass+",06:05,23:00,"+brightScreen+","+language+","+timeZone+",0,123456,07:00,"+locationMode+","+locationTime
+					+","+flowerNumber;
+		/*
+		 *  [YW*YYYYYYYYYY*NNNN*LEN*SET, 手表电话号码，设置次数流水号,设置项,上课禁用时间段,定时开机时间,定时关机时间,亮屏时间,语言,时区,指示灯, 闹钟1周期,闹钟2周期,闹钟3周期,闹钟1时间,闹钟2时间,闹钟3时间,定位模式,定位时间,小红花,睡眠,计步,心率,SOS短信开关,手表宝贝名称,后续还会加设置需要保留扩展]
+
+实例:
+[YW*5678901234*0001*000A*SET,13232211111,1234,F48,08:00-11:30|14:00-16:30|12345,06:05,23:00,10,2,480,0 , 0:12345,0:0,0:0,06:30,00:00,00:00,1,60,,,,,,宝贝] 
+		 * */
 			String reps = "[YW*" + imei + "*0001*" + RadixUtil.changeRadix(msg) + "*" + msg + "]";
+			logger.info("设备参数设置="+reps);
 			socketLoginDto.getChannel().writeAndFlush(reps);
 			bb.put("Code", 1);
 			//bb.put("Message", "");
@@ -236,7 +244,7 @@ public class WatchAppSetController extends BaseController {
 			bb.put("Alarm3", "");
 			bb.put("LocationMode", "");
 			bb.put("LocationTime", "");
-			bb.put("FlowerNumber", "");
+			bb.put("FlowerNumber", 0);
 			bb.put("SleepCalculate", "");
 			bb.put("StepCalculate", "");
 			bb.put("HrCalculate", "");
@@ -250,7 +258,10 @@ public class WatchAppSetController extends BaseController {
             	bb.put("BrightScreen", deviceSetInfo.getBrightScreen()+"");
             	bb.put("LocationMode", deviceSetInfo.getLocationMode()+"");
     			bb.put("LocationTime", deviceSetInfo.getLocationTime()+"");
-    			bb.put("FlowerNumber", deviceSetInfo.getFlowerNumber()+"");
+    			if(!"".equals(deviceSetInfo.getFlowerNumber()) && deviceSetInfo.getFlowerNumber() != null){
+    				bb.put("FlowerNumber", Integer.valueOf(deviceSetInfo.getFlowerNumber()+""));
+    			}
+    			
     			bb.put("SosMsgswitch", deviceSetInfo.getSosMsgswitch()+"");
             }
 		

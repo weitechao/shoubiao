@@ -15,6 +15,6 @@ public class SlbController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "/getiport/{imei}", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
 	public String getiport(@PathVariable String imei) {
-		return Utils.IP+","+ Utils.PORT;
+		return Utils.IP+":"+ Utils.PORT_HTTP;
 	}
 }

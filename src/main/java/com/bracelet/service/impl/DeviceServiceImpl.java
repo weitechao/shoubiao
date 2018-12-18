@@ -3,6 +3,7 @@ package com.bracelet.service.impl;
 import com.bracelet.datasource.DataSourceChange;
 import com.bracelet.entity.IpAddressInfo;
 import com.bracelet.entity.WatchDevice;
+import com.bracelet.entity.WatchDeviceAlarm;
 import com.bracelet.entity.WatchDeviceBak;
 import com.bracelet.entity.WatchDeviceHomeSchool;
 import com.bracelet.service.IDeviceService;
@@ -271,6 +272,49 @@ public class DeviceServiceImpl implements IDeviceService {
 				new int[] { Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.VARCHAR, Types.VARCHAR, 
 						Types.VARCHAR,Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, 
 						java.sql.Types.TIMESTAMP ,Types.INTEGER});
+		return i == 1;
+	}
+
+	@Override
+	public WatchDeviceAlarm getDeviceAlarmInfo(String imei) {
+		String sql = "select * from device_watch_alarm_info where imei=? LIMIT 1";
+		List<WatchDeviceAlarm> list = jdbcTemplate.query(sql, new Object[] { imei },
+				new BeanPropertyRowMapper<WatchDeviceAlarm>(WatchDeviceAlarm.class));
+
+		if (list != null && !list.isEmpty()) {
+			return list.get(0);
+		} else {
+			logger.info("get getDeviceInfo imei:" + imei);
+		}
+		return null;
+	}
+
+	@Override
+	public boolean updateWatchAlarmInfoById(Long id, String weekAlarm1, String weekAlarm2, String weekAlarm3,
+			String alarm1, String alarm2, String alarm3) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate.update(
+				"update device_watch_alarm_info set weekAlarm1=? ,weekAlarm2=?, weekAlarm3=?, alarm1=?, alarm2=?, alarm3=?, updatetime=? where id = ?",
+				new Object[] { weekAlarm1, weekAlarm2, weekAlarm3, alarm1, alarm2,
+						alarm3,now,
+						id },
+				new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, 
+						Types.VARCHAR, Types.VARCHAR,Types.VARCHAR, 
+						java.sql.Types.TIMESTAMP ,Types.INTEGER});
+		return i == 1;
+	}
+
+	@Override
+	public boolean insertDeviceAlarmInfo(String imei, String weekAlarm1, String weekAlarm2, String weekAlarm3,
+			String alarm1, String alarm2, String alarm3) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate.update(
+				"insert into device_watch_alarm_info ( imei, createtime, updatetime, weekAlarm1, weekAlarm2, weekAlarm3, alarm1, alarm2, alarm3) values (?,?,?,?,?,?,?,?,?)",
+				new Object[] { imei, now, now, weekAlarm1,weekAlarm2,weekAlarm3,alarm1,alarm2,alarm3},
+				new int[] { java.sql.Types.VARCHAR, java.sql.Types.TIMESTAMP,java.sql.Types.TIMESTAMP, 
+						java.sql.Types.VARCHAR, java.sql.Types.VARCHAR,java.sql.Types.VARCHAR, 
+						java.sql.Types.VARCHAR, java.sql.Types.VARCHAR, java.sql.Types.VARCHAR,
+						 });
 		return i == 1;
 	}
 

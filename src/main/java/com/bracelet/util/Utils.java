@@ -90,7 +90,8 @@ public class Utils {
 	
 	/*更换服务器部署一定要修改这两个参数*/
 	public static final String IP = "47.92.30.81";
-	public static final String PORT = "7780";
+	public static final String PORT_TCP = "7780";
+	public static final String PORT_HTTP = "8088";
 	
 	//LINUX voice上传地址和URL
 	public final static String VOICE_FILE_lINUX = "/usr/local/resin/resin-pro-4.0.53-8080/webapps/GXCareDevice/watchvoice/device";
@@ -101,6 +102,9 @@ public class Utils {
 	// app头像图片地址和url
 	public final static String APP_PHOTO_UTL = "http://47.92.30.81:8080/GXCareDevice/headPhoto/appset/";
 	public final static String PHOTT_FILE_lINUX = "/usr/local/resin/resin-pro-4.0.53-8080/webapps/GXCareDevice/headPhoto/appset";
+	//通讯录头像
+	public final static String PHONEBook_PHOTO_UTL = "http://47.92.30.81:8080/GXCareDevice/headImg/";
+	public final static String PHONEBook_FILE_lINUX = "/usr/local/resin/resin-pro-4.0.53-8080/webapps/GXCareDevice/headImg";
 
 	public static String randomString(int len) {
 		if (len <= 0) {

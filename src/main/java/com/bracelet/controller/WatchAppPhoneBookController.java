@@ -29,6 +29,7 @@ import com.bracelet.util.RanomUtil;
 import com.bracelet.util.RespCode;
 import com.bracelet.util.Utils;
 
+import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -88,6 +90,9 @@ public class WatchAppPhoneBookController extends BaseController {
 		}*/
 		if (phoneBook == null) {
 			memberService.insertPhoneBookInfo(imei, name, phone, cornet, headType, 1);
+			bb.put("DeviceContactId", memberService.getPhoneBookByImeiAndPhone(imei, phone).getId());
+		}else{
+			bb.put("DeviceContactId", phoneBook.getId());
 		}
 
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
@@ -148,10 +153,13 @@ public class WatchAppPhoneBookController extends BaseController {
 			sb.append("*");
 			sb.append(msg);
 			sb.append("]");
+			logger.info("设备通讯录增加更新="+sb.toString());
 			socketLoginDto.getChannel().writeAndFlush(sb.toString());
 			bb.put("Code", 1);
+			bb.put("Message", "通讯录添加成功");
 		} else {
 			bb.put("Code", 2);
+			bb.put("Message", "");
 		}
 
 		return bb.toString();
@@ -185,7 +193,7 @@ public class WatchAppPhoneBookController extends BaseController {
 				dataMap.put("Photo","");
 				dataMap.put("PhoneNumber",location.getCornet()+"");
 				dataMap.put("Type",1);
-				dataMap.put("HeadImg",1);
+				dataMap.put("HeadImg",location.getHeadImg()+"");
 				
 				jsonArray.add(dataMap);
 			}
@@ -268,6 +276,7 @@ public class WatchAppPhoneBookController extends BaseController {
 			sb.append("*");
 			sb.append(msg);
 			sb.append("]");
+			logger.info("设备通讯录删除更新="+sb.toString());
 			socketLoginDto.getChannel().writeAndFlush(sb.toString());
 			bb.put("Code", 1);
 		} else {
@@ -355,12 +364,46 @@ public class WatchAppPhoneBookController extends BaseController {
 			sb.append("*");
 			sb.append(msg);
 			sb.append("]");
+			logger.info("设备通讯录修改="+sb.toString());
 			socketLoginDto.getChannel().writeAndFlush(sb.toString());
 			bb.put("Code", 1);
 		} else {
 			bb.put("Code", 2);
 		}
 
+		return bb.toString();
+	}
+	
+	
+	/* 修改通讯录头像 */
+	@ResponseBody
+	@RequestMapping(value = "/updateHeadImg", method = RequestMethod.POST)
+	public String updateHeadImg(@RequestBody String body) {
+		JSONObject bb = new JSONObject();
+		JSONObject jsonObject = (JSONObject) JSON.parse(body);
+		String token = jsonObject.getString("token");
+		//loginId, deviceContactId, headImg
+		Long deviceContactId = Long.valueOf(jsonObject.getString("deviceContactId"));
+		Long loginId = Long.valueOf(jsonObject.getString("loginId"));
+		String head = jsonObject.getString("headImg");// 角色
+		
+
+		String userId = checkTokenWatchAndUser(token);
+		if ("0".equals(userId)) {
+			bb.put("Code", -1);
+			return bb.toString();
+		}
+		
+		byte[] headByte = Base64.decodeBase64(head);
+		String photoName = deviceContactId + "_" + new Date().getTime() + ".jpg";
+		Utils.createFileContent(Utils.PHONEBook_FILE_lINUX, photoName, headByte);
+
+		if(memberService.updatePhonebookHeadImgById(deviceContactId,Utils.PHONEBook_PHOTO_UTL+photoName)){
+			bb.put("Code", 1);
+		}else{
+			bb.put("Code", 0);
+		}
+	
 		return bb.toString();
 	}
 

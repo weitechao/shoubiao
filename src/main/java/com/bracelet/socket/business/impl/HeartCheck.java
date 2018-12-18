@@ -13,6 +13,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.bracelet.dto.SocketBaseDto;
 import com.bracelet.dto.SocketLoginDto;
 import com.bracelet.exception.BizException;
+import com.bracelet.redis.LimitCache;
 import com.bracelet.service.IVoltageService;
 import com.bracelet.socket.business.IService;
 import com.bracelet.util.ChannelMap;
@@ -28,6 +29,9 @@ public class HeartCheck extends AbstractBizService {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired
 	IVoltageService voltageService;
+	
+	@Autowired
+	LimitCache limitCache;
 	
 	@Override
 	protected SocketBaseDto process1(SocketLoginDto socketLoginDto,
@@ -60,7 +64,7 @@ public class HeartCheck extends AbstractBizService {
 
 		ChannelMap.addChannel(imei, channelDto);
 		ChannelMap.addChannel(channel, channelDto);*/
-		
+		limitCache.addKey(imei+"_energy", energy+"");
 		ChannelMap.addEnergy(imei,energy);
 		
 		

@@ -2,6 +2,7 @@ package com.bracelet.service.impl;
 
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.bracelet.entity.Authcode;
+import com.bracelet.redis.LimitCache;
 import com.bracelet.service.IAuthcodeService;
 import com.bracelet.service.ISmslogService;
 import com.bracelet.util.SmsUtil;
@@ -27,6 +28,7 @@ public class AuthcodeServiceImpl implements IAuthcodeService {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired
 	ISmslogService smslogService;
+	
 	@Override
 	public void sendAuthCode(String tel) {
 		StringBuilder sb = new StringBuilder();

@@ -58,7 +58,7 @@ public class MemberController extends BaseController {
 	IPwdService pwdService;
 
 	@ResponseBody
-	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public HttpBaseDto add(@RequestParam String token,
 			@RequestParam String tel, @RequestParam String name,
 			@RequestParam String imei, @RequestParam String head) {

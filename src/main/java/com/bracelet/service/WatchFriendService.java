@@ -16,4 +16,10 @@ public interface WatchFriendService {
 
 	boolean updateFriendById(Long id, String role, String phone, String cornet, String headType);
 
+	WatchFriend getFriendByImeiAndPhone(String imei, String phone, Long deviceFriendId);
+
+	boolean updateFriendNameById(Long id, String nickname);
+
+	boolean insertFriend(String imei, String nickname, String phone, String string, String string2, Long deviceFriendId);
+
 }

@@ -31,8 +31,7 @@ public class GetIpService implements IService {
 	private Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
 	IDeviceService ideviceService;
-    @Autowired
-	LimitCache limitCache;
+   
     @Override
 	public String process(String jsonInfo, Channel channel) {
 
@@ -49,18 +48,15 @@ public class GetIpService implements IService {
         StringBuffer add=new StringBuffer("IPREQ,");
 		add.append(1);
 		add.append(",");
-		String responseJsonString = HttpClientGet.get(Utils.IP_PORT_URL);
+	//	String responseJsonString = HttpClientGet.get(Utils.IP_PORT_URL);
 		/*
+47.92.183.190   负载均衡ip端口
 		 * 分配逻辑
 		 * 先通过请求slb 80 端口  slb 自己去获取到后端业务的一个ip和端口返回
 		 * */
-		if (!StringUtils.isEmpty(responseJsonString)) {
-			add.append(responseJsonString);
-			limitCache.addKey(imei,responseJsonString);
-		}else{
-			add.append(Utils.IP+","+ Utils.PORT);
-			limitCache.addKey(imei, Utils.IP+","+ Utils.PORT);
-		}
+	
+			add.append("47.92.183.190,7780");
+		
 		sb.append(RadixUtil.changeRadix(add.toString()));
 		sb.append("*");
 		sb.append(add.toString());

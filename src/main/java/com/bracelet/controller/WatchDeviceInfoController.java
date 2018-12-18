@@ -10,6 +10,7 @@ import com.bracelet.entity.OddShape;
 import com.bracelet.entity.SensitivePoint;
 import com.bracelet.entity.SensitivePointLog;
 import com.bracelet.entity.WatchDevice;
+import com.bracelet.entity.WatchDeviceAlarm;
 import com.bracelet.entity.WatchDeviceHomeSchool;
 import com.bracelet.entity.WatchPhoneBook;
 import com.bracelet.exception.BizException;
@@ -88,7 +89,7 @@ public class WatchDeviceInfoController extends BaseController {
 			bb.put("SmsNumber", "10086");
 			bb.put("SmsBalanceKey", 101);
 			bb.put("DeviceID", watch.getId());
-			bb.put("UserId", "");
+			bb.put("UserId", watch.getId());
 			bb.put("DeviceModelID", "");
 			bb.put("Firmware", "");
 			bb.put("Gender", 0);
@@ -362,6 +363,43 @@ public class WatchDeviceInfoController extends BaseController {
 			bb.put("Code", 1);
 		} else {
 			bb.put("Code", 0);
+		}
+		return bb.toString();
+	}
+
+	/* 修改闹钟 */
+	@ResponseBody
+	@RequestMapping(value = "/updateAlarm", method = RequestMethod.POST)
+	public String updateAlarm(@RequestBody String body) {
+		JSONObject bb = new JSONObject();
+		JSONObject jsonObject = (JSONObject) JSON.parse(body);
+		String token = jsonObject.getString("token");
+
+		String userId = checkTokenWatchAndUser(token);
+		if ("0".equals(userId)) {
+			bb.put("Code", -1);
+			return bb.toString();
+		}
+
+		String imei = jsonObject.getString("imei");
+		String weekAlarm1 = jsonObject.getString("weekAlarm1");
+		String weekAlarm2 = jsonObject.getString("weekAlarm2");
+		String weekAlarm3 = jsonObject.getString("weekAlarm3");
+		String alarm1 = jsonObject.getString("alarm1");
+		String alarm2 = jsonObject.getString("alarm2");
+		String alarm3 = jsonObject.getString("alarm3");
+
+		WatchDeviceAlarm watch = ideviceService.getDeviceAlarmInfo(imei);
+		if (watch != null) {
+			if (this.ideviceService.updateWatchAlarmInfoById(watch.getId(), weekAlarm1, weekAlarm2, weekAlarm3, alarm1,
+					alarm2, alarm3)) {
+				bb.put("Code", 1);
+			} else {
+				bb.put("Code", 0);
+			}
+		} else {
+			ideviceService.insertDeviceAlarmInfo(imei, weekAlarm1, weekAlarm2, weekAlarm3, alarm1, alarm2, alarm3);
+			bb.put("Code", 1);
 		}
 		return bb.toString();
 	}

@@ -5,6 +5,7 @@ import java.sql.Types;
 import java.util.List;
 
 import com.bracelet.datasource.DataSourceChange;
+import com.bracelet.entity.BindDevice;
 import com.bracelet.entity.DownLoadFileInfo;
 import com.bracelet.entity.WatchFriend;
 import com.bracelet.service.WatchFriendService;
@@ -58,11 +59,48 @@ public class WatchFriendServiceImpl implements WatchFriendService {
 			String cornet, String headType) {
 		Timestamp now = Utils.getCurrentTimestamp();
 		int i = jdbcTemplate
-				.update("update watch_friend_info set role_name=?,phone=?,cornet=?,headtype=?,createtime=? where id = ?",
+				.update("update watch_friend_info set role_name=?,phone=?,cornet=?,headtype=?,updatetime=? where id = ?",
 						new Object[] { role, phone, cornet, headType, now, id },
 						new int[] { Types.VARCHAR, Types.VARCHAR,
 								Types.VARCHAR, Types.VARCHAR, Types.TIMESTAMP,
 								Types.INTEGER });
+		return i == 1;
+	}
+
+	@Override
+	public WatchFriend getFriendByImeiAndPhone(String imei, String phone, Long deviceFriendId) {
+		String sql = "select * from watch_friend_info where  imei=? and DeviceFriendId=?  and phone=? LIMIT 1";
+		List<WatchFriend> list = jdbcTemplate.query(sql, new Object[] { imei, deviceFriendId, phone  },
+				new BeanPropertyRowMapper<WatchFriend>(WatchFriend.class));
+		if (list != null && !list.isEmpty()) {
+			return list.get(0);
+		} else {
+			logger.info("cannot find userinfo,imei:" + imei);
+		}
+		return null;
+	}
+
+	@Override
+	public boolean updateFriendNameById(Long id, String nickname) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate
+				.update("update watch_friend_info set role_name=?,updatetime=? where id = ?",
+						new Object[] { nickname, now, id },
+						new int[] { Types.VARCHAR, Types.TIMESTAMP,
+								Types.INTEGER });
+		return i == 1;
+	}
+
+	@Override
+	public boolean insertFriend(String imei, String nickname, String phone, String cornet, String headType,
+			Long deviceFriendId) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate
+				.update("insert into watch_friend_info ( imei,role_name, phone, cornet, headtype, createtime, updatetime, DeviceFriendId) values (?,?,?,?,?,?,?,?)",
+						new Object[] { imei, nickname, phone, cornet, headType, now ,now, deviceFriendId},
+						new int[] { Types.VARCHAR, Types.VARCHAR,
+								Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
+								Types.TIMESTAMP, Types.TIMESTAMP, Types.INTEGER});
 		return i == 1;
 	}
 

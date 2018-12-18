@@ -34,4 +34,6 @@ public interface IMemService {
 
 	boolean updatePhonebookById(Long id, String name, String phone, String cornet, String headType);
 
+	boolean updatePhonebookHeadImgById(Long deviceContactId, String photoImg);
+
 }

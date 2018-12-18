@@ -5,6 +5,7 @@ import java.util.List;
 import com.bracelet.datasource.DataSourceChange;
 import com.bracelet.entity.IpAddressInfo;
 import com.bracelet.entity.WatchDevice;
+import com.bracelet.entity.WatchDeviceAlarm;
 import com.bracelet.entity.WatchDeviceBak;
 import com.bracelet.entity.WatchDeviceHomeSchool;
 
@@ -61,6 +62,14 @@ public interface IDeviceService {
 
 	boolean updateWatchImeiInfoById(Long id, String phone, String nickname, Integer sex, String birday,
 			String school_age, String weight, String height, String familyNumber, String shortNumber);
+
+	WatchDeviceAlarm getDeviceAlarmInfo(String imei);
+
+	boolean updateWatchAlarmInfoById(Long id, String weekAlarm1, String weekAlarm2, String weekAlarm3, String alarm1,
+			String alarm2, String alarm3);
+
+	boolean insertDeviceAlarmInfo(String imei, String weekAlarm1, String weekAlarm2, String weekAlarm3, String alarm1,
+			String alarm2, String alarm3);
 
 
 

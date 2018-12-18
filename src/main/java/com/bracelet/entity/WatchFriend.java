@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 
 public class WatchFriend {
     private Long id;
+    private Long DeviceFriendId;
     private String imei;
     private String role_name;
     private String phone;
@@ -52,6 +53,11 @@ public class WatchFriend {
 	public void setCreatetime(Timestamp createtime) {
 		this.createtime = createtime;
 	}
-	
+	public Long getDeviceFriendId() {
+		return DeviceFriendId;
+	}
+	public void setDeviceFriendId(Long deviceFriendId) {
+		DeviceFriendId = deviceFriendId;
+	}
 	
 }

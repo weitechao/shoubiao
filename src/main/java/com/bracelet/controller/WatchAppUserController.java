@@ -164,7 +164,7 @@ public class WatchAppUserController extends BaseController {
 		String token = jsonObject.getString("token");
 		String user_id = checkTokenWatchAndUser(token);
 		if ("0".equals(user_id)) {
-			bb.put("Code", 2);
+			bb.put("Code", -1);
 			return bb.toString();
 		}
 		String tel = jsonObject.getString("tel");
@@ -176,7 +176,7 @@ public class WatchAppUserController extends BaseController {
 				userInfoService.updateUserPassword(userInfo.getUser_id(), password);
 				bb.put("Code", 1);
 			} else {
-				bb.put("Code", -1);
+				bb.put("Code", 2);
 			}
 
 		} else {
@@ -353,7 +353,7 @@ public class WatchAppUserController extends BaseController {
 				deviceSet.put("Alarm3", "0");
 				deviceSet.put("LocationMode", 0);
 				deviceSet.put("LocationTime", "0");
-				deviceSet.put("FlowerNumber", "0");
+				deviceSet.put("FlowerNumber", 0);
 				deviceSet.put("SleepCalculate", "0");
 				deviceSet.put("StepCalculate", "0");
 				deviceSet.put("HrCalculate", "0");

@@ -117,7 +117,7 @@ public class LoginService implements IService {
 			}
 		}
 		
-		limitCache.addKey(imei, Utils.IP+","+ Utils.PORT);
+		limitCache.addKey(imei, Utils.IP+"："+ Utils.PORT_HTTP);
 		String resp = "[YW*" + imei + "*0001*0006*INIT,1]";
 		logger.info("返回设备登录信息=" + resp);
 		return resp;

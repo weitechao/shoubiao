@@ -2,6 +2,7 @@ package com.bracelet.service.impl;
 
 import com.bracelet.datasource.DataSourceChange;
 import com.bracelet.entity.TokenInfo;
+import com.bracelet.redis.LimitCache;
 import com.bracelet.service.ITokenInfoService;
 import com.bracelet.util.Utils;
 import org.slf4j.Logger;
@@ -20,6 +21,9 @@ import java.util.List;
 public class TokenInfoServiceImpl implements ITokenInfoService {
 	@Autowired
 	JdbcTemplate jdbcTemplate;
+	
+	@Autowired
+	LimitCache limitCache;
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	public Long getUserIdByToken(String token) {
@@ -62,7 +66,7 @@ public class TokenInfoServiceImpl implements ITokenInfoService {
 		Timestamp now = Utils.getCurrentTimestamp();
 		jdbcTemplate.update("replace into token_info (token, user_id, createtime) values (?,?,?)",
 				new Object[] { token, userId, now }, new int[] { Types.VARCHAR, Types.INTEGER, Types.TIMESTAMP });
-
+		limitCache.addKey(token, userId+"");
 		return token;
 	}
 }

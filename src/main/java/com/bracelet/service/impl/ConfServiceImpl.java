@@ -1,5 +1,7 @@
 package com.bracelet.service.impl;
 
+import java.sql.Timestamp;
+import java.sql.Types;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,7 +10,10 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import com.bracelet.entity.Conf;
+import com.bracelet.entity.SchoolGuard;
+import com.bracelet.entity.Step;
 import com.bracelet.service.IConfService;
+import com.bracelet.util.Utils;
 
 @Service
 public class ConfServiceImpl implements IConfService {
@@ -21,6 +26,39 @@ public class ConfServiceImpl implements IConfService {
 		String sql = "select * from conf";
 		List<Conf> list = jdbcTemplate.query(sql, new Object[] {}, new BeanPropertyRowMapper<Conf>(Conf.class));
 		return list;
+	}
+
+	@Override
+	public SchoolGuard getSchoolGuard(Long deviceId) {
+		String sql = "select * from school_guard where deviceId=?  LIMIT 1";
+		List<SchoolGuard> list = jdbcTemplate.query(sql, new Object[] { deviceId },
+				new BeanPropertyRowMapper<SchoolGuard>(SchoolGuard.class));
+
+		if (list != null && !list.isEmpty()) {
+			return list.get(0);
+		} else {
+			logger.info("getLatest return null.user_id:" + deviceId);
+		}
+		return null;
+	}
+
+	@Override
+	public boolean updateSchoolGrardOffOnById(Long id, Integer status) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate.update("update school_guard  set offOn=?,updatetime=? where id = ?",
+				new Object[] { status, now, id }, new int[] { Types.INTEGER, Types.TIMESTAMP, Types.INTEGER });
+		return i == 1;
+	}
+	
+	
+	@Override
+	public boolean insertGuardOffOn(Long deviceId, Integer status) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate.update(
+				"insert into school_guard (deviceId, offOn, createtime, updatetime) values (?,?,?,?)",
+				new Object[] { deviceId, status, now, now },
+				new int[] { Types.INTEGER, Types.INTEGER,  Types.TIMESTAMP, Types.TIMESTAMP });
+		return i == 1;
 	}
 
 }
