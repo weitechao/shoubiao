@@ -8,6 +8,7 @@ import com.bracelet.dto.LatestBloodSugarDto;
 import com.bracelet.entity.BloodOxygen;
 import com.bracelet.entity.BloodSugar;
 import com.bracelet.entity.SchoolGuard;
+import com.bracelet.entity.TimeSwitch;
 import com.bracelet.entity.VersionInfo;
 import com.bracelet.service.IBloodOxygenService;
 import com.bracelet.service.IBloodSugarService;
@@ -119,8 +120,25 @@ public class SchoolController extends BaseController {
 		}
 		
          Long deviceId = jsonObject.getLong("deviceId");
+         String timeClose = jsonObject.getString("timeClose");
+         String timeOpen  = jsonObject.getString("timeOpen");
          
-		bb.put("Code", 1);
+         TimeSwitch time = confService.getTimeSwitch(deviceId);
+         if(time != null ){
+            if(confService.updateTimeSwitchById(time.getId(), timeClose, timeOpen)){
+            	bb.put("Code", 1);
+            }else{
+            	bb.put("Code", 0);
+            }
+         }else{
+        	 if(confService.insertTimeSwtich(deviceId,timeClose,timeOpen)){
+        		 bb.put("Code", 1);
+        	 }else{
+        		 bb.put("Code", 0);
+        	 }
+         }
+         
+		
 		
 		return bb.toString();
 	}

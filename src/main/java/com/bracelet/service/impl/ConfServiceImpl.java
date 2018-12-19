@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.bracelet.entity.Conf;
 import com.bracelet.entity.SchoolGuard;
 import com.bracelet.entity.Step;
+import com.bracelet.entity.TimeSwitch;
 import com.bracelet.service.IConfService;
 import com.bracelet.util.Utils;
 
@@ -58,6 +59,38 @@ public class ConfServiceImpl implements IConfService {
 				"insert into school_guard (deviceId, offOn, createtime, updatetime) values (?,?,?,?)",
 				new Object[] { deviceId, status, now, now },
 				new int[] { Types.INTEGER, Types.INTEGER,  Types.TIMESTAMP, Types.TIMESTAMP });
+		return i == 1;
+	}
+
+	@Override
+	public TimeSwitch getTimeSwitch(Long deviceId) {
+		String sql = "select * from watch_time_switch where deviceId=?  LIMIT 1";
+		List<TimeSwitch> list = jdbcTemplate.query(sql, new Object[] { deviceId },
+				new BeanPropertyRowMapper<TimeSwitch>(TimeSwitch.class));
+
+		if (list != null && !list.isEmpty()) {
+			return list.get(0);
+		} else {
+			logger.info("getLatest return null.user_id:" + deviceId);
+		}
+		return null;
+	}
+
+	@Override
+	public boolean updateTimeSwitchById(Long id, String timeClose, String timeOpen) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate.update("update watch_time_switch  set timeOpen=?, timeClose=?, updatetime=? where id = ?",
+				new Object[] { timeOpen, timeClose, now, id }, new int[] { Types.VARCHAR, Types.VARCHAR, Types.TIMESTAMP, Types.INTEGER });
+		return i == 1;
+	}
+
+	@Override
+	public boolean insertTimeSwtich(Long deviceId, String timeClose, String timeOpen) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate.update(
+				"insert into watch_time_switch (deviceId, timeOpen, timeClose, createtime, updatetime) values (?,?,?,?,?)",
+				new Object[] { deviceId,timeOpen, timeClose, now, now },
+				new int[] { Types.INTEGER, Types.VARCHAR, Types.VARCHAR,  Types.TIMESTAMP, Types.TIMESTAMP });
 		return i == 1;
 	}
 

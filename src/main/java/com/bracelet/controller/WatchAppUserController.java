@@ -64,7 +64,7 @@ public class WatchAppUserController extends BaseController {
 
 	// 登录
 	@ResponseBody
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	@RequestMapping(value = "/login", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String watchapplogin(@RequestBody String body) {
 		JSONObject jsonObject = (JSONObject) JSON.parse(body);
 
@@ -90,7 +90,7 @@ public class WatchAppUserController extends BaseController {
 				bb.put("Notification", "True");
 				bb.put("NotificationSound", "True");
 				bb.put("NotificationVibration", "True");
-				bb.put("ip", "47.92.30.81,7780");
+				bb.put("ip", Utils.IP+":"+ Utils.PORT_HTTP);
 
 				if (ipport != null && !"".equals(ipport)) {
 					bb.put("ip", ipport);
@@ -135,7 +135,7 @@ public class WatchAppUserController extends BaseController {
 			bb.put("Notification", "True");
 			bb.put("NotificationSound", "True");
 			bb.put("NotificationVibration", "True");
-			bb.put("ip", "47.92.30.81,7780");
+			bb.put("ip", Utils.IP+":"+ Utils.PORT_HTTP);
 			if (ipport != null && !"".equals(ipport)) {
 				bb.put("ip", ipport);
 			}
