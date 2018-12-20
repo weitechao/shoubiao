@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 public class SmsInfo {
 	
 	private Long id;
-	private Long deviceId;
+	private String deviceId;
 	private Integer type;
 	private String  phone;
 	private Timestamp createtime;
@@ -15,10 +15,11 @@ public class SmsInfo {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Long getDeviceId() {
+	
+	public String getDeviceId() {
 		return deviceId;
 	}
-	public void setDeviceId(Long deviceId) {
+	public void setDeviceId(String deviceId) {
 		this.deviceId = deviceId;
 	}
 	public Integer getType() {

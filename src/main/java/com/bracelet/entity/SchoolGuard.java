@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 public class SchoolGuard {
 
 	private Long id;
-	private Long deviceId;
+	private String deviceId;
 	private Timestamp createtime;
 	private Timestamp updatetime;
 	private Integer offOn;
@@ -15,10 +15,10 @@ public class SchoolGuard {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Long getDeviceId() {
+	public String getDeviceId() {
 		return deviceId;
 	}
-	public void setDeviceId(Long deviceId) {
+	public void setDeviceId(String deviceId) {
 		this.deviceId = deviceId;
 	}
 	public Timestamp getCreatetime() {

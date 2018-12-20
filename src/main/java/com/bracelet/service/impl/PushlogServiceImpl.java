@@ -54,7 +54,7 @@ public class PushlogServiceImpl implements IPushlogService {
 	}
 
 	@Override
-	public List<SmsInfo> getSmsList(Long deviceId) {
+	public List<SmsInfo> getSmsList(String deviceId) {
 		String sql = "select * from watch_sms_info where deviceId=? ";
 		List<SmsInfo> list = jdbcTemplate.query(sql, new Object[] {
 				deviceId }, new BeanPropertyRowMapper<SmsInfo>(
@@ -77,7 +77,7 @@ public class PushlogServiceImpl implements IPushlogService {
 	}
 
 	@Override
-	public DeviceCarrierInfo getDeviceCarrInfo(Long deviceId) {
+	public DeviceCarrierInfo getDeviceCarrInfo(String deviceId) {
 		String sql = "select * from watch_carrier where deviceId=?  LIMIT 1";
 		List<DeviceCarrierInfo> list = jdbcTemplate.query(sql, new Object[] { deviceId },
 				new BeanPropertyRowMapper<DeviceCarrierInfo>(DeviceCarrierInfo.class));
@@ -101,12 +101,12 @@ public class PushlogServiceImpl implements IPushlogService {
 	}
 
 	@Override
-	public boolean insertCarrier(Long deviceId, String smsNumber, String smsBalanceKey, String smsFlowKey) {
+	public boolean insertCarrier(String deviceId, String smsNumber, String smsBalanceKey, String smsFlowKey) {
 		Timestamp now = Utils.getCurrentTimestamp();
 		int i = jdbcTemplate.update(
 				"insert into watch_carrier (deviceId, smsNumber, smsBalanceKey, smsFlowKey, updatetime, createtime) values (?,?,?,?,?,?)",
 				new Object[] { deviceId, smsNumber, smsBalanceKey, smsFlowKey, now ,now}, new int[] {
-						Types.INTEGER, Types.VARCHAR,Types.VARCHAR, 
+						Types.VARCHAR, Types.VARCHAR,Types.VARCHAR, 
 						Types.VARCHAR, Types.TIMESTAMP,  Types.TIMESTAMP });
 		return i == 1;
 	}

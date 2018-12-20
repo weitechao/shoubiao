@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 public class TimeSwitch {
 
 	private Long id;
-	private Long deviceId;
+	private String deviceId;
 	private String timeClose;
 	private String timeOpen;
 	private Timestamp createtime;
@@ -16,10 +16,10 @@ public class TimeSwitch {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Long getDeviceId() {
+	public String getDeviceId() {
 		return deviceId;
 	}
-	public void setDeviceId(Long deviceId) {
+	public void setDeviceId(String deviceId) {
 		this.deviceId = deviceId;
 	}
 	public String getTimeClose() {

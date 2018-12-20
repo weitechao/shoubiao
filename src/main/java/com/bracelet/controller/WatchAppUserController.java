@@ -55,8 +55,6 @@ public class WatchAppUserController extends BaseController {
 	@Autowired
 	ILocationService locationService;
 
-	@Autowired
-	LimitCache limitCache;
 
 	@Autowired
 	IDeviceService ideviceService;
@@ -178,6 +176,7 @@ public class WatchAppUserController extends BaseController {
 			}*/
 
 		}
+		logger.info("app登录deviceid="+limitCache.getRedisKeyValue(tel + "_id"));
 		return bb.toString();
 	}
 

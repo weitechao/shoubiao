@@ -30,7 +30,7 @@ public class ConfServiceImpl implements IConfService {
 	}
 
 	@Override
-	public SchoolGuard getSchoolGuard(Long deviceId) {
+	public SchoolGuard getSchoolGuard(String deviceId) {
 		String sql = "select * from school_guard where deviceId=?  LIMIT 1";
 		List<SchoolGuard> list = jdbcTemplate.query(sql, new Object[] { deviceId },
 				new BeanPropertyRowMapper<SchoolGuard>(SchoolGuard.class));
@@ -53,17 +53,17 @@ public class ConfServiceImpl implements IConfService {
 	
 	
 	@Override
-	public boolean insertGuardOffOn(Long deviceId, Integer status) {
+	public boolean insertGuardOffOn(String deviceId, Integer status) {
 		Timestamp now = Utils.getCurrentTimestamp();
 		int i = jdbcTemplate.update(
 				"insert into school_guard (deviceId, offOn, createtime, updatetime) values (?,?,?,?)",
 				new Object[] { deviceId, status, now, now },
-				new int[] { Types.INTEGER, Types.INTEGER,  Types.TIMESTAMP, Types.TIMESTAMP });
+				new int[] { Types.VARCHAR, Types.INTEGER,  Types.TIMESTAMP, Types.TIMESTAMP });
 		return i == 1;
 	}
 
 	@Override
-	public TimeSwitch getTimeSwitch(Long deviceId) {
+	public TimeSwitch getTimeSwitch(String deviceId) {
 		String sql = "select * from watch_time_switch where deviceId=?  LIMIT 1";
 		List<TimeSwitch> list = jdbcTemplate.query(sql, new Object[] { deviceId },
 				new BeanPropertyRowMapper<TimeSwitch>(TimeSwitch.class));
@@ -85,12 +85,12 @@ public class ConfServiceImpl implements IConfService {
 	}
 
 	@Override
-	public boolean insertTimeSwtich(Long deviceId, String timeClose, String timeOpen) {
+	public boolean insertTimeSwtich(String deviceId, String timeClose, String timeOpen) {
 		Timestamp now = Utils.getCurrentTimestamp();
 		int i = jdbcTemplate.update(
 				"insert into watch_time_switch (deviceId, timeOpen, timeClose, createtime, updatetime) values (?,?,?,?,?)",
 				new Object[] { deviceId,timeOpen, timeClose, now, now },
-				new int[] { Types.INTEGER, Types.VARCHAR, Types.VARCHAR,  Types.TIMESTAMP, Types.TIMESTAMP });
+				new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,  Types.TIMESTAMP, Types.TIMESTAMP });
 		return i == 1;
 	}
 

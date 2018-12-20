@@ -10,17 +10,17 @@ public interface IConfService {
 
 	List<Conf> list();
 
-	SchoolGuard getSchoolGuard(Long deviceId);
+	SchoolGuard getSchoolGuard(String deviceId);
 
 	boolean updateSchoolGrardOffOnById(Long id, Integer status);
 
-	boolean insertGuardOffOn(Long deviceId, Integer status);
+	boolean insertGuardOffOn(String deviceId, Integer status);
 
-	TimeSwitch getTimeSwitch(Long deviceId);
+	TimeSwitch getTimeSwitch(String deviceId);
 
 	boolean updateTimeSwitchById(Long id, String timeClose, String timeOpen);
 
-	boolean insertTimeSwtich(Long deviceId, String timeClose, String timeOpen);
+	boolean insertTimeSwtich(String deviceId, String timeClose, String timeOpen);
 
 
 }

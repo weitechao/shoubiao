@@ -9,6 +9,7 @@ public class PhoneCharge {
 	private String phone;
 	private Timestamp createtime;
 	private Integer status;
+	private String imei;
 	public Long getId() {
 		return id;
 	}
@@ -39,5 +40,12 @@ public class PhoneCharge {
 	public void setStatus(Integer status) {
 		this.status = status;
 	}
+	public String getImei() {
+		return imei;
+	}
+	public void setImei(String imei) {
+		this.imei = imei;
+	}
+	
 	
 }

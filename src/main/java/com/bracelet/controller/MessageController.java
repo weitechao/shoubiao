@@ -9,6 +9,7 @@ import com.bracelet.entity.DeviceCarrierInfo;
 import com.bracelet.entity.PhoneCharge;
 import com.bracelet.entity.Pushlog;
 import com.bracelet.entity.SmsInfo;
+import com.bracelet.redis.LimitCache;
 import com.bracelet.service.IPushlogService;
 import com.bracelet.service.PageParam;
 import com.bracelet.service.Pagination;
@@ -31,6 +32,7 @@ import java.util.Map;
 public class MessageController extends BaseController {
 	@Autowired
 	IPushlogService pushlogService;
+	
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	@ResponseBody
@@ -65,7 +67,7 @@ public class MessageController extends BaseController {
 	/* 手表短信列表 */
 	@ResponseBody
 	@RequestMapping(value = "/getSmsList/{token}/{deviceId}", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
-	public String getSmsList(@PathVariable String token, @PathVariable Long deviceId) {
+	public String getSmsList(@PathVariable String token, @PathVariable String deviceId) {
 		JSONObject bb = new JSONObject();
 
 		String user_id = checkTokenWatchAndUser(token);
@@ -95,8 +97,15 @@ public class MessageController extends BaseController {
 
 	/* 手表话费查询 watch_phone_charge */
 	@ResponseBody
-	@RequestMapping(value = "/getCallCharge/{token}/{phone}", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
-	public String getCallCharge(@PathVariable String token, @PathVariable String phone) {
+	@RequestMapping(value = "/getCallCharge", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	public String getCallCharge(@RequestBody String body) {
+		
+		JSONObject jsonObject = (JSONObject) JSON.parse(body);
+		String token = jsonObject.getString("token");
+		String phone = jsonObject.getString("phone");
+		String content = jsonObject.getString("content");
+		String imei = jsonObject.getString("imei");
+		
 		JSONObject bb = new JSONObject();
 
 		String user_id = checkTokenWatchAndUser(token);
@@ -111,11 +120,13 @@ public class MessageController extends BaseController {
 			bb.put("phone", phone + "");
 			bb.put("content", phoneC.getContent() + "");
 			bb.put("createtime", phoneC.getCreatetime() + "");
+			bb.put("imei", phoneC.getImei()+"");
 		} else {
 			bb.put("Code", 1);
 			bb.put("phone", phone + "");
 			bb.put("content", "");
 			bb.put("createtime", "");
+			bb.put("imei", "");
 		}
 
 		return bb.toString();
@@ -134,7 +145,7 @@ public class MessageController extends BaseController {
 			return bb.toString();
 		}
 		// deviceId, smsNumber, smsBalanceKey，smsFlowKey
-		Long deviceId = jsonObject.getLong("deviceId");
+		String deviceId = jsonObject.getString("deviceId");
 		String smsNumber = jsonObject.getString("smsNumber");
 		String smsBalanceKey = jsonObject.getString("smsBalanceKey");
 		String smsFlowKey = jsonObject.getString("smsFlowKey");

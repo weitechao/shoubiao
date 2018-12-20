@@ -15,15 +15,15 @@ public interface IPushlogService {
 
 	boolean insertPushMsg(String imei, String message, Integer status);
 
-	List<SmsInfo> getSmsList(Long deviceId);
+	List<SmsInfo> getSmsList(String deviceId);
 
 	PhoneCharge getCharge(String phone);
 
-	DeviceCarrierInfo getDeviceCarrInfo(Long deviceId);
+	DeviceCarrierInfo getDeviceCarrInfo(String deviceId);
 
 	boolean updateCarrierById(Long id, String smsNumber, String smsBalanceKey, String smsFlowKey);
 
-	boolean insertCarrier(Long deviceId, String smsNumber, String smsBalanceKey, String smsFlowKey);
+	boolean insertCarrier(String deviceId, String smsNumber, String smsBalanceKey, String smsFlowKey);
 
 	boolean insertErrorInfo(Long userId, String content);
 

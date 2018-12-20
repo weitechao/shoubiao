@@ -26,27 +26,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping("/school")
-public class SchoolController extends BaseController {
+@RequestMapping("/callphone")
+public class CallPhoneController extends BaseController {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
 	IConfService confService;
 
-	@ResponseBody
-	@RequestMapping(value = "/heath", method = RequestMethod.POST)
-	public String oldLocation(@RequestBody String json) {
-		JSONObject bb = new JSONObject();
-
-		bb.put("Code", 1);
-
-		return bb.toString();
-	}
+	
 
 	@ResponseBody
-	@RequestMapping(value = "/getSchoolInfo/{token}/{imei}", method = RequestMethod.GET)
-	public String getSchoolInfo(@PathVariable String token, @PathVariable String imei) {
+	@RequestMapping(value = "/call/{token}/{imei}", method = RequestMethod.GET)
+	public String call(@PathVariable String token, @PathVariable String imei) {
 		JSONObject bb = new JSONObject();
 
 		String user_id = checkTokenWatchAndUser(token);
@@ -54,58 +46,30 @@ public class SchoolController extends BaseController {
 			bb.put("Code", -1);
 			return bb.toString();
 		}
-		bb.put("SchoolID", "");
-		bb.put("SchoolDay", "");
-		bb.put("SchoolArriveContent", "");
-		bb.put("SchoolArriveTime", "");
-		bb.put("SchoolLeaveContent", "");
-		bb.put("SchoolLeaveTime", "");
-		bb.put("RoadStayContent", "");
-		bb.put("RoadStayTime", "");
-		bb.put("HomeBackContent", "");
-		bb.put("HomeBackTime", "");
-		bb.put("Code", 1);
-		return bb.toString();
-	}
-
-	@ResponseBody
-	@RequestMapping(value = "/updateGuardStatus/{token}/{deviceId}/{status}", method = RequestMethod.GET)
-	public String updateGuardStatus(@PathVariable String token, @PathVariable String deviceId, @PathVariable Integer status) {
-		JSONObject bb = new JSONObject();
-
-		String user_id = checkTokenWatchAndUser(token);
-		if ("0".equals(user_id)) {
-			bb.put("Code", -1);
-			return bb.toString();
-		}
-		SchoolGuard schoolguard = confService.getSchoolGuard(deviceId);
-		if (schoolguard != null) {
-			if (confService.updateSchoolGrardOffOnById(schoolguard.getId(), status)) {
-				bb.put("Code", 1);
-			} else {
-				bb.put("Code", 0);
-			}
-		} else {
-			if (confService.insertGuardOffOn(deviceId , status)) {
-				bb.put("Code", 1);
-			} else {
-				bb.put("Code", 0);
-			}
-		}
-		return bb.toString();
-	}
-	
-	
-	@ResponseBody
-	@RequestMapping(value = "/updateSleepCalculate/{token}/{deviceId}/{sleepCalculate}", method = RequestMethod.GET)
-	public String updatesleepCalculate(@PathVariable String token, @PathVariable String deviceId,
-			@PathVariable String sleepCalculate) {
-		JSONObject bb = new JSONObject();
-
-		bb.put("Code", 1);
 		
+		bb.put("messageID", "");
+		bb.put("callID", "");
+		bb.put("Code", 1);
 		return bb.toString();
 	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/callTwo/{token}/{imei}/{messageID}/{callID}", method = RequestMethod.GET)
+	public String call(@PathVariable String token, @PathVariable String imei, @PathVariable String messageID, @PathVariable String callID) {
+		JSONObject bb = new JSONObject();
+
+		String user_id = checkTokenWatchAndUser(token);
+		if ("0".equals(user_id)) {
+			bb.put("Code", -1);
+			return bb.toString();
+		}
+		
+		bb.put("Code", 1);
+		return bb.toString();
+	}
+
+	
 	
 	@ResponseBody
 	@RequestMapping(value = "/timeSwitch", method = RequestMethod.POST)

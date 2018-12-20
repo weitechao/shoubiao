@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 public class DeviceCarrierInfo {
 
 	private Long id;
-	private Long deviceId;
+	private String deviceId;
 	private String smsNumber;
 	private String smsBalanceKey;
 	private String smsFlowKey;
@@ -20,10 +20,10 @@ public class DeviceCarrierInfo {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Long getDeviceId() {
+	public String getDeviceId() {
 		return deviceId;
 	}
-	public void setDeviceId(Long deviceId) {
+	public void setDeviceId(String deviceId) {
 		this.deviceId = deviceId;
 	}
 	public String getSmsNumber() {
