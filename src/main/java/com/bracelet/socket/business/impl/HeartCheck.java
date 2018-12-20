@@ -65,7 +65,7 @@ public class HeartCheck extends AbstractBizService {
 		ChannelMap.addChannel(imei, channelDto);
 		ChannelMap.addChannel(channel, channelDto);*/
 		limitCache.addKey(imei+"_energy", energy+"");
-		ChannelMap.addEnergy(imei,energy);
+		//ChannelMap.addEnergy(imei,energy);
 		
 		
 		//还需要保存下电量

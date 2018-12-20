@@ -39,9 +39,9 @@ public class LoginService implements IService {
 	IDeviceService ideviceService;
 	@Autowired
 	ILocationService locationService;
-	
-	 @Autowired
-	 LimitCache limitCache;
+
+	@Autowired
+	LimitCache limitCache;
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -60,7 +60,7 @@ public class LoginService implements IService {
 
 		String[] shuzu = jsonInfo.split("\\*");
 		String imei = shuzu[1];// 设备imei
-		//String no = shuzu[2];// 流水号
+		// String no = shuzu[2];// 流水号
 		String info = shuzu[4];
 
 		String[] infoshuzu = info.split(",");
@@ -68,58 +68,79 @@ public class LoginService implements IService {
 		int TypeOfOperator = Integer.valueOf(infoshuzu[2]);// 运营商类型:1表示移动2表示联通、3表示电信,0xFF表示其他
 		String dv = infoshuzu[3];// 设备固件版本
 
-		WatchDeviceBak watchd = ideviceService.getDeviceBakInfo(imei);
-		if (watchd != null) {
-			SocketLoginDto channelDto = new SocketLoginDto();
-			channelDto.setChannel(channel);
-			channelDto.setNo("1");
-			channelDto.setImei(imei);
-			channelDto.setPhone(phone);
-			channelDto.setUser_id(watchd.getD_id());
+		String haveValue = limitCache.getRedisKeyValue(imei + "_have");
 
-			logger.info("保存手表登录信息" + ",imei" + imei + "deviceid=" + watchd.getD_id());
-			ChannelMap.addChannel(imei, channelDto);
-			ChannelMap.addChannel(channel, channelDto);
-
-			// ideviceService.updateImeiInfo(watchd.getId(), phone,
-			// TypeOfOperator, dv);
-		} else {
-			WatchDevice watchSelect = ideviceService.getDeviceInfo(imei);
-			if (watchSelect == null) {
-				ideviceService.insertNewImei(imei, phone, TypeOfOperator, dv);
-				WatchDevice watchCopy = ideviceService.getDeviceInfo(imei);
-				if (watchCopy != null) {
-					ideviceService.insertNewImeiBak(watchCopy.getId(), imei);
-
-					SocketLoginDto channelDto = new SocketLoginDto();
-					channelDto.setChannel(channel);
-					channelDto.setNo("1");
-					channelDto.setImei(imei);
-					channelDto.setPhone(phone);
-					channelDto.setUser_id(watchCopy.getId());
-
-					logger.info("保存手表登录信息,"+imei);
-					ChannelMap.addChannel(imei, channelDto);
-					ChannelMap.addChannel(channel, channelDto);
-				}
-			} else {
-				ideviceService.insertNewImeiBak(watchSelect.getId(), imei);
+		if (haveValue == null || "".equals(haveValue)) {
+			WatchDeviceBak watchd = ideviceService.getDeviceBakInfo(imei);
+			if (watchd != null) {
 
 				SocketLoginDto channelDto = new SocketLoginDto();
 				channelDto.setChannel(channel);
 				channelDto.setNo("1");
 				channelDto.setImei(imei);
 				channelDto.setPhone(phone);
-				channelDto.setUser_id(watchSelect.getId());
-				logger.info("保存手表登录信息"+imei);
+				channelDto.setUser_id(watchd.getD_id());
+				limitCache.addKey(imei + "_have", "1");
+				limitCache.addKey(imei + "_id", watchd.getD_id() + "");
+
+				logger.info("保存手表登录信息" + ",imei" + imei + "deviceid=" + watchd.getD_id());
 				ChannelMap.addChannel(imei, channelDto);
 				ChannelMap.addChannel(channel, channelDto);
+
+				// ideviceService.updateImeiInfo(watchd.getId(), phone,
+				// TypeOfOperator, dv);
+			} else {
+				WatchDevice watchSelect = ideviceService.getDeviceInfo(imei);
+				if (watchSelect == null) {
+					ideviceService.insertNewImei(imei, phone, TypeOfOperator, dv);
+					WatchDevice watchCopy = ideviceService.getDeviceInfo(imei);
+					if (watchCopy != null) {
+						ideviceService.insertNewImeiBak(watchCopy.getId(), imei);
+
+						SocketLoginDto channelDto = new SocketLoginDto();
+						channelDto.setChannel(channel);
+						channelDto.setNo("1");
+						channelDto.setImei(imei);
+						channelDto.setPhone(phone);
+						channelDto.setUser_id(watchCopy.getId());
+						limitCache.addKey(imei + "_have", "1");
+						limitCache.addKey(imei + "_id", watchCopy.getId() + "");
+
+						logger.info("保存手表登录信息," + imei);
+						ChannelMap.addChannel(imei, channelDto);
+						ChannelMap.addChannel(channel, channelDto);
+					}
+				} else {
+					ideviceService.insertNewImeiBak(watchSelect.getId(), imei);
+
+					SocketLoginDto channelDto = new SocketLoginDto();
+					channelDto.setChannel(channel);
+					channelDto.setNo("1");
+					channelDto.setImei(imei);
+					channelDto.setPhone(phone);
+					channelDto.setUser_id(watchSelect.getId());
+					limitCache.addKey(imei + "_have", "1");
+					limitCache.addKey(imei + "_id", watchSelect.getId() + "");
+					logger.info("保存手表登录信息" + imei);
+					ChannelMap.addChannel(imei, channelDto);
+					ChannelMap.addChannel(channel, channelDto);
+				}
 			}
+		} else {
+			SocketLoginDto channelDto = new SocketLoginDto();
+			channelDto.setChannel(channel);
+			channelDto.setNo("1");
+			channelDto.setImei(imei);
+			channelDto.setPhone(phone);
+			channelDto.setUser_id(Long.valueOf(limitCache.getRedisKeyValue(imei + "_id")));
+			logger.info("保存手表登录信息" + ",imei" + imei + "deviceid=" + limitCache.getRedisKeyValue(imei + "_id"));
+			ChannelMap.addChannel(imei, channelDto);
+			ChannelMap.addChannel(channel, channelDto);
 		}
-		
-		limitCache.addKey(imei, Utils.IP+":"+ Utils.PORT_HTTP);
+
+		limitCache.addKey(imei, Utils.IP + ":" + Utils.PORT_HTTP);
 		String resp = "[YW*" + imei + "*0001*0006*INIT,1]";
-		logger.info("返回设备登录信息=" + resp);
+		logger.info("返回设备登录信息=" + resp+",redis 里的key为="+limitCache.getRedisKeyValue(imei + "_id"));
 		return resp;
 	}
 

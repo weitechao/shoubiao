@@ -33,7 +33,7 @@ public class ChannelMap {
 
 	private static Map<String, String> contentMap = new HashMap<String, String>();
 	
-	private static Map<String, String> energyMap = new HashMap<String, String>();
+	/*private static Map<String, String> energyMap = new HashMap<String, String>();*/
 
 	/**
 	 * 
@@ -135,12 +135,12 @@ public class ChannelMap {
 	}
 	
 	
-	public static void addEnergy(String imei, String energy) {
+	/*public static void addEnergy(String imei, String energy) {
 		energyMap.put(imei, energy);
 	}
 	
 	public static void getEnergy(String imei) {
 		energyMap.get(imei);
-	}
+	}*/
 
 }

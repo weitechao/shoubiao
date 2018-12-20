@@ -13,7 +13,7 @@ public class SocketLoginDto {
 	private String token;
 	private Channel channel;
 	private String phone;
-	private String energy;
+	//private String energy;
 
 	public String getNo() {
 		return no;
@@ -63,12 +63,12 @@ public class SocketLoginDto {
 		this.phone = phone;
 	}
 
-	public String getEnergy() {
+	/*public String getEnergy() {
 		return energy;
 	}
 
 	public void setEnergy(String energy) {
 		this.energy = energy;
-	}
+	}*/
 	
 }

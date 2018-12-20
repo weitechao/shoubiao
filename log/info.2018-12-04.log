@@ -1,1429 +1,0 @@
-2018-12-04 10:47:02,450 [main] INFO  SocketServer - ===start socket:7780
-2018-12-04 10:47:17,179 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - add connect:/192.168.3.15:51526
-2018-12-04 10:47:17,180 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelActive:/192.168.3.15:51526‘⁄œﬂ
-2018-12-04 10:47:17,821 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelInactive:/192.168.3.15:51526µÙœﬂ
-2018-12-04 10:47:17,821 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - remove connect:/192.168.3.15:51526
-2018-12-04 10:47:59,056 [nioEventLoopGroup-3-2] INFO  BaseChannelHandler - add connect:/192.168.3.15:51538
-2018-12-04 10:47:59,057 [nioEventLoopGroup-3-2] INFO  BaseChannelHandler - channelActive:/192.168.3.15:51538‘⁄œﬂ
-2018-12-04 10:48:01,872 [nioEventLoopGroup-3-2] INFO  BaseChannelHandler - [/192.168.3.15:51538]∑¢ÀÕ–≈œ¢:[YW*872018020142169*0002*0045*INIT,,0,Y01_K2_RDA6625_RENQI_LE_DIAN_LINUX.0.967.QGJ_V1.0,0000,0000,0
-2018-12-04 10:48:01,872 [nioEventLoopGroup-3-2] INFO  BusinessHandler - [YW*872018020142169*0002*0045*INIT,,0,Y01_K2_RDA6625_RENQI_LE_DIAN_LINUX.0.967.QGJ_V1.0,0000,0000,0
-2018-12-04 10:48:01,872 [nioEventLoopGroup-3-2] INFO  SocketBusinessFactory - *****cmd:INIT
-2018-12-04 10:48:02,247 [nioEventLoopGroup-3-2] ERROR DruidDataSource - init datasource error, url: jdbc:mysql://localhost:3306/watch?useUnicode=true&characterEncoding=utf8
-java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:998)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3847)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3783)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:871)
-	at com.mysql.jdbc.MysqlIO.proceedHandshakeWithPluggableAuthentication(MysqlIO.java:1665)
-	at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1207)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2249)
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2280)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2079)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:794)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:44)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:400)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:399)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:325)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148)
-	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:220)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1463)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
-	at com.alibaba.druid.pool.DruidDataSource.init(DruidDataSource.java:734)
-	at com.alibaba.druid.pool.DruidDataSource.getConnection(DruidDataSource.java:1060)
-	at com.alibaba.druid.pool.DruidDataSource.getConnection(DruidDataSource.java:1056)
-	at com.alibaba.druid.pool.DruidDataSource.getConnection(DruidDataSource.java:104)
-	at org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource.getConnection(AbstractRoutingDataSource.java:164)
-	at org.springframework.jdbc.datasource.DataSourceUtils.doGetConnection(DataSourceUtils.java:111)
-	at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:77)
-	at org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:619)
-	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:684)
-	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:716)
-	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:726)
-	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:776)
-	at com.bracelet.service.impl.DeviceServiceImpl.getDeviceInfo(DeviceServiceImpl.java:28)
-	at com.bracelet.socket.business.impl.LoginService.process(LoginService.java:66)
-	at com.bracelet.socket.business.impl.BusinessHandler.process(BusinessHandler.java:61)
-	at com.bracelet.socket.BaseChannelHandler.channelRead0(BaseChannelHandler.java:26)
-	at com.bracelet.socket.BaseChannelHandler.channelRead0(BaseChannelHandler.java:1)
-	at io.netty.channel.SimpleChannelInboundHandler.channelRead(SimpleChannelInboundHandler.java:105)
-	at com.bracelet.socket.BaseChannelHandler.channelRead(BaseChannelHandler.java:47)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
-	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340)
-	at io.netty.handler.timeout.IdleStateHandler.channelRead(IdleStateHandler.java:286)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
-	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340)
-	at io.netty.handler.codec.MessageToMessageDecoder.channelRead(MessageToMessageDecoder.java:102)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
-	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340)
-	at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:310)
-	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:284)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
-	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340)
-	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
-	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965)
-	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:163)
-	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:647)
-	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:582)
-	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:499)
-	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:461)
-	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884)
-	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
-	at java.lang.Thread.run(Thread.java:748)
-2018-12-04 10:48:02,253 [nioEventLoopGroup-3-2] ERROR DruidDataSource - {dataSource-1} init error
-java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:998)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3847)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3783)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:871)
-	at com.mysql.jdbc.MysqlIO.proceedHandshakeWithPluggableAuthentication(MysqlIO.java:1665)
-	at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1207)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2249)
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2280)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2079)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:794)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:44)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:400)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:399)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:325)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148)
-	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:220)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1463)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
-	at com.alibaba.druid.pool.DruidDataSource.init(DruidDataSource.java:734)
-	at com.alibaba.druid.pool.DruidDataSource.getConnection(DruidDataSource.java:1060)
-	at com.alibaba.druid.pool.DruidDataSource.getConnection(DruidDataSource.java:1056)
-	at com.alibaba.druid.pool.DruidDataSource.getConnection(DruidDataSource.java:104)
-	at org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource.getConnection(AbstractRoutingDataSource.java:164)
-	at org.springframework.jdbc.datasource.DataSourceUtils.doGetConnection(DataSourceUtils.java:111)
-	at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:77)
-	at org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:619)
-	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:684)
-	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:716)
-	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:726)
-	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:776)
-	at com.bracelet.service.impl.DeviceServiceImpl.getDeviceInfo(DeviceServiceImpl.java:28)
-	at com.bracelet.socket.business.impl.LoginService.process(LoginService.java:66)
-	at com.bracelet.socket.business.impl.BusinessHandler.process(BusinessHandler.java:61)
-	at com.bracelet.socket.BaseChannelHandler.channelRead0(BaseChannelHandler.java:26)
-	at com.bracelet.socket.BaseChannelHandler.channelRead0(BaseChannelHandler.java:1)
-	at io.netty.channel.SimpleChannelInboundHandler.channelRead(SimpleChannelInboundHandler.java:105)
-	at com.bracelet.socket.BaseChannelHandler.channelRead(BaseChannelHandler.java:47)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
-	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340)
-	at io.netty.handler.timeout.IdleStateHandler.channelRead(IdleStateHandler.java:286)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
-	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340)
-	at io.netty.handler.codec.MessageToMessageDecoder.channelRead(MessageToMessageDecoder.java:102)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
-	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340)
-	at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:310)
-	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:284)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
-	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340)
-	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
-	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965)
-	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:163)
-	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:647)
-	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:582)
-	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:499)
-	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:461)
-	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884)
-	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
-	at java.lang.Thread.run(Thread.java:748)
-2018-12-04 10:48:02,253 [nioEventLoopGroup-3-2] INFO  DruidDataSource - {dataSource-1} inited
-2018-12-04 10:48:02,253 [nioEventLoopGroup-3-2] ERROR BusinessHandler - process error:
-org.springframework.jdbc.CannotGetJdbcConnectionException: Could not get JDBC Connection; nested exception is java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
-	at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:80)
-	at org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:619)
-	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:684)
-	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:716)
-	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:726)
-	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:776)
-	at com.bracelet.service.impl.DeviceServiceImpl.getDeviceInfo(DeviceServiceImpl.java:28)
-	at com.bracelet.socket.business.impl.LoginService.process(LoginService.java:66)
-	at com.bracelet.socket.business.impl.BusinessHandler.process(BusinessHandler.java:61)
-	at com.bracelet.socket.BaseChannelHandler.channelRead0(BaseChannelHandler.java:26)
-	at com.bracelet.socket.BaseChannelHandler.channelRead0(BaseChannelHandler.java:1)
-	at io.netty.channel.SimpleChannelInboundHandler.channelRead(SimpleChannelInboundHandler.java:105)
-	at com.bracelet.socket.BaseChannelHandler.channelRead(BaseChannelHandler.java:47)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
-	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340)
-	at io.netty.handler.timeout.IdleStateHandler.channelRead(IdleStateHandler.java:286)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
-	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340)
-	at io.netty.handler.codec.MessageToMessageDecoder.channelRead(MessageToMessageDecoder.java:102)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
-	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340)
-	at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:310)
-	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:284)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
-	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340)
-	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
-	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965)
-	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:163)
-	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:647)
-	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:582)
-	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:499)
-	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:461)
-	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884)
-	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
-	at java.lang.Thread.run(Thread.java:748)
-Caused by: java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:998)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3847)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3783)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:871)
-	at com.mysql.jdbc.MysqlIO.proceedHandshakeWithPluggableAuthentication(MysqlIO.java:1665)
-	at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1207)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2249)
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2280)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2079)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:794)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:44)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:400)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:399)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:325)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148)
-	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:220)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1463)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
-	at com.alibaba.druid.pool.DruidDataSource.init(DruidDataSource.java:734)
-	at com.alibaba.druid.pool.DruidDataSource.getConnection(DruidDataSource.java:1060)
-	at com.alibaba.druid.pool.DruidDataSource.getConnection(DruidDataSource.java:1056)
-	at com.alibaba.druid.pool.DruidDataSource.getConnection(DruidDataSource.java:104)
-	at org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource.getConnection(AbstractRoutingDataSource.java:164)
-	at org.springframework.jdbc.datasource.DataSourceUtils.doGetConnection(DataSourceUtils.java:111)
-	at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:77)
-	... 40 common frames omitted
-2018-12-04 10:48:02,256 [Druid-ConnectionPool-Create-1126525711] ERROR DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/watch?useUnicode=true&characterEncoding=utf8, errorCode 1045, state 28000
-java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:998)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3847)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3783)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:871)
-	at com.mysql.jdbc.MysqlIO.proceedHandshakeWithPluggableAuthentication(MysqlIO.java:1665)
-	at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1207)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2249)
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2280)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2079)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:794)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:44)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:400)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:399)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:325)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148)
-	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:220)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1463)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
-	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
-2018-12-04 10:48:02,257 [Druid-ConnectionPool-Create-1126525711] ERROR DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/watch?useUnicode=true&characterEncoding=utf8, errorCode 1045, state 28000
-java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:998)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3847)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3783)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:871)
-	at com.mysql.jdbc.MysqlIO.proceedHandshakeWithPluggableAuthentication(MysqlIO.java:1665)
-	at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1207)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2249)
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2280)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2079)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:794)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:44)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:400)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:399)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:325)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148)
-	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:220)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1463)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
-	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
-2018-12-04 10:48:02,259 [Druid-ConnectionPool-Create-1126525711] ERROR DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/watch?useUnicode=true&characterEncoding=utf8, errorCode 1045, state 28000
-java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:998)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3847)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3783)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:871)
-	at com.mysql.jdbc.MysqlIO.proceedHandshakeWithPluggableAuthentication(MysqlIO.java:1665)
-	at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1207)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2249)
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2280)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2079)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:794)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:44)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:400)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:399)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:325)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148)
-	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:220)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1463)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
-	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
-2018-12-04 10:48:02,261 [Druid-ConnectionPool-Create-1126525711] ERROR DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/watch?useUnicode=true&characterEncoding=utf8, errorCode 1045, state 28000
-java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:998)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3847)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3783)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:871)
-	at com.mysql.jdbc.MysqlIO.proceedHandshakeWithPluggableAuthentication(MysqlIO.java:1665)
-	at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1207)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2249)
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2280)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2079)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:794)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:44)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:400)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:399)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:325)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148)
-	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:220)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1463)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
-	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
-2018-12-04 10:48:02,262 [Druid-ConnectionPool-Create-1126525711] ERROR DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/watch?useUnicode=true&characterEncoding=utf8, errorCode 1045, state 28000
-java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:998)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3847)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3783)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:871)
-	at com.mysql.jdbc.MysqlIO.proceedHandshakeWithPluggableAuthentication(MysqlIO.java:1665)
-	at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1207)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2249)
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2280)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2079)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:794)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:44)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:400)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:399)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:325)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148)
-	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:220)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1463)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
-	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
-2018-12-04 10:48:02,264 [Druid-ConnectionPool-Create-1126525711] ERROR DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/watch?useUnicode=true&characterEncoding=utf8, errorCode 1045, state 28000
-java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:998)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3847)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3783)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:871)
-	at com.mysql.jdbc.MysqlIO.proceedHandshakeWithPluggableAuthentication(MysqlIO.java:1665)
-	at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1207)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2249)
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2280)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2079)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:794)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:44)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:400)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:399)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:325)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148)
-	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:220)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1463)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
-	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
-2018-12-04 10:48:02,266 [Druid-ConnectionPool-Create-1126525711] ERROR DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/watch?useUnicode=true&characterEncoding=utf8, errorCode 1045, state 28000
-java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:998)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3847)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3783)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:871)
-	at com.mysql.jdbc.MysqlIO.proceedHandshakeWithPluggableAuthentication(MysqlIO.java:1665)
-	at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1207)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2249)
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2280)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2079)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:794)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:44)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:400)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:399)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:325)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148)
-	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:220)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1463)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
-	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
-2018-12-04 10:48:02,266 [nioEventLoopGroup-3-2] ERROR BaseChannelHandler - exceptioncaught,/192.168.3.15:51538
-java.lang.NullPointerException: msg
-	at io.netty.channel.AbstractChannelHandlerContext.writeAndFlush(AbstractChannelHandlerContext.java:785)
-	at io.netty.channel.AbstractChannelHandlerContext.writeAndFlush(AbstractChannelHandlerContext.java:831)
-	at io.netty.channel.DefaultChannelPipeline.writeAndFlush(DefaultChannelPipeline.java:1071)
-	at io.netty.channel.AbstractChannel.writeAndFlush(AbstractChannel.java:300)
-	at com.bracelet.socket.business.impl.BusinessHandler.process(BusinessHandler.java:88)
-	at com.bracelet.socket.BaseChannelHandler.channelRead0(BaseChannelHandler.java:26)
-	at com.bracelet.socket.BaseChannelHandler.channelRead0(BaseChannelHandler.java:1)
-	at io.netty.channel.SimpleChannelInboundHandler.channelRead(SimpleChannelInboundHandler.java:105)
-	at com.bracelet.socket.BaseChannelHandler.channelRead(BaseChannelHandler.java:47)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
-	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340)
-	at io.netty.handler.timeout.IdleStateHandler.channelRead(IdleStateHandler.java:286)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
-	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340)
-	at io.netty.handler.codec.MessageToMessageDecoder.channelRead(MessageToMessageDecoder.java:102)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
-	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340)
-	at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:310)
-	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:284)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
-	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340)
-	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
-	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965)
-	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:163)
-	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:647)
-	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:582)
-	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:499)
-	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:461)
-	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884)
-	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
-	at java.lang.Thread.run(Thread.java:748)
-2018-12-04 10:48:02,266 [nioEventLoopGroup-3-2] INFO  BaseChannelHandler - channelInactive:/192.168.3.15:51538µÙœﬂ
-2018-12-04 10:48:02,267 [nioEventLoopGroup-3-2] INFO  BaseChannelHandler - remove connect:/192.168.3.15:51538
-2018-12-04 10:48:02,269 [Druid-ConnectionPool-Create-1126525711] ERROR DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/watch?useUnicode=true&characterEncoding=utf8, errorCode 1045, state 28000
-java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:998)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3847)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3783)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:871)
-	at com.mysql.jdbc.MysqlIO.proceedHandshakeWithPluggableAuthentication(MysqlIO.java:1665)
-	at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1207)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2249)
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2280)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2079)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:794)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:44)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:400)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:399)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:325)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148)
-	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:220)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1463)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
-	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
-2018-12-04 10:48:02,272 [Druid-ConnectionPool-Create-1126525711] ERROR DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/watch?useUnicode=true&characterEncoding=utf8, errorCode 1045, state 28000
-java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:998)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3847)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3783)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:871)
-	at com.mysql.jdbc.MysqlIO.proceedHandshakeWithPluggableAuthentication(MysqlIO.java:1665)
-	at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1207)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2249)
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2280)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2079)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:794)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:44)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:400)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:399)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:325)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148)
-	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:220)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1463)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
-	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
-2018-12-04 10:48:02,273 [Druid-ConnectionPool-Create-1126525711] ERROR DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/watch?useUnicode=true&characterEncoding=utf8, errorCode 1045, state 28000
-java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:998)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3847)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3783)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:871)
-	at com.mysql.jdbc.MysqlIO.proceedHandshakeWithPluggableAuthentication(MysqlIO.java:1665)
-	at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1207)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2249)
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2280)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2079)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:794)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:44)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:400)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:399)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:325)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148)
-	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:220)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1463)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
-	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
-2018-12-04 10:48:02,275 [Druid-ConnectionPool-Create-1126525711] ERROR DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/watch?useUnicode=true&characterEncoding=utf8, errorCode 1045, state 28000
-java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:998)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3847)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3783)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:871)
-	at com.mysql.jdbc.MysqlIO.proceedHandshakeWithPluggableAuthentication(MysqlIO.java:1665)
-	at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1207)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2249)
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2280)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2079)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:794)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:44)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:400)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:399)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:325)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148)
-	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:220)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1463)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
-	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
-2018-12-04 10:48:02,277 [Druid-ConnectionPool-Create-1126525711] ERROR DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/watch?useUnicode=true&characterEncoding=utf8, errorCode 1045, state 28000
-java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:998)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3847)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3783)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:871)
-	at com.mysql.jdbc.MysqlIO.proceedHandshakeWithPluggableAuthentication(MysqlIO.java:1665)
-	at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1207)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2249)
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2280)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2079)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:794)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:44)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:400)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:399)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:325)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148)
-	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:220)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1463)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
-	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
-2018-12-04 10:48:02,278 [Druid-ConnectionPool-Create-1126525711] ERROR DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/watch?useUnicode=true&characterEncoding=utf8, errorCode 1045, state 28000
-java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:998)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3847)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3783)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:871)
-	at com.mysql.jdbc.MysqlIO.proceedHandshakeWithPluggableAuthentication(MysqlIO.java:1665)
-	at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1207)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2249)
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2280)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2079)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:794)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:44)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:400)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:399)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:325)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148)
-	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:220)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1463)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
-	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
-2018-12-04 10:48:02,279 [Druid-ConnectionPool-Create-1126525711] ERROR DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/watch?useUnicode=true&characterEncoding=utf8, errorCode 1045, state 28000
-java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:998)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3847)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3783)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:871)
-	at com.mysql.jdbc.MysqlIO.proceedHandshakeWithPluggableAuthentication(MysqlIO.java:1665)
-	at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1207)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2249)
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2280)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2079)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:794)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:44)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:400)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:399)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:325)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148)
-	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:220)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1463)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
-	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
-2018-12-04 10:48:02,282 [Druid-ConnectionPool-Create-1126525711] ERROR DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/watch?useUnicode=true&characterEncoding=utf8, errorCode 1045, state 28000
-java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:998)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3847)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3783)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:871)
-	at com.mysql.jdbc.MysqlIO.proceedHandshakeWithPluggableAuthentication(MysqlIO.java:1665)
-	at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1207)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2249)
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2280)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2079)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:794)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:44)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:400)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:399)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:325)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148)
-	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:220)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1463)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
-	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
-2018-12-04 10:48:02,283 [Druid-ConnectionPool-Create-1126525711] ERROR DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/watch?useUnicode=true&characterEncoding=utf8, errorCode 1045, state 28000
-java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:998)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3847)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3783)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:871)
-	at com.mysql.jdbc.MysqlIO.proceedHandshakeWithPluggableAuthentication(MysqlIO.java:1665)
-	at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1207)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2249)
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2280)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2079)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:794)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:44)
-	at sun.reflect.GeneratedConstructorAccessor37.newInstance(Unknown Source)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:400)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:399)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:325)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148)
-	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:220)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1463)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
-	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
-2018-12-04 10:48:02,285 [Druid-ConnectionPool-Create-1126525711] ERROR DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/watch?useUnicode=true&characterEncoding=utf8, errorCode 1045, state 28000
-java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:998)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3847)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3783)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:871)
-	at com.mysql.jdbc.MysqlIO.proceedHandshakeWithPluggableAuthentication(MysqlIO.java:1665)
-	at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1207)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2249)
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2280)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2079)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:794)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:44)
-	at sun.reflect.GeneratedConstructorAccessor37.newInstance(Unknown Source)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:400)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:399)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:325)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148)
-	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:220)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1463)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
-	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
-2018-12-04 10:48:02,286 [Druid-ConnectionPool-Create-1126525711] ERROR DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/watch?useUnicode=true&characterEncoding=utf8, errorCode 1045, state 28000
-java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:998)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3847)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3783)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:871)
-	at com.mysql.jdbc.MysqlIO.proceedHandshakeWithPluggableAuthentication(MysqlIO.java:1665)
-	at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1207)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2249)
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2280)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2079)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:794)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:44)
-	at sun.reflect.GeneratedConstructorAccessor37.newInstance(Unknown Source)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:400)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:399)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:325)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148)
-	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:220)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1463)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
-	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
-2018-12-04 10:48:02,288 [Druid-ConnectionPool-Create-1126525711] ERROR DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/watch?useUnicode=true&characterEncoding=utf8, errorCode 1045, state 28000
-java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:998)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3847)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3783)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:871)
-	at com.mysql.jdbc.MysqlIO.proceedHandshakeWithPluggableAuthentication(MysqlIO.java:1665)
-	at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1207)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2249)
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2280)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2079)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:794)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:44)
-	at sun.reflect.GeneratedConstructorAccessor37.newInstance(Unknown Source)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:400)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:399)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:325)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148)
-	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:220)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1463)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
-	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
-2018-12-04 10:48:02,289 [Druid-ConnectionPool-Create-1126525711] ERROR DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/watch?useUnicode=true&characterEncoding=utf8, errorCode 1045, state 28000
-java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:998)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3847)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3783)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:871)
-	at com.mysql.jdbc.MysqlIO.proceedHandshakeWithPluggableAuthentication(MysqlIO.java:1665)
-	at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1207)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2249)
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2280)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2079)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:794)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:44)
-	at sun.reflect.GeneratedConstructorAccessor37.newInstance(Unknown Source)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:400)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:399)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:325)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148)
-	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:220)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1463)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
-	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
-2018-12-04 10:48:02,291 [Druid-ConnectionPool-Create-1126525711] ERROR DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/watch?useUnicode=true&characterEncoding=utf8, errorCode 1045, state 28000
-java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:998)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3847)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3783)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:871)
-	at com.mysql.jdbc.MysqlIO.proceedHandshakeWithPluggableAuthentication(MysqlIO.java:1665)
-	at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1207)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2249)
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2280)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2079)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:794)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:44)
-	at sun.reflect.GeneratedConstructorAccessor37.newInstance(Unknown Source)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:400)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:399)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:325)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148)
-	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:220)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1463)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
-	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
-2018-12-04 10:48:02,292 [Druid-ConnectionPool-Create-1126525711] ERROR DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/watch?useUnicode=true&characterEncoding=utf8, errorCode 1045, state 28000
-java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:998)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3847)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3783)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:871)
-	at com.mysql.jdbc.MysqlIO.proceedHandshakeWithPluggableAuthentication(MysqlIO.java:1665)
-	at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1207)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2249)
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2280)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2079)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:794)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:44)
-	at sun.reflect.GeneratedConstructorAccessor37.newInstance(Unknown Source)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:400)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:399)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:325)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148)
-	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:220)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1463)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
-	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
-2018-12-04 10:48:02,293 [Druid-ConnectionPool-Create-1126525711] ERROR DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/watch?useUnicode=true&characterEncoding=utf8, errorCode 1045, state 28000
-java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:998)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3847)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3783)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:871)
-	at com.mysql.jdbc.MysqlIO.proceedHandshakeWithPluggableAuthentication(MysqlIO.java:1665)
-	at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1207)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2249)
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2280)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2079)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:794)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:44)
-	at sun.reflect.GeneratedConstructorAccessor37.newInstance(Unknown Source)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:400)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:399)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:325)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148)
-	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:220)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1463)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
-	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
-2018-12-04 10:48:02,294 [Druid-ConnectionPool-Create-1126525711] ERROR DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/watch?useUnicode=true&characterEncoding=utf8, errorCode 1045, state 28000
-java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:998)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3847)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3783)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:871)
-	at com.mysql.jdbc.MysqlIO.proceedHandshakeWithPluggableAuthentication(MysqlIO.java:1665)
-	at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1207)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2249)
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2280)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2079)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:794)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:44)
-	at sun.reflect.GeneratedConstructorAccessor37.newInstance(Unknown Source)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:400)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:399)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:325)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148)
-	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:220)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1463)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
-	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
-2018-12-04 10:48:02,295 [Druid-ConnectionPool-Create-1126525711] ERROR DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/watch?useUnicode=true&characterEncoding=utf8, errorCode 1045, state 28000
-java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:998)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3847)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3783)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:871)
-	at com.mysql.jdbc.MysqlIO.proceedHandshakeWithPluggableAuthentication(MysqlIO.java:1665)
-	at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1207)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2249)
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2280)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2079)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:794)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:44)
-	at sun.reflect.GeneratedConstructorAccessor37.newInstance(Unknown Source)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:400)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:399)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:325)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148)
-	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:220)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1463)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
-	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
-2018-12-04 10:48:02,297 [Druid-ConnectionPool-Create-1126525711] ERROR DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/watch?useUnicode=true&characterEncoding=utf8, errorCode 1045, state 28000
-java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:998)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3847)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3783)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:871)
-	at com.mysql.jdbc.MysqlIO.proceedHandshakeWithPluggableAuthentication(MysqlIO.java:1665)
-	at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1207)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2249)
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2280)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2079)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:794)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:44)
-	at sun.reflect.GeneratedConstructorAccessor37.newInstance(Unknown Source)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:400)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:399)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:325)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148)
-	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:220)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1463)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
-	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
-2018-12-04 10:48:02,298 [Druid-ConnectionPool-Create-1126525711] ERROR DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/watch?useUnicode=true&characterEncoding=utf8, errorCode 1045, state 28000
-java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:998)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3847)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3783)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:871)
-	at com.mysql.jdbc.MysqlIO.proceedHandshakeWithPluggableAuthentication(MysqlIO.java:1665)
-	at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1207)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2249)
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2280)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2079)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:794)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:44)
-	at sun.reflect.GeneratedConstructorAccessor37.newInstance(Unknown Source)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:400)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:399)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:325)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148)
-	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:220)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1463)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
-	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
-2018-12-04 10:48:02,299 [Druid-ConnectionPool-Create-1126525711] ERROR DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/watch?useUnicode=true&characterEncoding=utf8, errorCode 1045, state 28000
-java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:998)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3847)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3783)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:871)
-	at com.mysql.jdbc.MysqlIO.proceedHandshakeWithPluggableAuthentication(MysqlIO.java:1665)
-	at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1207)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2249)
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2280)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2079)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:794)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:44)
-	at sun.reflect.GeneratedConstructorAccessor37.newInstance(Unknown Source)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:400)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:399)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:325)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148)
-	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:220)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1463)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
-	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
-2018-12-04 10:48:02,300 [Druid-ConnectionPool-Create-1126525711] ERROR DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/watch?useUnicode=true&characterEncoding=utf8, errorCode 1045, state 28000
-java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:998)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3847)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3783)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:871)
-	at com.mysql.jdbc.MysqlIO.proceedHandshakeWithPluggableAuthentication(MysqlIO.java:1665)
-	at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1207)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2249)
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2280)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2079)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:794)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:44)
-	at sun.reflect.GeneratedConstructorAccessor37.newInstance(Unknown Source)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:400)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:399)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:325)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148)
-	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:220)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1463)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
-	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
-2018-12-04 10:48:02,301 [Druid-ConnectionPool-Create-1126525711] ERROR DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/watch?useUnicode=true&characterEncoding=utf8, errorCode 1045, state 28000
-java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:998)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3847)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3783)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:871)
-	at com.mysql.jdbc.MysqlIO.proceedHandshakeWithPluggableAuthentication(MysqlIO.java:1665)
-	at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1207)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2249)
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2280)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2079)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:794)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:44)
-	at sun.reflect.GeneratedConstructorAccessor37.newInstance(Unknown Source)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:400)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:399)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:325)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148)
-	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:220)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1463)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
-	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
-2018-12-04 10:48:02,303 [Druid-ConnectionPool-Create-1126525711] ERROR DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/watch?useUnicode=true&characterEncoding=utf8, errorCode 1045, state 28000
-java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:998)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3847)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3783)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:871)
-	at com.mysql.jdbc.MysqlIO.proceedHandshakeWithPluggableAuthentication(MysqlIO.java:1665)
-	at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1207)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2249)
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2280)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2079)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:794)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:44)
-	at sun.reflect.GeneratedConstructorAccessor37.newInstance(Unknown Source)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:400)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:399)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:325)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148)
-	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:220)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1463)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
-	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
-2018-12-04 10:48:08,321 [nioEventLoopGroup-3-3] INFO  BaseChannelHandler - add connect:/192.168.3.15:51575
-2018-12-04 10:48:08,321 [nioEventLoopGroup-3-3] INFO  BaseChannelHandler - channelActive:/192.168.3.15:51575‘⁄œﬂ
-2018-12-04 10:48:13,216 [nioEventLoopGroup-3-3] INFO  BaseChannelHandler - channelInactive:/192.168.3.15:51575µÙœﬂ
-2018-12-04 10:48:13,216 [nioEventLoopGroup-3-3] INFO  BaseChannelHandler - remove connect:/192.168.3.15:51575
-2018-12-04 10:48:18,209 [nioEventLoopGroup-3-4] INFO  BaseChannelHandler - add connect:/127.0.0.1:51578
-2018-12-04 10:48:18,209 [nioEventLoopGroup-3-4] INFO  BaseChannelHandler - channelActive:/127.0.0.1:51578‘⁄œﬂ
-2018-12-04 10:48:21,109 [nioEventLoopGroup-3-4] INFO  BaseChannelHandler - [/127.0.0.1:51578]∑¢ÀÕ–≈œ¢:[YW*872018020142169*0002*0045*INIT,,0,Y01_K2_RDA6625_RENQI_LE_DIAN_LINUX.0.967.QGJ_V1.0,0000,0000,0
-2018-12-04 10:48:21,109 [nioEventLoopGroup-3-4] INFO  BusinessHandler - [YW*872018020142169*0002*0045*INIT,,0,Y01_K2_RDA6625_RENQI_LE_DIAN_LINUX.0.967.QGJ_V1.0,0000,0000,0
-2018-12-04 10:48:21,109 [nioEventLoopGroup-3-4] INFO  SocketBusinessFactory - *****cmd:INIT
-2018-12-04 10:48:32,305 [Druid-ConnectionPool-Create-1126525711] ERROR DruidDataSource - create connection error, url: jdbc:mysql://localhost:3306/watch?useUnicode=true&characterEncoding=utf8, errorCode 1045, state 28000
-java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
-	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:998)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3847)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3783)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:871)
-	at com.mysql.jdbc.MysqlIO.proceedHandshakeWithPluggableAuthentication(MysqlIO.java:1665)
-	at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1207)
-	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2249)
-	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2280)
-	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2079)
-	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:794)
-	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:44)
-	at sun.reflect.GeneratedConstructorAccessor37.newInstance(Unknown Source)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:400)
-	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:399)
-	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:325)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148)
-	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:220)
-	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1463)
-	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1525)
-	at com.alibaba.druid.pool.DruidDataSource$CreateConnectionThread.run(DruidDataSource.java:2100)
-2018-12-04 10:48:51,462 [main] INFO  SocketServer - ===start socket:7780
-2018-12-04 10:48:59,189 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - add connect:/127.0.0.1:51624
-2018-12-04 10:48:59,189 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelActive:/127.0.0.1:51624‘⁄œﬂ
-2018-12-04 10:49:03,784 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - [/127.0.0.1:51624]∑¢ÀÕ–≈œ¢:[YW*872018020142169*0002*0045*INIT,,0,Y01_K2_RDA6625_RENQI_LE_DIAN_LINUX.0.967.QGJ_V1.0,0000,0000,0
-2018-12-04 10:49:03,784 [nioEventLoopGroup-3-1] INFO  BusinessHandler - [YW*872018020142169*0002*0045*INIT,,0,Y01_K2_RDA6625_RENQI_LE_DIAN_LINUX.0.967.QGJ_V1.0,0000,0000,0
-2018-12-04 10:49:03,785 [nioEventLoopGroup-3-1] INFO  SocketBusinessFactory - *****cmd:INIT
-2018-12-04 10:49:04,059 [nioEventLoopGroup-3-1] INFO  DruidDataSource - {dataSource-1} inited
-2018-12-04 10:49:04,161 [nioEventLoopGroup-3-1] INFO  DeviceServiceImpl - get getDeviceInfo imei:872018020142169
-2018-12-04 10:49:04,179 [nioEventLoopGroup-3-1] INFO  LoginService - …Ë±∏≥ı ºªØµ«¬ºdv:Y01_K2_RDA6625_RENQI_LE_DIAN_LINUX.0.967.QGJ_V1.0,,no:0002,imei:872018020142169
-2018-12-04 10:49:04,179 [nioEventLoopGroup-3-1] INFO  LoginService - ±£¥Ê ÷±Ìµ«¬º–≈œ¢,no:0002,imei872018020142169
-2018-12-04 10:49:04,200 [nioEventLoopGroup-3-1] INFO  LoginService - ∑µªÿ…Ë±∏µ«¬º–≈œ¢=[YW*872018020142169*0001*0006*INIT,1]
-2018-12-04 10:49:40,761 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - [/127.0.0.1:51624]∑¢ÀÕ–≈œ¢:[YW*872018020142169*0008*0423*TK,0,wetalk_20181204182703.amr,1,2,#!AMR
-
-<???g?F??E2
-<???g?F??E2
-<???g?F??E2D?:?+%??O?????~oe??Ra??(A?6??iC?8?B*??&w?q?D?????#?Y??$?	???Y??j?? ??Y?f?*?:"?Ezoh/?[?E?l? ??ßﬂ?O?-??C~z?D?%NJd????F??ll??~?7?,?iJ?? ???F?!?4,@~???7???H?:rx&???∂T??
- ?\???_ZE?X}?LE?
-2018-12-04 10:27:01,596 [nioEventLoopGroup-3-2
-2018-12-04 10:49:40,762 [nioEventLoopGroup-3-1] INFO  BusinessHandler - [YW*872018020142169*0008*0423*TK,0,wetalk_20181204182703.amr,1,2,#!AMR
-
-<???g?F??E2
-<???g?F??E2
-<???g?F??E2D?:?+%??O?????~oe??Ra??(A?6??iC?8?B*??&w?q?D?????#?Y??$?	???Y??j?? ??Y?f?*?:"?Ezoh/?[?E?l? ??ßﬂ?O?-??C~z?D?%NJd????F??ll??~?7?,?iJ?? ???F?!?4,@~???7???H?:rx&???∂T??
- ?\???_ZE?X}?LE?
-2018-12-04 10:27:01,596 [nioEventLoopGroup-3-2
-2018-12-04 10:49:40,762 [nioEventLoopGroup-3-1] INFO  SocketBusinessFactory - *****cmd:TK
-2018-12-04 10:49:40,762 [nioEventLoopGroup-3-1] INFO  TkService - ”Ô“ÙΩ” ’÷’∂Àªÿ∏¥:YW*872018020142169*0008*0423*TK,0,wetalk_20181204182703.amr,1,2,#!AMR
-
-<???g?F??E2
-<???g?F??E2
-<???g?F??E2D?:?+%??O?????~oe??Ra??(A?6??iC?8?B*??&w?q?D?????#?Y??$?	???Y??j?? ??Y?f?*?:"?Ezoh/??E?l? ??ßﬂ?O?-??C~z?D?%NJd????F??ll??~?7?,?iJ?? ???F?!?4,@~???7???H?:rx&???∂T??
- ?\???_ZE?X}?LE?
-2018-12-04 10:27:01,596 nioEventLoopGroup-3-2
-2018-12-04 10:49:40,762 [nioEventLoopGroup-3-1] INFO  TkService - ARM∏Ò Ω∂˛Ω¯÷∆“Ù∆µ ˝æ›=#!AMR
-
-<???g?F??E2
-<???g?F??E2
-<???g?F??E2D?:?+%??O?????~oe??Ra??(A?6??iC?8?B
-2018-12-04 10:49:40,763 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - [/127.0.0.1:51624]∑¢ÀÕ–≈œ¢: INFO  BusinessHandler - [YW*872018020142169*0008*0423*TK,0,wetalk_20181204182703.amr,1,2,#!AMR
-
-<???g?F??E2
-<???g?F??E2
-<???g?F??E2D?:?+%??O?????~oe??Ra??(A?6??iC?8?B*??&w?q?D?????#?Y??$?	???Y??j?? ??Y?f?*?:"?Ezoh/?[?E?l? ??ßﬂ?O?-??C~z?D?%NJd????F??ll??~?7?,?iJ?? ???F?!?4,@~???7???H?:rx&???∂T??
- ?\???_ZE?X}?LE?
-2018-12-04 10:49:40,763 [nioEventLoopGroup-3-1] INFO  BusinessHandler -  INFO  BusinessHandler - [YW*872018020142169*0008*0423*TK,0,wetalk_20181204182703.amr,1,2,#!AMR
-
-<???g?F??E2
-<???g?F??E2
-<???g?F??E2D?:?+%??O?????~oe??Ra??(A?6??iC?8?B*??&w?q?D?????#?Y??$?	???Y??j?? ??Y?f?*?:"?Ezoh/?[?E?l? ??ßﬂ?O?-??C~z?D?%NJd????F??ll??~?7?,?iJ?? ???F?!?4,@~???7???H?:rx&???∂T??
- ?\???_ZE?X}?LE?
-2018-12-04 10:49:40,763 [nioEventLoopGroup-3-1] INFO  SocketBusinessFactory - *****cmd:TK
-2018-12-04 10:49:40,763 [nioEventLoopGroup-3-1] INFO  TkService - ”Ô“ÙΩ” ’÷’∂Àªÿ∏¥: INFO  BusinessHandler - YW*872018020142169*0008*0423*TK,0,wetalk_20181204182703.amr,1,2,#!AMR
-
-<???g?F??E2
-<???g?F??E2
-<???g?F??E2D?:?+%??O?????~oe??Ra??(A?6??iC?8?B*??&w?q?D?????#?Y??$?	???Y??j?? ??Y?f?*?:"?Ezoh/??E?l? ??ßﬂ?O?-??C~z?D?%NJd????F??ll??~?7?,?iJ?? ???F?!?4,@~???7???H?:rx&???∂T??
- ?\???_ZE?X}?LE?
-2018-12-04 10:49:40,763 [nioEventLoopGroup-3-1] INFO  TkService - ARM∏Ò Ω∂˛Ω¯÷∆“Ù∆µ ˝æ›=#!AMR
-
-<???g?F??E2
-<???g?F??E2
-<???g?F??E2D?:?+%??O?????~oe??Ra??(A?6??iC?8?B
-2018-12-04 10:50:39,785 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - [/127.0.0.1:51624]∑¢ÀÕ–≈œ¢:[YW*872018020142169*0008*0423*TK,0,wetalk_20181204182703.amr,1,2,#!AMR
-
-<???g?F??E2
-<???g?F??E2
-<???g?F??E2D?:?+%??O?????~oe??Ra??(A?6??iC?8?B*??&w?q?D?????#?Y??$?	???Y??j?? ??Y?f?*?:"?Ezoh/?[?E?l? ??ßﬂ?O?-??C~z?D?%NJd????F??ll??~?7?,?iJ?? ???F?!?4,@~???7???H?:rx&???∂T??
- ?\???_ZE?X}?LE?
-2018-12-04 10:50:39,785 [nioEventLoopGroup-3-1] INFO  BusinessHandler - [YW*872018020142169*0008*0423*TK,0,wetalk_20181204182703.amr,1,2,#!AMR
-
-<???g?F??E2
-<???g?F??E2
-<???g?F??E2D?:?+%??O?????~oe??Ra??(A?6??iC?8?B*??&w?q?D?????#?Y??$?	???Y??j?? ??Y?f?*?:"?Ezoh/?[?E?l? ??ßﬂ?O?-??C~z?D?%NJd????F??ll??~?7?,?iJ?? ???F?!?4,@~???7???H?:rx&???∂T??
- ?\???_ZE?X}?LE?
-2018-12-04 10:50:39,785 [nioEventLoopGroup-3-1] INFO  SocketBusinessFactory - *****cmd:TK
-2018-12-04 10:50:39,785 [nioEventLoopGroup-3-1] INFO  TkService - ”Ô“ÙΩ” ’÷’∂Àªÿ∏¥:YW*872018020142169*0008*0423*TK,0,wetalk_20181204182703.amr,1,2,#!AMR
-
-<???g?F??E2
-<???g?F??E2
-<???g?F??E2D?:?+%??O?????~oe??Ra??(A?6??iC?8?B*??&w?q?D?????#?Y??$?	???Y??j?? ??Y?f?*?:"?Ezoh/??E?l? ??ßﬂ?O?-??C~z?D?%NJd????F??ll??~?7?,?iJ?? ???F?!?4,@~???7???H?:rx&???∂T??
- ?\???_ZE?X}?LE?
-2018-12-04 10:50:39,785 [nioEventLoopGroup-3-1] INFO  TkService - ARM∏Ò Ω∂˛Ω¯÷∆“Ù∆µ ˝æ›=#!AMR
-
-<???g?F??E2
-<???g?F??E2
-<???g?F??E2D?:?+%??O?????~oe??Ra??(A?6??iC?8?B
-2018-12-04 10:52:49,789 [nioEventLoopGroup-3-1] ERROR BaseChannelHandler - exceptioncaught,/127.0.0.1:51624
-io.netty.handler.timeout.ReadTimeoutException: null
-2018-12-04 10:52:49,789 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelInactive:/127.0.0.1:51624µÙœﬂ
-2018-12-04 10:52:49,790 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - remove connect:/127.0.0.1:51624
-2018-12-04 14:28:19,870 [main] INFO  SocketServer - ===start socket:7780
-2018-12-04 14:28:23,833 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - add connect:/127.0.0.1:56103
-2018-12-04 14:28:23,833 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelActive:/127.0.0.1:56103‘⁄œﬂ
-2018-12-04 14:28:26,277 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - [/127.0.0.1:56103]∑¢ÀÕ–≈œ¢:[YW*872018020142169*0002*0045*INIT,,0,Y01_K2_RDA6625_RENQI_LE_DIAN_LINUX.0.967.QGJ_V1.0,0000,0000,0
-2018-12-04 14:28:26,277 [nioEventLoopGroup-3-1] INFO  BusinessHandler - [YW*872018020142169*0002*0045*INIT,,0,Y01_K2_RDA6625_RENQI_LE_DIAN_LINUX.0.967.QGJ_V1.0,0000,0000,0
-2018-12-04 14:28:26,278 [nioEventLoopGroup-3-1] INFO  SocketBusinessFactory - *****cmd:INIT
-2018-12-04 14:28:26,475 [nioEventLoopGroup-3-1] INFO  DruidDataSource - {dataSource-1} inited
-2018-12-04 14:28:26,529 [nioEventLoopGroup-3-1] INFO  LoginService - …Ë±∏≥ı ºªØµ«¬ºdv:Y01_K2_RDA6625_RENQI_LE_DIAN_LINUX.0.967.QGJ_V1.0,,no:0002,imei:872018020142169
-2018-12-04 14:28:26,529 [nioEventLoopGroup-3-1] INFO  LoginService - ±£¥Ê ÷±Ìµ«¬º–≈œ¢,no:0002,imei872018020142169
-2018-12-04 14:28:26,533 [nioEventLoopGroup-3-1] INFO  LoginService - ∑µªÿ…Ë±∏µ«¬º–≈œ¢=[YW*872018020142169*0001*0006*INIT,1]
-2018-12-04 14:28:36,467 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - [/127.0.0.1:56103]∑¢ÀÕ–≈œ¢:[YW*872018020142169*0008*0423*TK,0,wetalk_20181204182703.amr,1,2,#!AMR
-
-<???g?F??E2
-<???g?F??E2
-<???g?F??E2D?:?+%??O?????~oe??Ra??(A?6??iC?8?B*??&w?q?D?????#?Y??$?	???Y??j?? ??Y?f?*?:"?Ezoh/?[?E?l? ??ßﬂ?O?-??C~z?D?%NJd????F??ll??~?7?,?iJ?? ???F?!?4,@~???7???H?:rx&???∂T??
- ?\???_ZE?X}?LE?
-2018-12-04 14:28:36,467 [nioEventLoopGroup-3-1] INFO  BusinessHandler - [YW*872018020142169*0008*0423*TK,0,wetalk_20181204182703.amr,1,2,#!AMR
-
-<???g?F??E2
-<???g?F??E2
-<???g?F??E2D?:?+%??O?????~oe??Ra??(A?6??iC?8?B*??&w?q?D?????#?Y??$?	???Y??j?? ??Y?f?*?:"?Ezoh/?[?E?l? ??ßﬂ?O?-??C~z?D?%NJd????F??ll??~?7?,?iJ?? ???F?!?4,@~???7???H?:rx&???∂T??
- ?\???_ZE?X}?LE?
-2018-12-04 14:28:36,467 [nioEventLoopGroup-3-1] INFO  SocketBusinessFactory - *****cmd:TK
-2018-12-04 14:28:36,467 [nioEventLoopGroup-3-1] INFO  TkService - ”Ô“ÙΩ” ’:YW*872018020142169*0008*0423*TK,0,wetalk_20181204182703.amr,1,2,#!AMR
-
-<???g?F??E2
-<???g?F??E2
-<???g?F??E2D?:?+%??O?????~oe??Ra??(A?6??iC?8?B*??&w?q?D?????#?Y??$?	???Y??j?? ??Y?f?*?:"?Ezoh/??E?l? ??ßﬂ?O?-??C~z?D?%NJd????F??ll??~?7?,?iJ?? ???F?!?4,@~???7???H?:rx&???∂T??
- ?\???_ZE?X}?LE?
-2018-12-04 14:28:36,468 [nioEventLoopGroup-3-1] INFO  TkService - ¥”socketLoginDto¿Ô»°≥ˆ¿¥µƒimei=872018020142169
-2018-12-04 14:28:36,468 [nioEventLoopGroup-3-1] INFO  TkService - [voiceName]=wetalk_20181204182703.amr
-2018-12-04 14:28:36,468 [nioEventLoopGroup-3-1] INFO  TkService - ¥”hashmap¿ÔªÒ»°µƒvoiceNamewetalk_20181204182703.amr
-2018-12-04 14:28:36,468 [nioEventLoopGroup-3-1] INFO  TkService -  Æ¡˘Ω¯÷∆◊™ªª∫Ûµƒ≥§∂»=1059
-2018-12-04 14:28:36,468 [nioEventLoopGroup-3-1] INFO  TkService - amrµƒŒª÷√=64
-2018-12-04 14:28:36,468 [nioEventLoopGroup-3-1] INFO  TkService - ”Ô“Ùjson◊‹≥§∂»=329
-2018-12-04 14:28:36,468 [nioEventLoopGroup-3-1] INFO  TkService - ARM∏Ò Ω∂˛Ω¯÷∆“Ù∆µ ˝æ›=#!AMR
-
-<???g?F??E2
-<???g?F??E2
-<???g?F??E2D?:?+%??O?????~oe??Ra??(A?6??iC?8?B*??&w?q?D?????#?Y??$?	???Y??j?? ??Y?f?*?:"?Ezoh/??E?l? ??ßﬂ?O?-??C~z?D?%NJd????F??ll??~?7?,?iJ?? ???F?!?4,@~???7???H?:rx&???∂T??
- ?\???_ZE?X}?LE?
-2018-12-04 14:28:36,471 [nioEventLoopGroup-3-1] INFO  TkService - voiceName(status=0)=wetalk_20181204182703.amr
-2018-12-04 14:29:05,115 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - [/127.0.0.1:56103]∑¢ÀÕ–≈œ¢:[?O?????~oe??Ra??(A?6??iC?8?B*??&w?q?D?????#?Y??$?	???Y??j?? ??Y?f?*?:"?Ezoh/?[?E?l? ??ßﬂ?O?-??C~z?D?%NJd????F??ll??~?7?,?iJ?? ???F?!?4,@~???7???H?:rx&???∂T??
- ?\???_ZE?X}?LE
-2018-12-04 14:29:05,115 [nioEventLoopGroup-3-1] INFO  BusinessHandler - [?O?????~oe??Ra??(A?6??iC?8?B*??&w?q?D?????#?Y??$?	???Y??j?? ??Y?f?*?:"?Ezoh/?[?E?l? ??ßﬂ?O?-??C~z?D?%NJd????F??ll??~?7?,?iJ?? ???F?!?4,@~???7???H?:rx&???∂T??
- ?\???_ZE?X}?LE
-2018-12-04 14:29:05,115 [nioEventLoopGroup-3-1] INFO  SocketBusinessFactory - *****cmd:TK
-2018-12-04 14:29:05,115 [nioEventLoopGroup-3-1] INFO  TkService - ”Ô“ÙΩ” ’:[?O?????~oe??Ra??(A?6??iC?8?B*??&w?q?D?????#?Y??$?	???Y??j?? ??Y?f?*?:"?Ezoh/?[?E?l? ??ßﬂ?O?-??C~z?D?%NJd????F??ll??~?7?,?iJ?? ???F?!?4,@~???7???H?:rx&???∂T??
- ?\???_ZE?X}?LE
-2018-12-04 14:29:05,115 [nioEventLoopGroup-3-1] INFO  TkService - ¥”socketLoginDto¿Ô»°≥ˆ¿¥µƒimei=872018020142169
-2018-12-04 14:29:05,115 [nioEventLoopGroup-3-1] INFO  TkService - voiceName=wetalk_20181204182703.amr
-2018-12-04 14:29:46,465 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - [/127.0.0.1:56103]∑¢ÀÕ–≈œ¢:[YW*872018020142169*0001*0009*TK,3,,0,0
-2018-12-04 14:29:46,465 [nioEventLoopGroup-3-1] INFO  BusinessHandler - [YW*872018020142169*0001*0009*TK,3,,0,0
-2018-12-04 14:29:46,466 [nioEventLoopGroup-3-1] INFO  SocketBusinessFactory - *****cmd:TK
-2018-12-04 14:29:46,466 [nioEventLoopGroup-3-1] INFO  TkService - ”Ô“ÙΩ” ’:YW*872018020142169*0001*0009*TK,3,,0,0
-2018-12-04 14:29:46,466 [nioEventLoopGroup-3-1] INFO  TkService - ¥”socketLoginDto¿Ô»°≥ˆ¿¥µƒimei=872018020142169
-2018-12-04 14:29:46,466 [nioEventLoopGroup-3-1] INFO  TkService - [voiceName]=
-2018-12-04 14:29:46,466 [nioEventLoopGroup-3-1] INFO  TkService - ¥”hashmap¿ÔªÒ»°µƒvoiceName1543904986466.amr
-2018-12-04 14:29:46,466 [nioEventLoopGroup-3-1] INFO  TkService -  Æ¡˘Ω¯÷∆◊™ªª∫Ûµƒ≥§∂»=9
-2018-12-04 14:46:06,688 [main] INFO  SocketServer - ===start socket:7780
-2018-12-04 14:46:14,033 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - add connect:/127.0.0.1:56493
-2018-12-04 14:46:14,033 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelActive:/127.0.0.1:56493‘⁄œﬂ
-2018-12-04 14:46:20,398 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - [/127.0.0.1:56493]∑¢ÀÕ–≈œ¢:[YW*872018020142169*0002*0045*INIT,,0,Y01_K2_RDA6625_RENQI_LE_DIAN_LINUX.0.967.QGJ_V1.0,0000,0000,0
-2018-12-04 14:46:20,399 [nioEventLoopGroup-3-1] INFO  BusinessHandler - [YW*872018020142169*0002*0045*INIT,,0,Y01_K2_RDA6625_RENQI_LE_DIAN_LINUX.0.967.QGJ_V1.0,0000,0000,0
-2018-12-04 14:46:20,399 [nioEventLoopGroup-3-1] INFO  SocketBusinessFactory - *****cmd:INIT
-2018-12-04 14:46:20,606 [nioEventLoopGroup-3-1] INFO  DruidDataSource - {dataSource-1} inited
-2018-12-04 14:46:20,640 [nioEventLoopGroup-3-1] INFO  LoginService - …Ë±∏≥ı ºªØµ«¬ºdv:Y01_K2_RDA6625_RENQI_LE_DIAN_LINUX.0.967.QGJ_V1.0,,no:0002,imei:872018020142169
-2018-12-04 14:46:20,640 [nioEventLoopGroup-3-1] INFO  LoginService - ±£¥Ê ÷±Ìµ«¬º–≈œ¢,no:0002,imei872018020142169
-2018-12-04 14:46:20,643 [nioEventLoopGroup-3-1] INFO  LoginService - ∑µªÿ…Ë±∏µ«¬º–≈œ¢=[YW*872018020142169*0001*0006*INIT,1]
-2018-12-04 14:46:32,333 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - [/127.0.0.1:56493]∑¢ÀÕ–≈œ¢:[YW*872018020142169*0008*0423*TK,0,wetalk_20181204182703.amr,1,2,#!AMR
-
-<???g?F??E2
-<???g?F??E2
-<???g?F??E2D?:?+%??O?????~oe??Ra??(A?6??iC?8?B*??&w?q?D?????#?Y??$?	???Y??j?? ??Y?f?*?:"?Ezoh/?[?E?l? ??ßﬂ?O?-??C~z?D?%NJd????F??ll??~?7?,?iJ?? ???F?!?4,@~???7???H?:rx&???∂T??
- ?\???_ZE?X}?LE?
-2018-12-04 14:46:32,333 [nioEventLoopGroup-3-1] INFO  BusinessHandler - [YW*872018020142169*0008*0423*TK,0,wetalk_20181204182703.amr,1,2,#!AMR
-
-<???g?F??E2
-<???g?F??E2
-<???g?F??E2D?:?+%??O?????~oe??Ra??(A?6??iC?8?B*??&w?q?D?????#?Y??$?	???Y??j?? ??Y?f?*?:"?Ezoh/?[?E?l? ??ßﬂ?O?-??C~z?D?%NJd????F??ll??~?7?,?iJ?? ???F?!?4,@~???7???H?:rx&???∂T??
- ?\???_ZE?X}?LE?
-2018-12-04 14:46:32,333 [nioEventLoopGroup-3-1] INFO  SocketBusinessFactory - *****cmd:TK
-2018-12-04 14:46:32,333 [nioEventLoopGroup-3-1] INFO  TkService - ”Ô“ÙΩ” ’:YW*872018020142169*0008*0423*TK,0,wetalk_20181204182703.amr,1,2,#!AMR
-
-<???g?F??E2
-<???g?F??E2
-<???g?F??E2D?:?+%??O?????~oe??Ra??(A?6??iC?8?B*??&w?q?D?????#?Y??$?	???Y??j?? ??Y?f?*?:"?Ezoh/??E?l? ??ßﬂ?O?-??C~z?D?%NJd????F??ll??~?7?,?iJ?? ???F?!?4,@~???7???H?:rx&???∂T??
- ?\???_ZE?X}?LE?
-2018-12-04 14:46:32,333 [nioEventLoopGroup-3-1] INFO  TkService - ¥”socketLoginDto¿Ô»°≥ˆ¿¥µƒimei=872018020142169
-2018-12-04 14:46:32,333 [nioEventLoopGroup-3-1] INFO  TkService - [voiceName]=wetalk_20181204182703.amr
-2018-12-04 14:46:32,333 [nioEventLoopGroup-3-1] INFO  TkService - ¥”hashmap¿ÔªÒ»°µƒvoiceNamewetalk_20181204182703.amr
-2018-12-04 14:46:32,333 [nioEventLoopGroup-3-1] INFO  TkService -  Æ¡˘Ω¯÷∆◊™ªª∫Ûµƒ≥§∂»=1059
-2018-12-04 14:46:32,333 [nioEventLoopGroup-3-1] INFO  TkService - amrµƒŒª÷√=64
-2018-12-04 14:46:32,334 [nioEventLoopGroup-3-1] INFO  TkService - ”Ô“Ùjson◊‹≥§∂»=329
-2018-12-04 14:46:32,334 [nioEventLoopGroup-3-1] INFO  TkService - ARM∏Ò Ω∂˛Ω¯÷∆“Ù∆µ ˝æ›=#!AMR
-
-<???g?F??E2
-<???g?F??E2
-<???g?F??E2D?:?+%??O?????~oe??Ra??(A?6??iC?8?B*??&w?q?D?????#?Y??$?	???Y??j?? ??Y?f?*?:"?Ezoh/??E?l? ??ßﬂ?O?-??C~z?D?%NJd????F??ll??~?7?,?iJ?? ???F?!?4,@~???7???H?:rx&???∂T??
- ?\???_ZE?X}?LE?
-2018-12-04 14:46:32,337 [nioEventLoopGroup-3-1] INFO  TkService - voiceName(status=0)=wetalk_20181204182703.amr
-2018-12-04 15:21:49,930 [main] INFO  SocketServer - ===start socket:7780
-2018-12-04 15:33:28,134 [main] INFO  SocketServer - ===start socket:7780
-2018-12-04 15:33:31,643 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - add connect:/127.0.0.1:57592
-2018-12-04 15:33:31,643 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelActive:/127.0.0.1:57592‘⁄œﬂ
-2018-12-04 15:33:34,495 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - [/127.0.0.1:57592]∑¢ÀÕ–≈œ¢:[YW*872018020142169*0002*0045*INIT,,0,Y01_K2_RDA6625_RENQI_LE_DIAN_LINUX.0.967.QGJ_V1.0,0000,0000,0
-2018-12-04 15:33:34,495 [nioEventLoopGroup-3-1] INFO  BusinessHandler - [YW*872018020142169*0002*0045*INIT,,0,Y01_K2_RDA6625_RENQI_LE_DIAN_LINUX.0.967.QGJ_V1.0,0000,0000,0
-2018-12-04 15:33:34,496 [nioEventLoopGroup-3-1] INFO  SocketBusinessFactory - *****cmd:INIT
-2018-12-04 15:33:34,694 [nioEventLoopGroup-3-1] INFO  DruidDataSource - {dataSource-1} inited
-2018-12-04 15:33:34,728 [nioEventLoopGroup-3-1] INFO  LoginService - …Ë±∏≥ı ºªØµ«¬ºdv:Y01_K2_RDA6625_RENQI_LE_DIAN_LINUX.0.967.QGJ_V1.0,,no:0002,imei:872018020142169
-2018-12-04 15:33:34,728 [nioEventLoopGroup-3-1] INFO  LoginService - ±£¥Ê ÷±Ìµ«¬º–≈œ¢,no:0002,imei872018020142169
-2018-12-04 15:33:34,731 [nioEventLoopGroup-3-1] INFO  LoginService - ∑µªÿ…Ë±∏µ«¬º–≈œ¢=[YW*872018020142169*0001*0006*INIT,1]
-2018-12-04 15:33:48,668 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - [/127.0.0.1:57592]∑¢ÀÕ–≈œ¢:[YW*872018020142169*0018*01CB*TK,0,wetalk_20181204232913.amr,2,2,2 tHx GL: ?    
-2018-12-04 15:33:48,668 [nioEventLoopGroup-3-1] INFO  BusinessHandler - [YW*872018020142169*0018*01CB*TK,0,wetalk_20181204232913.amr,2,2,2 tHx GL: ?    
-2018-12-04 15:33:48,668 [nioEventLoopGroup-3-1] INFO  SocketBusinessFactory - *****cmd:TK
-2018-12-04 15:33:48,669 [nioEventLoopGroup-3-1] INFO  TkService - ”Ô“ÙΩ” ’:YW*872018020142169*0018*01CB*TK,0,wetalk_20181204232913.amr,2,2,2 tHx GL: ?    
-2018-12-04 15:33:48,669 [nioEventLoopGroup-3-1] INFO  TkService - ¥”socketLoginDto¿Ô»°≥ˆ¿¥µƒimei=872018020142169
-2018-12-04 15:33:48,669 [nioEventLoopGroup-3-1] INFO  TkService - [voiceName]=wetalk_20181204232913.amr
-2018-12-04 15:33:48,669 [nioEventLoopGroup-3-1] INFO  TkService - ¥”hashmap¿ÔªÒ»°µƒvoiceNamewetalk_20181204232913.amr
-2018-12-04 15:33:48,669 [nioEventLoopGroup-3-1] INFO  TkService -  Æ¡˘Ω¯÷∆◊™ªª∫Ûµƒ≥§∂»=459
-2018-12-04 15:33:48,669 [nioEventLoopGroup-3-1] INFO  TkService - #!AMRµƒŒª÷√=-1
-2018-12-04 15:33:48,669 [nioEventLoopGroup-3-1] INFO  TkService - ”Ô“Ùjson◊‹≥§∂»=82
-2018-12-04 15:33:48,670 [nioEventLoopGroup-3-1] ERROR BusinessHandler - process error:
-java.lang.StringIndexOutOfBoundsException: String index out of range: -1
-	at java.lang.String.substring(String.java:1960)
-	at com.bracelet.socket.business.impl.TkService.process2(TkService.java:72)
-	at com.bracelet.socket.business.impl.AbstractBizService.process(AbstractBizService.java:42)
-	at com.bracelet.socket.business.impl.BusinessHandler.process(BusinessHandler.java:62)
-	at com.bracelet.socket.BaseChannelHandler.channelRead0(BaseChannelHandler.java:26)
-	at com.bracelet.socket.BaseChannelHandler.channelRead0(BaseChannelHandler.java:1)
-	at io.netty.channel.SimpleChannelInboundHandler.channelRead(SimpleChannelInboundHandler.java:105)
-	at com.bracelet.socket.BaseChannelHandler.channelRead(BaseChannelHandler.java:47)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
-	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340)
-	at io.netty.handler.timeout.IdleStateHandler.channelRead(IdleStateHandler.java:286)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
-	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340)
-	at io.netty.handler.codec.MessageToMessageDecoder.channelRead(MessageToMessageDecoder.java:102)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
-	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340)
-	at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:310)
-	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:284)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
-	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340)
-	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
-	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965)
-	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:163)
-	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:647)
-	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:582)
-	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:499)
-	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:461)
-	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884)
-	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
-	at java.lang.Thread.run(Thread.java:748)
-2018-12-04 15:33:48,672 [nioEventLoopGroup-3-1] ERROR BaseChannelHandler - exceptioncaught,/127.0.0.1:57592
-java.lang.NullPointerException: msg
-	at io.netty.channel.AbstractChannelHandlerContext.writeAndFlush(AbstractChannelHandlerContext.java:785)
-	at io.netty.channel.AbstractChannelHandlerContext.writeAndFlush(AbstractChannelHandlerContext.java:831)
-	at io.netty.channel.DefaultChannelPipeline.writeAndFlush(DefaultChannelPipeline.java:1071)
-	at io.netty.channel.AbstractChannel.writeAndFlush(AbstractChannel.java:300)
-	at com.bracelet.socket.business.impl.BusinessHandler.process(BusinessHandler.java:94)
-	at com.bracelet.socket.BaseChannelHandler.channelRead0(BaseChannelHandler.java:26)
-	at com.bracelet.socket.BaseChannelHandler.channelRead0(BaseChannelHandler.java:1)
-	at io.netty.channel.SimpleChannelInboundHandler.channelRead(SimpleChannelInboundHandler.java:105)
-	at com.bracelet.socket.BaseChannelHandler.channelRead(BaseChannelHandler.java:47)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
-	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340)
-	at io.netty.handler.timeout.IdleStateHandler.channelRead(IdleStateHandler.java:286)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
-	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340)
-	at io.netty.handler.codec.MessageToMessageDecoder.channelRead(MessageToMessageDecoder.java:102)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
-	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340)
-	at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:310)
-	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:284)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
-	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340)
-	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1434)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
-	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
-	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:965)
-	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:163)
-	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:647)
-	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:582)
-	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:499)
-	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:461)
-	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:884)
-	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
-	at java.lang.Thread.run(Thread.java:748)
-2018-12-04 15:33:48,672 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelInactive:/127.0.0.1:57592µÙœﬂ
-2018-12-04 15:33:48,673 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - remove connect:/127.0.0.1:57592
-2018-12-04 15:34:42,667 [main] INFO  SocketServer - ===start socket:7780
-2018-12-04 15:34:43,451 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - add connect:/127.0.0.1:57671
-2018-12-04 15:34:43,451 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelActive:/127.0.0.1:57671‘⁄œﬂ
-2018-12-04 15:34:47,200 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - [/127.0.0.1:57671]∑¢ÀÕ–≈œ¢:[YW*872018020142169*0002*0045*INIT,,0,Y01_K2_RDA6625_RENQI_LE_DIAN_LINUX.0.967.QGJ_V1.0,0000,0000,0
-2018-12-04 15:34:47,200 [nioEventLoopGroup-3-1] INFO  BusinessHandler - [YW*872018020142169*0002*0045*INIT,,0,Y01_K2_RDA6625_RENQI_LE_DIAN_LINUX.0.967.QGJ_V1.0,0000,0000,0
-2018-12-04 15:34:47,201 [nioEventLoopGroup-3-1] INFO  SocketBusinessFactory - *****cmd:INIT
-2018-12-04 15:34:47,396 [nioEventLoopGroup-3-1] INFO  DruidDataSource - {dataSource-1} inited
-2018-12-04 15:34:47,430 [nioEventLoopGroup-3-1] INFO  LoginService - …Ë±∏≥ı ºªØµ«¬ºdv:Y01_K2_RDA6625_RENQI_LE_DIAN_LINUX.0.967.QGJ_V1.0,,no:0002,imei:872018020142169
-2018-12-04 15:34:47,430 [nioEventLoopGroup-3-1] INFO  LoginService - ±£¥Ê ÷±Ìµ«¬º–≈œ¢,no:0002,imei872018020142169
-2018-12-04 15:34:47,433 [nioEventLoopGroup-3-1] INFO  LoginService - ∑µªÿ…Ë±∏µ«¬º–≈œ¢=[YW*872018020142169*0001*0006*INIT,1]
-2018-12-04 15:34:52,436 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - [/127.0.0.1:57671]∑¢ÀÕ–≈œ¢:[YW*872018020142169*0018*01CB*TK,0,wetalk_20181204232913.amr,2,2,2 tHx GL: ?    
-2018-12-04 15:34:52,436 [nioEventLoopGroup-3-1] INFO  BusinessHandler - [YW*872018020142169*0018*01CB*TK,0,wetalk_20181204232913.amr,2,2,2 tHx GL: ?    
-2018-12-04 15:34:52,436 [nioEventLoopGroup-3-1] INFO  SocketBusinessFactory - *****cmd:TK
-2018-12-04 15:34:52,436 [nioEventLoopGroup-3-1] INFO  TkService - ”Ô“ÙΩ” ’:YW*872018020142169*0018*01CB*TK,0,wetalk_20181204232913.amr,2,2,2 tHx GL: ?    
-2018-12-04 15:34:52,436 [nioEventLoopGroup-3-1] INFO  TkService - ¥”socketLoginDto¿Ô»°≥ˆ¿¥µƒimei=872018020142169
-2018-12-04 15:34:52,437 [nioEventLoopGroup-3-1] INFO  TkService - [voiceName]=wetalk_20181204232913.amr
-2018-12-04 15:34:52,437 [nioEventLoopGroup-3-1] INFO  TkService - ¥”hashmap¿ÔªÒ»°µƒvoiceNamewetalk_20181204232913.amr
-2018-12-04 15:34:52,437 [nioEventLoopGroup-3-1] INFO  TkService -  Æ¡˘Ω¯÷∆◊™ªª∫Ûµƒ≥§∂»=459
-2018-12-04 15:34:52,437 [nioEventLoopGroup-3-1] INFO  TkService - #!AMRµƒŒª÷√=-1
-2018-12-04 15:34:52,437 [nioEventLoopGroup-3-1] INFO  TkService - ”Ô“Ùjson◊‹≥§∂»=82
-2018-12-04 15:34:52,437 [nioEventLoopGroup-3-1] INFO  TkService - Œﬁ!#AMR=2 tHx GL: ?    
-2018-12-04 17:46:50,223 [main] INFO  SocketServer - ===start socket:7780
-2018-12-04 17:47:08,939 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - add connect:/127.0.0.1:60489
-2018-12-04 17:47:08,939 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelActive:/127.0.0.1:60489‘⁄œﬂ
-2018-12-04 17:47:16,259 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - [/127.0.0.1:60489]∑¢ÀÕ–≈œ¢:[YW*872018020142169*0002*0045*INIT,,0,Y01_K2_RDA6625_RENQI_LE_DIAN_LINUX.0.967.QGJ_V1.0,0000,0000,0
-2018-12-04 17:47:16,259 [nioEventLoopGroup-3-1] INFO  BusinessHandler - [YW*872018020142169*0002*0045*INIT,,0,Y01_K2_RDA6625_RENQI_LE_DIAN_LINUX.0.967.QGJ_V1.0,0000,0000,0
-2018-12-04 17:47:16,260 [nioEventLoopGroup-3-1] INFO  SocketBusinessFactory - *****cmd:INIT
-2018-12-04 17:47:16,464 [nioEventLoopGroup-3-1] INFO  DruidDataSource - {dataSource-1} inited
-2018-12-04 17:47:16,494 [nioEventLoopGroup-3-1] INFO  LoginService - …Ë±∏≥ı ºªØµ«¬ºdv:Y01_K2_RDA6625_RENQI_LE_DIAN_LINUX.0.967.QGJ_V1.0,,no:0002,imei:872018020142169
-2018-12-04 17:47:16,494 [nioEventLoopGroup-3-1] INFO  LoginService - ±£¥Ê ÷±Ìµ«¬º–≈œ¢,no:0002,imei872018020142169
-2018-12-04 17:47:16,498 [nioEventLoopGroup-3-1] INFO  LoginService - ∑µªÿ…Ë±∏µ«¬º–≈œ¢=[YW*872018020142169*0001*0006*INIT,1]
-2018-12-04 17:47:40,659 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - [/127.0.0.1:60489]∑¢ÀÕ–≈œ¢:[YW*872018020142169*001F*042B*TPBK,18735662247,IMG20181205000600.jpg,1,6,    ()*456789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz                                                                           
-2018-12-04 17:47:40,659 [nioEventLoopGroup-3-1] INFO  BusinessHandler - [YW*872018020142169*001F*042B*TPBK,18735662247,IMG20181205000600.jpg,1,6,    ()*456789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz                                                                           
-2018-12-04 17:47:40,659 [nioEventLoopGroup-3-1] INFO  SocketBusinessFactory - *****cmd:TPBK
-2018-12-04 17:47:40,659 [nioEventLoopGroup-3-1] INFO  UploadPhoto - …Ë±∏’’∆¨…œ¥´=YW*872018020142169*001F*042B*TPBK,18735662247,IMG20181205000600.jpg,1,6,    ()*456789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz                                                                           
-2018-12-04 17:47:40,659 [nioEventLoopGroup-3-1] INFO  UploadPhoto - jpg=    ()*456789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz                                                                           
-2018-12-04 17:47:40,696 [nioEventLoopGroup-3-1] INFO  UploadPhoto - …Ë±∏≈ƒ’’∑µªÿ ˝æ›=[YW*872018020142169*NNNN*0020*TPCF,IMG20181205000600.jpg,1,6,1]
-2018-12-04 17:48:20,810 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - [/127.0.0.1:60489]∑¢ÀÕ–≈œ¢:[YW*872018020142169*001F*042B*TPBK,18735662247,IMG20181205000600.jpg,6,6,    ()*456789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz                                                                           
-2018-12-04 17:48:20,811 [nioEventLoopGroup-3-1] INFO  BusinessHandler - [YW*872018020142169*001F*042B*TPBK,18735662247,IMG20181205000600.jpg,6,6,    ()*456789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz                                                                           
-2018-12-04 17:48:20,811 [nioEventLoopGroup-3-1] INFO  SocketBusinessFactory - *****cmd:TPBK
-2018-12-04 17:48:20,811 [nioEventLoopGroup-3-1] INFO  UploadPhoto - …Ë±∏’’∆¨…œ¥´=YW*872018020142169*001F*042B*TPBK,18735662247,IMG20181205000600.jpg,6,6,    ()*456789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz                                                                           
-2018-12-04 17:48:20,811 [nioEventLoopGroup-3-1] INFO  UploadPhoto - jpg=    ()*456789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz                                                                           
-2018-12-04 17:48:20,816 [nioEventLoopGroup-3-1] INFO  UploadPhoto - …Ë±∏≈ƒ’’∑µªÿ ˝æ›=[YW*872018020142169*NNNN*0020*TPCF,IMG20181205000600.jpg,6,6,1]

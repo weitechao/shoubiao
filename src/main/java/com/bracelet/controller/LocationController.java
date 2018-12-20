@@ -14,6 +14,7 @@ import com.bracelet.entity.OldBindDevice;
 import com.bracelet.entity.Step;
 import com.bracelet.entity.UserInfo;
 import com.bracelet.exception.BizException;
+import com.bracelet.redis.LimitCache;
 import com.bracelet.service.ILocationService;
 import com.bracelet.service.IStepService;
 import com.bracelet.service.IUserInfoService;
@@ -48,6 +49,9 @@ public class LocationController extends BaseController {
 	IStepService stepService;
 	@Resource
 	BaseChannelHandler baseChannelHandler;
+	
+	@Autowired
+	LimitCache limitCache;
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	/* app查询手表最新定位 */
@@ -90,9 +94,10 @@ public class LocationController extends BaseController {
 			dataMap1.put("wifi", "");
 			dataMap1.put("CreateTime", "");
 			dataMap1.put("Electricity", 100);
-			SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
-			if (socketLoginDto != null) {
-				dataMap1.put("Electricity", socketLoginDto.getEnergy());
+			
+			String energy = limitCache.getRedisKeyValue(imei+"_energy");
+			if (energy != null) {
+				dataMap1.put("Electricity", energy);
 			}
 			dataMap1.put("GSM", 94);
 			dataMap1.put("Step", 0);
@@ -100,8 +105,8 @@ public class LocationController extends BaseController {
 			dataMap1.put("Latitude", watchlocaiton.getLat());
 			dataMap1.put("Longitude", watchlocaiton.getLng());
 			dataMap1.put("Online", 0);
+			SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 			if (socketLoginDto != null) {
-				dataMap1.put("Electricity", socketLoginDto.getEnergy());
 				dataMap1.put("Online", 1);				
 			}
 			dataMap1.put("SatelliteNumber", 0);				
@@ -152,9 +157,10 @@ public class LocationController extends BaseController {
 				dataMap1.put("wifi", "");
 				dataMap1.put("CreateTime", "");
 				dataMap1.put("Electricity", 100);
-				SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
-				if (socketLoginDto != null) {
-					dataMap1.put("Electricity", socketLoginDto.getEnergy());
+			
+				String energy = limitCache.getRedisKeyValue(imei+"_energy");
+				if (energy != null) {
+					dataMap1.put("Electricity", energy);
 				}
 				dataMap1.put("GSM", 94);
 				dataMap1.put("Step", 0);
@@ -162,8 +168,8 @@ public class LocationController extends BaseController {
 				dataMap1.put("Latitude", locationWatch.getLat());
 				dataMap1.put("Longitude", locationWatch.getLng());
 				dataMap1.put("Online", 0);
+				SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 				if (socketLoginDto != null) {
-					dataMap1.put("Electricity", socketLoginDto.getEnergy());
 					dataMap1.put("Online", 1);				
 				}
 				dataMap1.put("SatelliteNumber", 0);				

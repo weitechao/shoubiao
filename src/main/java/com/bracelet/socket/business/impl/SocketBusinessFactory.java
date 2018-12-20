@@ -127,6 +127,9 @@ public class SocketBusinessFactory {
         case "ET":
             // 进入退出
             return resetService;
+        case "FDLN":
+            //好友列表
+            return resetService;
         case "TK":
             // 对讲群聊
             return tkService;

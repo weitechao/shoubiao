@@ -103,11 +103,17 @@ public class WatchAppUserController extends BaseController {
 				} else {
 					bb.put("DeviceID", socketLoginDto.getUser_id());
 				}*/
-
-				WatchDevice watchd = ideviceService.getDeviceInfo(tel);
-				if (watchd != null) {
-					bb.put("DeviceID", watchd.getId());
+				String deviceid = limitCache.getRedisKeyValue(tel + "_id");
+				if(deviceid !=null && !"0".equals(deviceid) && !"".equals(deviceid)){
+					bb.put("DeviceID", deviceid);
+				}else{
+					WatchDevice watchd = ideviceService.getDeviceInfo(tel);
+					if (watchd != null) {
+						bb.put("DeviceID", watchd.getId());
+						limitCache.addKey(tel + "_id", watchd.getId()+"");
+					}
 				}
+				
 			} else {
 				bb.put("Code", 2);// 2表示密码错误
 				bb.put("Message", "");// 2表示密码错误
@@ -140,7 +146,27 @@ public class WatchAppUserController extends BaseController {
 				bb.put("ip", ipport);
 			}
 			
-			WatchDevice watchd = ideviceService.getDeviceInfo(tel);
+			String deviceid = limitCache.getRedisKeyValue(tel + "_id");
+			if(deviceid !=null && !"0".equals(deviceid) && !"".equals(deviceid)){
+				bb.put("DeviceID", deviceid);
+			}else{
+				WatchDevice watchd = ideviceService.getDeviceInfo(tel);
+				if (watchd != null) {
+					bb.put("DeviceID", watchd.getId());
+					limitCache.addKey(tel + "_id", watchd.getId()+"");
+				}else{
+
+					ideviceService.insertNewImei(tel, "1", 0, "1");
+					WatchDevice watchdd = ideviceService.getDeviceInfo(tel);
+					if(watchdd!=null){
+						bb.put("DeviceID", watchdd.getId());
+						limitCache.addKey(tel + "_id", watchdd.getId()+"");
+					}
+				
+				}
+			}
+			
+		/*	WatchDevice watchd = ideviceService.getDeviceInfo(tel);
 			if (watchd != null) {
 				bb.put("DeviceID", watchd.getId());
 			}else{
@@ -149,7 +175,7 @@ public class WatchAppUserController extends BaseController {
 				if(watchdd!=null){
 					bb.put("DeviceID", watchdd.getId());
 				}
-			}
+			}*/
 
 		}
 		return bb.toString();

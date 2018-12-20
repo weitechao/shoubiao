@@ -68,20 +68,22 @@ public class WatchFriendController extends BaseController {
 
 		List<WatchFriend> FriendList = watchFriendService.getFriendByImei(imei);
 		JSONArray jsonArray = new JSONArray();
-		if(FriendList.size()>0 && FriendList != null){
-			for(WatchFriend wfd : FriendList){
+		if (FriendList.size() > 0 && FriendList != null) {
+			for (WatchFriend wfd : FriendList) {
 				JSONObject dataMap = new JSONObject();
 				dataMap.put("DeviceFriendId", wfd.getDeviceFriendId());
-				dataMap.put("Relationship", wfd.getRole_name()+"");
+				dataMap.put("Relationship", wfd.getRole_name() + "");
 				dataMap.put("FriendDeviceId ", wfd.getDeviceFriendId());
-				dataMap.put("Name", wfd.getRole_name()+"");
-				dataMap.put("Phone", wfd.getPhone()+"");
+				dataMap.put("Name", wfd.getRole_name() + "");
+				dataMap.put("Phone", wfd.getPhone() + "");
 				dataMap.put("id", wfd.getId());
 				jsonArray.add(dataMap);
 			}
 		}
 		bb.put("friendList", jsonArray);
 		bb.put("Code", 1);
+		
+		
 		return bb.toString();
 	}
 
@@ -101,24 +103,79 @@ public class WatchFriendController extends BaseController {
 		Long DeviceFriendId = jsonObject.getLong("DeviceFriendId");
 		String phone = jsonObject.getString("phone");
 		String imei = jsonObject.getString("imei");
-		
-		WatchFriend wtf = watchFriendService.getFriendByImeiAndPhone(imei,phone,DeviceFriendId);
-		
+
+		WatchFriend wtf = watchFriendService.getFriendByImeiAndPhone(imei, phone, DeviceFriendId);
+
 		String nickname = jsonObject.getString("new_name");
-		if(wtf !=null ){
-			watchFriendService.updateFriendNameById(wtf.getId(), nickname);
-		}else{
-			watchFriendService.insertFriend(imei, nickname, phone, "0", "1",DeviceFriendId);
+		if (wtf != null) {
+			if (watchFriendService.updateFriendNameById(wtf.getId(), nickname)) {
+				bb.put("Code", 1);
+			} else {
+				bb.put("Code", 0);
+			}
+		} else {
+			if (watchFriendService.insertFriend(imei, nickname, phone, "0", "1", DeviceFriendId)) {
+				bb.put("Code", 1);
+			} else {
+				bb.put("Code", 0);
+			}
 		}
-		bb.put("Code", 1);
+
+		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
+
+		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
+			bb.put("Code", 4);
+			return bb.toString();
+		}
+
+		StringBuffer sb = new StringBuffer("[YW*" + imei + "*0003*");
+		if (socketLoginDto.getChannel().isActive()) {
+			StringBuffer sb1 = new StringBuffer("");
+			StringBuffer sb2 = new StringBuffer("");
+
+			List<WatchFriend> FriendList = watchFriendService.getFriendByImei(imei);
+
+			if (FriendList.size() > 0) {
+				sb1.append(FriendList.size());
+				sb1.append(",");
+				for (WatchFriend WatchPhoneBook : FriendList) {
+					if (sb2.toString().isEmpty()) {
+						sb2.append(WatchPhoneBook.getDeviceFriendId());
+						sb2.append(",");
+						sb2.append(WatchPhoneBook.getRole_name());
+						sb2.append(",");
+						sb2.append(WatchPhoneBook.getPhone());
+					} else {
+						sb2.append(",");
+						sb2.append(WatchPhoneBook.getDeviceFriendId());
+						sb2.append(",");
+						sb2.append(WatchPhoneBook.getRole_name());
+						sb2.append(",");
+						sb2.append(WatchPhoneBook.getPhone());
+					}
+				}
+			} else {
+				sb1.append("0");
+			}
+			// PHB,1234, 001B*
+			String msg = "FDLN," + sb1.toString() + sb2.toString();
+			sb.append(RadixUtil.changeRadix(msg));
+			sb.append("*");
+			sb.append(msg);
+			sb.append("]");
+			logger.info("发送好友列表=" + sb.toString());
+			socketLoginDto.getChannel().writeAndFlush(sb.toString());
+			bb.put("Code", 1);
+		}
+
 		// Long id = jsonObject.getLong("id");
 		return bb.toString();
 	}
 
-	/* 获取 */
+	/* 删除 */
 	@ResponseBody
-	@RequestMapping(value = "/delete/{token}/{imei}", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
-	public String deleteFriendInfo(@PathVariable String token, @PathVariable Long id) {
+	@RequestMapping(value = "/delete/{token}/{id}/{imei}", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	public String deleteFriendInfo(@PathVariable String token, @PathVariable Long id, @PathVariable String imei) {
 
 		JSONObject bb = new JSONObject();
 
@@ -128,12 +185,60 @@ public class WatchFriendController extends BaseController {
 			return bb.toString();
 		}
 
-		if(watchFriendService.deleteFriendById(id)){
+		if (watchFriendService.deleteFriendById(id)) {
 			bb.put("Code", 1);
-		}else{
+
+			SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
+
+			if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
+				bb.put("Code", 4);
+				return bb.toString();
+			}
+
+			StringBuffer sb = new StringBuffer("[YW*" + imei + "*0003*");
+			if (socketLoginDto.getChannel().isActive()) {
+				StringBuffer sb1 = new StringBuffer("");
+				StringBuffer sb2 = new StringBuffer("");
+
+				List<WatchFriend> FriendList = watchFriendService.getFriendByImei(imei);
+
+				if (FriendList.size() > 0) {
+					sb1.append(FriendList.size());
+					sb1.append(",");
+					for (WatchFriend WatchPhoneBook : FriendList) {
+						if (sb2.toString().isEmpty()) {
+							sb2.append(WatchPhoneBook.getDeviceFriendId());
+							sb2.append(",");
+							sb2.append(WatchPhoneBook.getRole_name());
+							sb2.append(",");
+							sb2.append(WatchPhoneBook.getPhone());
+						} else {
+							sb2.append(",");
+							sb2.append(WatchPhoneBook.getDeviceFriendId());
+							sb2.append(",");
+							sb2.append(WatchPhoneBook.getRole_name());
+							sb2.append(",");
+							sb2.append(WatchPhoneBook.getPhone());
+						}
+					}
+				} else {
+					sb1.append("0");
+				}
+				// PHB,1234, 001B*
+				String msg = "FDLN," + sb1.toString() + sb2.toString();
+				sb.append(RadixUtil.changeRadix(msg));
+				sb.append("*");
+				sb.append(msg);
+				sb.append("]");
+				logger.info("发送好友列表=" + sb.toString());
+				socketLoginDto.getChannel().writeAndFlush(sb.toString());
+				bb.put("Code", 1);
+			}
+
+		} else {
 			bb.put("Code", 0);
 		}
 		return bb.toString();
 	}
-	
+
 }

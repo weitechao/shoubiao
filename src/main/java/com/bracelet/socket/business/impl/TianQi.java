@@ -41,13 +41,15 @@ public class TianQi extends AbstractBizService {
 	IVoltageService voltageService;
 	@Autowired
 	ILocationService locationService;
+	
+	
 
 	private static final String TianQiUrl = "https://restapi.amap.com/v3/weather/weatherInfo?key="
 			+ Utils.SSRH_TIANQI_KEY + "&extensions=base&output=json" + "&city=";
 
-	private static final String TianQiLocaiton = "http://apilocate.amap.com/position?key=" + Utils.SSRH_LOCATION_KEY
+/*	private static final String TianQiLocaiton = "http://apilocate.amap.com/position?key=" + Utils.SSRH_LOCATION_KEY
 			+ "&output=json&accesstype=0&cdma=0&tel=13537596170&network=GSM&imsi=";
-
+*/
 	@Override
 	protected SocketBaseDto process1(SocketLoginDto socketLoginDto, JSONObject jsonObject, Channel channel) {
 		// TODO Auto-generated method stub
