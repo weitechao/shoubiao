@@ -4,12 +4,14 @@ import io.netty.channel.Channel;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bracelet.dto.SocketBaseDto;
 import com.bracelet.dto.SocketLoginDto;
 import com.bracelet.exception.BizException;
+import com.bracelet.redis.LimitCache;
 import com.bracelet.socket.business.IService;
 import com.bracelet.util.ChannelMap;
 import com.bracelet.util.RespCode;
@@ -18,6 +20,8 @@ import com.bracelet.util.RespCode;
 public abstract class AbstractBizService implements IService {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
+	
+	
 
 	@Override
 	public SocketBaseDto process(JSONObject jsonObject, Channel channel) {

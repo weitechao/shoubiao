@@ -47,8 +47,11 @@ public class CallPhoneController extends BaseController {
 			return bb.toString();
 		}
 		
-		bb.put("messageID", "");
-		bb.put("callID", "");
+		JSONObject bbb = new JSONObject();
+		bbb.put("messageID", "0");
+		bbb.put("callID", "0");
+		
+		bb.put("Body", bbb.toString());
 		bb.put("Code", 1);
 		return bb.toString();
 	}
@@ -64,6 +67,11 @@ public class CallPhoneController extends BaseController {
 			bb.put("Code", -1);
 			return bb.toString();
 		}
+		JSONObject bbb = new JSONObject();
+		bbb.put("messageID", "0");
+		bbb.put("callID", "0");
+		
+		bb.put("Body", bbb.toString());
 		
 		bb.put("Code", 1);
 		return bb.toString();

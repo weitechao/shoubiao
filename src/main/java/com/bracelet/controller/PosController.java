@@ -58,9 +58,6 @@ public class PosController extends BaseController {
 	@Autowired
 	ILocationService locationService;
 
-	@Autowired
-	LimitCache limitCache;
-
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	

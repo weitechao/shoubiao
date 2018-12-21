@@ -436,5 +436,14 @@ public class WatchAppUserController extends BaseController {
 		bb.put("Message", "");
 		return bb.toString();
 	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/exit/{token}", method = RequestMethod.GET)
+	public String exit(@PathVariable String token) {
+		JSONObject bb = new JSONObject();
+		bb.put("Code", 1);
+		return bb.toString();
+	}
 
 }

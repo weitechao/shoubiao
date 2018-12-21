@@ -36,6 +36,12 @@ public class InsertFriend {
 	public void setStatus(int status) {
 		this.status = status;
 	}
+	public Timestamp getCreatetime() {
+		return createtime;
+	}
+	public void setCreatetime(Timestamp createtime) {
+		this.createtime = createtime;
+	}
 	
 
 }

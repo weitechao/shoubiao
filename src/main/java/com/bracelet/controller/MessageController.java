@@ -9,7 +9,9 @@ import com.bracelet.entity.DeviceCarrierInfo;
 import com.bracelet.entity.PhoneCharge;
 import com.bracelet.entity.Pushlog;
 import com.bracelet.entity.SmsInfo;
+import com.bracelet.entity.WatchDevice;
 import com.bracelet.redis.LimitCache;
+import com.bracelet.service.IDeviceService;
 import com.bracelet.service.IPushlogService;
 import com.bracelet.service.PageParam;
 import com.bracelet.service.Pagination;
@@ -32,7 +34,10 @@ import java.util.Map;
 public class MessageController extends BaseController {
 	@Autowired
 	IPushlogService pushlogService;
-	
+
+	@Autowired
+	IDeviceService ideviceService;
+
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	@ResponseBody
@@ -99,13 +104,13 @@ public class MessageController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "/getCallCharge", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String getCallCharge(@RequestBody String body) {
-		
+
 		JSONObject jsonObject = (JSONObject) JSON.parse(body);
 		String token = jsonObject.getString("token");
 		String phone = jsonObject.getString("phone");
 		String content = jsonObject.getString("content");
 		String imei = jsonObject.getString("imei");
-		
+
 		JSONObject bb = new JSONObject();
 
 		String user_id = checkTokenWatchAndUser(token);
@@ -120,7 +125,7 @@ public class MessageController extends BaseController {
 			bb.put("phone", phone + "");
 			bb.put("content", phoneC.getContent() + "");
 			bb.put("createtime", phoneC.getCreatetime() + "");
-			bb.put("imei", phoneC.getImei()+"");
+			bb.put("imei", phoneC.getImei() + "");
 		} else {
 			bb.put("Code", 1);
 			bb.put("phone", phone + "");
@@ -187,6 +192,49 @@ public class MessageController extends BaseController {
 		} else {
 			bb.put("Code", 0);
 		}
+		return bb.toString();
+	}
+
+	/* 手表短信列表 */
+	@ResponseBody
+	@RequestMapping(value = "/msglist/{token}/{deviceId}", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	public String msglist(@PathVariable String token, @PathVariable String deviceId) {
+		JSONObject bb = new JSONObject();
+
+		String user_id = checkTokenWatchAndUser(token);
+		if ("0".equals(user_id)) {
+			bb.put("Code", -1);
+			return bb.toString();
+		}
+		// List 数组{ Type ，DeviceID ，Content，Message，CreateTime }
+		JSONArray jsonArray = new JSONArray();
+
+		JSONObject dataMap = new JSONObject();
+		dataMap.put("Type", "1");
+
+		String deviceid = limitCache.getRedisKeyValue(deviceId + "_id");
+		if (deviceid != null && !"0".equals(deviceid) && !"".equals(deviceid)) {
+			dataMap.put("DeviceID", deviceid);
+		} else {
+			WatchDevice watchd = ideviceService.getDeviceInfo(deviceId);
+			if (watchd != null) {
+				dataMap.put("DeviceID", watchd.getId());
+				limitCache.addKey(deviceId + "_id", watchd.getId() + "");
+			}
+		}
+		/*
+		 * "Type":"106","DeviceID":"805592","Content":"22.7032466399987-113.964199185461","Message":"设备进行过通话","CreateTime":"2018/12/18 16:49:16" 
+		 * */
+
+		
+		dataMap.put("Content", "");
+		dataMap.put("Message", "");
+		dataMap.put("CreateTime", "");
+		jsonArray.add(dataMap);
+
+		bb.put("Code", 1);
+		bb.put("List", jsonArray);
+
 		return bb.toString();
 	}
 

@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import com.bracelet.entity.Conf;
 import com.bracelet.entity.HealthStepManagement;
+import com.bracelet.entity.NotifyInfo;
 import com.bracelet.entity.SchoolGuard;
 import com.bracelet.entity.Step;
 import com.bracelet.entity.TimeSwitch;
@@ -132,6 +133,40 @@ public class ConfServiceImpl implements IConfService {
 		Timestamp now = Utils.getCurrentTimestamp();
 		int i = jdbcTemplate.update("update healthStepManagement  set sleepCalculate=?  , updatetime=? where id = ?",
 				new Object[] {  sleepCalculate, now, id }, new int[] {Types.VARCHAR, Types.TIMESTAMP, Types.INTEGER });
+		return i == 1;
+	}
+
+	@Override
+	public NotifyInfo getNotiFyInfo(String deviceId) {
+		String sql = "select * from notify_info where imei=?  LIMIT 1";
+		List<NotifyInfo> list = jdbcTemplate.query(sql, new Object[] { deviceId },
+				new BeanPropertyRowMapper<NotifyInfo>(NotifyInfo.class));
+
+		if (list != null && !list.isEmpty()) {
+			return list.get(0);
+		} else {
+			logger.info("getLatest return null.user_id:" + deviceId);
+		}
+		return null;
+	}
+
+	@Override
+	public boolean updateNotifyById(Long id, String notification, String notificationSound,
+			String notificationVibration) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate.update("update notify_info  set notification=? ,notificationSound=?,notificationVibration=?, updatetime=? where id = ?",
+				new Object[] {  notification, notificationSound, notificationVibration,now, id }, new int[] {Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.TIMESTAMP, Types.INTEGER });
+		return i == 1;
+	}
+
+	@Override
+	public boolean insertNotify(String deviceId, String notification, String notificationSound,
+			String notificationVibration) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate.update(
+				"insert into notify_info (imei, notification, notificationSound, notificationVibration, createtime, updatetime) values (?,?,?,?,?,?)",
+				new Object[] { deviceId, notification, notificationSound, notificationVibration , now,  now },
+				new int[] { Types.VARCHAR, Types.VARCHAR,Types.VARCHAR, Types.VARCHAR,  Types.TIMESTAMP, Types.TIMESTAMP });
 		return i == 1;
 	}
 

@@ -23,6 +23,7 @@ import com.bracelet.util.ChannelMap;
 import com.bracelet.util.HttpClientGet;
 import com.bracelet.util.RanomUtil;
 import com.bracelet.util.RespCode;
+import com.bracelet.util.Utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,9 +50,7 @@ public class LocationController extends BaseController {
 	IStepService stepService;
 	@Resource
 	BaseChannelHandler baseChannelHandler;
-	
-	@Autowired
-	LimitCache limitCache;
+
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	/* app查询手表最新定位 */
@@ -73,7 +72,7 @@ public class LocationController extends BaseController {
 			bb.put("locationType", watchlocaiton.getLocationType());
 			bb.put("uploadtime", watchlocaiton.getTimestamp());
 			bb.put("Code", 1);
-			
+
 			JSONObject dataMap = new JSONObject();
 			dataMap.put("DeviceID", "");
 			dataMap.put("Message", 0);
@@ -83,8 +82,7 @@ public class LocationController extends BaseController {
 			JSONArray jsonArray = new JSONArray();
 			jsonArray.add(dataMap);
 			bb.put("NewList", jsonArray);
-			
-			
+
 			JSONObject dataMap1 = new JSONObject();
 			dataMap1.put("DeviceID", "");
 			dataMap1.put("Altitude", 0);
@@ -94,8 +92,8 @@ public class LocationController extends BaseController {
 			dataMap1.put("wifi", "");
 			dataMap1.put("CreateTime", "");
 			dataMap1.put("Electricity", 100);
-			
-			String energy = limitCache.getRedisKeyValue(imei+"_energy");
+
+			String energy = limitCache.getRedisKeyValue(imei + "_energy");
 			if (energy != null) {
 				dataMap1.put("Electricity", energy);
 			}
@@ -107,21 +105,21 @@ public class LocationController extends BaseController {
 			dataMap1.put("Online", 0);
 			SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 			if (socketLoginDto != null) {
-				dataMap1.put("Online", 1);				
+				dataMap1.put("Online", 1);
 			}
-			dataMap1.put("SatelliteNumber", 0);				
-			dataMap1.put("ServerTime", "");				
-			dataMap1.put("Speed", 0);				
-			dataMap1.put("UpdateTime", "");				
-			
+			dataMap1.put("SatelliteNumber", 0);
+			dataMap1.put("ServerTime", "");
+			dataMap1.put("Speed", 0);
+			dataMap1.put("UpdateTime", "");
+
 			JSONArray jsonArray1 = new JSONArray();
 			jsonArray1.add(dataMap1);
 			bb.put("DeviceState", jsonArray1);
-			
+
 		} else {
 			LocationWatch locationWatch = locationService.getLatest(imei);
 			if (locationWatch != null) {
-				
+
 				WatchLatestLocation watchlastlocation = new WatchLatestLocation();
 				watchlastlocation.setImei(imei);
 				watchlastlocation.setLat(locationWatch.getLat());
@@ -129,14 +127,13 @@ public class LocationController extends BaseController {
 				watchlastlocation.setLocationType(locationWatch.getLocation_type());
 				watchlastlocation.setTimestamp(locationWatch.getUpload_time().getTime());
 				ChannelMap.addlocation(imei, watchlastlocation);
-				
-				
+
 				bb.put("lat", locationWatch.getLat());
 				bb.put("lng", locationWatch.getLng());
 				bb.put("locationType", locationWatch.getLocation_type());
 				bb.put("uploadtime", locationWatch.getUpload_time().getTime());
 				bb.put("Code", 1);
-				
+
 				JSONObject dataMap = new JSONObject();
 				dataMap.put("DeviceID", "");
 				dataMap.put("Message", 0);
@@ -146,8 +143,7 @@ public class LocationController extends BaseController {
 				JSONArray jsonArray = new JSONArray();
 				jsonArray.add(dataMap);
 				bb.put("NewList", jsonArray);
-				
-				
+
 				JSONObject dataMap1 = new JSONObject();
 				dataMap1.put("DeviceID", "");
 				dataMap1.put("Altitude", 0);
@@ -157,8 +153,8 @@ public class LocationController extends BaseController {
 				dataMap1.put("wifi", "");
 				dataMap1.put("CreateTime", "");
 				dataMap1.put("Electricity", 100);
-			
-				String energy = limitCache.getRedisKeyValue(imei+"_energy");
+
+				String energy = limitCache.getRedisKeyValue(imei + "_energy");
 				if (energy != null) {
 					dataMap1.put("Electricity", energy);
 				}
@@ -170,17 +166,17 @@ public class LocationController extends BaseController {
 				dataMap1.put("Online", 0);
 				SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 				if (socketLoginDto != null) {
-					dataMap1.put("Online", 1);				
+					dataMap1.put("Online", 1);
 				}
-				dataMap1.put("SatelliteNumber", 0);				
-				dataMap1.put("ServerTime", "");				
-				dataMap1.put("Speed", 0);				
-				dataMap1.put("UpdateTime", "");				
-				
+				dataMap1.put("SatelliteNumber", 0);
+				dataMap1.put("ServerTime", "");
+				dataMap1.put("Speed", 0);
+				dataMap1.put("UpdateTime", "");
+
 				JSONArray jsonArray1 = new JSONArray();
 				jsonArray1.add(dataMap1);
 				bb.put("DeviceState", jsonArray1);
-				
+
 			} else {
 				bb.put("Code", 0);
 			}
@@ -204,28 +200,28 @@ public class LocationController extends BaseController {
 		List<LocationWatch> locationList = locationService.getWatchFootprint(imei, starttime, endtime);
 		JSONArray jsonArray = new JSONArray();
 		if (locationList != null) {
-			bb.put("Total", locationList.size()+"");
+			bb.put("Total", locationList.size() + "");
 			for (LocationWatch location : locationList) {
 				JSONObject dataMap = new JSONObject();
 				dataMap.put("lat", location.getLat());
 				dataMap.put("lng", location.getLng());
 				dataMap.put("timestamp", location.getUpload_time().getTime());
 				dataMap.put("locationType", location.getLocation_type());
-				
-				dataMap.put("time", location.getUpload_time().getTime()+"");
+
+				dataMap.put("time", location.getUpload_time().getTime() + "");
 				dataMap.put("Status", 0);
 				dataMap.put("Latitude", location.getLat());
 				dataMap.put("Longitude", location.getLng());
 				dataMap.put("LocationType", location.getLocation_type());
-				dataMap.put("CreateTime",location.getUpload_time().getTime()+"" );
-				dataMap.put("UpdateTime",location.getUpload_time().getTime()+"" );
+				dataMap.put("CreateTime", location.getUpload_time().getTime() + "");
+				dataMap.put("UpdateTime", location.getUpload_time().getTime() + "");
 				jsonArray.add(dataMap);
 			}
 			bb.put("Code", 1);
-		//	bb.put("list", jsonArray.toString());
+			// bb.put("list", jsonArray.toString());
 		} else {
 			bb.put("Code", 0);
-			
+
 		}
 
 		bb.put("List", jsonArray);
@@ -328,6 +324,100 @@ public class LocationController extends BaseController {
 		return dto;
 	}
 
+	@ResponseBody
+	@RequestMapping(value = "/getlocationInfo", method = RequestMethod.POST)
+	public String getlocationInfo(@RequestBody String body) {
+		JSONObject bb = new JSONObject();
+
+		JSONObject jsonObject = (JSONObject) JSON.parse(body);
+		String token = jsonObject.getString("token");
+		String userId = checkTokenWatchAndUser(token);
+
+		// loginId，mapType, lat,lng
+		if ("0".equals(userId)) {
+			bb.put("Code", -1);
+			return bb.toString();
+		}
+		String mapType = jsonObject.getString("mapType");
+		String lat = jsonObject.getString("lat");
+		String lng = jsonObject.getString("lng");
+		
+		if (!"0.000000".equals(lat) && !"0.000000".equals(lng)) {
+			String url = "https://restapi.amap.com/v3/geocode/regeo?key=7d92f6b57a23743f6939c24714731a6a&location=" + lng + "," + lat;
+			String res = HttpClientGet.get(url);
+			/*
+
+{"status":"1",
+"regeocode":{"addressComponent": 
+               {"city":"深圳市","province":"广东省","adcode":"440306","district":"宝安区","towncode":"440306003000",
+               "streetNumber":{"number":"27号","location":"113.873493,22.5679314","direction":"西南","distance":"7.67614","street":"华侨新村西堤一巷"},
+               "country":"中国","township":"西乡街道",
+               "businessAreas":[{"location":"113.8702516298224,22.58332089537708","name":"西乡","id":"440306"},
+               {"location":"113.89640616362594,22.570097072405947","name":"新安","id":"440306"},
+               {"location":"113.89536002134635,22.560183159277475","name":"翻身路","id":"440306"}],
+               "building":{"name":[],"type":[]},"neighborhood":{"name":"安泰花园","type":"商务住宅;住宅区;住宅小区"},
+               "citycode":"0755"},
+               "formatted_address":"广东省深圳市宝安区西乡街道安泰花园金华大酒店"},"info":"OK","infocode":"10000"}
+               
+               
+               地址信息返回格式：{ "Code":"1",
+               "Province":"广东省",
+               "City":"深圳市","District":"宝安区",
+               "Road":"华侨新村西堤一巷27号",
+               "Nearby":[{"POI":"广东省深圳市宝安区西乡街道安泰花园金华大酒店"}],
+               "Address":"广东省深圳市宝安区华侨新村西堤一巷27号,广东省深圳市宝安区西乡街道安泰花园金华大酒店" }
+               
+               
+               
+               {"Road":"华侨新村西堤一巷27号","Nearby":"","City":"深圳市","POI":"","Code":0,"District":"宝安区","Province":"广东省"}
+*/
+			JSONArray jsonArray = new JSONArray();
+			JSONObject bb1 = new JSONObject();
+			
+			JSONObject json = JSON.parseObject(res);
+	        if (json == null || json.getIntValue("status") != 1) {
+	        	logger.error("调用逆地理编码接口失败, 坐标：{},{} 内容：{}"+ lat+ ","+lng+ ","+res);
+	        	bb.put("Code", 0);
+	        	bb.put("Province", "");
+	        	bb.put("City", "");
+	        	bb.put("District", "");
+	        	bb.put("Road", "");
+	        	
+	        	
+	        	bb1.put("POI", "");
+	        	jsonArray.add(bb1);
+	        	bb.put("Nearby", jsonArray);
+	        	bb.put("Address", "");
+	        	
+	        }
+	        JSONObject regeoCode = json.getJSONObject("regeocode");
+	        JSONObject area = regeoCode.getJSONObject("addressComponent");
+	        
+	        bb.put("Code", 1);
+	        bb.put("Province", cleanContent(area.getString("province")));
+        	bb.put("City", cleanContent(area.getString("city")));
+        	bb.put("District", cleanContent(area.getString("district")));
+        	 JSONObject street = area.getJSONObject("streetNumber");
+        	 
+        	bb.put("Road", cleanContent(street.getString("street") + street.getString("number")));
+        	bb.put("Nearby", jsonArray);
+        	
+        	bb1.put("POI", cleanContent(regeoCode.getString("formatted_address")));
+        	jsonArray.add(bb1);
+        	bb.put("Nearby", jsonArray);
+        	
+        	bb.put("Address", cleanContent(area.getString("province"))+cleanContent(area.getString("city"))+cleanContent(area.getString("district"))+cleanContent(street.getString("street") + street.getString("number"))+","+cleanContent(regeoCode.getString("formatted_address")));
+		} else {
+			bb.put("Code", 5);
+		}
+
+		return bb.toString();
+	}
+
+	 private String cleanContent(String cont) {
+	        return cont == null ? cont : cont.replaceAll("[\\{\\}\\[\\] ,\"']+", "");
+	    }
+	 
 	/*--下面是老人功能机的接口-------------------------------------------------------------------------------------------------*/
 	/* 上传定位 */
 	@ResponseBody
