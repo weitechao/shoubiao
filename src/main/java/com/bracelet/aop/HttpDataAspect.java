@@ -62,10 +62,10 @@ public class HttpDataAspect {
 		resp=result+"";
 		//logger.info("[HTTP] process info: [name:" + name + "][reqParams:" + reqParams + "][resp:" + resp + "][rstatus:" + rstatus + "][rmsg:" + rmsg + "][time:" + time + "]");
 		if(name.equals(Utils.METHOD_NAME)){ 
-			apilogService.insert(name, "head", resp, "", rstatus, rmsg, time);
+			apilogService.insertApp(name, "head", resp, "", rstatus, rmsg, time);
 		}else{
 			if(!Utils.METHOD_SLBTEST.equals(name)){
-				apilogService.insert(name, reqParams, resp, "", rstatus, rmsg, time);
+				apilogService.insertApp(name, reqParams, resp, "", rstatus, rmsg, time);
 			}
 		}
 		return result;

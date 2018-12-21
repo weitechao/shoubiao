@@ -7,6 +7,7 @@ import com.bracelet.dto.LatestBloodOxygenDto;
 import com.bracelet.dto.LatestBloodSugarDto;
 import com.bracelet.entity.BloodOxygen;
 import com.bracelet.entity.BloodSugar;
+import com.bracelet.entity.HealthStepManagement;
 import com.bracelet.entity.SchoolGuard;
 import com.bracelet.entity.TimeSwitch;
 import com.bracelet.entity.VersionInfo;
@@ -36,10 +37,36 @@ public class SchoolController extends BaseController {
 
 	@ResponseBody
 	@RequestMapping(value = "/heath", method = RequestMethod.POST)
-	public String oldLocation(@RequestBody String json) {
+	public String oldLocation(@RequestBody String body) {
 		JSONObject bb = new JSONObject();
-
-		bb.put("Code", 1);
+//deviceId，stepCalculate，sleepCalculate，hrCalculate 
+		JSONObject jsonObject = (JSONObject) JSON.parse(body);
+		String token = jsonObject.getString("token");
+		String user_id = checkTokenWatchAndUser(token);
+		if ("0".equals(user_id)) {
+			bb.put("Code", -1);
+			return bb.toString();
+		}
+		String deviceId = jsonObject.getString("deviceId");
+		String stepCalculate = jsonObject.getString("stepCalculate");
+		String sleepCalculate = jsonObject.getString("sleepCalculate");
+		String hrCalculate = jsonObject.getString("hrCalculate");
+		HealthStepManagement  heathM = confService.getHeathStepInfo(deviceId);
+		if(heathM != null){
+			if(confService.updateHeathById(heathM.getId(), stepCalculate, sleepCalculate, hrCalculate )){
+				bb.put("Code", 1);
+			}else{
+				bb.put("Code", 0);
+			}
+		}else{
+			if(confService.insertHeath(deviceId, stepCalculate, sleepCalculate, hrCalculate )){
+				bb.put("Code", 1);
+			}else{
+				bb.put("Code", 0);
+			
+			}
+		}
+	
 
 		return bb.toString();
 	}
@@ -102,6 +129,23 @@ public class SchoolController extends BaseController {
 			@PathVariable String sleepCalculate) {
 		JSONObject bb = new JSONObject();
 
+		
+		HealthStepManagement  heathM = confService.getHeathStepInfo(deviceId);
+		if(heathM != null){
+			if(confService.updateHeathSleepCalculateById(heathM.getId(),  sleepCalculate)){
+				bb.put("Code", 1);
+			}else{
+				bb.put("Code", 0);
+			}
+		}else{
+			if(confService.insertHeath(deviceId, "", sleepCalculate, "" )){
+				bb.put("Code", 1);
+			}else{
+				bb.put("Code", 0);
+			
+			}
+		}
+		
 		bb.put("Code", 1);
 		
 		return bb.toString();

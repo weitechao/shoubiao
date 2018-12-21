@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import com.bracelet.entity.Conf;
+import com.bracelet.entity.HealthStepManagement;
 import com.bracelet.entity.SchoolGuard;
 import com.bracelet.entity.Step;
 import com.bracelet.entity.TimeSwitch;
@@ -91,6 +92,46 @@ public class ConfServiceImpl implements IConfService {
 				"insert into watch_time_switch (deviceId, timeOpen, timeClose, createtime, updatetime) values (?,?,?,?,?)",
 				new Object[] { deviceId,timeOpen, timeClose, now, now },
 				new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,  Types.TIMESTAMP, Types.TIMESTAMP });
+		return i == 1;
+	}
+
+	@Override
+	public HealthStepManagement getHeathStepInfo(String deviceId) {
+		String sql = "select * from healthStepManagement where imei=?  LIMIT 1";
+		List<HealthStepManagement> list = jdbcTemplate.query(sql, new Object[] { deviceId },
+				new BeanPropertyRowMapper<HealthStepManagement>(HealthStepManagement.class));
+
+		if (list != null && !list.isEmpty()) {
+			return list.get(0);
+		} else {
+			logger.info("getLatest return null.user_id:" + deviceId);
+		}
+		return null;
+	}
+
+	@Override
+	public boolean updateHeathById(Long id, String stepCalculate, String sleepCalculate, String hrCalculate) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate.update("update healthStepManagement  set stepCalculate=?,sleepCalculate=?,hrCalculate=?,updatetime=? where id = ?",
+				new Object[] { stepCalculate, sleepCalculate,  hrCalculate, now, id }, new int[] {Types.VARCHAR,Types.VARCHAR, Types.VARCHAR, Types.TIMESTAMP, Types.INTEGER });
+		return i == 1;
+	}
+
+	@Override
+	public boolean insertHeath(String deviceId, String stepCalculate, String sleepCalculate, String hrCalculate) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate.update(
+				"insert into healthStepManagement (imei, stepCalculate, sleepCalculate, hrCalculate, createtime, updatetime) values (?,?,?,?,?,?)",
+				new Object[] { deviceId, stepCalculate, sleepCalculate, hrCalculate , now,  now },
+				new int[] { Types.VARCHAR, Types.VARCHAR,Types.VARCHAR, Types.VARCHAR,  Types.TIMESTAMP, Types.TIMESTAMP });
+		return i == 1;
+	}
+
+	@Override
+	public boolean updateHeathSleepCalculateById(Long id, String sleepCalculate) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate.update("update healthStepManagement  set sleepCalculate=?  , updatetime=? where id = ?",
+				new Object[] {  sleepCalculate, now, id }, new int[] {Types.VARCHAR, Types.TIMESTAMP, Types.INTEGER });
 		return i == 1;
 	}
 

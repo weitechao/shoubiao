@@ -27,4 +27,15 @@ public class ApilogServiceImpl implements IApilogService {
 		return i == 1;
 	}
 
+	@Override
+	public boolean insertApp(String name, String req, String resp, String imei, Integer rstatus, String rmsg,
+			Long time) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate.update(
+				"insert into api_applog (name, req, resp, imei, rstatus, rmsg, time, createtime) values (?,?,?,?,?,?,?,?)",
+				new Object[] { name, req, resp, imei, rstatus, rmsg, time, now }, new int[] { Types.VARCHAR, Types.VARCHAR,
+						Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.VARCHAR, Types.INTEGER, Types.TIMESTAMP });
+		return i == 1;
+	}
+
 }

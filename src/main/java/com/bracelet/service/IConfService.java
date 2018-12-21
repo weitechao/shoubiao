@@ -1,6 +1,7 @@
 package com.bracelet.service;
 
 import com.bracelet.entity.Conf;
+import com.bracelet.entity.HealthStepManagement;
 import com.bracelet.entity.SchoolGuard;
 import com.bracelet.entity.TimeSwitch;
 
@@ -21,6 +22,14 @@ public interface IConfService {
 	boolean updateTimeSwitchById(Long id, String timeClose, String timeOpen);
 
 	boolean insertTimeSwtich(String deviceId, String timeClose, String timeOpen);
+
+	HealthStepManagement getHeathStepInfo(String deviceId);
+
+	boolean updateHeathById(Long id, String stepCalculate, String sleepCalculate, String hrCalculate);
+
+	boolean insertHeath(String deviceId, String stepCalculate, String sleepCalculate, String hrCalculate);
+
+	boolean updateHeathSleepCalculateById(Long id, String sleepCalculate);
 
 
 }
