@@ -221,7 +221,7 @@ public class WatchAppSetController extends BaseController {
 		if (deviceSet != null) {
 			// bb.put("data", deviceSet.getData());
 			bb.put("Code", 1);
-			bb.put("SetInfo", "1-1-1-1-0-0-0-0-1-0-1-0");
+			bb.put("SetInfo", deviceSet.getSetInfo()+"");
 			bb.put("ClassDisabled1", "08:00-12:00");
 			bb.put("ClassDisabled2", "14:00-17:00");
 			bb.put("WeekDisabled", "");

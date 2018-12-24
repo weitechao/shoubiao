@@ -143,8 +143,8 @@ public class DeviceServiceImpl implements IDeviceService {
 
 	@Override
 	@DataSourceChange(slave = true)
-	public WatchDeviceHomeSchool getDeviceHomeAndFamilyInfo(Long id) {
-		String sql = "select * from device_watch_hf_info where w_id=? LIMIT 1";
+	public WatchDeviceHomeSchool getDeviceHomeAndFamilyInfo(String id) {
+		String sql = "select * from device_watch_hf_info where imei=? LIMIT 1";
 		List<WatchDeviceHomeSchool> list = jdbcTemplate.query(sql, new Object[] { id },
 				new BeanPropertyRowMapper<WatchDeviceHomeSchool>(WatchDeviceHomeSchool.class));
 

@@ -203,19 +203,24 @@ public class WatchAppTkController extends BaseController {
 		List<WatchVoiceInfo> list = watchtkService.getVoiceListByImeiAndStatus(imei, 0);
 		JSONArray jsonArray = new JSONArray();
 		if (list != null) {
-			SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 			for (WatchVoiceInfo WatchVoiceInfo : list) {
 				JSONObject dataMap = new JSONObject();
 				dataMap.put("voiceUrl", "");
 				dataMap.put("createtime", WatchVoiceInfo.getCreatetime().getTime());
 				dataMap.put("DeviceVoiceId", WatchVoiceInfo.getId());
 				dataMap.put("DeviceID", 0);
-				if(socketLoginDto == null || socketLoginDto.getChannel() == null){
-					WatchDevice watchd = ideviceService.getDeviceInfo(imei);
-					dataMap.put("DeviceID",watchd.getId());
+				
+				String deviceid = limitCache.getRedisKeyValue(imei + "_id");
+				if(deviceid !=null && !"0".equals(deviceid) && !"".equals(deviceid)){
+					bb.put("DeviceID", deviceid);
 				}else{
-					dataMap.put("DeviceID", socketLoginDto.getUser_id());
+					WatchDevice watchd = ideviceService.getDeviceInfo(imei);
+					if (watchd != null) {
+						bb.put("DeviceID", watchd.getId());
+						limitCache.addKey(imei + "_id", watchd.getId()+"");
+					}
 				}
+				
 				dataMap.put("State", 1);
 				dataMap.put("Type", 3);
 				dataMap.put("MsgType", 0);

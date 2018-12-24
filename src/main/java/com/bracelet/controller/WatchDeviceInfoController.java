@@ -76,7 +76,9 @@ public class WatchDeviceInfoController extends BaseController {
 			 * watch.getHeight() + "");
 			 */
 			bb.put("head", watch.getHead() + "");
-
+			bb.put("Birthday", watch.getBirday()+"");
+			bb.put("HomeAddress", watch.getHome_info()+"");
+			
 			bb.put("Code", 1);
 			bb.put("ActiveDate", "");
 			bb.put("BabyName", watch.getNickname() + "");
@@ -112,14 +114,14 @@ public class WatchDeviceInfoController extends BaseController {
 			bb.put("HomeLat", "");
 			bb.put("HomeLng", "");
 
-			WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfo(watch.getId());
+			WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfo(imei);
 			if (whsc != null) {
 				bb.put("SchoolAddress", whsc.getSchoolAddress());
 				bb.put("SchoolLat", whsc.getSchoolLat());
 				bb.put("SchoolLng", whsc.getSchoolLng());
 				bb.put("UpdateTime", whsc.getUpdatetime().getTime());
 				bb.put("LatestTime", whsc.getLatestTime());
-				bb.put("HomeAddress", whsc.getHomeAddress());
+				bb.put("HomeAddress", whsc.getHomeAddress()+"");
 				bb.put("HomeLat", whsc.getHomeLat());
 				bb.put("HomeLng", whsc.getHomeLng());
 			}
@@ -129,6 +131,7 @@ public class WatchDeviceInfoController extends BaseController {
 			if (this.ideviceService.insertDeviceImeiInfo(imei, "", "", 1, "", "", "", "", "", "", "")) {
 				WatchDevice watchh = ideviceService.getDeviceInfo(imei);
 				bb.put("id", watchh.getId());
+				bb.put("Birthday", watchh.getBirday()+"");
 				bb.put("phone", watchh.getPhone() + "");
 				bb.put("nickname", watchh.getNickname() + "");
 				bb.put("createtime", watchh.getCreatetime().getTime());
@@ -144,10 +147,30 @@ public class WatchDeviceInfoController extends BaseController {
 				bb.put("height", watchh.getHeight() + "");
 				bb.put("head", watchh.getHead() + "");
 
-				WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfo(watchh.getId());
+				
+				bb.put("SchoolAddress", "");
+				bb.put("SchoolLat", "");
+				bb.put("SchoolLng", "");
+				bb.put("UpdateTime", "");
+				bb.put("LatestTime", "");
+				bb.put("HomeAddress", "");
+				bb.put("HomeLat", "");
+				bb.put("HomeLng", "");
+				bb.put("HomeAddress", watchh.getHome_info()+"");
+				
+				WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfo(imei);
 				if (whsc == null) {
 					ideviceService.insertDeviceHomeAndFamilyInfo(watchh.getId(), imei, "", "", "", "", "", "", "", "",
 							"", "");
+				}else{
+					bb.put("SchoolAddress", whsc.getSchoolAddress()+"");
+					bb.put("SchoolLat", whsc.getSchoolLat()+"");
+					bb.put("SchoolLng", whsc.getSchoolLng()+"");
+					bb.put("UpdateTime", whsc.getUpdatetime().getTime());
+					bb.put("LatestTime", "");
+					bb.put("HomeLat", whsc.getHomeLat()+"");
+					bb.put("HomeLng", whsc.getHomeLng()+"");
+					bb.put("HomeAddress",whsc.getHomeAddress()+"");
 				}
 				bb.put("Code", 1);
 
@@ -175,15 +198,8 @@ public class WatchDeviceInfoController extends BaseController {
 				bb.put("PhoneCornet", watchh.getShort_number() + "," + watchh.getFamily_number());
 				bb.put("Photo", "");
 
-				bb.put("SchoolAddress", "");
-				bb.put("SchoolLat", "");
-				bb.put("SchoolLng", "");
 				bb.put("SerialNumber", imei);
-				bb.put("UpdateTime", "");
-				bb.put("LatestTime", "");
-				bb.put("HomeAddress", "");
-				bb.put("HomeLat", "");
-				bb.put("HomeLng", "");
+			
 
 			} else {
 				bb.put("Code", 0);
@@ -301,7 +317,7 @@ public class WatchDeviceInfoController extends BaseController {
 			return bb.toString();
 		}
 
-		Long id = jsonObject.getLong("id");
+		String id = jsonObject.getString("id");
 		String imei = jsonObject.getString("imei");
 
 		/*
@@ -321,16 +337,16 @@ public class WatchDeviceInfoController extends BaseController {
 		String homeLat = jsonObject.getString("homeLat");
 		String homeLng = jsonObject.getString("homeLng");
 
-		WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfo(id);
+		WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfo(imei);
 		if (whsc != null) {
-			if (this.ideviceService.updateImeiHomeAndFamilyInfoById(id, classDisable1, classDisable2, weekDisable,
+			if (this.ideviceService.updateImeiHomeAndFamilyInfoById(whsc.getId(), classDisable1, classDisable2, weekDisable,
 					schoolAddress, schoolLat, schoolLng, latestTime, homeAddress, homeLat, homeLng)) {
 				bb.put("Code", 1);
 			} else {
 				bb.put("Code", 0);
 			}
 		} else {
-			if (ideviceService.insertDeviceHomeAndFamilyInfo(id, imei, schoolAddress, classDisable1, classDisable2,
+			if (ideviceService.insertDeviceHomeAndFamilyInfo(Long.valueOf("1"), imei, schoolAddress, classDisable1, classDisable2,
 					weekDisable, schoolLat, schoolLng, latestTime, homeAddress, homeLng, homeLat)) {
 				bb.put("Code", 1);
 			} else {

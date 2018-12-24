@@ -325,7 +325,7 @@ public class LocationController extends BaseController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/getlocationInfo", method = RequestMethod.POST)
+	@RequestMapping(value = "/getlocationInfo", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String getlocationInfo(@RequestBody String body) {
 		JSONObject bb = new JSONObject();
 
@@ -585,6 +585,51 @@ public class LocationController extends BaseController {
 		JSONObject bb = new JSONObject();
 		userInfoService.updateOldBindDeviceInfo(id, name);
 		bb.put("codes", 1);
+		return bb.toString();
+	}
+
+	
+	
+	/* 查询手表的轨迹 */
+	@ResponseBody
+	@RequestMapping(value = "/track/{token}/{imei}/{starttime}/{endtime}", method = RequestMethod.GET)
+	public String track(@PathVariable String token, @PathVariable String imei, @PathVariable String starttime,
+			@PathVariable String endtime) {
+		JSONObject bb = new JSONObject();
+		String user_id = checkTokenWatchAndUser(token);
+		if ("0".equals(user_id)) {
+			bb.put("code", -1);
+			return bb.toString();
+		}
+
+		List<LocationWatch> locationList = locationService.getWatchFootprint(imei, starttime, endtime);
+		JSONArray jsonArray = new JSONArray();
+		if (locationList != null) {
+			bb.put("Total", locationList.size() + "");
+			for (LocationWatch location : locationList) {
+				JSONObject dataMap = new JSONObject();
+				dataMap.put("lat", location.getLat());
+				dataMap.put("lng", location.getLng());
+				dataMap.put("timestamp", location.getUpload_time().getTime());
+				dataMap.put("locationType", location.getLocation_type());
+
+				dataMap.put("time", location.getUpload_time().getTime() + "");
+				dataMap.put("Status", 0);
+				dataMap.put("Latitude", location.getLat());
+				dataMap.put("Longitude", location.getLng());
+				dataMap.put("LocationType", location.getLocation_type());
+				dataMap.put("CreateTime", location.getUpload_time().getTime() + "");
+				dataMap.put("UpdateTime", location.getUpload_time().getTime() + "");
+				jsonArray.add(dataMap);
+			}
+			bb.put("Code", 1);
+			// bb.put("list", jsonArray.toString());
+		} else {
+			bb.put("Code", 0);
+
+		}
+
+		bb.put("List", jsonArray);
 		return bb.toString();
 	}
 

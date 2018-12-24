@@ -83,6 +83,7 @@ public class WatchAppUserController extends BaseController {
 				bb.put("UserId", userInfo.getUser_id());
 				bb.put("PhoneNumber", "0");
 				bb.put("BindNumber", "0");
+				bb.put("Birthday", "" );
 				bb.put("UserType", 0);
 				bb.put("Name", "0");
 				bb.put("Notification", "True");
@@ -139,6 +140,7 @@ public class WatchAppUserController extends BaseController {
 			bb.put("Notification", "True");
 			bb.put("NotificationSound", "True");
 			bb.put("NotificationVibration", "True");
+			bb.put("Birthday", "" );
 			bb.put("ip", Utils.IP+":"+ Utils.PORT_HTTP);
 			if (ipport != null && !"".equals(ipport)) {
 				bb.put("ip", ipport);
@@ -151,6 +153,7 @@ public class WatchAppUserController extends BaseController {
 				WatchDevice watchd = ideviceService.getDeviceInfo(tel);
 				if (watchd != null) {
 					bb.put("DeviceID", watchd.getId());
+					bb.put("Birthday", watchd.getBirday()+"" );
 					limitCache.addKey(tel + "_id", watchd.getId()+"");
 				}else{
 
@@ -250,7 +253,7 @@ public class WatchAppUserController extends BaseController {
 
 	// 绑定设备
 	@ResponseBody
-	@RequestMapping(value = "/bindDevice", method = RequestMethod.POST)
+	@RequestMapping(value = "/bindDevice", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String bindDevice(@RequestBody String body) {
 		JSONObject bb = new JSONObject();
 		JSONObject jsonObject = (JSONObject) JSON.parse(body);
@@ -303,7 +306,7 @@ public class WatchAppUserController extends BaseController {
 				dataMap.put("timestamp", location.getCreatetime().getTime());
 
 				dataMap.put("ActiveDate", "");
-				dataMap.put("BabyName", location.getName());
+				dataMap.put("BabyName", location.getName()+"");
 				dataMap.put("BindNumber", location.getImei());
 				dataMap.put("DeviceType", 1);
 				dataMap.put("Birthday", "0");

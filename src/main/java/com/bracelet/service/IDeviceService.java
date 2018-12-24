@@ -15,7 +15,7 @@ public interface IDeviceService {
 	WatchDevice getDeviceInfo(String addimei);
 	
 	@DataSourceChange(slave = true)
-	WatchDeviceHomeSchool getDeviceHomeAndFamilyInfo(Long id);
+	WatchDeviceHomeSchool getDeviceHomeAndFamilyInfo(String imei);
 
 	List<IpAddressInfo> getipinfo();
 
