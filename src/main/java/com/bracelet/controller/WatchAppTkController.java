@@ -35,6 +35,7 @@ import com.bracelet.util.RespCode;
 import com.bracelet.util.Utils;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +59,9 @@ public class WatchAppTkController extends BaseController {
 	IUploadPhotoService iUploadPhotoService;
 	@Autowired
 	IDeviceService ideviceService;
+	
+	@Autowired
+	IUserInfoService userInfoService;
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	/*
@@ -65,7 +69,7 @@ public class WatchAppTkController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/tkToDevice", method = RequestMethod.POST)
-	public String tkToDevice(@RequestBody String body) throws UnsupportedEncodingException {
+	public String tkToDevice(@RequestBody String body){
 		JSONObject jsonObject = (JSONObject) JSON.parse(body);
 		JSONObject bb = new JSONObject();
 		String token = jsonObject.getString("token");
@@ -77,17 +81,68 @@ public class WatchAppTkController extends BaseController {
 		}
 
 		String imei = jsonObject.getString("imei");
-		String phone = jsonObject.getString("phone");// 号码
+	//	String phone = jsonObject.getString("phone");// 号码
 		String voiceData = jsonObject.getString("voiceData");// 语音内容 base64转字符串
 		String sourceName = jsonObject.getString("sourceName");// 文件名字
 
 		 byte[] voicebyte = Base64.decodeBase64(voiceData);
-		// insertVoiceInfo(String sender, String receiver, String
-		// sourceName,String voiceData, Integer status,String numMessage);
-		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
-		String numMessage = Utils.randomString(5);
-		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
-			watchtkService.insertAppVoiceInfo(phone, imei, sourceName, voiceData, 0, numMessage, 1, 1);
+		 
+			Utils.createFileContent(Utils.VOICE_FILE_lINUX, "app_"+sourceName, voicebyte);
+	
+		//SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
+			JSONArray jsonArray = new JSONArray();
+			String msgNumber =Utils.randomString(5);
+		watchtkService.insertAppVoiceInfo("app", imei, sourceName, Utils.VOICE_URL + "app_"+sourceName, 0, msgNumber, 1, 1);
+		bb.put("Code", 1);
+		
+		//WatchVoiceInfo watchAppVoice = watchtkService.getAppVoiceInfoByImeiAndStatus(imei, 1);
+		
+				JSONObject dataMap = new JSONObject();
+				dataMap.put("voiceUrl", "");
+				dataMap.put("DeviceVoiceId",((int)((Math.random()*9+1)*10000))+"");
+				dataMap.put("DeviceID", 0);
+				
+				String deviceid = limitCache.getRedisKeyValue(imei + "_id");
+				if(deviceid !=null && !"0".equals(deviceid) && !"".equals(deviceid)){
+					dataMap.put("DeviceID", deviceid);
+				}else{
+					WatchDevice watchd = ideviceService.getDeviceInfo(imei);
+					if (watchd != null) {
+						dataMap.put("DeviceID", watchd.getId());
+						limitCache.addKey(imei + "_id", watchd.getId()+"");
+					}
+				}
+				
+				dataMap.put("State", 1);
+				dataMap.put("Type", 3);
+				dataMap.put("MsgType", 0);
+				dataMap.put("ObjectId", "0");
+				if(StringUtils.isEmpty(limitCache.getRedisKeyValue(imei + "_userid"))){
+					UserInfo userInfo = userInfoService.getUserInfoByUsername(imei);
+					if(userInfo !=null ){
+						dataMap.put("ObjectId", userInfo.getUser_id()+"");
+						limitCache.addKey(imei + "_userid", userInfo.getUser_id() + "");
+					}
+					
+				}else{
+					
+					dataMap.put("ObjectId", limitCache.getRedisKeyValue(imei + "_userid"));
+				}
+				dataMap.put("Mark", "");
+				dataMap.put("Path",Utils.VOICE_URL + "app_"+sourceName);
+				dataMap.put("Length", 0);
+				dataMap.put("CreateTime", "");
+				dataMap.put("UpdateTime", "");
+				jsonArray.add(dataMap);
+				
+		
+		
+		
+		
+		bb.put("VoiceList", jsonArray);
+		
+		
+	/*	if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
 			bb.put("Code", 2);
 			return bb.toString();
 		}
@@ -122,16 +177,13 @@ public class WatchAppTkController extends BaseController {
 				socketLoginDto.getChannel().writeAndFlush(voicebyte);
 			}
 			
-			// 因为这里我觉得下发的时候需要增加一个消息号，设备再回复的时候，。把消息号带上，这个消息号永远唯一，消息号我随机生成
-			
-			// byte[] voiceDatat = Base64.decodeBase64(voiceData);
-			// socketLoginDto.getChannel().writeAndFlush(voiceDatat); 调试有可能是这种
+		
 
-			watchtkService.insertAppVoiceInfo(phone, imei, sourceName, voiceData, 1, numMessage, 1, 1);
+			watchtkService.insertAppVoiceInfo("app", imei, sourceName, voiceData, 1, numMessage, 1, 1);
 		} else {
-			watchtkService.insertAppVoiceInfo(phone, imei, sourceName, voiceData, 0, numMessage, 1, 1);
+			watchtkService.insertAppVoiceInfo("app", imei, sourceName, voiceData, 0, numMessage, 1, 1);
 			bb.put("Code", 0);
-		}
+		}*/
 		return bb.toString();
 	}
 
@@ -151,7 +203,7 @@ public class WatchAppTkController extends BaseController {
 		List<DownLoadFileInfo>list = iUploadPhotoService.getphotoInfo(imei,0);
 		JSONArray jsonArray = new JSONArray();
 		if (list != null) {
-			SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
+		
 			for (DownLoadFileInfo fileInfo : list) {
 				JSONObject dataMap = new JSONObject();
 				dataMap.put("photoUrl", fileInfo.getSource());
@@ -159,11 +211,15 @@ public class WatchAppTkController extends BaseController {
 				dataMap.put("photoName", fileInfo.getPhoto_name());
 				dataMap.put("DevicePhotoId", fileInfo.getId());
 				dataMap.put("DeviceID", "");
-				if(socketLoginDto == null || socketLoginDto.getChannel() == null){
-					WatchDevice watchd = ideviceService.getDeviceInfo(imei);
-					dataMap.put("DeviceID",watchd.getId());
+				String deviceid = limitCache.getRedisKeyValue(imei + "_id");
+				if(deviceid !=null && !"0".equals(deviceid) && !"".equals(deviceid)){
+					dataMap.put("DeviceID", deviceid);
 				}else{
-					dataMap.put("DeviceID", socketLoginDto.getUser_id());
+					WatchDevice watchd = ideviceService.getDeviceInfo(imei);
+					if (watchd != null) {
+						dataMap.put("DeviceID", watchd.getId());
+						limitCache.addKey(imei + "_id", watchd.getId()+"");
+					}
 				}
 				dataMap.put("Source", "");
 				dataMap.put("DeviceTime", "");
@@ -212,11 +268,11 @@ public class WatchAppTkController extends BaseController {
 				
 				String deviceid = limitCache.getRedisKeyValue(imei + "_id");
 				if(deviceid !=null && !"0".equals(deviceid) && !"".equals(deviceid)){
-					bb.put("DeviceID", deviceid);
+					dataMap.put("DeviceID", deviceid);
 				}else{
 					WatchDevice watchd = ideviceService.getDeviceInfo(imei);
 					if (watchd != null) {
-						bb.put("DeviceID", watchd.getId());
+						dataMap.put("DeviceID", watchd.getId());
 						limitCache.addKey(imei + "_id", watchd.getId()+"");
 					}
 				}

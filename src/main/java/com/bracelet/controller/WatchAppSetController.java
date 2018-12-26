@@ -13,6 +13,7 @@ import com.bracelet.entity.OldBindDevice;
 import com.bracelet.entity.Step;
 import com.bracelet.entity.UserInfo;
 import com.bracelet.entity.VersionInfo;
+import com.bracelet.entity.WatchDeviceAlarm;
 import com.bracelet.entity.WatchDeviceHomeSchool;
 import com.bracelet.entity.WatchDeviceSet;
 import com.bracelet.exception.BizException;
@@ -236,12 +237,23 @@ public class WatchAppSetController extends BaseController {
 			bb.put("TimerOpen", "07:00");
 			bb.put("TimerClose", "00:00");
 			bb.put("BrightScreen", "10");
+			
 			bb.put("WeekAlarm1", "");
 			bb.put("WeekAlarm2", "");
 			bb.put("WeekAlarm3", "");
 			bb.put("Alarm1", "");
 			bb.put("Alarm2", "");
 			bb.put("Alarm3", "");
+			
+			WatchDeviceAlarm watch = ideviceService.getDeviceAlarmInfo(imei);
+			if(watch !=null ){
+				bb.put("WeekAlarm1", watch.getWeekAlarm1()+"");
+				bb.put("WeekAlarm2", watch.getWeekAlarm2()+"");
+				bb.put("WeekAlarm3", watch.getWeekAlarm3()+"");
+				bb.put("Alarm1", watch.getAlarm1()+"");
+				bb.put("Alarm2", watch.getAlarm2()+"");
+				bb.put("Alarm3", watch.getAlarm3()+"");
+			}
 			bb.put("LocationMode", "");
 			bb.put("LocationTime", "");
 			bb.put("FlowerNumber", 0);

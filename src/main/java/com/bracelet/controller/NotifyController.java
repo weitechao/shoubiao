@@ -69,10 +69,10 @@ public class NotifyController extends BaseController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/notifyList/{token}/{imei}", method = RequestMethod.GET)
-	public String notifyList(@PathVariable String token,@PathVariable String imei) {
+	@RequestMapping(value = "/notifyList/{token}", method = RequestMethod.GET)
+	public String notifyList(@PathVariable String token) {
 		JSONObject bb = new JSONObject();
-
+         String imei = "872018020142169";
 		String user_id = checkTokenWatchAndUser(token);
 		if ("0".equals(user_id)) {
 			bb.put("Code", -1);

@@ -21,4 +21,6 @@ public interface WatchTkService {
 	boolean insertAppVoiceInfo(String sender, String receiver, String sourceName, String voiceData, Integer status,
 			String numMessage, Integer thisNubmer, Integer allNumber);
 
+	WatchVoiceInfo getAppVoiceInfoByImeiAndStatus(String imei, Integer status);
+
 }

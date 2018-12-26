@@ -81,4 +81,17 @@ public class WatchTkServiceImpl implements WatchTkService {
 		return i == 1;
 	}
 
+	@Override
+	public WatchVoiceInfo getAppVoiceInfoByImeiAndStatus(String imei, Integer status) {
+		String sql = "select * from app_voice_info where receiver=? and status=?  order by id desc limit 1";
+		List<WatchVoiceInfo> list = jdbcTemplate.query(sql, new Object[] { imei, status },
+				new BeanPropertyRowMapper<WatchVoiceInfo>(WatchVoiceInfo.class));
+		if (list != null && !list.isEmpty()) {
+			return list.get(0);
+		} else {
+			logger.info("getLatestVoice return null.user_id:" + imei);
+		}
+		return null;
+	}
+
 }

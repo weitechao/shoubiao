@@ -190,7 +190,7 @@ public class WatchAppPhoneBookController extends BaseController {
 				dataMap.put("Relationship", location.getName());
 				dataMap.put("timestamp", location.getCreatetime().getTime());
 				dataMap.put("ObjectId", 0);
-				dataMap.put("Photo","");
+				dataMap.put("Photo","123456");
 				dataMap.put("PhoneNumber",location.getCornet()+"");
 				dataMap.put("Type",1);
 				dataMap.put("HeadImg",location.getHeadImg()+"");

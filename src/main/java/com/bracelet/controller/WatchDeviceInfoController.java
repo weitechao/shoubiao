@@ -67,14 +67,7 @@ public class WatchDeviceInfoController extends BaseController {
 
 		if (watch != null) {
 			bb.put("id", watch.getId());
-			/*
-			 * bb.put("phone", watch.getPhone() + ""); bb.put("updatetime",
-			 * watch.getUpdatetime().getTime()); bb.put("dv", watch.getDv() +
-			 * ""); bb.put("type", watch.getType() + ""); bb.put("sex",
-			 * watch.getSex() + ""); bb.put("birday", watch.getBirday() + "");
-			 * bb.put("weight", watch.getWeight() + ""); bb.put("height",
-			 * watch.getHeight() + "");
-			 */
+			
 			bb.put("head", watch.getHead() + "");
 			bb.put("Birthday", watch.getBirday()+"");
 			bb.put("HomeAddress", watch.getHome_info()+"");
@@ -82,7 +75,7 @@ public class WatchDeviceInfoController extends BaseController {
 			bb.put("Code", 1);
 			bb.put("ActiveDate", "");
 			bb.put("BabyName", watch.getNickname() + "");
-			bb.put("BindNumber", "");
+			bb.put("BindNumber", imei);
 			bb.put("CreateTime", watch.getCreatetime().getTime());
 			bb.put("CurrentFirmware", "");
 			bb.put("SetVersionNO", 1);
@@ -91,7 +84,7 @@ public class WatchDeviceInfoController extends BaseController {
 			bb.put("SmsNumber", "10086");
 			bb.put("SmsBalanceKey", 101);
 			bb.put("DeviceID", watch.getId());
-			bb.put("UserId", watch.getId());
+			bb.put("UserId", userId);
 			bb.put("DeviceModelID", "");
 			bb.put("Firmware", "");
 			bb.put("Gender", 0);
@@ -103,16 +96,17 @@ public class WatchDeviceInfoController extends BaseController {
 			bb.put("PhoneNumber", "");
 			bb.put("PhoneCornet", watch.getShort_number() + "," + watch.getFamily_number());
 			bb.put("Photo", "");
+			bb.put("SmsFlowKey", "0");
 
 			bb.put("SchoolAddress", "");
-			bb.put("SchoolLat", "");
-			bb.put("SchoolLng", "");
+			bb.put("SchoolLat", "0");
+			bb.put("SchoolLng", "0");
 			bb.put("SerialNumber", imei);
 			bb.put("UpdateTime", "");
 			bb.put("LatestTime", "");
 			bb.put("HomeAddress", "");
-			bb.put("HomeLat", "");
-			bb.put("HomeLng", "");
+			bb.put("HomeLat", "0");
+			bb.put("HomeLng", "0");
 
 			WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfo(imei);
 			if (whsc != null) {
@@ -146,16 +140,16 @@ public class WatchDeviceInfoController extends BaseController {
 				bb.put("weight", watchh.getWeight() + "");
 				bb.put("height", watchh.getHeight() + "");
 				bb.put("head", watchh.getHead() + "");
-
+			
 				
 				bb.put("SchoolAddress", "");
-				bb.put("SchoolLat", "");
-				bb.put("SchoolLng", "");
+				bb.put("SchoolLat", "0");
+				bb.put("SchoolLng", "0");
 				bb.put("UpdateTime", "");
 				bb.put("LatestTime", "");
 				bb.put("HomeAddress", "");
-				bb.put("HomeLat", "");
-				bb.put("HomeLng", "");
+				bb.put("HomeLat", "0");
+				bb.put("HomeLng", "0");
 				bb.put("HomeAddress", watchh.getHome_info()+"");
 				
 				WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfo(imei);
@@ -176,7 +170,7 @@ public class WatchDeviceInfoController extends BaseController {
 
 				bb.put("ActiveDate", "");
 				bb.put("BabyName", watchh.getNickname() + "");
-				bb.put("BindNumber", "");
+				bb.put("BindNumber", imei);
 				bb.put("CreateTime", watchh.getCreatetime().getTime());
 				bb.put("CurrentFirmware", "");
 				bb.put("SetVersionNO", 1);
@@ -185,7 +179,7 @@ public class WatchDeviceInfoController extends BaseController {
 				bb.put("SmsNumber", "10086");
 				bb.put("SmsBalanceKey", 101);
 				bb.put("DeviceID", watchh.getId());
-				bb.put("UserId", "");
+				bb.put("UserId", userId);
 				bb.put("DeviceModelID", "");
 				bb.put("Firmware", "");
 				bb.put("Gender", 0);
@@ -199,7 +193,7 @@ public class WatchDeviceInfoController extends BaseController {
 				bb.put("Photo", "");
 
 				bb.put("SerialNumber", imei);
-			
+				bb.put("SmsFlowKey", "0");
 
 			} else {
 				bb.put("Code", 0);
@@ -317,7 +311,7 @@ public class WatchDeviceInfoController extends BaseController {
 			return bb.toString();
 		}
 
-		String id = jsonObject.getString("id");
+		//String id = jsonObject.getString("id");
 		String imei = jsonObject.getString("imei");
 
 		/*

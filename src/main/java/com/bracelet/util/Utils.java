@@ -82,6 +82,7 @@ public class Utils {
 	public final static String METHOD_TkService = "com.bracelet.socket.business.impl.TkService";
 	public final static String METHOD_UploadPhoto = "com.bracelet.socket.business.impl.UploadPhoto";
 	public final static String METHOD_SLBTEST = "PosController.testslb(..)";
+	public final static String NOTIFY_LIST= "NotifyController.notifyList(..)";
 
 	public static final String GPS_URL = "http://restapi.amap.com/v3/assistant/coordinate/convert";
 

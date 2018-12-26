@@ -42,7 +42,10 @@ public class SocketServer implements InitializingBean, DisposableBean{
 				.option(ChannelOption.SO_BACKLOG, 128).
 				option(ChannelOption.SO_SNDBUF, 1024).
 				option(ChannelOption.SO_RCVBUF, 1024).
+				option(ChannelOption.TCP_NODELAY, true)
+				.option(ChannelOption.SO_REUSEADDR, true).
 				childOption(ChannelOption.SO_KEEPALIVE, true);
+				
 		
 		
 		//  .option(ChannelOption.SO_SNDBUF, 32 * 1024) //设置发送数据缓冲大小.option(ChannelOption.SO_RCVBUF, 32 * 1024) //设置接受数据缓冲大小

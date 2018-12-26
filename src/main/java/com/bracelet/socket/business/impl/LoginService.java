@@ -133,7 +133,7 @@ public class LoginService implements IService {
 			channelDto.setImei(imei);
 			channelDto.setPhone(phone);
 			channelDto.setUser_id(Long.valueOf(limitCache.getRedisKeyValue(imei + "_id")));
-			logger.info("保存手表登录信息" + ",imei" + imei + "deviceid=" + limitCache.getRedisKeyValue(imei + "_id"));
+			logger.info("redis  里有值  保存手表登录信息" + ",imei" + imei + "deviceid=" + limitCache.getRedisKeyValue(imei + "_id"));
 			ChannelMap.addChannel(imei, channelDto);
 			ChannelMap.addChannel(channel, channelDto);
 		}

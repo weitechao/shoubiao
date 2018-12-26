@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -52,6 +53,8 @@ public class LocationController extends BaseController {
 	BaseChannelHandler baseChannelHandler;
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
+	
+	SimpleDateFormat smt =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	/* app查询手表最新定位 */
 	@ResponseBody
@@ -74,7 +77,7 @@ public class LocationController extends BaseController {
 			bb.put("Code", 1);
 
 			JSONObject dataMap = new JSONObject();
-			dataMap.put("DeviceID", "");
+			dataMap.put("DeviceID", limitCache.getRedisKeyValue(imei + "_id"));
 			dataMap.put("Message", 0);
 			dataMap.put("Voice", 0);
 			dataMap.put("SMS", 0);
@@ -84,9 +87,8 @@ public class LocationController extends BaseController {
 			bb.put("NewList", jsonArray);
 
 			JSONObject dataMap1 = new JSONObject();
-			dataMap1.put("DeviceID", "");
+			dataMap1.put("DeviceID", limitCache.getRedisKeyValue(imei + "_id"));
 			dataMap1.put("Altitude", 0);
-			dataMap1.put("Course", 0);
 			dataMap1.put("Course", 0);
 			dataMap1.put("LocationType", watchlocaiton.getLocationType());
 			dataMap1.put("wifi", "");
@@ -135,7 +137,7 @@ public class LocationController extends BaseController {
 				bb.put("Code", 1);
 
 				JSONObject dataMap = new JSONObject();
-				dataMap.put("DeviceID", "");
+				dataMap.put("DeviceID", limitCache.getRedisKeyValue(imei + "_id"));
 				dataMap.put("Message", 0);
 				dataMap.put("Voice", 0);
 				dataMap.put("SMS", 0);
@@ -145,9 +147,8 @@ public class LocationController extends BaseController {
 				bb.put("NewList", jsonArray);
 
 				JSONObject dataMap1 = new JSONObject();
-				dataMap1.put("DeviceID", "");
+				dataMap1.put("DeviceID", limitCache.getRedisKeyValue(imei + "_id"));
 				dataMap1.put("Altitude", 0);
-				dataMap1.put("Course", 0);
 				dataMap1.put("Course", 0);
 				dataMap1.put("LocationType", locationWatch.getLocation_type());
 				dataMap1.put("wifi", "");
@@ -592,9 +593,18 @@ public class LocationController extends BaseController {
 	
 	/* 查询手表的轨迹 */
 	@ResponseBody
-	@RequestMapping(value = "/track/{token}/{imei}/{starttime}/{endtime}", method = RequestMethod.GET)
-	public String track(@PathVariable String token, @PathVariable String imei, @PathVariable String starttime,
-			@PathVariable String endtime) {
+	@RequestMapping(value = "/track", method = RequestMethod.POST)
+	public String track(@RequestBody String body){
+			
+			/*@PathVariable String token, @PathVariable String imei, @PathVariable String starttime,
+			@PathVariable String endtime) {*/
+		
+		JSONObject jsonObject = (JSONObject) JSON.parse(body);
+		String token = jsonObject.getString("token");
+		String imei = jsonObject.getString("imei");
+		String starttime = jsonObject.getString("starttime");
+		String endtime = jsonObject.getString("endtime");
+		
 		JSONObject bb = new JSONObject();
 		String user_id = checkTokenWatchAndUser(token);
 		if ("0".equals(user_id)) {
@@ -613,12 +623,12 @@ public class LocationController extends BaseController {
 				dataMap.put("timestamp", location.getUpload_time().getTime());
 				dataMap.put("locationType", location.getLocation_type());
 
-				dataMap.put("time", location.getUpload_time().getTime() + "");
+				dataMap.put("Time", location.getUpload_time().getTime() + "");
 				dataMap.put("Status", 0);
 				dataMap.put("Latitude", location.getLat());
 				dataMap.put("Longitude", location.getLng());
 				dataMap.put("LocationType", location.getLocation_type());
-				dataMap.put("CreateTime", location.getUpload_time().getTime() + "");
+				dataMap.put("CreateTime",smt.format(location.getUpload_time().getTime()));
 				dataMap.put("UpdateTime", location.getUpload_time().getTime() + "");
 				jsonArray.add(dataMap);
 			}
