@@ -91,7 +91,7 @@ public class LocationController extends BaseController {
 			dataMap1.put("Altitude", 0);
 			dataMap1.put("Course", 0);
 			dataMap1.put("LocationType", watchlocaiton.getLocationType());
-			dataMap1.put("wifi", "");
+			
 			dataMap1.put("CreateTime", "");
 			dataMap1.put("Electricity", 100);
 
@@ -99,6 +99,7 @@ public class LocationController extends BaseController {
 			if (energy != null) {
 				dataMap1.put("Electricity", energy);
 			}
+			dataMap1.put("wifi", "");
 			dataMap1.put("GSM", 94);
 			dataMap1.put("Step", 0);
 			dataMap1.put("Health", "0.0");
@@ -640,6 +641,113 @@ public class LocationController extends BaseController {
 		}
 
 		bb.put("List", jsonArray);
+		return bb.toString();
+	}
+	
+	
+	/* app查询手表最新定位 */
+	@ResponseBody
+	@RequestMapping(value = "/getlastLocation/search/{token}/{imei}", method = RequestMethod.GET)
+	public String getlastLocation(@PathVariable String token, @PathVariable String imei) {
+		JSONObject bb = new JSONObject();
+
+		String user_id = checkTokenWatchAndUser(token);
+		if ("0".equals(user_id)) {
+			bb.put("Code", -1);
+			return bb.toString();
+		}
+
+		WatchLatestLocation watchlocaiton = ChannelMap.getlocation(imei);
+		if (watchlocaiton != null) {
+			
+			bb.put("Code", 1);
+
+			bb.put("DeviceID", limitCache.getRedisKeyValue(imei + "_id"));
+			bb.put("Altitude", 0);
+			bb.put("Course", 0);
+			bb.put("LocationType", watchlocaiton.getLocationType());
+			
+			bb.put("CreateTime", "");
+			bb.put("Electricity", 100);
+
+			String energy = limitCache.getRedisKeyValue(imei + "_energy");
+			if (energy != null) {
+				bb.put("Electricity", energy);
+			}
+			bb.put("wifi", "");
+			bb.put("GSM", 94);
+			bb.put("Step", 0);
+			bb.put("Health", "0.0");
+			bb.put("Latitude", watchlocaiton.getLat());
+			bb.put("Longitude", watchlocaiton.getLng());
+			bb.put("Online", 0);
+			SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
+			if (socketLoginDto != null) {
+				bb.put("Online", 1);
+			}
+			bb.put("SatelliteNumber", 0);
+			bb.put("ServerTime", "");
+			bb.put("Speed", 0);
+			bb.put("UpdateTime", "");
+
+			
+
+		} else {
+			LocationWatch locationWatch = locationService.getLatest(imei);
+			if (locationWatch != null) {
+
+				WatchLatestLocation watchlastlocation = new WatchLatestLocation();
+				watchlastlocation.setImei(imei);
+				watchlastlocation.setLat(locationWatch.getLat());
+				watchlastlocation.setLng(locationWatch.getLng());
+				watchlastlocation.setLocationType(locationWatch.getLocation_type());
+				watchlastlocation.setTimestamp(locationWatch.getUpload_time().getTime());
+				ChannelMap.addlocation(imei, watchlastlocation);
+
+			
+				bb.put("locationType", locationWatch.getLocation_type());
+			
+				bb.put("Code", 1);
+
+				
+			
+				
+
+				
+				bb.put("DeviceID", limitCache.getRedisKeyValue(imei + "_id"));
+				bb.put("Altitude", 0);
+				bb.put("Course", 0);
+				bb.put("LocationType", locationWatch.getLocation_type());
+				bb.put("wifi", "");
+				bb.put("CreateTime", "");
+				bb.put("Electricity", 100);
+
+				String energy = limitCache.getRedisKeyValue(imei + "_energy");
+				if (energy != null) {
+					bb.put("Electricity", energy);
+				}
+				bb.put("GSM", 94);
+				bb.put("Step", 0);
+				bb.put("Health", "0.0");
+				bb.put("Latitude", locationWatch.getLat());
+				bb.put("Longitude", locationWatch.getLng());
+				bb.put("Online", 0);
+				SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
+				if (socketLoginDto != null) {
+					bb.put("Online", 1);
+				}
+				bb.put("SatelliteNumber", 0);
+				bb.put("ServerTime", "");
+				bb.put("Speed", 0);
+				bb.put("UpdateTime", "");
+
+				
+
+			} else {
+				bb.put("Code", 0);
+			}
+		}
+
 		return bb.toString();
 	}
 

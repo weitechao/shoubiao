@@ -179,7 +179,7 @@ public class DeviceServiceImpl implements IDeviceService {
 			String homeAddress, String homeLat, String homeLng) {
 		Timestamp now = Utils.getCurrentTimestamp();
 		int i = jdbcTemplate.update(
-				"update device_watch_hf_info set updatetime=?, schoolAddress=?, classDisable1=?, classDisable2=?, weekDisable1=?, schoolLat=?, schoolLng=?, latestTime=?, homeAddress=?, homeLng=?, homeLat=? where w_id = ?",
+				"update device_watch_hf_info set updatetime=?, schoolAddress=?, classDisable1=?, classDisable2=?, weekDisable1=?, schoolLat=?, schoolLng=?, latestTime=?, homeAddress=?, homeLng=?, homeLat=? where id = ?",
 				new Object[] { now, schoolAddress, classDisable1, classDisable2, weekDisable, schoolLat, schoolLng,
 						latestTime, homeAddress, homeLng, homeLat, id },
 				new int[] { Types.TIMESTAMP, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,

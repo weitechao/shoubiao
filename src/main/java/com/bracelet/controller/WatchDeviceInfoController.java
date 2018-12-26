@@ -68,7 +68,7 @@ public class WatchDeviceInfoController extends BaseController {
 		if (watch != null) {
 			bb.put("id", watch.getId());
 			
-			bb.put("head", watch.getHead() + "");
+			//bb.put("head", "");
 			bb.put("Birthday", watch.getBirday()+"");
 			bb.put("HomeAddress", watch.getHome_info()+"");
 			
@@ -87,26 +87,28 @@ public class WatchDeviceInfoController extends BaseController {
 			bb.put("UserId", userId);
 			bb.put("DeviceModelID", "");
 			bb.put("Firmware", "");
-			bb.put("Gender", 0);
-			bb.put("Grade", 0);
 			bb.put("HireExpireDate", "");
 			bb.put("HireStartDate", "");
 			bb.put("IsGuard", "");
 			bb.put("Password", "");
-			bb.put("PhoneNumber", "");
-			bb.put("PhoneCornet", watch.getShort_number() + "," + watch.getFamily_number());
-			bb.put("Photo", "");
+			bb.put("Gender", watch.getSex()+"");
+			bb.put("Grade", watch.getSchool_age()+"");
+			bb.put("PhoneNumber", watch.getPhone()+"");
+			bb.put("PhoneCornet", watch.getShort_number()+"");
+			bb.put("Photo", watch.getHead() + "");
 			bb.put("SmsFlowKey", "0");
+			bb.put("SerialNumber", imei);
 
 			bb.put("SchoolAddress", "");
 			bb.put("SchoolLat", "0");
 			bb.put("SchoolLng", "0");
-			bb.put("SerialNumber", imei);
 			bb.put("UpdateTime", "");
 			bb.put("LatestTime", "");
 			bb.put("HomeAddress", "");
 			bb.put("HomeLat", "0");
 			bb.put("HomeLng", "0");
+			
+			/*shortNumber，PhoneCornet）,( phone, PhoneNumber) ,( schoolAge, Grade)，(sex, Gender)*/
 
 			WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfo(imei);
 			if (whsc != null) {
@@ -139,7 +141,7 @@ public class WatchDeviceInfoController extends BaseController {
 				bb.put("homeInfo", watchh.getHome_info() + "");
 				bb.put("weight", watchh.getWeight() + "");
 				bb.put("height", watchh.getHeight() + "");
-				bb.put("head", watchh.getHead() + "");
+				//bb.put("head", watchh.getHead() + "");
 			
 				
 				bb.put("SchoolAddress", "");
@@ -189,8 +191,12 @@ public class WatchDeviceInfoController extends BaseController {
 				bb.put("IsGuard", "");
 				bb.put("Password", "");
 				bb.put("PhoneNumber", "");
-				bb.put("PhoneCornet", watchh.getShort_number() + "," + watchh.getFamily_number());
-				bb.put("Photo", "");
+				
+				bb.put("Gender", watchh.getSex()+"");
+				bb.put("Grade", watchh.getSchool_age()+"");
+				bb.put("PhoneNumber", watchh.getPhone()+"");
+				bb.put("PhoneCornet", watchh.getShort_number()+"");
+				bb.put("Photo", watchh.getHead() + "");
 
 				bb.put("SerialNumber", imei);
 				bb.put("SmsFlowKey", "0");
