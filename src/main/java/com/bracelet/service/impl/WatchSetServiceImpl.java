@@ -5,6 +5,7 @@ import java.sql.Types;
 import java.util.List;
 
 import com.bracelet.datasource.DataSourceChange;
+import com.bracelet.entity.LocationFrequency;
 import com.bracelet.entity.MomentPwdInfo;
 import com.bracelet.entity.WatchDeviceSet;
 import com.bracelet.service.WatchSetService;
@@ -177,6 +178,40 @@ public class WatchSetServiceImpl implements WatchSetService {
 						Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
 						Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
 						Types.VARCHAR, Types.TIMESTAMP, Types.TIMESTAMP });
+		return i == 1;
+	}
+
+	@Override
+	public LocationFrequency getLocationFrequencyByImei(String imei) {
+		String sql = "select * from device_location_fequency where  imei=? limit 1";
+		List<LocationFrequency> list = jdbcTemplate.query(sql, new Object[] {
+				imei }, new BeanPropertyRowMapper<LocationFrequency>(
+						LocationFrequency.class));
+		if (list != null && !list.isEmpty()) {
+			return list.get(0);
+		} else {
+			logger.info("cannot find WatchDeviceSet,imei:" + imei);
+		}
+		return null;
+	}
+
+	@Override
+	public boolean updateLocationFrequencyById(Long id, Integer f) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate
+				.update("update device_location_fequency  set frequency=?,updatetime=? where id = ?",
+						new Object[] { f, now, id }, new int[] {
+								Types.INTEGER, Types.TIMESTAMP, 
+								Types.INTEGER });
+		return i == 1;
+	}
+
+	@Override
+	public boolean insertLocationFrequency(String imei, Integer f) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate.update("insert into device_location_fequency ( imei, frequency, createtime, updatetime) values (?,?,?,?)",
+				new Object[] { imei, f, now,now },
+				new int[] { Types.VARCHAR, Types.INTEGER, Types.TIMESTAMP, Types.TIMESTAMP });
 		return i == 1;
 	}
 

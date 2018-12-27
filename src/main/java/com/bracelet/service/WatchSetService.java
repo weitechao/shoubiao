@@ -1,6 +1,7 @@
 package com.bracelet.service;
 
 import com.bracelet.datasource.DataSourceChange;
+import com.bracelet.entity.LocationFrequency;
 import com.bracelet.entity.WatchDeviceSet;
 
 public interface WatchSetService {
@@ -41,6 +42,12 @@ public interface WatchSetService {
 			String timerSwitch, String disabledInClass, String reserveEmergencyPower, String somatosensory,
 			String reportCallLocation, String automaticAnswering, String sosMsgswitch, String flowerNumber,
 			String brightScreen, String language, String timeZone, String locationMode, String locationTime);
+
+	LocationFrequency getLocationFrequencyByImei(String imei);
+
+	boolean updateLocationFrequencyById(Long id, Integer f);
+
+	boolean insertLocationFrequency(String imei, Integer f);
 
 	
 }

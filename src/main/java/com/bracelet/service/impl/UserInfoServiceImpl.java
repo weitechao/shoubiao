@@ -437,4 +437,5 @@ public class UserInfoServiceImpl implements IUserInfoService {
 				new Object[] { password, user_id }, new int[] { Types.VARCHAR, Types.INTEGER });
 		return i == 1;
 	}
+
 }

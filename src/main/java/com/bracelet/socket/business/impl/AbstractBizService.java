@@ -12,6 +12,7 @@ import com.bracelet.dto.SocketBaseDto;
 import com.bracelet.dto.SocketLoginDto;
 import com.bracelet.exception.BizException;
 import com.bracelet.redis.LimitCache;
+import com.bracelet.service.IDeviceService;
 import com.bracelet.socket.business.IService;
 import com.bracelet.util.ChannelMap;
 import com.bracelet.util.RespCode;
@@ -21,7 +22,11 @@ public abstract class AbstractBizService implements IService {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	
+	@Autowired
+	LimitCache limitCache;
 	
+	@Autowired
+	IDeviceService ideviceService;
 
 	@Override
 	public SocketBaseDto process(JSONObject jsonObject, Channel channel) {

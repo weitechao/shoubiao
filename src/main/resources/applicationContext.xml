@@ -59,6 +59,7 @@
 		<property name="removeAbandonedTimeout" value="${mysql.removeAbandonedTimeout}" />
 		<property name="logAbandoned" value="${mysql.logAbandoned}" />
 		<property name="poolPreparedStatements" value="false" />
+	
 	</bean>
 	<!-- 主数据库 -->
 	<bean id="dataSourceM" parent="parentDataSource">

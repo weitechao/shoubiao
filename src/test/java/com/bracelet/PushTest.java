@@ -28,8 +28,8 @@ public class PushTest {
 		sosDto.setWay(0);
 		sosDto.setContent("123123");
 	
-		String title = "开锁";
+		String title = "哈哈哈哈";
 		String content = JSON.toJSONString(sosDto);
-		PushUtil.push("013EBDFEBB939779125038F8B4015DD3", title, content, "66666666666");
+		PushUtil.push("7E26A2307007D0A762FFDB08D9BA6096", title, content, "77777777777777");
     }
 }

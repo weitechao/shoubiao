@@ -18,14 +18,13 @@ import com.bracelet.service.IPushlogService;
 import java.util.Date;
 
 public class PushUtil {
-
 	private static Logger logger = LoggerFactory.getLogger(PushUtil.class);
 	private static IClientProfile profile = DefaultProfile.getProfile(
-			"cn-hangzhou", Utils.accessKeyId, Utils.accessKeySecret);
-	private static Long appKey = 24610856L;
+			"cn-hangzhou", Utils.accessKeyIdOfWatch, Utils.accessKeySecretOfWatch);
+	private static Long appKey = 25337001L;
 
-	@Autowired
-	private static IPushlogService pushlogService;
+	/*@Autowired
+	private static IPushlogService pushlogService;*/
 
 	public static void push(String targetValue, String title, String content,
 			String notifyContent) {

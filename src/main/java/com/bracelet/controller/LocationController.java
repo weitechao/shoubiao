@@ -54,7 +54,7 @@ public class LocationController extends BaseController {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	
-	SimpleDateFormat smt =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
 
 	/* app查询手表最新定位 */
 	@ResponseBody
@@ -629,7 +629,7 @@ public class LocationController extends BaseController {
 				dataMap.put("Latitude", location.getLat());
 				dataMap.put("Longitude", location.getLng());
 				dataMap.put("LocationType", location.getLocation_type());
-				dataMap.put("CreateTime",smt.format(location.getUpload_time().getTime()));
+				dataMap.put("CreateTime",Utils.getTime(location.getUpload_time().getTime()));
 				dataMap.put("UpdateTime", location.getUpload_time().getTime() + "");
 				jsonArray.add(dataMap);
 			}
@@ -659,7 +659,7 @@ public class LocationController extends BaseController {
 
 		WatchLatestLocation watchlocaiton = ChannelMap.getlocation(imei);
 		if (watchlocaiton != null) {
-			
+			String time = Utils.getLocationTime(watchlocaiton.getTimestamp());
 			bb.put("Code", 1);
 
 			bb.put("DeviceID", limitCache.getRedisKeyValue(imei + "_id"));
@@ -667,7 +667,7 @@ public class LocationController extends BaseController {
 			bb.put("Course", 0);
 			bb.put("LocationType", watchlocaiton.getLocationType());
 			
-			bb.put("CreateTime", "");
+			bb.put("CreateTime", time);
 			bb.put("Electricity", 100);
 
 			String energy = limitCache.getRedisKeyValue(imei + "_energy");
@@ -686,16 +686,16 @@ public class LocationController extends BaseController {
 				bb.put("Online", 1);
 			}
 			bb.put("SatelliteNumber", 0);
-			bb.put("ServerTime", "");
+			bb.put("ServerTime", time);
 			bb.put("Speed", 0);
-			bb.put("UpdateTime", "");
+			bb.put("UpdateTime", time);
 
 			
 
 		} else {
 			LocationWatch locationWatch = locationService.getLatest(imei);
 			if (locationWatch != null) {
-
+				String timee = Utils.getLocationTime(locationWatch.getUpload_time().getTime());
 				WatchLatestLocation watchlastlocation = new WatchLatestLocation();
 				watchlastlocation.setImei(imei);
 				watchlastlocation.setLat(locationWatch.getLat());
@@ -719,7 +719,7 @@ public class LocationController extends BaseController {
 				bb.put("Course", 0);
 				bb.put("LocationType", locationWatch.getLocation_type());
 				bb.put("wifi", "");
-				bb.put("CreateTime", "");
+				bb.put("CreateTime", timee);
 				bb.put("Electricity", 100);
 
 				String energy = limitCache.getRedisKeyValue(imei + "_energy");
@@ -737,9 +737,9 @@ public class LocationController extends BaseController {
 					bb.put("Online", 1);
 				}
 				bb.put("SatelliteNumber", 0);
-				bb.put("ServerTime", "");
+				bb.put("ServerTime", timee);
 				bb.put("Speed", 0);
-				bb.put("UpdateTime", "");
+				bb.put("UpdateTime", timee);
 
 				
 

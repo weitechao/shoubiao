@@ -15,6 +15,7 @@ import com.bracelet.entity.VersionInfo;
 import com.bracelet.entity.WatchAppVersionInfo;
 import com.bracelet.entity.WatchDevice;
 import com.bracelet.entity.WatchDeviceAlarm;
+import com.bracelet.entity.WatchDeviceHomeSchool;
 import com.bracelet.exception.BizException;
 import com.bracelet.redis.LimitCache;
 import com.bracelet.service.IAuthcodeService;
@@ -82,6 +83,7 @@ public class WatchAppUserController extends BaseController {
 				bb.put("LoginId", "0");
 				bb.put("UserId", userInfo.getUser_id());
 				limitCache.addKey(tel + "_userid", userInfo.getUser_id() + "");
+				limitCache.addKey(tel + "_push", token);
 				bb.put("PhoneNumber", "0");
 				bb.put("BindNumber", "0");
 				bb.put("Birthday", "");
@@ -135,6 +137,7 @@ public class WatchAppUserController extends BaseController {
 				bb.put("UserId", userInfoo.getUser_id() + "");
 				limitCache.addKey(tel + "_userid", userInfoo.getUser_id() + "");
 			}
+			limitCache.addKey(tel + "_push", token);
 
 			bb.put("PhoneNumber", "0");
 			bb.put("BindNumber", "0");
@@ -303,7 +306,7 @@ public class WatchAppUserController extends BaseController {
 				dataMap.put("DeviceType", 1);
 				dataMap.put("Birthday", "0");
 				dataMap.put("CreateTime", "0");
-				dataMap.put("CurrentFirmware", "0");
+				dataMap.put("CurrentFirmware", "Y01_K2_RDA6625_RENQI_LE_DIAN_LINUX.0.967.QGJ_V1.0");
 				dataMap.put("SetVersionNO", "0");
 				dataMap.put("ContactVersionNO", "0");
 				dataMap.put("OperatorType", 0);
@@ -367,9 +370,17 @@ public class WatchAppUserController extends BaseController {
 					deviceSet.put("Alarm3", watch.getAlarm3()+"");
 				}
 				
-				deviceSet.put("ClassDisabled1", "0");
-				deviceSet.put("ClassDisabled2", "0");
-				deviceSet.put("WeekDisabled", "0");
+				deviceSet.put("ClassDisabled1", "08:00-12:00");
+				deviceSet.put("ClassDisabled2", "14:00-17:00");
+				deviceSet.put("WeekDisabled", "");
+				
+				WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfoByImei(location.getImei());
+				if (whsc != null) {
+					deviceSet.put("ClassDisabled1", whsc.getClassDisable1() + "");
+					deviceSet.put("ClassDisabled2", whsc.getClassDisable2() + "");
+					deviceSet.put("WeekDisabled", whsc.getWeekDisable() + "");
+				}
+				
 				deviceSet.put("TimerOpen", "0");
 				deviceSet.put("TimerClose", "0");
 				deviceSet.put("BrightScreen", "0");
@@ -412,8 +423,143 @@ public class WatchAppUserController extends BaseController {
 			bb.put("Code", 1);
 
 		} else {
+			UserInfo UserInfo = userInfoService.getUserInfoById(user_id);
+			if(userInfoService.saveBindInfo(user_id, UserInfo.getUsername(), "", 0)){
+				List<BindDevice> bdListt = userInfoService.getBindInfoById(user_id);
 
-			bb.put("Code", 0);
+				for (BindDevice location : bdListt) {
+					JSONObject dataMap = new JSONObject();
+					dataMap.put("id", location.getId());
+					dataMap.put("imei", location.getImei());
+					dataMap.put("status", location.getStatus());
+					dataMap.put("name", location.getName());
+					dataMap.put("timestamp", location.getCreatetime().getTime());
+
+					dataMap.put("ActiveDate", "");
+					dataMap.put("BabyName", location.getName() + "");
+					dataMap.put("BindNumber", location.getImei());
+					dataMap.put("DeviceType", 1);
+					dataMap.put("Birthday", "0");
+					dataMap.put("CreateTime", "0");
+					dataMap.put("CurrentFirmware", "Y01_K2_RDA6625_RENQI_LE_DIAN_LINUX.0.967.QGJ_V1.0");
+					dataMap.put("SetVersionNO", "0");
+					dataMap.put("ContactVersionNO", "0");
+					dataMap.put("OperatorType", 0);
+					dataMap.put("SmsNumber", "0");
+					dataMap.put("SmsBalanceKey", "0");
+					dataMap.put("SmsFlowKey", "0");
+					dataMap.put("DeviceID", "");
+
+					String deviceid = limitCache.getRedisKeyValue(location.getImei() + "_id");
+					if (deviceid != null && !"0".equals(deviceid) && !"".equals(deviceid)) {
+						dataMap.put("DeviceID", deviceid);
+					} else {
+						WatchDevice watchd = ideviceService.getDeviceInfo(location.getImei());
+						if (watchd != null) {
+							dataMap.put("DeviceID", watchd.getId());
+							limitCache.addKey(location.getImei() + "_id", watchd.getId() + "");
+						}
+					}
+
+					dataMap.put("UserId", "0");
+					dataMap.put("DeviceModelID", "10000100");
+					dataMap.put("Firmware", "0");
+					dataMap.put("Gender", 0);
+					dataMap.put("Grade", 0);
+					dataMap.put("HireExpireDate", "0");
+					dataMap.put("HireStartDate", "0");
+					dataMap.put("HomeAddress", "0");
+					dataMap.put("HomeLat", "0");
+					dataMap.put("HomeLng", "0");
+					dataMap.put("IsGuard", "0");
+					dataMap.put("Password", "0");
+					dataMap.put("PhoneCornet", "0");
+					dataMap.put("PhoneNumber", "0");
+					dataMap.put("Photo", "0");
+					dataMap.put("SchoolAddress", "0");
+					dataMap.put("SchoolLat", "0");
+					dataMap.put("SchoolLng", "0");
+					dataMap.put("SerialNumber", location.getImei());
+					dataMap.put("LatestTime", "0");
+					dataMap.put("UpdateTime", "0");
+					dataMap.put("CloudPlatform", 0);
+
+					JSONObject deviceSet = new JSONObject();
+					deviceSet.put("SetInfo", "1-1-1-1-0-0-0-0-1-0-1-0");
+					
+					
+					deviceSet.put("WeekAlarm1", "");
+					deviceSet.put("WeekAlarm2", "");
+					deviceSet.put("WeekAlarm3", "");
+					deviceSet.put("Alarm1", "");
+					deviceSet.put("Alarm2", "");
+					deviceSet.put("Alarm3", "");
+					
+					WatchDeviceAlarm watch = ideviceService.getDeviceAlarmInfo(location.getImei());
+					if(watch != null){
+						deviceSet.put("WeekAlarm1", watch.getWeekAlarm1()+"");
+						deviceSet.put("WeekAlarm2", watch.getWeekAlarm2()+"");
+						deviceSet.put("WeekAlarm3", watch.getWeekAlarm3()+"");
+						deviceSet.put("Alarm1", watch.getAlarm1()+"");
+						deviceSet.put("Alarm2", watch.getAlarm2()+"");
+						deviceSet.put("Alarm3", watch.getAlarm3()+"");
+					}
+					
+					
+					deviceSet.put("ClassDisabled1", "08:00-12:00");
+					deviceSet.put("ClassDisabled2", "14:00-17:00");
+					deviceSet.put("WeekDisabled", "");
+					
+					WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfoByImei(location.getImei());
+					if (whsc != null) {
+						deviceSet.put("ClassDisabled1", whsc.getClassDisable1() + "");
+						deviceSet.put("ClassDisabled2", whsc.getClassDisable2() + "");
+						deviceSet.put("WeekDisabled", whsc.getWeekDisable() + "");
+					}
+
+					
+					deviceSet.put("TimerOpen", "0");
+					deviceSet.put("TimerClose", "0");
+					deviceSet.put("BrightScreen", "0");
+				
+					deviceSet.put("LocationMode", 0);
+					deviceSet.put("LocationTime", "0");
+					deviceSet.put("FlowerNumber", 0);
+					deviceSet.put("SleepCalculate", "0");
+					deviceSet.put("StepCalculate", "0");
+					deviceSet.put("HrCalculate", "0");
+					deviceSet.put("SosMsgswitch", "0");
+					deviceSet.put("CreateTime", "0");
+					deviceSet.put("UpdateTime", "0");
+					dataMap.put("DeviceSet", deviceSet);
+
+					JSONObject deviceState = new JSONObject();
+					deviceState.put("Altitude", 0);
+					deviceState.put("Course", 0);
+					deviceState.put("LocationType", 0);
+					deviceState.put("CreateTime", "0");
+					deviceState.put("DeviceTime", "0");
+					deviceState.put("Electricity", 0);
+					deviceState.put("GSM", 0);
+					deviceState.put("Step", 0);
+					deviceState.put("Health", "0");
+					deviceState.put("Latitude", 0);
+					deviceState.put("Longitude", 0);
+					deviceState.put("Online", 0);
+					deviceState.put("SatelliteNumber", 0);
+					deviceState.put("ServerTime", "");
+					deviceState.put("Speed", 0);
+					deviceState.put("UpdateTime", "");
+					dataMap.put("DeviceState", deviceState);
+
+					JSONArray jsonArray1 = new JSONArray();
+					dataMap.put("ContactArr", jsonArray1);
+
+					jsonArray.add(dataMap);
+				}
+				bb.put("Code", 1);
+
+			}
 		}
 		bb.put("deviceList", jsonArray);
 		return bb.toString();

@@ -486,6 +486,16 @@ public class Utils {
 		return ft.format(new Date());
 	}
 
+	
+	public static String getTime(Long timestame) {
+		SimpleDateFormat smt =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		return smt.format(timestame);
+	}
+	
+	public static String getLocationTime(Long timestame) {
+		SimpleDateFormat smt =  new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		return smt.format(timestame);
+	}
 	/**
 	 * 将图片转换成二进制
 	 * 
