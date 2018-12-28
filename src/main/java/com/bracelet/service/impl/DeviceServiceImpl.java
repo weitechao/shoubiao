@@ -63,11 +63,11 @@ public class DeviceServiceImpl implements IDeviceService {
 	public boolean insertNewImei(String imei, String phone, int typeOfOperator, String dv) {
 		Timestamp now = Utils.getCurrentTimestamp();
 		int i = jdbcTemplate.update(
-				"insert into device_watch_info (imei, phone, nickname, dv, createtime, updatetime,type) values (?,?,?,?,?,?,?)",
-				new Object[] { imei, phone, imei, dv, now, now, typeOfOperator },
+				"insert into device_watch_info (imei, phone, nickname, dv, createtime, updatetime,type,school_age) values (?,?,?,?,?,?,?,?)",
+				new Object[] { imei, phone, imei, dv, now, now, typeOfOperator,"1" },
 				new int[] { java.sql.Types.VARCHAR, java.sql.Types.VARCHAR, java.sql.Types.VARCHAR,
 						java.sql.Types.VARCHAR, java.sql.Types.TIMESTAMP, java.sql.Types.TIMESTAMP,
-						java.sql.Types.INTEGER });
+						java.sql.Types.INTEGER ,java.sql.Types.VARCHAR});
 		return i == 1;
 	}
 

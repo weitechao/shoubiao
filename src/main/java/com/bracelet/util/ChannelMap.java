@@ -23,7 +23,7 @@ public class ChannelMap {
 	 */
 	private static Map<Channel, SocketLoginDto> channelMap3 = new HashMap<Channel, SocketLoginDto>();
 
-	private static Map<String, WatchLatestLocation> channelMap4 = new HashMap<String, WatchLatestLocation>();
+	/*private static Map<String, WatchLatestLocation> channelMap4 = new HashMap<String, WatchLatestLocation>();*/
 
 	private static Map<String, TianQiLatest> channelMap5 = new HashMap<String, TianQiLatest>();
 
@@ -75,13 +75,13 @@ public class ChannelMap {
 		channelMap3.remove(channel);
 	}
 
-	public static void addlocation(String imei, WatchLatestLocation dto) {
+	/*public static void addlocation(String imei, WatchLatestLocation dto) {
 		channelMap4.put(imei, dto);
 	}
 
 	public static WatchLatestLocation getlocation(String imei) {
 		return channelMap4.get(imei);
-	}
+	}*/
 
 	public static void addCityQianQi(String city, TianQiLatest dto) {
 		channelMap5.put(city, dto);

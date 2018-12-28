@@ -112,14 +112,14 @@ public class WatchDeviceInfoController extends BaseController {
 
 			WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfo(imei);
 			if (whsc != null) {
-				bb.put("SchoolAddress", whsc.getSchoolAddress());
-				bb.put("SchoolLat", whsc.getSchoolLat());
-				bb.put("SchoolLng", whsc.getSchoolLng());
-				bb.put("UpdateTime", whsc.getUpdatetime().getTime());
-				bb.put("LatestTime", whsc.getLatestTime());
+				bb.put("SchoolAddress", whsc.getSchoolAddress()+"");
+				bb.put("SchoolLat", whsc.getSchoolLat()+"");
+				bb.put("SchoolLng", whsc.getSchoolLng()+"");
+				bb.put("UpdateTime", whsc.getUpdatetime().getTime()+"");
+				bb.put("LatestTime", whsc.getLatestTime()+"");
 				bb.put("HomeAddress", whsc.getHomeAddress()+"");
-				bb.put("HomeLat", whsc.getHomeLat());
-				bb.put("HomeLng", whsc.getHomeLng());
+				bb.put("HomeLat", whsc.getHomeLat()+"");
+				bb.put("HomeLng", whsc.getHomeLng()+"");
 			}
 
 		} else {
@@ -156,7 +156,7 @@ public class WatchDeviceInfoController extends BaseController {
 				
 				WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfo(imei);
 				if (whsc == null) {
-					ideviceService.insertDeviceHomeAndFamilyInfo(watchh.getId(), imei, "", "", "", "", "", "", "", "",
+					ideviceService.insertDeviceHomeAndFamilyInfo(watchh.getId(), imei, "", "08:00-12:00", "14:00-17:00", "", "", "", "", "",
 							"", "");
 				}else{
 					bb.put("SchoolAddress", whsc.getSchoolAddress()+"");

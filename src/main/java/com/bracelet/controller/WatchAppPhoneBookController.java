@@ -12,6 +12,7 @@ import com.bracelet.entity.OldBindDevice;
 import com.bracelet.entity.Step;
 import com.bracelet.entity.UserInfo;
 import com.bracelet.entity.VersionInfo;
+import com.bracelet.entity.WatchDevice;
 import com.bracelet.entity.WatchFriend;
 import com.bracelet.entity.WatchPhoneBook;
 import com.bracelet.exception.BizException;
@@ -24,9 +25,11 @@ import com.bracelet.service.WatchSetService;
 import com.bracelet.socket.BaseChannelHandler;
 import com.bracelet.util.ChannelMap;
 import com.bracelet.util.HttpClientGet;
+import com.bracelet.util.PushUtil;
 import com.bracelet.util.RadixUtil;
 import com.bracelet.util.RanomUtil;
 import com.bracelet.util.RespCode;
+import com.bracelet.util.StringUtil;
 import com.bracelet.util.Utils;
 
 import org.apache.commons.codec.binary.Base64;
@@ -157,6 +160,47 @@ public class WatchAppPhoneBookController extends BaseController {
 			socketLoginDto.getChannel().writeAndFlush(sb.toString());
 			bb.put("Code", 1);
 			bb.put("Message", "通讯录添加成功");
+			
+			
+			
+			
+				JSONObject push = new JSONObject();
+				JSONArray jsonArray = new JSONArray();
+				JSONObject dataMap = new JSONObject();
+				dataMap.put("DeviceID", "");
+				String deviceid = limitCache.getRedisKeyValue(imei + "_id");
+				if( !StringUtil.isEmpty(deviceid)){
+					dataMap.put("DeviceID", deviceid);
+				}else{
+					WatchDevice watchd = ideviceService.getDeviceInfo(imei);
+					if (watchd != null) {
+						deviceid=watchd.getId()+"";
+						dataMap.put("DeviceID", watchd.getId());
+						limitCache.addKey(imei + "_id", watchd.getId()+"");
+					}
+				}
+				dataMap.put("Message", 1);
+				dataMap.put("Voice", 0);
+				dataMap.put("SMS", 0);
+				dataMap.put("Photo", 0);
+				jsonArray.add(dataMap);
+				push.put("NewList", jsonArray);
+				JSONArray jsonArray1 = new JSONArray();
+				JSONObject dataMap1 = new JSONObject();
+				jsonArray1.add(dataMap1);
+				push.put("DeviceState", jsonArray1);
+
+				JSONArray jsonArray2 = new JSONArray();
+				JSONObject dataMap2 = new JSONObject();
+				dataMap2.put("Type", 7);
+				dataMap2.put("DeviceID", deviceid);
+				jsonArray2.add(dataMap2);
+				push.put("Notification", jsonArray2);
+
+				push.put("Code", 1);
+				push.put("New", 1);
+				PushUtil.push(token, "通讯录已同步", push.toString(), "通讯录已同步");	
+						
 		} else {
 			bb.put("Code", 2);
 			bb.put("Message", "");
@@ -279,6 +323,46 @@ public class WatchAppPhoneBookController extends BaseController {
 			logger.info("设备通讯录删除更新="+sb.toString());
 			socketLoginDto.getChannel().writeAndFlush(sb.toString());
 			bb.put("Code", 1);
+			
+			
+			
+			JSONObject push = new JSONObject();
+			JSONArray jsonArray = new JSONArray();
+			JSONObject dataMap = new JSONObject();
+			dataMap.put("DeviceID", "");
+			String deviceid = limitCache.getRedisKeyValue(imei + "_id");
+			if( !StringUtil.isEmpty(deviceid)){
+				dataMap.put("DeviceID", deviceid);
+			}else{
+				WatchDevice watchd = ideviceService.getDeviceInfo(imei);
+				if (watchd != null) {
+					deviceid=watchd.getId()+"";
+					dataMap.put("DeviceID", watchd.getId());
+					limitCache.addKey(imei + "_id", watchd.getId()+"");
+				}
+			}
+			dataMap.put("Message", 1);
+			dataMap.put("Voice", 0);
+			dataMap.put("SMS", 0);
+			dataMap.put("Photo", 0);
+			jsonArray.add(dataMap);
+			push.put("NewList", jsonArray);
+			JSONArray jsonArray1 = new JSONArray();
+			JSONObject dataMap1 = new JSONObject();
+			jsonArray1.add(dataMap1);
+			push.put("DeviceState", jsonArray1);
+
+			JSONArray jsonArray2 = new JSONArray();
+			JSONObject dataMap2 = new JSONObject();
+			dataMap2.put("Type", 7);
+			dataMap2.put("DeviceID", deviceid);
+			jsonArray2.add(dataMap2);
+			push.put("Notification", jsonArray2);
+
+			push.put("Code", 1);
+			push.put("New", 1);
+			PushUtil.push(token, "通讯录已同步", push.toString(), "通讯录已同步");	
+			
 		} else {
 			bb.put("Code", 2);
 		}
@@ -367,6 +451,47 @@ public class WatchAppPhoneBookController extends BaseController {
 			logger.info("设备通讯录修改="+sb.toString());
 			socketLoginDto.getChannel().writeAndFlush(sb.toString());
 			bb.put("Code", 1);
+			
+			
+			
+			
+			JSONObject push = new JSONObject();
+			JSONArray jsonArray = new JSONArray();
+			JSONObject dataMap = new JSONObject();
+			dataMap.put("DeviceID", "");
+			String deviceid = limitCache.getRedisKeyValue(imei + "_id");
+			if( !StringUtil.isEmpty(deviceid)){
+				dataMap.put("DeviceID", deviceid);
+			}else{
+				WatchDevice watchd = ideviceService.getDeviceInfo(imei);
+				if (watchd != null) {
+					deviceid=watchd.getId()+"";
+					dataMap.put("DeviceID", watchd.getId());
+					limitCache.addKey(imei + "_id", watchd.getId()+"");
+				}
+			}
+			dataMap.put("Message", 1);
+			dataMap.put("Voice", 0);
+			dataMap.put("SMS", 0);
+			dataMap.put("Photo", 0);
+			jsonArray.add(dataMap);
+			push.put("NewList", jsonArray);
+			JSONArray jsonArray1 = new JSONArray();
+			JSONObject dataMap1 = new JSONObject();
+			jsonArray1.add(dataMap1);
+			push.put("DeviceState", jsonArray1);
+
+			JSONArray jsonArray2 = new JSONArray();
+			JSONObject dataMap2 = new JSONObject();
+			dataMap2.put("Type", 7);
+			dataMap2.put("DeviceID", deviceid);
+			jsonArray2.add(dataMap2);
+			push.put("Notification", jsonArray2);
+
+			push.put("Code", 1);
+			push.put("New", 1);
+			PushUtil.push(token, "通讯录已同步", push.toString(), "通讯录已同步");	
+			
 		} else {
 			bb.put("Code", 2);
 		}

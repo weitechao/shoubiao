@@ -11,10 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.bracelet.dto.SocketBaseDto;
 import com.bracelet.dto.SocketLoginDto;
 import com.bracelet.dto.WatchLatestLocation;
+import com.bracelet.entity.WatchDevice;
 import com.bracelet.entity.WatchUploadPhotoInfo;
 import com.bracelet.exception.BizException;
 import com.bracelet.service.ILocationService;
@@ -23,8 +25,10 @@ import com.bracelet.service.IVoltageService;
 import com.bracelet.socket.business.IService;
 import com.bracelet.util.ChannelMap;
 import com.bracelet.util.HttpClientGet;
+import com.bracelet.util.PushUtil;
 import com.bracelet.util.RadixUtil;
 import com.bracelet.util.RespCode;
+import com.bracelet.util.StringUtil;
 import com.bracelet.util.Utils;
 
 /**
@@ -124,6 +128,49 @@ public class UploadPhoto extends AbstractBizService {
 			
 			if(thisNumber == allNumber&& allNumber!=0){
 				iUploadPhotoService.insertPhoto(imei, Utils.PHOTO_URL+ photoName, photoName, "1");
+				
+				
+				String token = limitCache.getRedisKeyValue(imei + "_push");
+				if( !StringUtil.isEmpty(token)){
+					JSONObject push = new JSONObject();
+					JSONArray jsonArray = new JSONArray();
+					JSONObject dataMap = new JSONObject();
+					dataMap.put("DeviceID", "");
+					String deviceid = limitCache.getRedisKeyValue(imei + "_id");
+					if(deviceid !=null && !"0".equals(deviceid) && !"".equals(deviceid)){
+						dataMap.put("DeviceID", deviceid);
+					}else{
+						WatchDevice watchd = ideviceService.getDeviceInfo(imei);
+						if (watchd != null) {
+							deviceid=watchd.getId()+"";
+							dataMap.put("DeviceID", watchd.getId());
+							limitCache.addKey(imei + "_id", watchd.getId()+"");
+						}
+					}
+					dataMap.put("Message", 0);
+					dataMap.put("Voice", 0);
+					dataMap.put("SMS", 0);
+					dataMap.put("Photo", 1);
+					jsonArray.add(dataMap);
+					push.put("NewList", jsonArray);
+					JSONArray jsonArray1 = new JSONArray();
+					JSONObject dataMap1 = new JSONObject();
+					jsonArray1.add(dataMap1);
+					push.put("DeviceState", jsonArray1);
+
+					JSONArray jsonArray2 = new JSONArray();
+					JSONObject dataMap2 = new JSONObject();
+					dataMap2.put("Type", 11);
+					dataMap2.put("DeviceID", deviceid);
+					dataMap2.put("photoUrl", Utils.PHOTO_URL+ photoName);
+					jsonArray2.add(dataMap2);
+					push.put("Notification", jsonArray2);
+
+					push.put("Code", 1);
+					push.put("New", 1);
+					PushUtil.push(token, "新图片", push.toString(), "新图片");	
+				}
+				
 			}
 			
 			String resp = "TPCF," + photoName + "," + thisNumber + "," + allNumber + ",1";
@@ -187,16 +234,19 @@ public class UploadPhoto extends AbstractBizService {
 						locationService.insertUdPhotoInfo(imei, 1, locationsArr[1], locationsArr[0], status, time,
 								locationStyle,photoName);
 
-						WatchLatestLocation watchlastlocation = new WatchLatestLocation();
+						limitCache.setLocationRedis(imei+"_last",locationsArr[1], locationsArr[0], "1", new Date().getTime()+""); 
+						limitCache.setLocationRedis(imei+"_save",locationsArr[1], locationsArr[0], "1", new Date().getTime()+""); 
+						
+						/*WatchLatestLocation watchlastlocation = new WatchLatestLocation();
 						watchlastlocation.setImei(imei);
 						watchlastlocation.setLat(locationsArr[1]);
 						watchlastlocation.setLng(locationsArr[0]);
 						watchlastlocation.setLocationType(1);
 						watchlastlocation.setTimestamp(new Date().getTime());
-						ChannelMap.addlocation(imei, watchlastlocation);
+						ChannelMap.addlocation(imei, watchlastlocation);*/
 					}
 				}
-				voltageService.insertDianLiang(imei, Integer.valueOf(energy));
+				//voltageService.insertDianLiang(imei, Integer.valueOf(energy));
 			} else {
 				logger.info("GPS定位失败=" + lat + "," + lng);
 			}
@@ -245,35 +295,16 @@ public class UploadPhoto extends AbstractBizService {
 							String lon = arr[0];
 							locationService.insertUdPhotoInfo(imei, 2, lat1, lon, status, time, locationStyle,photoName);
 							
-							/*WatchLatestLocation oldWatchLocation = ChannelMap.getlocation(imei);
-							if (oldWatchLocation != null) {
-								if (oldWatchLocation.getLocationType() == 2) {
-									if (((oldWatchLocation.getTimestamp() - new Date().getTime()) / (60 * 1000)) >= 3) {
-										locationService.insertUdInfo(imei, 2, lat1, lon, status, time, locationStyle);
-									} else {
-										double calcDistance = Utils.calcDistance(
-												Double.valueOf(oldWatchLocation.getLng()),
-												Double.valueOf(oldWatchLocation.getLat()), Double.valueOf(lon),
-												Double.valueOf(lat1));
-										if (calcDistance > 550) {
-											locationService.insertUdInfo(imei, 2, lat1, lon, status, time,
-													locationStyle);
-										}
-									}
-								} else {
-									locationService.insertUdInfo(imei, 2, lat1, lon, status, time, locationStyle);
-								}
-							} else {
-								locationService.insertUdInfo(imei, 2, lat1, lon, status, time, locationStyle);
-							}*/
-
-							WatchLatestLocation watchlastlocation = new WatchLatestLocation();
+							limitCache.setLocationRedis(imei+"_last",lat, lng, "2", new Date().getTime()+""); 
+							//limitCache.setLocationRedis(imei+"_save",lat, lng, "2", new Date().getTime()+""); 
+							
+							/*WatchLatestLocation watchlastlocation = new WatchLatestLocation();
 							watchlastlocation.setImei(imei);
 							watchlastlocation.setLat(lat1);
 							watchlastlocation.setLng(lon);
 							watchlastlocation.setLocationType(2);
 							watchlastlocation.setTimestamp(new Date().getTime());
-							ChannelMap.addlocation(imei, watchlastlocation);
+							ChannelMap.addlocation(imei, watchlastlocation);*/
 						}
 					}
 				}
@@ -314,40 +345,18 @@ public class UploadPhoto extends AbstractBizService {
 								String lat1 = arr[1];
 								String lon = arr[0];
 
-							/*	WatchLatestLocation oldWatchLocation = ChannelMap.getlocation(imei);
-
-								if (oldWatchLocation != null) {
-									if (oldWatchLocation.getLocationType() == 3) {
-										if (((oldWatchLocation.getTimestamp() - new Date().getTime())
-												/ (60 * 1000)) >= 3) {
-											locationService.insertUdInfo(imei, 3, lat1, lon, status, time,
-													locationStyle);
-										} else {
-											double calcDistance = Utils.calcDistance(
-													Double.valueOf(oldWatchLocation.getLng()),
-													Double.valueOf(oldWatchLocation.getLat()), Double.valueOf(lon),
-													Double.valueOf(lat1));
-											if (calcDistance > 550) {
-												locationService.insertUdInfo(imei, 3, lat1, lon, status, time,
-														locationStyle);
-											}
-										}
-									} else {
-										locationService.insertUdInfo(imei, 3, lat1, lon, status, time, locationStyle);
-									}
-								} else {
-									locationService.insertUdInfo(imei, 3, lat1, lon, status, time, locationStyle);
-								}*/
 								
 								locationService.insertUdPhotoInfo(imei, 3, lat1, lon, status, time, locationStyle,photoName);
 								
-								WatchLatestLocation watchlastlocation = new WatchLatestLocation();
+								limitCache.setLocationRedis(imei+"_last",lat1, lon, "3", new Date().getTime()+""); 
+								//limitCache.setLocationRedis(imei+"_save",lat1, locationsArr[0], "1", new Date().getTime()+""); 
+								/*WatchLatestLocation watchlastlocation = new WatchLatestLocation();
 								watchlastlocation.setImei(imei);
 								watchlastlocation.setLat(lat1);
 								watchlastlocation.setLng(lon);
 								watchlastlocation.setLocationType(3);
 								watchlastlocation.setTimestamp(new Date().getTime());
-								ChannelMap.addlocation(imei, watchlastlocation);
+								ChannelMap.addlocation(imei, watchlastlocation);*/
 							}
 						}
 					}

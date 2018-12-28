@@ -2,8 +2,11 @@ package com.bracelet.controller;
 
 import com.bracelet.exception.BizException;
 import com.bracelet.redis.LimitCache;
+import com.bracelet.service.IDeviceService;
 import com.bracelet.service.ITokenInfoService;
 import com.bracelet.util.RespCode;
+import com.bracelet.util.StringUtil;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +19,9 @@ public class BaseController {
 	@Autowired
 	protected ITokenInfoService tokenInfoService;
 
+	@Autowired
+	IDeviceService ideviceService;
+	
 	@Autowired
 	LimitCache limitCache;
 
@@ -37,11 +43,11 @@ public class BaseController {
 		String reponse = "0";
 		String tokenValue = limitCache.getRedisKeyValue(token);
 
-		if (tokenValue != null && !"".equals(tokenValue)) {
+		if (!StringUtil.isEmpty(tokenValue)) {
 			return tokenValue;
 		}
 		Long user_id = tokenInfoService.getUserIdByToken(token);
-		if (user_id != null) {
+		if (!StringUtil.isEmpty(user_id)) {
 			reponse = user_id + "";
 			limitCache.addKey(token, reponse);
 		} else {

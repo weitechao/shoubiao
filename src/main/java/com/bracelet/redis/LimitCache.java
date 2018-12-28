@@ -1,7 +1,13 @@
 package com.bracelet.redis;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+
+import com.bracelet.dto.WatchLatestLocation;
 
 import redis.clients.jedis.Jedis;
 
@@ -83,5 +89,39 @@ public class LimitCache extends BasicRedisSupport {
 		size = jedis.dbSize();
 		returnResource(jedis);
 		return size;
+	}
+
+	public void setLocationRedis(String imei, String lat, String lng, String locationType, String timestamp) {
+		Map<String, String> user = new HashMap<String, String>();
+		user.put("lat", lat);
+		user.put("lng", lng);
+		user.put("locationType", locationType);
+		user.put("timestamp", timestamp);
+		Jedis jedis = getJedis();
+		jedis.hmset(imei, user);
+		returnResource(jedis);
+	}
+
+	public String getLocationRedis(String imei) {
+		Jedis jedis = getJedis();
+		String reponse = "";
+		if (jedis.exists(imei + "_location")) {
+			List<String> rsmap = jedis.hmget(imei, "lat", "lng", "locationType", "timestamp");
+			reponse = rsmap + "";
+		}
+		returnResource(jedis);
+		return reponse;
+	}
+
+	public boolean existsLocation(String key) {
+		boolean flag = true;
+		Jedis jedis = getJedis();
+		boolean exists = jedis.exists(key);
+		if (exists) {// 如果存在
+		} else {
+			flag = false;
+		}
+		returnResource(jedis);
+		return flag;
 	}
 }

@@ -14,6 +14,7 @@ import com.bracelet.entity.OldBindDevice;
 import com.bracelet.entity.Step;
 import com.bracelet.entity.UserInfo;
 import com.bracelet.entity.VersionInfo;
+import com.bracelet.entity.WatchDevice;
 import com.bracelet.entity.WatchDeviceAlarm;
 import com.bracelet.entity.WatchDeviceHomeSchool;
 import com.bracelet.entity.WatchDeviceSet;
@@ -26,6 +27,7 @@ import com.bracelet.service.WatchSetService;
 import com.bracelet.socket.BaseChannelHandler;
 import com.bracelet.util.ChannelMap;
 import com.bracelet.util.HttpClientGet;
+import com.bracelet.util.PushUtil;
 import com.bracelet.util.RadixUtil;
 import com.bracelet.util.RanomUtil;
 import com.bracelet.util.RespCode;
@@ -197,6 +199,45 @@ public class WatchAppSetController extends BaseController {
 			socketLoginDto.getChannel().writeAndFlush(reps);
 			bb.put("Code", 1);
 			// bb.put("Message", "");
+			
+			
+			JSONObject push = new JSONObject();
+			JSONArray jsonArray = new JSONArray();
+			JSONObject dataMap = new JSONObject();
+			dataMap.put("DeviceID", "");
+			String deviceid = limitCache.getRedisKeyValue(imei + "_id");
+			if(deviceid !=null && !"0".equals(deviceid) && !"".equals(deviceid)){
+				dataMap.put("DeviceID", deviceid);
+			}else{
+				WatchDevice watchd = ideviceService.getDeviceInfo(imei);
+				if (watchd != null) {
+					deviceid=watchd.getId()+"";
+					dataMap.put("DeviceID", watchd.getId());
+					limitCache.addKey(imei + "_id", watchd.getId()+"");
+				}
+			}
+			dataMap.put("Message", 1);
+			dataMap.put("Voice", 0);
+			dataMap.put("SMS", 0);
+			dataMap.put("Photo", 0);
+			jsonArray.add(dataMap);
+			push.put("NewList", jsonArray);
+			JSONArray jsonArray1 = new JSONArray();
+			JSONObject dataMap1 = new JSONObject();
+			jsonArray1.add(dataMap1);
+			push.put("DeviceState", jsonArray1);
+
+			JSONArray jsonArray2 = new JSONArray();
+			JSONObject dataMap2 = new JSONObject();
+			dataMap2.put("Type", 231);
+			dataMap2.put("DeviceID", deviceid);
+			jsonArray2.add(dataMap2);
+			push.put("Notification", jsonArray2);
+
+			push.put("Code", 1);
+			push.put("New", 1);
+			PushUtil.push(token, "更新设备设置", push.toString(), "更新设备设置");	
+			
 
 		} else {
 			bb.put("Code", 2);
@@ -251,8 +292,7 @@ public class WatchAppSetController extends BaseController {
 				bb.put("Alarm2", watch.getAlarm2() + "");
 				bb.put("Alarm3", watch.getAlarm3() + "");
 			}
-			bb.put("LocationMode", "");
-			bb.put("LocationTime", "");
+			bb.put("LocationMode", "1");
 			bb.put("FlowerNumber", 0);
 			bb.put("SleepCalculate", "");
 			bb.put("StepCalculate", "");
@@ -271,6 +311,11 @@ public class WatchAppSetController extends BaseController {
 				}
 
 				bb.put("SosMsgswitch", deviceSetInfo.getSosMsgswitch() + "");
+			}
+			
+			LocationFrequency  locaFre = watchSetService.getLocationFrequencyByImei(imei);
+			if(locaFre != null){
+				bb.put("LocationMode", locaFre.getFrequency()+"");
 			}
 
 		} else {

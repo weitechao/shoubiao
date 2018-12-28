@@ -66,7 +66,7 @@ public class TkService extends AbstractBizService {
 				
 				String token = limitCache.getRedisKeyValue(imei + "_push");
 				if( !StringUtil.isEmpty(token)){
-					JSONObject bb = new JSONObject();
+					JSONObject push = new JSONObject();
 					JSONArray jsonArray = new JSONArray();
 					JSONObject dataMap = new JSONObject();
 					dataMap.put("DeviceID", "");
@@ -86,29 +86,11 @@ public class TkService extends AbstractBizService {
 					dataMap.put("SMS", 0);
 					dataMap.put("Photo", 0);
 					jsonArray.add(dataMap);
-					bb.put("NewList", jsonArray);
+					push.put("NewList", jsonArray);
 					JSONArray jsonArray1 = new JSONArray();
 					JSONObject dataMap1 = new JSONObject();
-					dataMap1.put("DeviceID", deviceid);
-					dataMap1.put("Altitude", 0);
-					dataMap1.put("Course", 0);
-					dataMap1.put("LocationType", 0);
-					dataMap1.put("wifi", "");
-					dataMap1.put("CreateTime", "");
-					dataMap1.put("DeviceTime", "");
-					dataMap1.put("Electricity", 100);
-					dataMap1.put("GSM", 76);
-					dataMap1.put("Step", 0);
-					dataMap1.put("Health", "0:0");
-					dataMap1.put("Latitude", "");
-					dataMap1.put("Longitude", "");
-					dataMap1.put("Online", "0");
-					dataMap1.put("SatelliteNumber", "0");
-					dataMap1.put("ServerTime", "");
-					dataMap1.put("Speed", "0");
-					dataMap1.put("UpdateTime", "0");
 					jsonArray1.add(dataMap1);
-					bb.put("DeviceState", jsonArray1);
+					push.put("DeviceState", jsonArray1);
 
 					JSONArray jsonArray2 = new JSONArray();
 					JSONObject dataMap2 = new JSONObject();
@@ -116,11 +98,11 @@ public class TkService extends AbstractBizService {
 					dataMap2.put("DeviceID", deviceid);
 					dataMap2.put("voiceUrl", Utils.VOICE_URL + voiceName);
 					jsonArray2.add(dataMap2);
-					bb.put("Notification", jsonArray2);
+					push.put("Notification", jsonArray2);
 
-					bb.put("Code", 1);
-					bb.put("New", 1);
-					PushUtil.push(token, "新语音", bb.toString(), "新语音");	
+					push.put("Code", 1);
+					push.put("New", 1);
+					PushUtil.push(token, "新语音", push.toString(), "新语音");	
 				}
 				
 			}

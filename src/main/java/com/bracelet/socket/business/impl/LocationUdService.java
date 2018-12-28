@@ -11,15 +11,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.bracelet.dto.SocketBaseDto;
 import com.bracelet.dto.SocketLoginDto;
 import com.bracelet.dto.WatchLatestLocation;
+import com.bracelet.entity.WatchDevice;
 import com.bracelet.service.ILocationService;
 import com.bracelet.service.IVoltageService;
 import com.bracelet.socket.business.IService;
 import com.bracelet.util.ChannelMap;
 import com.bracelet.util.HttpClientGet;
+import com.bracelet.util.PushUtil;
+import com.bracelet.util.StringUtil;
 import com.bracelet.util.Utils;
 
 @Service("locationUdService")
@@ -38,7 +42,6 @@ public class LocationUdService extends AbstractBizService {
 		return null;
 	}
 
-	@SuppressWarnings("unused")
 	@Override
 	protected String process2(SocketLoginDto socketLoginDto, String jsonInfo, Channel channel) {
 		logger.info("位置数据上报:" + jsonInfo);
@@ -56,6 +59,47 @@ public class LocationUdService extends AbstractBizService {
 		chuliLocationInfo(imei, info, no, locationStyle);
 
 		if ("AL".equals(cmd)) {
+			
+			String token = limitCache.getRedisKeyValue(imei + "_push");
+			if( !StringUtil.isEmpty(token)){
+				JSONObject push = new JSONObject();
+				JSONArray jsonArray = new JSONArray();
+				JSONObject dataMap = new JSONObject();
+				dataMap.put("DeviceID", "");
+				String deviceid = limitCache.getRedisKeyValue(imei + "_id");
+				if(deviceid !=null && !"0".equals(deviceid) && !"".equals(deviceid)){
+					dataMap.put("DeviceID", deviceid);
+				}else{
+					WatchDevice watchd = ideviceService.getDeviceInfo(imei);
+					if (watchd != null) {
+						deviceid=watchd.getId()+"";
+						dataMap.put("DeviceID", watchd.getId());
+						limitCache.addKey(imei + "_id", watchd.getId()+"");
+					}
+				}
+				dataMap.put("Message", 0);
+				dataMap.put("Voice", 0);
+				dataMap.put("SMS", 1);
+				dataMap.put("Photo", 0);
+				jsonArray.add(dataMap);
+				push.put("NewList", jsonArray);
+				JSONArray jsonArray1 = new JSONArray();
+				JSONObject dataMap1 = new JSONObject();
+				jsonArray1.add(dataMap1);
+				push.put("DeviceState", jsonArray1);
+
+				JSONArray jsonArray2 = new JSONArray();
+				JSONObject dataMap2 = new JSONObject();
+				dataMap2.put("Type", 101);
+				dataMap2.put("DeviceID", deviceid);
+				jsonArray2.add(dataMap2);
+				push.put("Notification", jsonArray2);
+
+				push.put("Code", 1);
+				push.put("New", 1);
+				PushUtil.push(token, "报警信息", push.toString(), "报警信息");	
+			}
+			
 			return "[YW*" + imei + "*0001*0002*AL]";
 		}
 		return "";
@@ -96,20 +140,17 @@ public class LocationUdService extends AbstractBizService {
 					locations = locations.split(";")[0];
 					String[] locationsArr = locations.split(",");
 					if (locationsArr.length == 2) {
-						locationService.insertUdInfo(imei, 1, locationsArr[1], locationsArr[0], status, time,
+						lat = locationsArr[1];
+						lng = locationsArr[0];
+						locationService.insertUdInfo(imei, 1, lat, lng, status, time,
 								locationStyle);
 
-						WatchLatestLocation watchlastlocation = new WatchLatestLocation();
-						watchlastlocation.setImei(imei);
-						watchlastlocation.setLat(locationsArr[1]);
-						watchlastlocation.setLng(locationsArr[0]);
-						watchlastlocation.setLocationType(1);
-						watchlastlocation.setTimestamp(new Date().getTime());
-						ChannelMap.addlocation(imei, watchlastlocation);
+						limitCache.setLocationRedis(imei+"_last",lat, lng, "1", new Date().getTime()+""); 
+						limitCache.setLocationRedis(imei+"_save",lat, lng, "1", new Date().getTime()+""); 
+					
 					}
 				}
-				// voltageService.insertDianLiang(imei,
-				// Integer.valueOf(energy));
+			
 			} else {
 				logger.info("GPS定位失败=" + lat + "," + lng);
 			}
@@ -154,44 +195,44 @@ public class LocationUdService extends AbstractBizService {
 
 						String[] arr = location.split(",");
 						if (arr.length == 2) {
-							String lat1 = arr[1];
-							String lon = arr[0];
+							 lat = arr[1];
+							 lng = arr[0];
 
 							if (locationStyle == 2) {
-								locationService.insertUdInfo(imei, 2, lat1, lon, status, time, locationStyle);
+								locationService.insertUdInfo(imei, 2, lat, lng, status, time, locationStyle);
+								limitCache.setLocationRedis(imei+"_save",lat, lng, "2", new Date().getTime()+""); 
 							} else {
-								WatchLatestLocation oldWatchLocation = ChannelMap.getlocation(imei);
-								if (oldWatchLocation != null) {
-									if (oldWatchLocation.getLocationType() == 2) {
-										if (((oldWatchLocation.getTimestamp() - new Date().getTime())
-												/ (60 * 1000)) >= 3) {
-											locationService.insertUdInfo(imei, 2, lat1, lon, status, time,
-													locationStyle);
-										} else {
-											double calcDistance = Utils.calcDistance(
-													Double.valueOf(oldWatchLocation.getLng()),
-													Double.valueOf(oldWatchLocation.getLat()), Double.valueOf(lon),
-													Double.valueOf(lat1));
-											if (calcDistance > 550) {
-												locationService.insertUdInfo(imei, 2, lat1, lon, status, time,
-														locationStyle);
-											}
-										}
+							    String locationLastInfo = limitCache.getLocationRedis(imei+"_save");
+								if (!StringUtil.isEmpty(locationLastInfo)) {
+									
+									String[] locationShuzu = locationLastInfo.substring(1, locationLastInfo.length()-1).split("\\,");
+									//lat", "lng", "locationType", "timestamp"
+									//Integer locationTypeSave = Integer.valueOf(locationShuzu[2]);
+									Long timeStampSave = Long.valueOf(locationShuzu[3]);
+									String latSave = locationShuzu[0];
+									String lngSave = locationShuzu[1];
+									
+									if (((timeStampSave - new Date().getTime()) / (60 * 1000)) >= 3) {
+										locationService.insertUdInfo(imei, 2, lat, lng, status, time, locationStyle);
+										limitCache.setLocationRedis(imei+"_save",lat, lng, "2", new Date().getTime()+""); 
+										
 									} else {
-										locationService.insertUdInfo(imei, 2, lat1, lon, status, time, locationStyle);
+										double calcDistance = Utils.calcDistance(Double.valueOf(lngSave),
+												Double.valueOf(latSave), Double.valueOf(lng),
+												Double.valueOf(lat));
+										if (calcDistance > 550) {
+											locationService.insertUdInfo(imei, 2, lat, lng, status, time, locationStyle);
+											limitCache.setLocationRedis(imei+"_save",lat, lng, "2", new Date().getTime()+""); 
+										}
 									}
+									
 								} else {
-									locationService.insertUdInfo(imei, 2, lat1, lon, status, time, locationStyle);
+									locationService.insertUdInfo(imei, 2, lat, lng, status, time, locationStyle);
+									limitCache.setLocationRedis(imei+"_save",lat, lng, "2", new Date().getTime()+""); 
 								}
 							}
-
-							WatchLatestLocation watchlastlocation = new WatchLatestLocation();
-							watchlastlocation.setImei(imei);
-							watchlastlocation.setLat(lat1);
-							watchlastlocation.setLng(lon);
-							watchlastlocation.setLocationType(2);
-							watchlastlocation.setTimestamp(new Date().getTime());
-							ChannelMap.addlocation(imei, watchlastlocation);
+							
+							limitCache.setLocationRedis(imei+"_last",lat, lng, "2", new Date().getTime()+""); 
 						}
 					}
 				}
@@ -229,47 +270,46 @@ public class LocationUdService extends AbstractBizService {
 
 							String[] arr = location.split(",");
 							if (arr.length == 2) {
-								String lat1 = arr[1];
-								String lon = arr[0];
+								 lat = arr[1];
+								 lng = arr[0];
 
 								if (locationStyle == 2) {
 
-									locationService.insertUdInfo(imei, 3, lat1, lon, status, time, locationStyle);
+									locationService.insertUdInfo(imei, 3, lat, lng, status, time, locationStyle);
+									limitCache.setLocationRedis(imei+"_save",lat, lng, "3", new Date().getTime()+""); 
 								} else {
-
-									WatchLatestLocation oldWatchLocation = ChannelMap.getlocation(imei);
-
-									if (oldWatchLocation != null) {
-										if (oldWatchLocation.getLocationType() == 3) {
-											if (((oldWatchLocation.getTimestamp() - new Date().getTime())
-													/ (60 * 1000)) >= 3) {
-												locationService.insertUdInfo(imei, 3, lat1, lon, status, time,
-														locationStyle);
-											} else {
-												double calcDistance = Utils.calcDistance(
-														Double.valueOf(oldWatchLocation.getLng()),
-														Double.valueOf(oldWatchLocation.getLat()), Double.valueOf(lon),
-														Double.valueOf(lat1));
-												if (calcDistance > 550) {
-													locationService.insertUdInfo(imei, 3, lat1, lon, status, time,
-															locationStyle);
-												}
-											}
+								    String locationLastInfo = limitCache.getLocationRedis(imei+"_save");
+									if (!StringUtil.isEmpty(locationLastInfo)) {
+										
+										String[] locationShuzu = locationLastInfo.substring(1, locationLastInfo.length()-1).split("\\,");
+										//lat", "lng", "locationType", "timestamp"
+										//Integer locationTypeSave = Integer.valueOf(locationShuzu[2]);
+										Long timeStampSave = Long.valueOf(locationShuzu[3]);
+										String latSave = locationShuzu[0];
+										String lngSave = locationShuzu[1];
+										
+										if (((timeStampSave - new Date().getTime()) / (60 * 1000)) >= 3) {
+											locationService.insertUdInfo(imei, 3, lat, lng, status, time, locationStyle);
+											limitCache.setLocationRedis(imei+"_save",lat, lng, "3", new Date().getTime()+""); 
+											
 										} else {
-											locationService.insertUdInfo(imei, 3, lat1, lon, status, time,
-													locationStyle);
+											double calcDistance = Utils.calcDistance(Double.valueOf(lngSave),
+													Double.valueOf(latSave), Double.valueOf(lng),
+													Double.valueOf(lat));
+											if (calcDistance > 550) {
+												locationService.insertUdInfo(imei, 3, lat, lng, status, time, locationStyle);
+												limitCache.setLocationRedis(imei+"_save",lat, lng, "3", new Date().getTime()+""); 
+											}
 										}
+										
 									} else {
-										locationService.insertUdInfo(imei, 3, lat1, lon, status, time, locationStyle);
+										locationService.insertUdInfo(imei, 3, lat, lng, status, time, locationStyle);
+										limitCache.setLocationRedis(imei+"_save",lat, lng, "3", new Date().getTime()+""); 
 									}
 								}
-								WatchLatestLocation watchlastlocation = new WatchLatestLocation();
-								watchlastlocation.setImei(imei);
-								watchlastlocation.setLat(lat1);
-								watchlastlocation.setLng(lon);
-								watchlastlocation.setLocationType(3);
-								watchlastlocation.setTimestamp(new Date().getTime());
-								ChannelMap.addlocation(imei, watchlastlocation);
+								
+								limitCache.setLocationRedis(imei+"_last",lat, lng, "3", new Date().getTime()+""); 
+								
 							}
 						}
 					}

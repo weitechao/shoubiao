@@ -23,6 +23,7 @@ import com.bracelet.util.ChannelMap;
 import com.bracelet.util.HttpClientGet;
 import com.bracelet.util.RanomUtil;
 import com.bracelet.util.RespCode;
+import com.bracelet.util.StringUtil;
 import com.bracelet.util.Utils;
 
 import org.slf4j.Logger;
@@ -34,6 +35,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -53,8 +55,6 @@ public class LocationController extends BaseController {
 	BaseChannelHandler baseChannelHandler;
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
-	
-
 
 	/* app查询手表最新定位 */
 	@ResponseBody
@@ -67,13 +67,20 @@ public class LocationController extends BaseController {
 			bb.put("Code", -1);
 			return bb.toString();
 		}
+		String locationLastInfo = limitCache.getLocationRedis(imei + "_last");
+		if (!StringUtil.isEmpty(locationLastInfo)) {
 
-		WatchLatestLocation watchlocaiton = ChannelMap.getlocation(imei);
-		if (watchlocaiton != null) {
-			bb.put("lat", watchlocaiton.getLat());
-			bb.put("lng", watchlocaiton.getLng());
-			bb.put("locationType", watchlocaiton.getLocationType());
-			bb.put("uploadtime", watchlocaiton.getTimestamp());
+			String[] locationShuzu = locationLastInfo.substring(1, locationLastInfo.length() - 1).split("\\,");
+
+			Integer locationTypeSave = Integer.valueOf(locationShuzu[2]);
+			Long timeStampSave = Long.valueOf(locationShuzu[3]);
+			String latSave = locationShuzu[0];
+			String lngSave = locationShuzu[1];
+
+			bb.put("lat", latSave);
+			bb.put("lng", lngSave);
+			bb.put("locationType", locationTypeSave);
+			bb.put("uploadtime", timeStampSave);
 			bb.put("Code", 1);
 
 			JSONObject dataMap = new JSONObject();
@@ -90,8 +97,8 @@ public class LocationController extends BaseController {
 			dataMap1.put("DeviceID", limitCache.getRedisKeyValue(imei + "_id"));
 			dataMap1.put("Altitude", 0);
 			dataMap1.put("Course", 0);
-			dataMap1.put("LocationType", watchlocaiton.getLocationType());
-			
+			dataMap1.put("LocationType", locationTypeSave);
+
 			dataMap1.put("CreateTime", "");
 			dataMap1.put("Electricity", 100);
 
@@ -103,8 +110,8 @@ public class LocationController extends BaseController {
 			dataMap1.put("GSM", 94);
 			dataMap1.put("Step", 0);
 			dataMap1.put("Health", "0.0");
-			dataMap1.put("Latitude", watchlocaiton.getLat());
-			dataMap1.put("Longitude", watchlocaiton.getLng());
+			dataMap1.put("Latitude", latSave);
+			dataMap1.put("Longitude", lngSave);
 			dataMap1.put("Online", 0);
 			SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 			if (socketLoginDto != null) {
@@ -123,13 +130,18 @@ public class LocationController extends BaseController {
 			LocationWatch locationWatch = locationService.getLatest(imei);
 			if (locationWatch != null) {
 
-				WatchLatestLocation watchlastlocation = new WatchLatestLocation();
-				watchlastlocation.setImei(imei);
-				watchlastlocation.setLat(locationWatch.getLat());
-				watchlastlocation.setLng(locationWatch.getLng());
-				watchlastlocation.setLocationType(locationWatch.getLocation_type());
-				watchlastlocation.setTimestamp(locationWatch.getUpload_time().getTime());
-				ChannelMap.addlocation(imei, watchlastlocation);
+				limitCache.setLocationRedis(imei + "_last", locationWatch.getLat(), locationWatch.getLng(),
+						locationWatch.getLocation_type() + "", locationWatch.getUpload_time().getTime() + "");
+				/*
+				 * WatchLatestLocation watchlastlocation = new
+				 * WatchLatestLocation(); watchlastlocation.setImei(imei);
+				 * watchlastlocation.setLat(locationWatch.getLat());
+				 * watchlastlocation.setLng(locationWatch.getLng());
+				 * watchlastlocation.setLocationType(locationWatch.
+				 * getLocation_type());
+				 * watchlastlocation.setTimestamp(locationWatch.getUpload_time()
+				 * .getTime()); ChannelMap.addlocation(imei, watchlastlocation);
+				 */
 
 				bb.put("lat", locationWatch.getLat());
 				bb.put("lng", locationWatch.getLng());
@@ -343,72 +355,79 @@ public class LocationController extends BaseController {
 		String mapType = jsonObject.getString("mapType");
 		String lat = jsonObject.getString("lat");
 		String lng = jsonObject.getString("lng");
-		
+
 		if (!"0.000000".equals(lat) && !"0.000000".equals(lng)) {
-			String url = "https://restapi.amap.com/v3/geocode/regeo?key=7d92f6b57a23743f6939c24714731a6a&location=" + lng + "," + lat;
+			String url = "https://restapi.amap.com/v3/geocode/regeo?key=7d92f6b57a23743f6939c24714731a6a&location="
+					+ lng + "," + lat;
 			String res = HttpClientGet.get(url);
 			/*
-
-{"status":"1",
-"regeocode":{"addressComponent": 
-               {"city":"深圳市","province":"广东省","adcode":"440306","district":"宝安区","towncode":"440306003000",
-               "streetNumber":{"number":"27号","location":"113.873493,22.5679314","direction":"西南","distance":"7.67614","street":"华侨新村西堤一巷"},
-               "country":"中国","township":"西乡街道",
-               "businessAreas":[{"location":"113.8702516298224,22.58332089537708","name":"西乡","id":"440306"},
-               {"location":"113.89640616362594,22.570097072405947","name":"新安","id":"440306"},
-               {"location":"113.89536002134635,22.560183159277475","name":"翻身路","id":"440306"}],
-               "building":{"name":[],"type":[]},"neighborhood":{"name":"安泰花园","type":"商务住宅;住宅区;住宅小区"},
-               "citycode":"0755"},
-               "formatted_address":"广东省深圳市宝安区西乡街道安泰花园金华大酒店"},"info":"OK","infocode":"10000"}
-               
-               
-               地址信息返回格式：{ "Code":"1",
-               "Province":"广东省",
-               "City":"深圳市","District":"宝安区",
-               "Road":"华侨新村西堤一巷27号",
-               "Nearby":[{"POI":"广东省深圳市宝安区西乡街道安泰花园金华大酒店"}],
-               "Address":"广东省深圳市宝安区华侨新村西堤一巷27号,广东省深圳市宝安区西乡街道安泰花园金华大酒店" }
-               
-               
-               
-               {"Road":"华侨新村西堤一巷27号","Nearby":"","City":"深圳市","POI":"","Code":0,"District":"宝安区","Province":"广东省"}
-*/
+			 * 
+			 * {"status":"1", "regeocode":{"addressComponent":
+			 * {"city":"深圳市","province":"广东省","adcode":"440306","district":"宝安区"
+			 * ,"towncode":"440306003000",
+			 * "streetNumber":{"number":"27号","location":"113.873493,22.5679314"
+			 * ,"direction":"西南","distance":"7.67614","street":"华侨新村西堤一巷"},
+			 * "country":"中国","township":"西乡街道", "businessAreas":[{"location":
+			 * "113.8702516298224,22.58332089537708","name":"西乡","id":"440306"},
+			 * {"location":"113.89640616362594,22.570097072405947","name":"新安",
+			 * "id":"440306"},
+			 * {"location":"113.89536002134635,22.560183159277475","name":"翻身路",
+			 * "id":"440306"}],
+			 * "building":{"name":[],"type":[]},"neighborhood":{"name":"安泰花园",
+			 * "type":"商务住宅;住宅区;住宅小区"}, "citycode":"0755"},
+			 * "formatted_address":"广东省深圳市宝安区西乡街道安泰花园金华大酒店"},"info":"OK",
+			 * "infocode":"10000"}
+			 * 
+			 * 
+			 * 地址信息返回格式：{ "Code":"1", "Province":"广东省",
+			 * "City":"深圳市","District":"宝安区", "Road":"华侨新村西堤一巷27号",
+			 * "Nearby":[{"POI":"广东省深圳市宝安区西乡街道安泰花园金华大酒店"}],
+			 * "Address":"广东省深圳市宝安区华侨新村西堤一巷27号,广东省深圳市宝安区西乡街道安泰花园金华大酒店" }
+			 * 
+			 * 
+			 * 
+			 * {"Road":"华侨新村西堤一巷27号","Nearby":"","City":"深圳市","POI":"","Code":0,
+			 * "District":"宝安区","Province":"广东省"}
+			 */
 			JSONArray jsonArray = new JSONArray();
 			JSONObject bb1 = new JSONObject();
-			
+
 			JSONObject json = JSON.parseObject(res);
-	        if (json == null || json.getIntValue("status") != 1) {
-	        	logger.error("调用逆地理编码接口失败, 坐标：{},{} 内容：{}"+ lat+ ","+lng+ ","+res);
-	        	bb.put("Code", 0);
-	        	bb.put("Province", "");
-	        	bb.put("City", "");
-	        	bb.put("District", "");
-	        	bb.put("Road", "");
-	        	
-	        	
-	        	bb1.put("POI", "");
-	        	jsonArray.add(bb1);
-	        	bb.put("Nearby", jsonArray);
-	        	bb.put("Address", "");
-	        	
-	        }
-	        JSONObject regeoCode = json.getJSONObject("regeocode");
-	        JSONObject area = regeoCode.getJSONObject("addressComponent");
-	        
-	        bb.put("Code", 1);
-	        bb.put("Province", cleanContent(area.getString("province")));
-        	bb.put("City", cleanContent(area.getString("city")));
-        	bb.put("District", cleanContent(area.getString("district")));
-        	 JSONObject street = area.getJSONObject("streetNumber");
-        	 
-        	bb.put("Road", cleanContent(street.getString("street") + street.getString("number")));
-        	bb.put("Nearby", jsonArray);
-        	
-        	bb1.put("POI", cleanContent(regeoCode.getString("formatted_address")));
-        	jsonArray.add(bb1);
-        	bb.put("Nearby", jsonArray);
-        	
-        	bb.put("Address", cleanContent(area.getString("province"))+cleanContent(area.getString("city"))+cleanContent(area.getString("district"))+cleanContent(street.getString("street") + street.getString("number"))+","+cleanContent(regeoCode.getString("formatted_address")));
+			if (json == null || json.getIntValue("status") != 1) {
+				logger.error("调用逆地理编码接口失败, 坐标：{},{} 内容：{}" + lat + "," + lng + "," + res);
+				bb.put("Code", 0);
+				bb.put("Province", "");
+				bb.put("City", "");
+				bb.put("District", "");
+				bb.put("Road", "");
+
+				bb1.put("POI", "");
+				jsonArray.add(bb1);
+				bb.put("Nearby", jsonArray);
+				bb.put("Address", "");
+
+			}
+			JSONObject regeoCode = json.getJSONObject("regeocode");
+			JSONObject area = regeoCode.getJSONObject("addressComponent");
+
+			bb.put("Code", 1);
+			bb.put("Province", cleanContent(area.getString("province")));
+			bb.put("City", cleanContent(area.getString("city")));
+			bb.put("District", cleanContent(area.getString("district")));
+			JSONObject street = area.getJSONObject("streetNumber");
+
+			bb.put("Road", cleanContent(street.getString("street") + street.getString("number")));
+			bb.put("Nearby", jsonArray);
+
+			bb1.put("POI", cleanContent(regeoCode.getString("formatted_address")));
+			jsonArray.add(bb1);
+			bb.put("Nearby", jsonArray);
+
+			bb.put("Address",
+					cleanContent(area.getString("province")) + cleanContent(area.getString("city"))
+							+ cleanContent(area.getString("district"))
+							+ cleanContent(street.getString("street") + street.getString("number")) + ","
+							+ cleanContent(regeoCode.getString("formatted_address")));
 		} else {
 			bb.put("Code", 5);
 		}
@@ -416,10 +435,10 @@ public class LocationController extends BaseController {
 		return bb.toString();
 	}
 
-	 private String cleanContent(String cont) {
-	        return cont == null ? cont : cont.replaceAll("[\\{\\}\\[\\] ,\"']+", "");
-	    }
-	 
+	private String cleanContent(String cont) {
+		return cont == null ? cont : cont.replaceAll("[\\{\\}\\[\\] ,\"']+", "");
+	}
+
 	/*--下面是老人功能机的接口-------------------------------------------------------------------------------------------------*/
 	/* 上传定位 */
 	@ResponseBody
@@ -590,22 +609,24 @@ public class LocationController extends BaseController {
 		return bb.toString();
 	}
 
-	
-	
 	/* 查询手表的轨迹 */
 	@ResponseBody
 	@RequestMapping(value = "/track", method = RequestMethod.POST)
-	public String track(@RequestBody String body){
-			
-			/*@PathVariable String token, @PathVariable String imei, @PathVariable String starttime,
-			@PathVariable String endtime) {*/
-		
+	public String track(@RequestBody String body) {
+
+		/*
+		 * @PathVariable String token, @PathVariable String imei, @PathVariable
+		 * String starttime,
+		 * 
+		 * @PathVariable String endtime) {
+		 */
+
 		JSONObject jsonObject = (JSONObject) JSON.parse(body);
 		String token = jsonObject.getString("token");
 		String imei = jsonObject.getString("imei");
 		String starttime = jsonObject.getString("starttime");
 		String endtime = jsonObject.getString("endtime");
-		
+
 		JSONObject bb = new JSONObject();
 		String user_id = checkTokenWatchAndUser(token);
 		if ("0".equals(user_id)) {
@@ -629,7 +650,7 @@ public class LocationController extends BaseController {
 				dataMap.put("Latitude", location.getLat());
 				dataMap.put("Longitude", location.getLng());
 				dataMap.put("LocationType", location.getLocation_type());
-				dataMap.put("CreateTime",Utils.getTime(location.getUpload_time().getTime()));
+				dataMap.put("CreateTime", Utils.getTime(location.getUpload_time().getTime()));
 				dataMap.put("UpdateTime", location.getUpload_time().getTime() + "");
 				jsonArray.add(dataMap);
 			}
@@ -643,8 +664,7 @@ public class LocationController extends BaseController {
 		bb.put("List", jsonArray);
 		return bb.toString();
 	}
-	
-	
+
 	/* app查询手表最新定位 */
 	@ResponseBody
 	@RequestMapping(value = "/getlastLocation/search/{token}/{imei}", method = RequestMethod.GET)
@@ -657,16 +677,24 @@ public class LocationController extends BaseController {
 			return bb.toString();
 		}
 
-		WatchLatestLocation watchlocaiton = ChannelMap.getlocation(imei);
-		if (watchlocaiton != null) {
-			String time = Utils.getLocationTime(watchlocaiton.getTimestamp());
+		String locationLastInfo = limitCache.getLocationRedis(imei + "_last");
+		if (!StringUtil.isEmpty(locationLastInfo)) {
+
+			String[] locationShuzu = locationLastInfo.substring(1, locationLastInfo.length() - 1).split("\\,");
+
+			Integer locationTypeSave = Integer.valueOf(locationShuzu[2]);
+			Long timeStampSave = Long.valueOf(locationShuzu[3]);
+			String latSave = locationShuzu[0];
+			String lngSave = locationShuzu[1];
+
+			String time = Utils.getLocationTime(timeStampSave);
 			bb.put("Code", 1);
 
 			bb.put("DeviceID", limitCache.getRedisKeyValue(imei + "_id"));
 			bb.put("Altitude", 0);
 			bb.put("Course", 0);
-			bb.put("LocationType", watchlocaiton.getLocationType());
-			
+			bb.put("LocationType", locationTypeSave);
+
 			bb.put("CreateTime", time);
 			bb.put("Electricity", 100);
 
@@ -678,8 +706,8 @@ public class LocationController extends BaseController {
 			bb.put("GSM", 94);
 			bb.put("Step", 0);
 			bb.put("Health", "0.0");
-			bb.put("Latitude", watchlocaiton.getLat());
-			bb.put("Longitude", watchlocaiton.getLng());
+			bb.put("Latitude", latSave);
+			bb.put("Longitude", lngSave);
 			bb.put("Online", 0);
 			SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 			if (socketLoginDto != null) {
@@ -690,30 +718,17 @@ public class LocationController extends BaseController {
 			bb.put("Speed", 0);
 			bb.put("UpdateTime", time);
 
-			
-
 		} else {
 			LocationWatch locationWatch = locationService.getLatest(imei);
 			if (locationWatch != null) {
 				String timee = Utils.getLocationTime(locationWatch.getUpload_time().getTime());
-				WatchLatestLocation watchlastlocation = new WatchLatestLocation();
-				watchlastlocation.setImei(imei);
-				watchlastlocation.setLat(locationWatch.getLat());
-				watchlastlocation.setLng(locationWatch.getLng());
-				watchlastlocation.setLocationType(locationWatch.getLocation_type());
-				watchlastlocation.setTimestamp(locationWatch.getUpload_time().getTime());
-				ChannelMap.addlocation(imei, watchlastlocation);
+				limitCache.setLocationRedis(imei + "_last", locationWatch.getLat(), locationWatch.getLng(),
+						locationWatch.getLocation_type() + "", locationWatch.getUpload_time().getTime() + "");
 
-			
 				bb.put("locationType", locationWatch.getLocation_type());
-			
+
 				bb.put("Code", 1);
 
-				
-			
-				
-
-				
 				bb.put("DeviceID", limitCache.getRedisKeyValue(imei + "_id"));
 				bb.put("Altitude", 0);
 				bb.put("Course", 0);
@@ -740,8 +755,6 @@ public class LocationController extends BaseController {
 				bb.put("ServerTime", timee);
 				bb.put("Speed", 0);
 				bb.put("UpdateTime", timee);
-
-				
 
 			} else {
 				bb.put("Code", 0);

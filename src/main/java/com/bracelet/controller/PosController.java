@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.bracelet.dto.HttpBaseDto;
 import com.bracelet.dto.SocketLoginDto;
+import com.bracelet.dto.WatchLatestLocation;
 import com.bracelet.entity.GPS;
 import com.bracelet.entity.Location;
 import com.bracelet.entity.LocationOld;
@@ -172,7 +173,7 @@ public class PosController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "/redisTest", method = RequestMethod.GET)
 	public String redisTest() {
-		boolean e = limitCache.addKey("e", "1");
+	/*	boolean e = limitCache.addKey("e", "1");
 		boolean f = limitCache.addKey("f", "1");
 		boolean b = limitCache.addKey("a", "1");
 		logger.info("b=" + b);
@@ -184,8 +185,17 @@ public class PosController extends BaseController {
 		logger.info(limitCache.getRedisKeyValue("123456"));
 		logger.info(limitCache.getRedisKeyValue("12345sada6"));
 		
-		logger.info(limitCache.getSize()+"");
+		logger.info(limitCache.getSize()+"")*/;
+		limitCache.setLocationRedis("89213456465456" ,"lat12", "lng45","1","4614654564") ;
 		
+		logger.info(limitCache.existsLocation("89213456465456")+"");
+		logger.info(limitCache.existsLocation("892134564654561")+"");
+		
+		String abc =limitCache.getLocationRedis("89213456465456");
+		System.out.println(abc);
+		System.out.println(limitCache.getLocationRedis("89213456465412256"));
+		System.out.println(abc.substring(1, abc.length()-1).split("\\,")[0]);
+		System.out.println(abc.substring(1, abc.length()-1).split(",")[0]);
 		return "1";
 	}
 	
@@ -195,7 +205,19 @@ public class PosController extends BaseController {
 	@RequestMapping(value = "/get/{imei}", method = RequestMethod.GET ,produces="text/html;charset=UTF-8")
 	public String getImeiIpPort(@PathVariable String imei) {
 		logger.info(limitCache.getRedisKeyValue(imei));
+		
+		//String locationLastInfo = limitCache.getLocationRedis(imei + "_last");
 		return limitCache.getRedisKeyValue(imei);
+	}
+	
+	/* 获取imei ip 和端口 */
+	@ResponseBody
+	@RequestMapping(value = "/getLocationRedis/{imei}", method = RequestMethod.GET ,produces="text/html;charset=UTF-8")
+	public String getLocationRedis(@PathVariable String imei) {
+		
+		String locationLastInfo = limitCache.getLocationRedis(imei + "_last");
+		logger.info(imei+"-locationLastInfo="+locationLastInfo);
+		return locationLastInfo+"";
 	}
 	
 	
@@ -205,4 +227,5 @@ public class PosController extends BaseController {
 	public String testslb(@PathVariable String imei) {
 		return imei;
 	}
+	
 }
