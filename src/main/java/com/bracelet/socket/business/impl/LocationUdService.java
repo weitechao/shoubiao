@@ -144,9 +144,10 @@ public class LocationUdService extends AbstractBizService {
 						lng = locationsArr[0];
 						locationService.insertUdInfo(imei, 1, lat, lng, status, time,
 								locationStyle);
-
-						limitCache.setLocationRedis(imei+"_last",lat, lng, "1", new Date().getTime()+""); 
-						limitCache.setLocationRedis(imei+"_save",lat, lng, "1", new Date().getTime()+""); 
+						
+						String locationValue=lat+","+lng+",1"+","+new Date().getTime();
+						limitCache.addKey(imei+"_save",locationValue); 
+						limitCache.addKey(imei+"_last",locationValue); 
 					
 					}
 				}
@@ -198,14 +199,17 @@ public class LocationUdService extends AbstractBizService {
 							 lat = arr[1];
 							 lng = arr[0];
 
+							 String locationValue=lat+","+lng+",2"+","+new Date().getTime();
+								
+								
 							if (locationStyle == 2) {
 								locationService.insertUdInfo(imei, 2, lat, lng, status, time, locationStyle);
-								limitCache.setLocationRedis(imei+"_save",lat, lng, "2", new Date().getTime()+""); 
+								limitCache.addKey(imei+"_save",locationValue); 
 							} else {
-							    String locationLastInfo = limitCache.getLocationRedis(imei+"_save");
+							    String locationLastInfo = limitCache.getRedisKeyValue(imei+"_save");
 								if (!StringUtil.isEmpty(locationLastInfo)) {
 									
-									String[] locationShuzu = locationLastInfo.substring(1, locationLastInfo.length()-1).split("\\,");
+									String[] locationShuzu = locationLastInfo.split(",");
 									//lat", "lng", "locationType", "timestamp"
 									//Integer locationTypeSave = Integer.valueOf(locationShuzu[2]);
 									Long timeStampSave = Long.valueOf(locationShuzu[3]);
@@ -214,25 +218,23 @@ public class LocationUdService extends AbstractBizService {
 									
 									if (((timeStampSave - new Date().getTime()) / (60 * 1000)) >= 3) {
 										locationService.insertUdInfo(imei, 2, lat, lng, status, time, locationStyle);
-										limitCache.setLocationRedis(imei+"_save",lat, lng, "2", new Date().getTime()+""); 
-										
+										limitCache.addKey(imei+"_save",locationValue); 
 									} else {
 										double calcDistance = Utils.calcDistance(Double.valueOf(lngSave),
 												Double.valueOf(latSave), Double.valueOf(lng),
 												Double.valueOf(lat));
 										if (calcDistance > 550) {
 											locationService.insertUdInfo(imei, 2, lat, lng, status, time, locationStyle);
-											limitCache.setLocationRedis(imei+"_save",lat, lng, "2", new Date().getTime()+""); 
+											limitCache.addKey(imei+"_save",locationValue); 
 										}
 									}
 									
 								} else {
 									locationService.insertUdInfo(imei, 2, lat, lng, status, time, locationStyle);
-									limitCache.setLocationRedis(imei+"_save",lat, lng, "2", new Date().getTime()+""); 
+									limitCache.addKey(imei+"_save",locationValue); 
 								}
 							}
-							
-							limitCache.setLocationRedis(imei+"_last",lat, lng, "2", new Date().getTime()+""); 
+							limitCache.addKey(imei+"_last",locationValue); 
 						}
 					}
 				}
@@ -272,16 +274,18 @@ public class LocationUdService extends AbstractBizService {
 							if (arr.length == 2) {
 								 lat = arr[1];
 								 lng = arr[0];
-
+								 
+								 String locationValue=lat+","+lng+",3"+","+new Date().getTime();
+								 
 								if (locationStyle == 2) {
 
 									locationService.insertUdInfo(imei, 3, lat, lng, status, time, locationStyle);
-									limitCache.setLocationRedis(imei+"_save",lat, lng, "3", new Date().getTime()+""); 
+									limitCache.addKey(imei+"_save",locationValue); 
 								} else {
-								    String locationLastInfo = limitCache.getLocationRedis(imei+"_save");
+								    String locationLastInfo = limitCache.getRedisKeyValue(imei+"_save");
 									if (!StringUtil.isEmpty(locationLastInfo)) {
 										
-										String[] locationShuzu = locationLastInfo.substring(1, locationLastInfo.length()-1).split("\\,");
+										String[] locationShuzu = locationLastInfo.split(",");
 										//lat", "lng", "locationType", "timestamp"
 										//Integer locationTypeSave = Integer.valueOf(locationShuzu[2]);
 										Long timeStampSave = Long.valueOf(locationShuzu[3]);
@@ -290,7 +294,7 @@ public class LocationUdService extends AbstractBizService {
 										
 										if (((timeStampSave - new Date().getTime()) / (60 * 1000)) >= 3) {
 											locationService.insertUdInfo(imei, 3, lat, lng, status, time, locationStyle);
-											limitCache.setLocationRedis(imei+"_save",lat, lng, "3", new Date().getTime()+""); 
+											limitCache.addKey(imei+"_save",locationValue); 
 											
 										} else {
 											double calcDistance = Utils.calcDistance(Double.valueOf(lngSave),
@@ -298,17 +302,17 @@ public class LocationUdService extends AbstractBizService {
 													Double.valueOf(lat));
 											if (calcDistance > 550) {
 												locationService.insertUdInfo(imei, 3, lat, lng, status, time, locationStyle);
-												limitCache.setLocationRedis(imei+"_save",lat, lng, "3", new Date().getTime()+""); 
+												limitCache.addKey(imei+"_save",locationValue); 
 											}
 										}
 										
 									} else {
 										locationService.insertUdInfo(imei, 3, lat, lng, status, time, locationStyle);
-										limitCache.setLocationRedis(imei+"_save",lat, lng, "3", new Date().getTime()+""); 
+										limitCache.addKey(imei+"_save",locationValue); 
 									}
 								}
 								
-								limitCache.setLocationRedis(imei+"_last",lat, lng, "3", new Date().getTime()+""); 
+								limitCache.addKey(imei+"_last",locationValue); 
 								
 							}
 						}

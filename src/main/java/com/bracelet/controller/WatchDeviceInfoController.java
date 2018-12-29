@@ -70,7 +70,6 @@ public class WatchDeviceInfoController extends BaseController {
 			
 			//bb.put("head", "");
 			bb.put("Birthday", watch.getBirday()+"");
-			bb.put("HomeAddress", watch.getHome_info()+"");
 			
 			bb.put("Code", 1);
 			bb.put("ActiveDate", "");

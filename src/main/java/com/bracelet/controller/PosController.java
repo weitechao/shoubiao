@@ -173,7 +173,7 @@ public class PosController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "/redisTest", method = RequestMethod.GET)
 	public String redisTest() {
-	/*	boolean e = limitCache.addKey("e", "1");
+		boolean e = limitCache.addKey("e", "1");
 		boolean f = limitCache.addKey("f", "1");
 		boolean b = limitCache.addKey("a", "1");
 		logger.info("b=" + b);
@@ -185,17 +185,8 @@ public class PosController extends BaseController {
 		logger.info(limitCache.getRedisKeyValue("123456"));
 		logger.info(limitCache.getRedisKeyValue("12345sada6"));
 		
-		logger.info(limitCache.getSize()+"")*/;
-		limitCache.setLocationRedis("89213456465456" ,"lat12", "lng45","1","4614654564") ;
-		
-		logger.info(limitCache.existsLocation("89213456465456")+"");
-		logger.info(limitCache.existsLocation("892134564654561")+"");
-		
-		String abc =limitCache.getLocationRedis("89213456465456");
-		System.out.println(abc);
-		System.out.println(limitCache.getLocationRedis("89213456465412256"));
-		System.out.println(abc.substring(1, abc.length()-1).split("\\,")[0]);
-		System.out.println(abc.substring(1, abc.length()-1).split(",")[0]);
+		logger.info(limitCache.getSize()+"");
+	
 		return "1";
 	}
 	
@@ -214,9 +205,14 @@ public class PosController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "/getLocationRedis/{imei}", method = RequestMethod.GET ,produces="text/html;charset=UTF-8")
 	public String getLocationRedis(@PathVariable String imei) {
-		
-		String locationLastInfo = limitCache.getLocationRedis(imei + "_last");
-		logger.info(imei+"-locationLastInfo="+locationLastInfo);
+		String locationLastInfo = limitCache.getRedisKeyValue(imei + "_last");
+		logger.info("locationLastInfo="+locationLastInfo);
+		String[] locationShuzu = locationLastInfo.split(",");
+		Integer locationTypeSave = Integer.valueOf(locationShuzu[2]);
+		Long timeStampSave = Long.valueOf(locationShuzu[3]);
+		String latSave = locationShuzu[0];
+		String lngSave = locationShuzu[1];
+		logger.info(latSave+","+lngSave+","+locationTypeSave+","+timeStampSave);
 		return locationLastInfo+"";
 	}
 	

@@ -234,19 +234,13 @@ public class UploadPhoto extends AbstractBizService {
 						locationService.insertUdPhotoInfo(imei, 1, locationsArr[1], locationsArr[0], status, time,
 								locationStyle,photoName);
 
-						limitCache.setLocationRedis(imei+"_last",locationsArr[1], locationsArr[0], "1", new Date().getTime()+""); 
-						limitCache.setLocationRedis(imei+"_save",locationsArr[1], locationsArr[0], "1", new Date().getTime()+""); 
+						String locationValue=lat+","+lng+",1"+","+new Date().getTime();
+						limitCache.addKey(imei+"_save",locationValue); 
+						limitCache.addKey(imei+"_last",locationValue); 
 						
-						/*WatchLatestLocation watchlastlocation = new WatchLatestLocation();
-						watchlastlocation.setImei(imei);
-						watchlastlocation.setLat(locationsArr[1]);
-						watchlastlocation.setLng(locationsArr[0]);
-						watchlastlocation.setLocationType(1);
-						watchlastlocation.setTimestamp(new Date().getTime());
-						ChannelMap.addlocation(imei, watchlastlocation);*/
+						
 					}
 				}
-				//voltageService.insertDianLiang(imei, Integer.valueOf(energy));
 			} else {
 				logger.info("GPS定位失败=" + lat + "," + lng);
 			}
@@ -291,20 +285,13 @@ public class UploadPhoto extends AbstractBizService {
 
 						String[] arr = location.split(",");
 						if (arr.length == 2) {
-							String lat1 = arr[1];
-							String lon = arr[0];
-							locationService.insertUdPhotoInfo(imei, 2, lat1, lon, status, time, locationStyle,photoName);
-							
-							limitCache.setLocationRedis(imei+"_last",lat, lng, "2", new Date().getTime()+""); 
-							//limitCache.setLocationRedis(imei+"_save",lat, lng, "2", new Date().getTime()+""); 
-							
-							/*WatchLatestLocation watchlastlocation = new WatchLatestLocation();
-							watchlastlocation.setImei(imei);
-							watchlastlocation.setLat(lat1);
-							watchlastlocation.setLng(lon);
-							watchlastlocation.setLocationType(2);
-							watchlastlocation.setTimestamp(new Date().getTime());
-							ChannelMap.addlocation(imei, watchlastlocation);*/
+							 lat = arr[1];
+							 lng = arr[0];
+							locationService.insertUdPhotoInfo(imei, 2, lat, lng, status, time, locationStyle,photoName);
+							String locationValue=lat+","+lng+",2"+","+new Date().getTime();
+
+							limitCache.addKey(imei+"_save",locationValue); 
+							limitCache.addKey(imei+"_last",locationValue); 
 						}
 					}
 				}
@@ -342,21 +329,17 @@ public class UploadPhoto extends AbstractBizService {
 
 							String[] arr = location.split(",");
 							if (arr.length == 2) {
-								String lat1 = arr[1];
-								String lon = arr[0];
+								lat = arr[1];
+								lng = arr[0];
 
 								
-								locationService.insertUdPhotoInfo(imei, 3, lat1, lon, status, time, locationStyle,photoName);
+								locationService.insertUdPhotoInfo(imei, 3, lat, lng, status, time, locationStyle,photoName);
+								String locationValue=lat+","+lng+",3"+","+new Date().getTime();
+								limitCache.addKey(imei+"_save",locationValue); 
+								limitCache.addKey(imei+"_last",locationValue); 
 								
-								limitCache.setLocationRedis(imei+"_last",lat1, lon, "3", new Date().getTime()+""); 
-								//limitCache.setLocationRedis(imei+"_save",lat1, locationsArr[0], "1", new Date().getTime()+""); 
-								/*WatchLatestLocation watchlastlocation = new WatchLatestLocation();
-								watchlastlocation.setImei(imei);
-								watchlastlocation.setLat(lat1);
-								watchlastlocation.setLng(lon);
-								watchlastlocation.setLocationType(3);
-								watchlastlocation.setTimestamp(new Date().getTime());
-								ChannelMap.addlocation(imei, watchlastlocation);*/
+							
+							
 							}
 						}
 					}

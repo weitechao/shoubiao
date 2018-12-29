@@ -67,11 +67,12 @@ public class LocationController extends BaseController {
 			bb.put("Code", -1);
 			return bb.toString();
 		}
-		String locationLastInfo = limitCache.getLocationRedis(imei + "_last");
+		String locationLastInfo = limitCache.getRedisKeyValue(imei + "_last");
+	
+		
 		if (!StringUtil.isEmpty(locationLastInfo)) {
 
-			String[] locationShuzu = locationLastInfo.substring(1, locationLastInfo.length() - 1).split("\\,");
-
+			String[] locationShuzu = locationLastInfo.split(",");
 			Integer locationTypeSave = Integer.valueOf(locationShuzu[2]);
 			Long timeStampSave = Long.valueOf(locationShuzu[3]);
 			String latSave = locationShuzu[0];
@@ -130,19 +131,9 @@ public class LocationController extends BaseController {
 			LocationWatch locationWatch = locationService.getLatest(imei);
 			if (locationWatch != null) {
 
-				limitCache.setLocationRedis(imei + "_last", locationWatch.getLat(), locationWatch.getLng(),
-						locationWatch.getLocation_type() + "", locationWatch.getUpload_time().getTime() + "");
-				/*
-				 * WatchLatestLocation watchlastlocation = new
-				 * WatchLatestLocation(); watchlastlocation.setImei(imei);
-				 * watchlastlocation.setLat(locationWatch.getLat());
-				 * watchlastlocation.setLng(locationWatch.getLng());
-				 * watchlastlocation.setLocationType(locationWatch.
-				 * getLocation_type());
-				 * watchlastlocation.setTimestamp(locationWatch.getUpload_time()
-				 * .getTime()); ChannelMap.addlocation(imei, watchlastlocation);
-				 */
-
+				String locationValue=locationWatch.getLat()+","+locationWatch.getLng()+","+locationWatch.getLocation_type()+","+new Date().getTime();
+				limitCache.addKey(imei+"_last",locationValue); 
+			
 				bb.put("lat", locationWatch.getLat());
 				bb.put("lng", locationWatch.getLng());
 				bb.put("locationType", locationWatch.getLocation_type());
@@ -677,17 +668,18 @@ public class LocationController extends BaseController {
 			return bb.toString();
 		}
 
-		String locationLastInfo = limitCache.getLocationRedis(imei + "_last");
+		String locationLastInfo = limitCache.getRedisKeyValue(imei + "_last");
+		
 		if (!StringUtil.isEmpty(locationLastInfo)) {
-
-			String[] locationShuzu = locationLastInfo.substring(1, locationLastInfo.length() - 1).split("\\,");
+logger.info("查询最新定位从redis里拿="+imei);
+			String[] locationShuzu = locationLastInfo.split(",");
 
 			Integer locationTypeSave = Integer.valueOf(locationShuzu[2]);
-			Long timeStampSave = Long.valueOf(locationShuzu[3]);
+			//Long timeStampSave = Long.valueOf(locationShuzu[3]);
 			String latSave = locationShuzu[0];
 			String lngSave = locationShuzu[1];
 
-			String time = Utils.getLocationTime(timeStampSave);
+			String time = Utils.getLocationTime(new Date().getTime());
 			bb.put("Code", 1);
 
 			bb.put("DeviceID", limitCache.getRedisKeyValue(imei + "_id"));
@@ -717,14 +709,18 @@ public class LocationController extends BaseController {
 			bb.put("ServerTime", time);
 			bb.put("Speed", 0);
 			bb.put("UpdateTime", time);
+			bb.put("DeviceTime", time);
 
 		} else {
+			logger.info("查询最新定位从mysql里拿="+imei);
 			LocationWatch locationWatch = locationService.getLatest(imei);
 			if (locationWatch != null) {
-				String timee = Utils.getLocationTime(locationWatch.getUpload_time().getTime());
-				limitCache.setLocationRedis(imei + "_last", locationWatch.getLat(), locationWatch.getLng(),
-						locationWatch.getLocation_type() + "", locationWatch.getUpload_time().getTime() + "");
-
+				String timee = Utils.getLocationTime(new Date().getTime());
+				
+				String locationValue=locationWatch.getLat()+","+locationWatch.getLng()+","+locationWatch.getLocation_type()+","+new Date().getTime();
+				limitCache.addKey(imei+"_last",locationValue); 
+				
+				
 				bb.put("locationType", locationWatch.getLocation_type());
 
 				bb.put("Code", 1);
@@ -755,6 +751,7 @@ public class LocationController extends BaseController {
 				bb.put("ServerTime", timee);
 				bb.put("Speed", 0);
 				bb.put("UpdateTime", timee);
+				bb.put("DeviceTime", timee);
 
 			} else {
 				bb.put("Code", 0);
