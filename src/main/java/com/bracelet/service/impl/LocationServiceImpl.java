@@ -138,6 +138,15 @@ public class LocationServiceImpl implements ILocationService {
 			table = "sos_location_watchinfo";
 		}else if(locationStyle == 4){
 			table = "photo_location_watchinfo";
+		}else{
+			Integer count = Integer.valueOf(imei.substring(imei.length()-1 , imei.length())) % 4;
+			if(count == 1){
+				table = "location_1_watchinfo";
+			}else if(count == 2){
+				table = "location_2_watchinfo";
+			}else if(count == 3){
+				table = "location_3_watchinfo";
+			}
 		}
 		int i = jdbcTemplate
 				.update("insert into  "+ table +"   (imei, location_type, lat, lng, status, location_time, upload_time, location_style) values (?,?,?,?,?,?,?,?)",
@@ -165,7 +174,17 @@ public class LocationServiceImpl implements ILocationService {
 	@Override
 	@DataSourceChange(slave = true)
 	public List<LocationWatch> getWatchFootprint(String imei, String starttime, String endtime) {
-		String sql = "select * from location_watchinfo where imei=? and upload_time > ? and upload_time < ? order by upload_time asc";
+        String table = "location_watchinfo";
+		Integer count = Integer.valueOf(imei.substring(imei.length()-1 , imei.length())) % 4;
+		if(count == 1){
+			table = "location_1_watchinfo";
+		}else if(count == 2){
+			table = "location_2_watchinfo";
+		}else if(count == 3){
+			table = "location_3_watchinfo";
+		}
+		
+		String sql = "select * from  "+ table +"  where imei=? and upload_time > ? and upload_time < ? order by upload_time asc";
 		List<LocationWatch> list = jdbcTemplate.query(sql, new Object[] { imei,
 				starttime, endtime }, new BeanPropertyRowMapper<LocationWatch>(
 						LocationWatch.class));
