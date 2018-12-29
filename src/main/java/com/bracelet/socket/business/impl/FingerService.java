@@ -106,7 +106,7 @@ public class FingerService implements IService {
 						FingerDto sosDto = new FingerDto();
 						sosDto.setName(name);
 						sosDto.setImei(imei);
-						sosDto.setTimestamp(new Date().getTime());
+						sosDto.setTimestamp(System.currentTimeMillis());
 						String target = tokenInfoService
 								.getTokenByUserId(userId);
 
@@ -200,7 +200,7 @@ public class FingerService implements IService {
 		SocketBaseDto dto = new SocketBaseDto();
 		dto.setType(jsonObject.getIntValue("type"));
 		dto.setNo(no);
-		dto.setTimestamp(new Date().getTime());
+		dto.setTimestamp(System.currentTimeMillis());
 		dto.setStatus(0);
 
 		return dto;

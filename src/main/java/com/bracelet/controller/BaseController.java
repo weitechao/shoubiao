@@ -41,15 +41,16 @@ public class BaseController {
 
 	protected String checkTokenWatchAndUser(String token) {
 		String reponse = "0";
-		String tokenValue = limitCache.getRedisKeyValue(token);
+		String userId = limitCache.getRedisKeyValue(token);
 
-		if (!StringUtil.isEmpty(tokenValue)) {
-			return tokenValue;
+		if (!StringUtil.isEmpty(userId)) {
+			return userId;
 		}
+		
 		Long user_id = tokenInfoService.getUserIdByToken(token);
 		if (!StringUtil.isEmpty(user_id)) {
 			reponse = user_id + "";
-			limitCache.addKey(token, reponse);
+			//limitCache.addToken(token, reponse);
 		} else {
 			logger.info("[checkTokenAndUser] 通过token检查userid不存在，token:" + token);
 		}

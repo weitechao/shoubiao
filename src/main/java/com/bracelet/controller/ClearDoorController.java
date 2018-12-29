@@ -84,7 +84,7 @@ public class ClearDoorController extends BaseController {
 					FingerDto sosDto = new FingerDto();
 					sosDto.setName(name);
 					sosDto.setImei(imei);
-					sosDto.setTimestamp(new Date().getTime());
+					sosDto.setTimestamp(System.currentTimeMillis());
 					String target = tokenInfoService.getTokenByUserId(userId);
 					String title = "设备清除信息";
 					String content = JSON.toJSONString(sosDto);

@@ -71,7 +71,7 @@ public class PrizeUpDoorService implements IService {
 								FingerDto sosDto = new FingerDto();
 								sosDto.setName("不明用户");
 								sosDto.setImei(imei);
-								sosDto.setTimestamp(new Date().getTime());
+								sosDto.setTimestamp(System.currentTimeMillis());
 								String target = tokenInfoService.getTokenByUserId(userId);
 								String title = "撬锁报警";
 								String content = JSON.toJSONString(sosDto);
@@ -94,7 +94,7 @@ public class PrizeUpDoorService implements IService {
 		SocketBaseDto dto = new SocketBaseDto();
 		dto.setType(jsonObject.getIntValue("type"));
 		dto.setNo(no);
-		dto.setTimestamp(new Date().getTime());
+		dto.setTimestamp(System.currentTimeMillis());
 		dto.setStatus(0);
 
 		return dto;

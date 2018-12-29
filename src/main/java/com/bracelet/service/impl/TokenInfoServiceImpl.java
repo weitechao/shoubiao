@@ -57,7 +57,7 @@ public class TokenInfoServiceImpl implements ITokenInfoService {
 
 
 	public String genToken(Long userId) {
-		long timestamp = new Date().getTime();
+		long timestamp = System.currentTimeMillis();
 		int randomCode = Utils.randomInt(10, 10000);
 		String otoken = "U" + timestamp + userId + "-" + randomCode;
 		// md5 签名
@@ -67,7 +67,7 @@ public class TokenInfoServiceImpl implements ITokenInfoService {
 		Timestamp now = Utils.getCurrentTimestamp();
 		jdbcTemplate.update("replace into token_info (token, user_id, createtime) values (?,?,?)",
 				new Object[] { token, userId, now }, new int[] { Types.VARCHAR, Types.INTEGER, Types.TIMESTAMP });
-		limitCache.addKey(token, userId+"");
+		limitCache.addToken(token, userId+"");
 		return token;
 	}
 }

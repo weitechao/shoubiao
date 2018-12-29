@@ -280,7 +280,7 @@ public class WatchDeviceInfoController extends BaseController {
 		logger.info("头像=" + head);
 
 		byte[] headByte = Base64.decodeBase64(head);
-		String photoName = imei + "_" + new Date().getTime() + ".jpg";
+		String photoName = imei + "_" + System.currentTimeMillis() + ".jpg";
 		Utils.createFileContent(Utils.PHOTT_FILE_lINUX, photoName, headByte);
 
 		// if (this.ideviceService.updateImeiHeadInfo(id,

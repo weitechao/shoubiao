@@ -37,7 +37,7 @@ public class JsonTest {
         Map<String, Object> dataResp = new HashMap<>();
         dataResp.put("maxHeartPressure", 200);
         dataResp.put("minHeartPressure", 120);
-        dataResp.put("timestamp", new Date().getTime());
+        dataResp.put("timestamp", System.currentTimeMillis());
         baseDto.setData(dataResp);
 
         System.out.println(JSON.toJSONString(baseDto));

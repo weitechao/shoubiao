@@ -23,7 +23,7 @@ public class PushTest {
 		OpenDoorDto sosDto = new OpenDoorDto();
 		sosDto.setName("11");
 		sosDto.setImei("4568456456");
-		sosDto.setTimestamp(new Date().getTime());
+		sosDto.setTimestamp(System.currentTimeMillis());
 		sosDto.setSide(1);
 		sosDto.setWay(0);
 		sosDto.setContent("123123");

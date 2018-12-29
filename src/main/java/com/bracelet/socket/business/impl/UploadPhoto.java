@@ -95,7 +95,7 @@ public class UploadPhoto extends AbstractBizService {
 		if (thisNumber != 0) {// 当前包 如果是0就是定位  1就是照片数据
 			logger.info("[photoName]=" + photoName);
 			if (photoName == null || "".equals(photoName)) {
-				photoName = imei + "_" + new Date().getTime() + ".jpg";
+				photoName = imei + "_" + System.currentTimeMillis() + ".jpg";
 			} else {
 				photoName = imei + "_" + photoName;
 			}
@@ -234,7 +234,7 @@ public class UploadPhoto extends AbstractBizService {
 						locationService.insertUdPhotoInfo(imei, 1, locationsArr[1], locationsArr[0], status, time,
 								locationStyle,photoName);
 
-						String locationValue=lat+","+lng+",1"+","+new Date().getTime();
+						String locationValue=lat+","+lng+",1"+","+System.currentTimeMillis();
 						limitCache.addKey(imei+"_save",locationValue); 
 						limitCache.addKey(imei+"_last",locationValue); 
 						
@@ -288,9 +288,7 @@ public class UploadPhoto extends AbstractBizService {
 							 lat = arr[1];
 							 lng = arr[0];
 							locationService.insertUdPhotoInfo(imei, 2, lat, lng, status, time, locationStyle,photoName);
-							String locationValue=lat+","+lng+",2"+","+new Date().getTime();
-
-							limitCache.addKey(imei+"_save",locationValue); 
+							String locationValue=lat+","+lng+",2"+","+System.currentTimeMillis();
 							limitCache.addKey(imei+"_last",locationValue); 
 						}
 					}
@@ -331,14 +329,10 @@ public class UploadPhoto extends AbstractBizService {
 							if (arr.length == 2) {
 								lat = arr[1];
 								lng = arr[0];
-
 								
 								locationService.insertUdPhotoInfo(imei, 3, lat, lng, status, time, locationStyle,photoName);
-								String locationValue=lat+","+lng+",3"+","+new Date().getTime();
-								limitCache.addKey(imei+"_save",locationValue); 
+								String locationValue=lat+","+lng+",3"+","+System.currentTimeMillis();
 								limitCache.addKey(imei+"_last",locationValue); 
-								
-							
 							
 							}
 						}

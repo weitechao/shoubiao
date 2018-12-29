@@ -70,7 +70,7 @@ public class BusinessHandler implements IBusinessHandler {
 			rmsg = e.getMessage();
 			dto = new SocketBaseDto();
 			dto.setMessage(e.getMessage());
-			dto.setTimestamp(new Date().getTime() / 1000);
+			dto.setTimestamp(System.currentTimeMillis() / 1000);
 			dto.setNo(no);
 			dto.setType(type);
 			dto.setStatus(RespCode.SYS_ERR.getCode());

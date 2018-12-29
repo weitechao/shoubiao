@@ -520,7 +520,7 @@ public class WatchAppPhoneBookController extends BaseController {
 		}
 		
 		byte[] headByte = Base64.decodeBase64(head);
-		String photoName = deviceContactId + "_" + new Date().getTime() + ".jpg";
+		String photoName = deviceContactId + "_" + System.currentTimeMillis() + ".jpg";
 		Utils.createFileContent(Utils.PHONEBook_FILE_lINUX, photoName, headByte);
 
 		if(memberService.updatePhonebookHeadImgById(deviceContactId,Utils.PHONEBook_PHOTO_UTL+photoName)){

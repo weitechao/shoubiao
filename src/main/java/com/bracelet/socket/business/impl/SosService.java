@@ -106,7 +106,7 @@ public class SosService extends AbstractBizService {
 		SocketBaseDto dto = new SocketBaseDto();
 		dto.setType(jsonObject.getIntValue("type"));
 		dto.setNo(jsonObject.getString("no"));
-		dto.setTimestamp(new Date().getTime());
+		dto.setTimestamp(System.currentTimeMillis());
 
 		dto.setStatus(0);
 		return dto;

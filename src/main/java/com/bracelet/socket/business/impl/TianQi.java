@@ -103,7 +103,7 @@ public class TianQi extends AbstractBizService {
 						locationService.insertUdInfo(imei, 1, lat, lng, status, time,
 								locationStyle);
 
-						String locationValue=lat+","+lng+",1"+","+new Date().getTime();
+						String locationValue=lat+","+lng+",1"+","+System.currentTimeMillis();
 						limitCache.addKey(imei+"_save",locationValue); 
 						limitCache.addKey(imei+"_last",locationValue); 
 					}
@@ -157,7 +157,7 @@ public class TianQi extends AbstractBizService {
 							lat = arr[1];
 						    lng = arr[0];
 							
-						    String redisValue = lat+","+lng+",2"+","+new Date().getTime();
+						    String redisValue = lat+","+lng+",2"+","+System.currentTimeMillis();
 						    
 							String locationLastInfo = limitCache.getRedisKeyValue(imei+"_save");
 							if (!StringUtil.isEmpty(locationLastInfo)) {
@@ -170,7 +170,7 @@ public class TianQi extends AbstractBizService {
 								Long timeStampSave = Long.valueOf(locationShuzu[3]);
 							
 									
-								if (((timeStampSave - new Date().getTime()) / (60 * 1000)) >= 3) {
+								if ((( System.currentTimeMillis() - timeStampSave ) / (60 * 1000)) >= 3) {
 									locationService.insertUdInfo(imei, 2, lat, lng, status, time, locationStyle);
 									limitCache.addKey(imei+"_save",redisValue); 
 									
@@ -231,7 +231,7 @@ public class TianQi extends AbstractBizService {
 								lat = arr[1];
 							    lng = arr[0];
 							    
-							    String redisValue = lat+","+lng+",3"+","+new Date().getTime();
+							    String redisValue = lat+","+lng+",3"+","+System.currentTimeMillis();
 								
 							    String locationLastInfo = limitCache.getRedisKeyValue(imei+"_save");
 								if (!StringUtil.isEmpty(locationLastInfo)) {
@@ -243,10 +243,9 @@ public class TianQi extends AbstractBizService {
 									String latSave = locationShuzu[0];
 									String lngSave = locationShuzu[1];
 									
-									if (((timeStampSave - new Date().getTime()) / (60 * 1000)) >= 3) {
+									if (((System.currentTimeMillis() - timeStampSave) / (60 * 1000)) >= 3) {
 										locationService.insertUdInfo(imei, 3, lat, lng, status, time, locationStyle);
 										limitCache.addKey(imei+"_save",redisValue); 
-										
 									} else {
 										double calcDistance = Utils.calcDistance(Double.valueOf(lngSave),
 												Double.valueOf(latSave), Double.valueOf(lng),

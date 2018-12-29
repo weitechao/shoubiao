@@ -20,6 +20,7 @@ import com.bracelet.entity.WatchDeviceBak;
 import com.bracelet.exception.BizException;
 import com.bracelet.redis.LimitCache;
 import com.bracelet.util.RespCode;
+import com.bracelet.util.StringUtil;
 import com.bracelet.util.Utils;
 import com.bracelet.service.IDeviceService;
 import com.bracelet.service.ILocationService;
@@ -70,7 +71,7 @@ public class LoginService implements IService {
 
 		String haveValue = limitCache.getRedisKeyValue(imei + "_have");
 
-		if (haveValue == null || "".equals(haveValue)) {
+		if (StringUtil.isEmpty(haveValue)) {
 			WatchDeviceBak watchd = ideviceService.getDeviceBakInfo(imei);
 			if (watchd != null) {
 
@@ -175,7 +176,7 @@ public class LoginService implements IService {
 		SocketBaseDto dto = new SocketBaseDto();
 		dto.setType(jsonObject.getIntValue("type"));
 		dto.setNo(jsonObject.getString("no"));
-		dto.setTimestamp(new Date().getTime());
+		dto.setTimestamp(System.currentTimeMillis());
 		dto.setStatus(0);
 		return dto;
 	}

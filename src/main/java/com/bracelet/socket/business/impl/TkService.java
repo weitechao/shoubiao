@@ -46,7 +46,7 @@ public class TkService extends AbstractBizService {
 
 			logger.info("[voiceName]=" + voiceName);
 			if (voiceName == null || "".equals(voiceName)) {
-				voiceName = imei + "_" + new Date().getTime() + ".amr";
+				voiceName = imei + "_" + System.currentTimeMillis() + ".amr";
 			} else {
 				voiceName = imei + "_" + voiceName;
 			}

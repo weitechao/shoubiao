@@ -1,5 +1,6 @@
 package com.bracelet.redis;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -103,4 +104,18 @@ public class LimitCache extends BasicRedisSupport {
 		returnResource(jedis);
 		return flag;
 	}
+	
+	
+	// 增加token key value
+	public void addToken(String token, String userId) {
+		Jedis jedis = getJedis();
+		if(jedis.exists(userId)){
+			String oldtoken = jedis.get(userId);
+			jedis.del(oldtoken);
+		}
+		jedis.set(token, userId);
+		jedis.set(userId, token);
+		returnResource(jedis);
+	}
+	
 }

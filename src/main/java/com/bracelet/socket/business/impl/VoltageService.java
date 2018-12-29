@@ -70,7 +70,7 @@ public class VoltageService implements IService {
 		FingerDto sosDto = new FingerDto();
 		sosDto.setName(bindd.getName());
 		sosDto.setImei(imei);
-		sosDto.setTimestamp(new Date().getTime());
+		sosDto.setTimestamp(System.currentTimeMillis());
 		sosDto.setContent(notifyContent); 
 		String target = tokenInfoService.getTokenByUserId(bindd.getUser_id());
 		String title = "低电量提示";
@@ -100,7 +100,7 @@ public class VoltageService implements IService {
 		 * 
 		 * String notifyContent = "电量小于百分之10，请及时充电!"; FingerDto sosDto = new
 		 * FingerDto(); sosDto.setName(info.getName()); sosDto.setImei(imei);
-		 * sosDto.setTimestamp(new Date().getTime());
+		 * sosDto.setTimestamp(System.currentTimeMillis());
 		 * sosDto.setContent(notifyContent); String target =
 		 * tokenInfoService.getTokenByUserId(userId); String title = "低电量提示";
 		 * String content = JSON.toJSONString(sosDto); PushUtil.push(target,
@@ -116,7 +116,7 @@ public class VoltageService implements IService {
 		SocketBaseDto dto = new SocketBaseDto();
 		dto.setType(jsonObject.getIntValue("type"));
 		dto.setNo(no);
-		dto.setTimestamp(new Date().getTime());
+		dto.setTimestamp(System.currentTimeMillis());
 		dto.setStatus(0);
 
 		return dto;

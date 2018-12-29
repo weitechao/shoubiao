@@ -208,7 +208,7 @@ public class Utils {
 	}
 
 	public static Timestamp getCurrentTimestamp() {
-		return new Timestamp(new Date().getTime());
+		return new Timestamp(System.currentTimeMillis());
 	}
 
 	/**
