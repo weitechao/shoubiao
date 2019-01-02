@@ -5,11 +5,16 @@ import io.netty.channel.Channel;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.LoggerFactory;
+
 import com.bracelet.dto.SocketLoginDto;
 import com.bracelet.dto.TianQiLatest;
 import com.bracelet.dto.WatchLatestLocation;
 
+import ch.qos.logback.classic.Logger;
+
 public class ChannelMap {
+	
 	private ChannelMap() {
 	}
 
@@ -23,8 +28,6 @@ public class ChannelMap {
 	 */
 	private static Map<Channel, SocketLoginDto> channelMap3 = new HashMap<Channel, SocketLoginDto>();
 
-	/*private static Map<String, WatchLatestLocation> channelMap4 = new HashMap<String, WatchLatestLocation>();*/
-
 	private static Map<String, TianQiLatest> channelMap5 = new HashMap<String, TianQiLatest>();
 
 	private static Map<String, byte[]> byteMap = new HashMap<String, byte[]>();
@@ -32,15 +35,14 @@ public class ChannelMap {
 	private static Map<String, Integer> IntegerMap = new HashMap<String, Integer>();
 
 	private static Map<String, String> contentMap = new HashMap<String, String>();
-	
-	/*private static Map<String, String> energyMap = new HashMap<String, String>();*/
 
 	/**
 	 * 
 	 * add channelInfo
 	 * 
 	 * @param imei
-	 * 			@param dto @return void @exception
+	 * @param dto
+	 * 			@return void @exception
 	 */
 	public static void addChannel(String imei, SocketLoginDto dto) {
 		channelMap2.put(imei, dto);
@@ -68,20 +70,23 @@ public class ChannelMap {
 
 	public static void removeChannel(Channel channel) {
 		SocketLoginDto dto = channelMap3.get(channel);
+		
 		if (dto != null) {
-			channelMap2.remove(dto.getImei());
+			String removeAddress = channel.remoteAddress() + "";
+			String imei = dto.getImei();
+			SocketLoginDto socketLoginDto = getChannel(imei);
+			if (socketLoginDto != null ) {
+				String MapHaveAddress = socketLoginDto.getChannel().remoteAddress() + "";
+				System.out.println("remove connect  MapHaveAddress:" + MapHaveAddress);
+				if (MapHaveAddress.equals(removeAddress)) {
+					channelMap2.remove(imei);
+				}else{
+					System.out.println("remove connect  MapHaveAddress 不同:" + MapHaveAddress);
+				}
+			}
 		}
-
 		channelMap3.remove(channel);
 	}
-
-	/*public static void addlocation(String imei, WatchLatestLocation dto) {
-		channelMap4.put(imei, dto);
-	}
-
-	public static WatchLatestLocation getlocation(String imei) {
-		return channelMap4.get(imei);
-	}*/
 
 	public static void addCityQianQi(String city, TianQiLatest dto) {
 		channelMap5.put(city, dto);
@@ -98,8 +103,7 @@ public class ChannelMap {
 	public static String getContent(String imei) {
 		return contentMap.get(imei);
 	}
-	
-	
+
 	public static void removeContent(String imei) {
 		contentMap.remove(imei);
 	}
@@ -111,11 +115,10 @@ public class ChannelMap {
 	public static byte[] getByte(String imei) {
 		return byteMap.get(imei);
 	}
-	
+
 	public static void removeByte(String imei) {
 		byteMap.remove(imei);
 	}
-	
 
 	public static void addInteger(String imei, Integer cout) {
 		IntegerMap.put(imei, cout);
@@ -124,23 +127,22 @@ public class ChannelMap {
 	public static Integer getInteger(String imei) {
 		return IntegerMap.get(imei);
 	}
+
 	public static void removeInteger(String imei) {
 		IntegerMap.remove(imei);
 	}
-	
+
 	public static void removeAll(String remoteAddress) {
-		IntegerMap.remove(remoteAddress+"_len");
-		byteMap.remove(remoteAddress+"_byte");
-		contentMap.remove(remoteAddress+"_voice");
+		IntegerMap.remove(remoteAddress + "_len");
+		byteMap.remove(remoteAddress + "_byte");
+		contentMap.remove(remoteAddress + "_voice");
 	}
-	
-	
-	/*public static void addEnergy(String imei, String energy) {
-		energyMap.put(imei, energy);
-	}
-	
-	public static void getEnergy(String imei) {
-		energyMap.get(imei);
-	}*/
+
+	/*
+	 * public static void addEnergy(String imei, String energy) {
+	 * energyMap.put(imei, energy); }
+	 * 
+	 * public static void getEnergy(String imei) { energyMap.get(imei); }
+	 */
 
 }
