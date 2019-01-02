@@ -21,9 +21,9 @@ public class SocketServer implements InitializingBean, DisposableBean{
 	private EventLoopGroup workerGroup = null;
 	
 	 /**用于分配处理业务线程的线程组个数 */  
-    protected static final int BIZGROUPSIZE = Runtime.getRuntime().availableProcessors()*2; //默认  
+   // protected static final int BIZGROUPSIZE = Runtime.getRuntime().availableProcessors()*2; //默认  
     /** 业务出现线程大小*/  
-    protected static final int BIZTHREADSIZE = 4;  
+    //protected static final int BIZTHREADSIZE = 4;  
 	
 
 	@Autowired
@@ -35,14 +35,15 @@ public class SocketServer implements InitializingBean, DisposableBean{
 		 * BossGroup和WorkerGroup都是NioEventLoopGroup，BossGroup用来处理nio的Accept，Worker处理nio的Read和Write事件
 		 * */
 		
-		bossGroup = new NioEventLoopGroup(BIZGROUPSIZE);
-		workerGroup = new NioEventLoopGroup(BIZTHREADSIZE);
+		bossGroup = new NioEventLoopGroup(1);
+		workerGroup = new NioEventLoopGroup();
 		ServerBootstrap b = new ServerBootstrap();
 		b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class).childHandler(serverChannelInitializer)
 				.option(ChannelOption.SO_BACKLOG, 128).
-				option(ChannelOption.SO_SNDBUF, 1024).
-				option(ChannelOption.SO_RCVBUF, 1024).
 				childOption(ChannelOption.SO_KEEPALIVE, true);
+				/*option(ChannelOption.SO_SNDBUF, 1024).
+				option(ChannelOption.SO_RCVBUF, 1024).*/
+				
 		/*
 		 * option(ChannelOption.TCP_NODELAY, true)
 				.option(ChannelOption.SO_REUSEADDR, true).
