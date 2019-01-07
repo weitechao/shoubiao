@@ -327,7 +327,7 @@ public class WatchAppUserController extends BaseController {
 				}
 
 				dataMap.put("UserId", "0");
-				dataMap.put("DeviceModelID", "10000100");
+				dataMap.put("DeviceModelID", "0101010");
 				dataMap.put("Firmware", "0");
 				dataMap.put("Gender", 0);
 				dataMap.put("Grade", 0);
@@ -462,7 +462,7 @@ public class WatchAppUserController extends BaseController {
 					}
 
 					dataMap.put("UserId", "0");
-					dataMap.put("DeviceModelID", "10000100");
+					dataMap.put("DeviceModelID", "0101010");
 					dataMap.put("Firmware", "0");
 					dataMap.put("Gender", 0);
 					dataMap.put("Grade", 0);

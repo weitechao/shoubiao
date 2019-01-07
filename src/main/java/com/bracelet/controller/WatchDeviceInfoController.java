@@ -84,14 +84,20 @@ public class WatchDeviceInfoController extends BaseController {
 			bb.put("SmsBalanceKey", 101);
 			bb.put("DeviceID", watch.getId());
 			bb.put("UserId", userId);
-			bb.put("DeviceModelID", "");
+			bb.put("DeviceModelID", "0101010");
 			bb.put("Firmware", "");
 			bb.put("HireExpireDate", "");
 			bb.put("HireStartDate", "");
 			bb.put("IsGuard", "");
 			bb.put("Password", "");
 			bb.put("Gender", watch.getSex()+"");
-			bb.put("Grade", watch.getSchool_age()+"");
+			bb.put("Grade", 0);
+			
+			if(!StringUtils.isAllEmpty(watch.getSchool_age())){
+				bb.put("Grade", watch.getSchool_age());
+			}
+			
+			
 			bb.put("PhoneNumber", watch.getPhone()+"");
 			bb.put("PhoneCornet", watch.getShort_number()+"");
 			bb.put("Photo", watch.getHead() + "");
@@ -181,7 +187,7 @@ public class WatchDeviceInfoController extends BaseController {
 				bb.put("SmsBalanceKey", 101);
 				bb.put("DeviceID", watchh.getId());
 				bb.put("UserId", userId);
-				bb.put("DeviceModelID", "");
+				bb.put("DeviceModelID", "0101010");
 				bb.put("Firmware", "");
 				bb.put("Gender", 0);
 				bb.put("Grade", 0);
@@ -192,7 +198,11 @@ public class WatchDeviceInfoController extends BaseController {
 				bb.put("PhoneNumber", "");
 				
 				bb.put("Gender", watchh.getSex()+"");
-				bb.put("Grade", watchh.getSchool_age()+"");
+				
+				if(!StringUtils.isAllEmpty(watchh.getSchool_age())){
+					bb.put("Grade", watchh.getSchool_age());
+				}
+				
 				bb.put("PhoneNumber", watchh.getPhone()+"");
 				bb.put("PhoneCornet", watchh.getShort_number()+"");
 				bb.put("Photo", watchh.getHead() + "");

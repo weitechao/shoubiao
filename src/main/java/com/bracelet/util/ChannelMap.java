@@ -14,7 +14,7 @@ import com.bracelet.dto.WatchLatestLocation;
 import ch.qos.logback.classic.Logger;
 
 public class ChannelMap {
-	
+
 	private ChannelMap() {
 	}
 
@@ -42,7 +42,7 @@ public class ChannelMap {
 	 * 
 	 * @param imei
 	 * @param dto
-	 * 			@return void @exception
+	 * @return void @exception
 	 */
 	public static void addChannel(String imei, SocketLoginDto dto) {
 		channelMap2.put(imei, dto);
@@ -70,18 +70,12 @@ public class ChannelMap {
 
 	public static void removeChannel(Channel channel) {
 		SocketLoginDto dto = channelMap3.get(channel);
-		
 		if (dto != null) {
-			String removeAddress = channel.remoteAddress() + "";
 			String imei = dto.getImei();
 			SocketLoginDto socketLoginDto = getChannel(imei);
-			if (socketLoginDto != null ) {
-				String MapHaveAddress = socketLoginDto.getChannel().remoteAddress() + "";
-				System.out.println("remove connect  MapHaveAddress:" + MapHaveAddress);
-				if (MapHaveAddress.equals(removeAddress)) {
+			if (socketLoginDto != null) {
+				if ((socketLoginDto.getChannel().remoteAddress() + "").equals(channel.remoteAddress() + "")) {
 					channelMap2.remove(imei);
-				}else{
-					System.out.println("remove connect  MapHaveAddress 不同:" + MapHaveAddress);
 				}
 			}
 		}
