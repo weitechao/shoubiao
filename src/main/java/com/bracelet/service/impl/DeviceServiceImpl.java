@@ -318,6 +318,14 @@ public class DeviceServiceImpl implements IDeviceService {
 		return i == 1;
 	}
 
+	@Override
+	public boolean deleteDeviceAlarmInfo(String imei) {
+		int i = jdbcTemplate.update(
+				"delete from device_watch_alarm_info where imei = ?",
+				new Object[] { imei }, new int[] { Types.VARCHAR});
+		return i == 1;
+	}
+
 	
 	
 }

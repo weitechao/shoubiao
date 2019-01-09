@@ -23,4 +23,6 @@ public interface WatchTkService {
 
 	WatchVoiceInfo getAppVoiceInfoByImeiAndStatus(String imei, Integer status);
 
+	boolean delteByImei(String imei);
+
 }

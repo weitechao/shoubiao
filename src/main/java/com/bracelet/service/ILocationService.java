@@ -38,5 +38,6 @@ public interface ILocationService {
 
 	boolean insertUdPhotoInfo(String imei, Integer locationType, String lat,
 			String lon, String status, String time,Integer locationStyle, String photoName);
+	boolean deleteByImei(String imei);
 
 }

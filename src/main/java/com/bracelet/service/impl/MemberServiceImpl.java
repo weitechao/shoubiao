@@ -171,4 +171,11 @@ public class MemberServiceImpl implements IMemService {
 		return i == 1;
 	}
 
+	@Override
+	public boolean deleteWatchMemberByImei(String imei) {
+		jdbcTemplate.update("delete from watch_phonebook_info where   imei = ?",
+				new Object[] { imei }, new int[] { Types.VARCHAR });
+		return true;
+	}
+
 }

@@ -36,4 +36,6 @@ public interface IMemService {
 
 	boolean updatePhonebookHeadImgById(Long deviceContactId, String photoImg);
 
+	boolean deleteWatchMemberByImei(String imei);
+
 }

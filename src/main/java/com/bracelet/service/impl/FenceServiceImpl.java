@@ -215,4 +215,12 @@ public class FenceServiceImpl implements IFenceService {
 		return list;
 	}
 
+	@Override
+	public boolean deleteWatchFenceByImei(String imei) {
+		int i = jdbcTemplate.update(
+				"delete from watch_fence where imei = ? ",
+				new Object[] { imei }, new int[] { Types.VARCHAR});
+		return i == 1;
+	}
+
 }

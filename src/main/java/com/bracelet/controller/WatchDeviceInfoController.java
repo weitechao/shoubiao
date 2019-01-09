@@ -84,7 +84,7 @@ public class WatchDeviceInfoController extends BaseController {
 			bb.put("SmsBalanceKey", 101);
 			bb.put("DeviceID", watch.getId());
 			bb.put("UserId", userId);
-			bb.put("DeviceModelID", "0101010");
+			bb.put("DeviceModelID", "10000100");
 			bb.put("Firmware", "");
 			bb.put("HireExpireDate", "");
 			bb.put("HireStartDate", "");
@@ -187,7 +187,7 @@ public class WatchDeviceInfoController extends BaseController {
 				bb.put("SmsBalanceKey", 101);
 				bb.put("DeviceID", watchh.getId());
 				bb.put("UserId", userId);
-				bb.put("DeviceModelID", "0101010");
+				bb.put("DeviceModelID", "10000100");
 				bb.put("Firmware", "");
 				bb.put("Gender", 0);
 				bb.put("Grade", 0);

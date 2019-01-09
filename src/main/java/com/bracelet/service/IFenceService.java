@@ -39,4 +39,6 @@ public interface IFenceService {
 	@DataSourceChange(slave = true)
 	List<Fence> getWatchFenceList(String imei);
 
+	boolean deleteWatchFenceByImei(String imei);
+
 }

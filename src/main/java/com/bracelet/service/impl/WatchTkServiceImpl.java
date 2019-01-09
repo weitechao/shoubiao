@@ -94,4 +94,11 @@ public class WatchTkServiceImpl implements WatchTkService {
 		return null;
 	}
 
+	@Override
+	public boolean delteByImei(String imei) {
+		int i = jdbcTemplate.update("delete from watch_voice_info where sender = ?",
+				new Object[] { imei}, new int[] { Types.VARCHAR });
+		return i == 1;
+	}
+
 }

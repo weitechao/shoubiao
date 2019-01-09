@@ -207,4 +207,24 @@ public class LocationServiceImpl implements ILocationService {
 						Types.TIMESTAMP, Types.INTEGER, Types.VARCHAR });
 		return i == 1;
 	}
+
+	@Override
+	public boolean deleteByImei(String imei) {
+		
+		String table = "location_watchinfo";
+
+		Integer count = Integer.valueOf(imei.substring(imei.length() - 1, imei.length())) % 4;
+		if (count == 1) {
+			table = "location_1_watchinfo";
+		} else if (count == 2) {
+			table = "location_2_watchinfo";
+		} else if (count == 3) {
+			table = "location_3_watchinfo";
+		}
+		
+		
+		jdbcTemplate.update("delete from "+ table + "   where   imei = ?",
+				new Object[] { imei }, new int[] { Types.VARCHAR });
+		return true;
+	}
 }

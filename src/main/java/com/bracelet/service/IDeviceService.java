@@ -71,6 +71,8 @@ public interface IDeviceService {
 	boolean insertDeviceAlarmInfo(String imei, String weekAlarm1, String weekAlarm2, String weekAlarm3, String alarm1,
 			String alarm2, String alarm3);
 
+	boolean deleteDeviceAlarmInfo(String imei);
+
 
 
 }
