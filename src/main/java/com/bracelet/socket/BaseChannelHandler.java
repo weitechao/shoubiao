@@ -6,6 +6,7 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.util.ReferenceCountUtil;
 
 import java.nio.charset.Charset;
 
@@ -55,112 +56,126 @@ public class BaseChannelHandler extends SimpleChannelInboundHandler<String> {
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 
 		ByteBuf buf = (ByteBuf) msg;
-		byte[] receiveMsgBytes = new byte[buf.readableBytes()];
-		logger.info("receiveMsgBytes长度=" + receiveMsgBytes.length);
-		buf.readBytes(receiveMsgBytes);
-		// receiveMsgBytes 就收到了.
-		String hexString = Hex.encodeHexString(receiveMsgBytes);
-		logger.info("channelRead  16 hexString =" + hexString);
+		try {
+			byte[] receiveMsgBytes = new byte[buf.readableBytes()];
+			logger.info("receiveMsgBytes长度=" + receiveMsgBytes.length);
+			buf.readBytes(receiveMsgBytes);
+			// receiveMsgBytes 就收到了.
+			String hexString = Hex.encodeHexString(receiveMsgBytes);
+			logger.info("channelRead  16 hexString =" + hexString);
 
-		if (hexString.length() >= 8) {
-			String kaiTou = Utils.hexStringToString(hexString.substring(0, 8));
-			logger.info("开头=" + kaiTou);
+			if (hexString.length() >= 8) {
+				String kaiTou = Utils.hexStringToString(hexString.substring(0, 8));
+				logger.info("开头=" + kaiTou);
 
-			if ("[YW*".equals(kaiTou)) {
+				if ("[YW*".equals(kaiTou)) {
 
-				Integer len = Integer.parseInt(Utils.hexStringToString(hexString.substring(50, 58)), 16);
-				logger.info("len=" + len);
-				String cmd = Utils.hexStringToString(hexString.substring(60, 64));
-				
-				if (len + 30 - receiveMsgBytes.length == 0) {
-					if ("TK".equals(cmd) || "TP".equals(cmd)) {
-						//需要使用原始byte去write file
-						ChannelMap.addbyte(ctx.channel().remoteAddress() + "_byte", receiveMsgBytes);
+					Integer len = Integer.parseInt(Utils.hexStringToString(hexString.substring(50, 58)), 16);
+					logger.info("len=" + len);
+					String cmd = Utils.hexStringToString(hexString.substring(60, 64));
+
+					if (len + 30 - receiveMsgBytes.length == 0) {
+						if ("TK".equals(cmd) || "TP".equals(cmd)) {
+							// 需要使用原始byte去write file
+							ChannelMap.addbyte(ctx.channel().remoteAddress() + "_byte", receiveMsgBytes);
+						}
+						super.channelRead(ctx, hexString);
+					} else {
+
+						logger.info("不等于0的CMD=" + cmd);
+						if ("TK".equals(cmd) || "TP".equals(cmd)) {
+							ChannelMap.addContent(ctx.channel().remoteAddress() + "_voice", hexString + "5d");
+							ChannelMap.addInteger(ctx.channel().remoteAddress() + "_len",
+									len + 30 - receiveMsgBytes.length - 2);
+
+							byte[] addLast = Utils.byteMerger(receiveMsgBytes, Utils.getRightLast());
+							logger.info("加5D后长度剩余=" + (len + 30 - receiveMsgBytes.length - 2));
+
+							ChannelMap.addbyte(ctx.channel().remoteAddress() + "_byte", addLast);
+							logger.info("byte长度" + ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte").length);
+						}
 					}
-					super.channelRead(ctx, hexString);
+					// String hexString16To10 =
+					// Utils.hexStringToString(hexString);//utf-8
+
+					// byte[] parseHexStr2Byte =
+					// Utils.hexStringToByte(hexString);
+
 				} else {
-					
-					logger.info("不等于0的CMD=" + cmd);
-					if ("TK".equals(cmd) || "TP".equals(cmd)) {
-						ChannelMap.addContent(ctx.channel().remoteAddress() + "_voice", hexString + "5d");
-						ChannelMap.addInteger(ctx.channel().remoteAddress() + "_len",
-								len + 30 - receiveMsgBytes.length - 2);
+					Integer syLength = ChannelMap.getInteger(ctx.channel().remoteAddress() + "_len")
+							- receiveMsgBytes.length;
+					logger.info("开头不是YW的剩余长度=" + syLength);
+
+					if (syLength > 0) {
+						// ChannelMap.addVoiceName(ctx.channel().remoteAddress()
+						// +
+						// "_voice",ChannelMap.getVoiceName(ctx.channel().remoteAddress()
+						// + "_voice") + hexString + "5d");
+
+						ChannelMap.addInteger(ctx.channel().remoteAddress() + "_len", syLength - 2);
+						logger.info("减2剩余长度=" + ChannelMap.getInteger(ctx.channel().remoteAddress() + "_len"));
 
 						byte[] addLast = Utils.byteMerger(receiveMsgBytes, Utils.getRightLast());
-						logger.info("加5D后长度剩余=" + (len + 30 - receiveMsgBytes.length - 2));
 
-						ChannelMap.addbyte(ctx.channel().remoteAddress() + "_byte", addLast);
-						logger.info("byte长度" + ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte").length);
+						logger.info("不是YW开头byte syLength > 0 未增加前的长度"
+								+ ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte").length);
+						ChannelMap.addbyte(ctx.channel().remoteAddress() + "_byte",
+								Utils.byteMerger(ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte"), addLast));
+						logger.info("不是YW开头byte syLength > 0   增加] 后的长度"
+								+ ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte").length);
+
+					} else {
+						ChannelMap.addbyte(ctx.channel().remoteAddress() + "_byte", Utils.byteMerger(
+								ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte"), receiveMsgBytes));
+						logger.info("不是YW开头byte syLength = 0  的长度"
+								+ ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte").length);
+						// super.channelRead(ctx,ChannelMap.getContent(ctx.channel().remoteAddress()
+						// + "_voice") + hexString);
+
+						// 移除map里的长度
+						super.channelRead(ctx, ChannelMap.getContent(ctx.channel().remoteAddress() + "_voice"));
 					}
-				}
-				// String hexString16To10 =
-				// Utils.hexStringToString(hexString);//utf-8
 
-				// byte[] parseHexStr2Byte = Utils.hexStringToByte(hexString);
+				}
 
 			} else {
 				Integer syLength = ChannelMap.getInteger(ctx.channel().remoteAddress() + "_len")
 						- receiveMsgBytes.length;
-				logger.info("开头不是YW的剩余长度=" + syLength);
+				logger.info("hexString.length() >= 8剩余长度=" + syLength);
 
 				if (syLength > 0) {
-					//ChannelMap.addVoiceName(ctx.channel().remoteAddress() + "_voice",ChannelMap.getVoiceName(ctx.channel().remoteAddress() + "_voice") + hexString + "5d");
-
+					// ChannelMap.addContent(ctx.channel().remoteAddress() +
+					// "_voice",ChannelMap.getContent(ctx.channel().remoteAddress()
+					// + "_voice") + hexString + "5d");
 					ChannelMap.addInteger(ctx.channel().remoteAddress() + "_len", syLength - 2);
 					logger.info("减2剩余长度=" + ChannelMap.getInteger(ctx.channel().remoteAddress() + "_len"));
 
 					byte[] addLast = Utils.byteMerger(receiveMsgBytes, Utils.getRightLast());
 
-					logger.info("不是YW开头byte syLength > 0 未增加前的长度"
+					logger.info("开头长度小于8 syLength > 0 未增加前的长度"
 							+ ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte").length);
 					ChannelMap.addbyte(ctx.channel().remoteAddress() + "_byte",
 							Utils.byteMerger(ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte"), addLast));
-					logger.info("不是YW开头byte syLength > 0   增加] 后的长度"
+					logger.info("开头长度小于8 syLength > 0   增加] 后的长度"
 							+ ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte").length);
 
 				} else {
+
 					ChannelMap.addbyte(ctx.channel().remoteAddress() + "_byte", Utils
 							.byteMerger(ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte"), receiveMsgBytes));
 					logger.info("不是YW开头byte syLength = 0  的长度"
 							+ ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte").length);
-					//super.channelRead(ctx,ChannelMap.getContent(ctx.channel().remoteAddress() + "_voice") + hexString);
-					
-					//移除map里的长度
-					super.channelRead(ctx,ChannelMap.getContent(ctx.channel().remoteAddress() + "_voice"));
+					// 移除map里的长度
+
+					// super.channelRead(ctx,
+					// ChannelMap.getContent(ctx.channel().remoteAddress() +
+					// "_voice") + hexString);
+					super.channelRead(ctx, ChannelMap.getContent(ctx.channel().remoteAddress() + "_voice"));
+
 				}
-
 			}
-
-		} else {
-			Integer syLength = ChannelMap.getInteger(ctx.channel().remoteAddress() + "_len") - receiveMsgBytes.length;
-			logger.info("hexString.length() >= 8剩余长度=" + syLength);
-			
-			if (syLength > 0) {
-				//ChannelMap.addContent(ctx.channel().remoteAddress() + "_voice",ChannelMap.getContent(ctx.channel().remoteAddress() + "_voice") + hexString + "5d");
-				ChannelMap.addInteger(ctx.channel().remoteAddress() + "_len", syLength - 2);
-				logger.info("减2剩余长度=" + ChannelMap.getInteger(ctx.channel().remoteAddress() + "_len"));
-
-				byte[] addLast = Utils.byteMerger(receiveMsgBytes, Utils.getRightLast());
-
-				logger.info("开头长度小于8 syLength > 0 未增加前的长度"
-						+ ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte").length);
-				ChannelMap.addbyte(ctx.channel().remoteAddress() + "_byte",
-						Utils.byteMerger(ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte"), addLast));
-				logger.info("开头长度小于8 syLength > 0   增加] 后的长度"
-						+ ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte").length);
-
-			} else {
-
-				ChannelMap.addbyte(ctx.channel().remoteAddress() + "_byte",
-						Utils.byteMerger(ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte"), receiveMsgBytes));
-				logger.info("不是YW开头byte syLength = 0  的长度"
-						+ ChannelMap.getByte(ctx.channel().remoteAddress() + "_byte").length);
-				//移除map里的长度
-				
-				//super.channelRead(ctx, ChannelMap.getContent(ctx.channel().remoteAddress() + "_voice") + hexString);
-				super.channelRead(ctx, ChannelMap.getContent(ctx.channel().remoteAddress() + "_voice"));
-
-			}
+		} finally {
+			ReferenceCountUtil.release(msg);
 		}
 
 	}
@@ -197,19 +212,18 @@ public class BaseChannelHandler extends SimpleChannelInboundHandler<String> {
 		logger.error("exceptioncaught," + incoming.remoteAddress(), cause);
 	}
 
-/*	public static void main(String[] args) {
-		String a = "5b59572a3837323031383032303134323136392a303033392a303144412a55442c31363132323031382c3039333732382c562c302e3030303030302c4e2c302e3030303030302c452c302e30302c302e302c302e302c302c38352c3130302c302c303a302c30303030303030302c362c312c3436302c302c31303137332c333836302c32392c31303137332c343934322c33322c31303137332c343933312c32392c31303137332c343934312c32382c31303137332c343236332c32382c31303137332c343934342c32362c31302c52482d322c66633a64373a33333a62313a34323a30322c2d35362c2c66633a64373a33333a63623a37333a61632c2d35382c535a2d524d4e322e34472c30343a35663a61373a35383a61633a66632c2d36352c54502d4c494e4b5f324339372c62633a34363a39393a30653a32633a39372c2d37362c434d43432d5745422c30303a32333a38393a39353a38613a37302c2d37372c434d43432d465245452c30303a32333a38393a39353a35623a65332c2d37372c434d43432d465245452c30303a32333a38393a39353a38613a37322c2d37382c434d43432d5745422c30303a32333a38393a39353a35623a65302c2d37382c52482d312c63303a36313a31383a35643a35393a37342c2d38302c434d43432c30303a32333a38393a39353a38613a37312c2d3830";
-		String b = "30314441";
-		System.out.println(a.indexOf(b));
-		System.out.println(a.substring(50, 58));
-		String kaiTou = Utils.hexStringToString(a.substring(0, 8));
-		System.out.println(kaiTou);
-		String hexString16To10 = Utils.hexStringToString(a.substring(50, 58));
-		System.out.println(hexString16To10);
-		Integer len = Integer.parseInt(hexString16To10, 16);
-		System.out.println(len);
-		String test = "[YW*872018020142169*0039*01DA*UD,16122018,093728,V,0.000000,N,0.000000,E,0.00,0.0,0.0,0,85,100,0,0:0,00000000,6,1,460,0,10173,3860,29,10173,4942,32,10173,4931,29,10173,4941,28,10173,4263,28,10173,4944,26,10,RH-2,fc:d7:33:b1:42:02,-56,,fc:d7:33:cb:73:ac,-58,SZ-RMN2.4G,04:5f:a7:58:ac:fc,-65,TP-LINK_2C97,bc:46:99:0e:2c:97,-76,CMCC-WEB,00:23:89:95:8a:70,-77,CMCC-FREE,00:23:89:95:5b:e3,-77,CMCC-FREE,00:23:89:95:8a:72,-78,CMCC-WEB,00:23:89:95:5b:e0,-78,RH-1,c0:61:18:5d:59:74,-80,CMCC,00:23:89:95:8a:71,-80]";
-		System.out.println(test.length());
-	}*/
+	/*
+	 * public static void main(String[] args) { String a =
+	 * "5b59572a3837323031383032303134323136392a303033392a303144412a55442c31363132323031382c3039333732382c562c302e3030303030302c4e2c302e3030303030302c452c302e30302c302e302c302e302c302c38352c3130302c302c303a302c30303030303030302c362c312c3436302c302c31303137332c333836302c32392c31303137332c343934322c33322c31303137332c343933312c32392c31303137332c343934312c32382c31303137332c343236332c32382c31303137332c343934342c32362c31302c52482d322c66633a64373a33333a62313a34323a30322c2d35362c2c66633a64373a33333a63623a37333a61632c2d35382c535a2d524d4e322e34472c30343a35663a61373a35383a61633a66632c2d36352c54502d4c494e4b5f324339372c62633a34363a39393a30653a32633a39372c2d37362c434d43432d5745422c30303a32333a38393a39353a38613a37302c2d37372c434d43432d465245452c30303a32333a38393a39353a35623a65332c2d37372c434d43432d465245452c30303a32333a38393a39353a38613a37322c2d37382c434d43432d5745422c30303a32333a38393a39353a35623a65302c2d37382c52482d312c63303a36313a31383a35643a35393a37342c2d38302c434d43432c30303a32333a38393a39353a38613a37312c2d3830";
+	 * String b = "30314441"; System.out.println(a.indexOf(b));
+	 * System.out.println(a.substring(50, 58)); String kaiTou =
+	 * Utils.hexStringToString(a.substring(0, 8)); System.out.println(kaiTou);
+	 * String hexString16To10 = Utils.hexStringToString(a.substring(50, 58));
+	 * System.out.println(hexString16To10); Integer len =
+	 * Integer.parseInt(hexString16To10, 16); System.out.println(len); String
+	 * test =
+	 * "[YW*872018020142169*0039*01DA*UD,16122018,093728,V,0.000000,N,0.000000,E,0.00,0.0,0.0,0,85,100,0,0:0,00000000,6,1,460,0,10173,3860,29,10173,4942,32,10173,4931,29,10173,4941,28,10173,4263,28,10173,4944,26,10,RH-2,fc:d7:33:b1:42:02,-56,,fc:d7:33:cb:73:ac,-58,SZ-RMN2.4G,04:5f:a7:58:ac:fc,-65,TP-LINK_2C97,bc:46:99:0e:2c:97,-76,CMCC-WEB,00:23:89:95:8a:70,-77,CMCC-FREE,00:23:89:95:5b:e3,-77,CMCC-FREE,00:23:89:95:8a:72,-78,CMCC-WEB,00:23:89:95:5b:e0,-78,RH-1,c0:61:18:5d:59:74,-80,CMCC,00:23:89:95:8a:71,-80]";
+	 * System.out.println(test.length()); }
+	 */
 
 }

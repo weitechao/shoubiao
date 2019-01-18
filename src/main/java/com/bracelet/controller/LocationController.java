@@ -671,7 +671,7 @@ public class LocationController extends BaseController {
 		String locationLastInfo = limitCache.getRedisKeyValue(imei + "_last");
 		
 		if (!StringUtil.isEmpty(locationLastInfo)) {
-logger.info("查询最新定位从redis里拿="+imei);
+            logger.info("查询最新定位从redis里拿="+imei);
 			String[] locationShuzu = locationLastInfo.split(",");
 
 			Integer locationTypeSave = Integer.valueOf(locationShuzu[2]);
