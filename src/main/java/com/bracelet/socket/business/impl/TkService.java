@@ -4,6 +4,7 @@ import java.util.Date;
 
 import io.netty.channel.Channel;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.bracelet.dto.SocketBaseDto;
 import com.bracelet.dto.SocketLoginDto;
+import com.bracelet.entity.UserInfo;
 import com.bracelet.entity.WatchDevice;
 import com.bracelet.service.WatchTkService;
 import com.bracelet.util.ChannelMap;
@@ -88,15 +90,36 @@ public class TkService extends AbstractBizService {
 					jsonArray.add(dataMap);
 					push.put("NewList", jsonArray);
 					JSONArray jsonArray1 = new JSONArray();
-					JSONObject dataMap1 = new JSONObject();
-					jsonArray1.add(dataMap1);
+					/*JSONObject dataMap1 = new JSONObject();
+					jsonArray1.add(dataMap1);*/
 					push.put("DeviceState", jsonArray1);
 
 					JSONArray jsonArray2 = new JSONArray();
 					JSONObject dataMap2 = new JSONObject();
 					dataMap2.put("Type", 1);
 					dataMap2.put("DeviceID", deviceid);
-					dataMap2.put("voiceUrl", Utils.VOICE_URL + voiceName);
+					
+					
+					
+					//dataMap2.put("voiceUrl", Utils.VOICE_URL + voiceName);
+					JSONArray jsonArrayVoice = new JSONArray();					
+					JSONObject dataMapVoice = new JSONObject();
+					dataMapVoice.put("voiceUrl", "");
+					dataMapVoice.put("DeviceVoiceId",((int)((Math.random()*9+1)*10000))+"");
+					dataMapVoice.put("DeviceID", deviceid);
+					dataMapVoice.put("State", 1);
+					dataMapVoice.put("Type", 3);
+					dataMapVoice.put("MsgType", 0);
+					dataMapVoice.put("ObjectId", "");
+					dataMapVoice.put("Mark", "");
+					dataMapVoice.put("Path",Utils.VOICE_URL + voiceName);
+					dataMapVoice.put("Length", 2);
+					dataMapVoice.put("CreateTime", "");
+					dataMapVoice.put("UpdateTime", "");
+					jsonArrayVoice.add(dataMapVoice);
+					dataMap2.put("VoiceList", jsonArrayVoice);
+ 			        
+					
 					jsonArray2.add(dataMap2);
 					push.put("Notification", jsonArray2);
 

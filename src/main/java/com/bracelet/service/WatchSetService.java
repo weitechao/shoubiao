@@ -3,6 +3,7 @@ package com.bracelet.service;
 import com.bracelet.datasource.DataSourceChange;
 import com.bracelet.entity.LocationFrequency;
 import com.bracelet.entity.WatchDeviceSet;
+import com.bracelet.entity.WatchDialpad;
 
 public interface WatchSetService {
 
@@ -48,6 +49,10 @@ public interface WatchSetService {
 	boolean updateLocationFrequencyById(Long id, Integer f);
 
 	boolean insertLocationFrequency(String imei, Integer f);
+
+	boolean setdialpadbyImei(String imei, Integer type);
+
+	WatchDialpad getWatchDialpad(String imei);
 
 	
 }

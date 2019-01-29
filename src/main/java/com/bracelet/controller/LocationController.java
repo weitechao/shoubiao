@@ -294,7 +294,7 @@ public class LocationController extends BaseController {
 		re.setTimestamp(System.currentTimeMillis() / 1000);
 		re.setType(30);
 		re.setNo(RanomUtil.getFixLenthString(10));
-
+		
 		if (socketLoginDto.getChannel().isActive()) {
 			socketLoginDto.getChannel().writeAndFlush(JSON.toJSONString(re) + "\r\n");
 			logger.info("===request getLocation...ip:" + socketLoginDto.getChannel().remoteAddress().toString()

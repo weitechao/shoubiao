@@ -134,12 +134,7 @@ public class WatchAppTkController extends BaseController {
 				dataMap.put("CreateTime", "");
 				dataMap.put("UpdateTime", "");
 				jsonArray.add(dataMap);
-				
-		
-		
-		
-		
-		bb.put("VoiceList", jsonArray);
+		        bb.put("VoiceList", jsonArray);
 		
 		
 	/*	if (socketLoginDto == null || socketLoginDto.getChannel() == null) {

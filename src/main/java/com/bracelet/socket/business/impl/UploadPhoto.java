@@ -154,8 +154,8 @@ public class UploadPhoto extends AbstractBizService {
 					jsonArray.add(dataMap);
 					push.put("NewList", jsonArray);
 					JSONArray jsonArray1 = new JSONArray();
-					JSONObject dataMap1 = new JSONObject();
-					jsonArray1.add(dataMap1);
+					/*JSONObject dataMap1 = new JSONObject();
+					jsonArray1.add(dataMap1);*/
 					push.put("DeviceState", jsonArray1);
 
 					JSONArray jsonArray2 = new JSONArray();
@@ -165,7 +165,27 @@ public class UploadPhoto extends AbstractBizService {
 					dataMap2.put("photoUrl", Utils.PHOTO_URL+ photoName);
 					jsonArray2.add(dataMap2);
 					push.put("Notification", jsonArray2);
-
+					
+					JSONObject dataMapPhoto = new JSONObject();
+					dataMapPhoto.put("photoUrl", "");
+					dataMapPhoto.put("createtime", new Date().getTime());
+					dataMapPhoto.put("photoName", photoName);
+					dataMapPhoto.put("DevicePhotoId", ((int)((Math.random()*9+1)*10000))+"");
+					dataMapPhoto.put("DeviceID", deviceid);
+					dataMapPhoto.put("Source", "");
+					dataMapPhoto.put("DeviceTime", "");
+					dataMapPhoto.put("Latitude", "");
+					dataMapPhoto.put("Longitude", "");
+					dataMapPhoto.put("Mark", "");
+					dataMapPhoto.put("Path", Utils.PHOTO_URL+ photoName);
+					dataMapPhoto.put("Thumb", "");
+					dataMapPhoto.put("CreateTime", "");
+					dataMapPhoto.put("UpdateTime", "");
+					JSONArray jsonArrayPhoto = new JSONArray();
+					jsonArrayPhoto.add(dataMapPhoto);
+					
+					push.put("List", jsonArrayPhoto);
+					
 					push.put("Code", 1);
 					push.put("New", 1);
 					PushUtil.push(token, "新图片", push.toString(), "新图片");	

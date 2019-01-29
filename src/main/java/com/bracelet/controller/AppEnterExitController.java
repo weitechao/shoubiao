@@ -2,8 +2,10 @@ package com.bracelet.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bracelet.dto.SocketLoginDto;
+import com.bracelet.service.WatchSetService;
 import com.bracelet.util.ChannelMap;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +13,10 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/app")
 public class AppEnterExitController extends BaseController {
+	
+	@Autowired
+	WatchSetService watchSetService;	
+	
 
 	@ResponseBody
 	@RequestMapping(value = "/enter/{token}/{imei}", method = RequestMethod.GET)
@@ -78,6 +84,7 @@ public class AppEnterExitController extends BaseController {
 		}
 
 		if (socketLoginDto.getChannel().isActive()) {
+			
 			String reps=null;
 			if(type==1){
 				reps = "[YW*"+imei+"*0001*0004*KB,1]";
@@ -86,6 +93,7 @@ public class AppEnterExitController extends BaseController {
 			}
 			socketLoginDto.getChannel().writeAndFlush(reps);
 			bb.put("Code", 1);
+			watchSetService.setdialpadbyImei(imei,type);
 		} else {
 			bb.put("Code", 0);
 		}

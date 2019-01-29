@@ -16,6 +16,7 @@ import com.bracelet.entity.WatchAppVersionInfo;
 import com.bracelet.entity.WatchDevice;
 import com.bracelet.entity.WatchDeviceAlarm;
 import com.bracelet.entity.WatchDeviceHomeSchool;
+import com.bracelet.entity.WatchDialpad;
 import com.bracelet.exception.BizException;
 import com.bracelet.redis.LimitCache;
 import com.bracelet.service.IAuthcodeService;
@@ -26,6 +27,7 @@ import com.bracelet.service.IMemService;
 import com.bracelet.service.IOpenDoorService;
 import com.bracelet.service.IUserInfoService;
 import com.bracelet.service.IVoltageService;
+import com.bracelet.service.WatchSetService;
 import com.bracelet.service.WatchTkService;
 import com.bracelet.util.ChannelMap;
 import com.bracelet.util.RanomUtil;
@@ -65,6 +67,9 @@ public class WatchAppUserController extends BaseController {
 
 	@Autowired
 	IMemService memService;
+	
+	@Autowired
+	WatchSetService watchSetService;
 
 	@Autowired
 	IFenceService fenceService;
@@ -359,8 +364,8 @@ public class WatchAppUserController extends BaseController {
 				dataMap.put("HomeLng", "0");
 				dataMap.put("IsGuard", "0");
 				dataMap.put("Password", "0");
-				dataMap.put("PhoneCornet", "0");
-				dataMap.put("PhoneNumber", "0");
+				dataMap.put("PhoneCornet", "");
+				dataMap.put("PhoneNumber", "");
 				dataMap.put("Photo", "0");
 				dataMap.put("SchoolAddress", "0");
 				dataMap.put("SchoolLat", "0");
@@ -414,6 +419,13 @@ public class WatchAppUserController extends BaseController {
 				deviceSet.put("SosMsgswitch", "0");
 				deviceSet.put("CreateTime", "0");
 				deviceSet.put("UpdateTime", "0");
+				deviceSet.put("dialPad", "1");
+				
+				WatchDialpad watDiapad = watchSetService.getWatchDialpad(location.getImei());
+				if(watDiapad !=null ){
+					deviceSet.put("dialPad", watDiapad.getType()+"");
+				}
+				
 				dataMap.put("DeviceSet", deviceSet);
 
 				JSONObject deviceState = new JSONObject();
@@ -493,8 +505,8 @@ public class WatchAppUserController extends BaseController {
 					dataMap.put("HomeLng", "0");
 					dataMap.put("IsGuard", "0");
 					dataMap.put("Password", "0");
-					dataMap.put("PhoneCornet", "0");
-					dataMap.put("PhoneNumber", "0");
+					dataMap.put("PhoneCornet", "");
+					dataMap.put("PhoneNumber", "");
 					dataMap.put("Photo", "0");
 					dataMap.put("SchoolAddress", "0");
 					dataMap.put("SchoolLat", "0");
@@ -548,6 +560,7 @@ public class WatchAppUserController extends BaseController {
 					deviceSet.put("SosMsgswitch", "0");
 					deviceSet.put("CreateTime", "0");
 					deviceSet.put("UpdateTime", "0");
+					deviceSet.put("dialPad", "1");
 					dataMap.put("DeviceSet", deviceSet);
 
 					JSONObject deviceState = new JSONObject();

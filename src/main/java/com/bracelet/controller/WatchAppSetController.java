@@ -18,6 +18,7 @@ import com.bracelet.entity.WatchDevice;
 import com.bracelet.entity.WatchDeviceAlarm;
 import com.bracelet.entity.WatchDeviceHomeSchool;
 import com.bracelet.entity.WatchDeviceSet;
+import com.bracelet.entity.WatchDialpad;
 import com.bracelet.exception.BizException;
 import com.bracelet.service.IDeviceService;
 import com.bracelet.service.ILocationService;
@@ -223,8 +224,8 @@ public class WatchAppSetController extends BaseController {
 			jsonArray.add(dataMap);
 			push.put("NewList", jsonArray);
 			JSONArray jsonArray1 = new JSONArray();
-			JSONObject dataMap1 = new JSONObject();
-			jsonArray1.add(dataMap1);
+			/*JSONObject dataMap1 = new JSONObject();
+			jsonArray1.add(dataMap1);*/
 			push.put("DeviceState", jsonArray1);
 
 			JSONArray jsonArray2 = new JSONArray();
@@ -236,7 +237,7 @@ public class WatchAppSetController extends BaseController {
 
 			push.put("Code", 1);
 			push.put("New", 1);
-			PushUtil.push(token, "更新设备设置", push.toString(), "更新设备设置");	
+			//PushUtil.push(token, "更新设备设置", push.toString(), "更新设备设置");	
 			
 
 		} else {
@@ -264,6 +265,7 @@ public class WatchAppSetController extends BaseController {
 			bb.put("ClassDisabled1", "08:00-12:00");
 			bb.put("ClassDisabled2", "14:00-17:00");
 			bb.put("WeekDisabled", "");
+			bb.put("dialPad", "1");
 
 			WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfoByImei(imei);
 			if (whsc != null) {
@@ -317,6 +319,11 @@ public class WatchAppSetController extends BaseController {
 			if(locaFre != null){
 				bb.put("LocationMode", locaFre.getFrequency()+"");
 			}
+			
+			WatchDialpad watDiapad = watchSetService.getWatchDialpad(imei);
+			if(watDiapad !=null ){
+				bb.put("dialPad", watDiapad.getType()+"");
+			}
 
 		} else {
 			bb.put("Code", 0);
@@ -342,6 +349,7 @@ public class WatchAppSetController extends BaseController {
 			bb.put("SosMsgswitch", "");
 			bb.put("CreateTime", "");
 			bb.put("UpdateTime", "");
+			bb.put("dialPad", "1");
 		}
 		return bb.toString();
 	}

@@ -76,7 +76,7 @@ public class WatchDeviceInfoController extends BaseController {
 			bb.put("BabyName", watch.getNickname() + "");
 			bb.put("BindNumber", imei);
 			bb.put("CreateTime", watch.getCreatetime().getTime());
-			bb.put("CurrentFirmware", "");
+			bb.put("CurrentFirmware", "Y01_K2_RDA6625_RENQI_LE_DIAN_LINUX.0.967.QGJ_V1.0");
 			bb.put("SetVersionNO", 1);
 			bb.put("ContactVersionNO", 1);
 			bb.put("OperatorType", 1);
@@ -179,7 +179,7 @@ public class WatchDeviceInfoController extends BaseController {
 				bb.put("BabyName", watchh.getNickname() + "");
 				bb.put("BindNumber", imei);
 				bb.put("CreateTime", watchh.getCreatetime().getTime());
-				bb.put("CurrentFirmware", "");
+				bb.put("CurrentFirmware", "Y01_K2_RDA6625_RENQI_LE_DIAN_LINUX.0.967.QGJ_V1.0");
 				bb.put("SetVersionNO", 1);
 				bb.put("ContactVersionNO", 1);
 				bb.put("OperatorType", 1);
