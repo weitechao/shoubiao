@@ -163,11 +163,11 @@ public class SchoolController extends BaseController {
 			return bb.toString();
 		}
 		
-         String deviceId = jsonObject.getString("deviceId");
+         String imei = jsonObject.getString("imei");
          String timeClose = jsonObject.getString("timeClose");
          String timeOpen  = jsonObject.getString("timeOpen");
          
-         TimeSwitch time = confService.getTimeSwitch(deviceId);
+         TimeSwitch time = confService.getTimeSwitch(imei);
          if(time != null ){
             if(confService.updateTimeSwitchById(time.getId(), timeClose, timeOpen)){
             	bb.put("Code", 1);
@@ -175,7 +175,7 @@ public class SchoolController extends BaseController {
             	bb.put("Code", 0);
             }
          }else{
-        	 if(confService.insertTimeSwtich(deviceId,timeClose,timeOpen)){
+        	 if(confService.insertTimeSwtich(imei,timeClose,timeOpen)){
         		 bb.put("Code", 1);
         	 }else{
         		 bb.put("Code", 0);

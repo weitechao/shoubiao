@@ -159,7 +159,7 @@ public class FenceServiceImpl implements IFenceService {
 	}
 
 	@Override
-	public boolean insert(String imei, String name, String lat, String lng, String radius) {
+	public boolean insert(String imei, String name, String lat, String lng, String radius ,Integer entry, Integer exit, Integer enable) {
 	/*	Fence fence = this.getWatchOne(imei);
 		if (fence != null) {
 			logger.warn("imei[" + imei + "]已经设置过电子围栏[" + lat + "][" + lng + "][" + radius + "]!");
@@ -168,20 +168,21 @@ public class FenceServiceImpl implements IFenceService {
 
 		Timestamp now = Utils.getCurrentTimestamp();
 		int i = jdbcTemplate.update(
-				"insert into watch_fence (imei, name, lat, lng, radius, createtime, updatetime) values (?,?,?,?,?,?,?)",
-				new Object[] { imei, name, lat, lng, radius, now, now },
-				new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.TIMESTAMP, Types.TIMESTAMP });
+				"insert into watch_fence (imei, name, lat, lng, radius, createtime, updatetime, is_entry, is_exit, is_enable) values (?,?,?,?,?,?,?,?,?,?)",
+				new Object[] { imei, name, lat, lng, radius, now, now, entry, exit, enable},
+				new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.TIMESTAMP, Types.TIMESTAMP, Types.INTEGER, Types.INTEGER, Types.INTEGER });
 		return i == 1;
 	}
 	
 
 	@Override
-	public boolean updateWatchFence(Long id, String imei, String name, String lat, String lng, String radius) {
+	public boolean updateWatchFence(Long id, String imei, String name, String lat, String lng, String radius,Integer entry,Integer exit, Integer enable) {
+		//
 		Timestamp now = Utils.getCurrentTimestamp();
 		int i = jdbcTemplate.update(
-				"update watch_fence set name = ?, lat = ?, lng = ?, radius = ?, updatetime = ? where id = ? ",
-				new Object[] { name, lat, lng, radius, now, id },
-				new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.TIMESTAMP, Types.INTEGER});
+				"update watch_fence set name = ?, lat = ?, lng = ?, radius = ?, updatetime = ? ,is_entry = ?, is_exit = ?, is_enable = ? where id = ? ",
+				new Object[] { name, lat, lng, radius, now, entry, exit, enable, id },
+				new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.TIMESTAMP,Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER});
 		return i == 1;
 	}
 

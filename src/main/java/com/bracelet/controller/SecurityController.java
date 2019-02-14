@@ -72,11 +72,11 @@ public class SecurityController extends BaseController {
 				JSONObject dataMap = new JSONObject();
 				dataMap.put("GeofenceID", fenone.getId());
 				dataMap.put("FenceName", fenone.getName()+"");
-				dataMap.put("Entry", 0);
-				dataMap.put("Exit", 0);
+				dataMap.put("Entry", fenone.getIs_entry());
+				dataMap.put("Exit", fenone.getIs_exit());
+				dataMap.put("Enable", fenone.getIs_enable());
 				dataMap.put("CreateTime", "");
 				dataMap.put("UpdateTime", "");
-				dataMap.put("Enable", 0);
 				dataMap.put("Description", "");
 				dataMap.put("Lat", fenone.getLat());
 				dataMap.put("Lng", fenone.getLng());
@@ -109,9 +109,20 @@ public class SecurityController extends BaseController {
 		String lng = jsonObject.getString("lng");
 		String radius = jsonObject.getString("radius");
 		
-		//String entry = jsonObject.getString("entry");
-	//	String exit = jsonObject.getString("exit");
-		//String enable = jsonObject.getString("enable");
+	
+		
+		Integer entry = jsonObject.getInteger("entry");
+		Integer exit = jsonObject.getInteger("exit");
+		Integer enable = jsonObject.getInteger("enable");
+		
+		
+		/*
+		 * ["{\"enable\":\"0\",\"radius\":\"500\",
+		 * \"imei\":\"872018020142169\",
+		 * \"token\":\"498016FC71B8D961E8E8FB8D8A6A8D55\",
+		 * \"exit\":\"1\",\"entry\":\"1\",\"fenceName\":\"12\",
+		 * \"lat\":\"22.533053142030756\",\"lng\":\"114.02305886149406\"}"]
+		 * */
 		
 
 		String userId = checkTokenWatchAndUser(token);
@@ -119,7 +130,7 @@ public class SecurityController extends BaseController {
 			bb.put("Code", -1);
 			return bb.toString();
 		}
-		if (this.fenceService.insert(imei, name, lat, lng, radius)) {
+		if (this.fenceService.insert(imei, name, lat, lng, radius, entry, exit, enable)) {
 			bb.put("Code", 1);
 		} else {
 			bb.put("Code", 0);
@@ -143,17 +154,22 @@ public class SecurityController extends BaseController {
 			return bb.toString();
 		}
 		String imei = jsonObject.getString("imei");
-		String name = jsonObject.getString("fenceName");// 围栏名称
+		String name = jsonObject.getString("name");// 围栏名称
 		String lat = jsonObject.getString("lat");
 		String lng = jsonObject.getString("lng");
 		String radius = jsonObject.getString("radius");
 		Long id = Long.valueOf(jsonObject.getString("id"));
 		
-		//String entry = jsonObject.getString("entry");
-		//String exit = jsonObject.getString("exit");
-		//String enable = jsonObject.getString("enable");
+		Integer entry = jsonObject.getInteger("entry");
+		Integer exit = jsonObject.getInteger("exit");
+		Integer enable = jsonObject.getInteger("enable");
 		
-		if (this.fenceService.updateWatchFence(id, imei, name, lat, lng, radius)) {
+		/*["{\"enable\":\"1\",\"radius\":\"500\",\"imei\":\"872018020142169\",
+		 * \"id\":\"4\",\"token\":\"498016FC71B8D961E8E8FB8D8A6A8D55\",\
+		 * "exit\":\"0\",\"name\":\"25889\",\"entry\":\"0\",
+		 * \"lat\":\"22.535997554570656\",\"lng\":\"114.02577459812167\"}"]
+		*/
+		if (this.fenceService.updateWatchFence(id, imei, name, lat, lng, radius, entry, exit, enable)) {
 			bb.put("Code", 1);
 		} else {
 			bb.put("Code", 0);

@@ -403,7 +403,7 @@ public class WatchAppUserController extends BaseController {
 				if (whsc != null) {
 					deviceSet.put("ClassDisabled1", whsc.getClassDisable1() + "");
 					deviceSet.put("ClassDisabled2", whsc.getClassDisable2() + "");
-					deviceSet.put("WeekDisabled", whsc.getWeekDisable() + "");
+					deviceSet.put("WeekDisabled", whsc.getWeekDisable1() + "");
 				}
 
 				deviceSet.put("TimerOpen", "0");
@@ -544,7 +544,7 @@ public class WatchAppUserController extends BaseController {
 					if (whsc != null) {
 						deviceSet.put("ClassDisabled1", whsc.getClassDisable1() + "");
 						deviceSet.put("ClassDisabled2", whsc.getClassDisable2() + "");
-						deviceSet.put("WeekDisabled", whsc.getWeekDisable() + "");
+						deviceSet.put("WeekDisabled", whsc.getWeekDisable1() + "");
 					}
 
 					deviceSet.put("TimerOpen", "0");
@@ -644,7 +644,11 @@ public class WatchAppUserController extends BaseController {
 		watchtkService.delteByImei(imei);
 		// 删闹钟
 		ideviceService.deleteDeviceAlarmInfo(imei);
-
+		
+		UserInfo userInfo = userInfoService.getUserInfoByUsername(imei);
+		if (userInfo != null) {
+				userInfoService.updateUserPassword(userInfo.getUser_id(), "123456");
+		}
 		bb.put("Code", 1);
 		// bb.put("Message", "解绑成功");
 		return bb.toString();

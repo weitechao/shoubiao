@@ -150,11 +150,11 @@ public class WatchSetServiceImpl implements WatchSetService {
 	}
 
 	@Override
-	public boolean updateWatchSet(Long id, String setInfo, String infoVibration, String infoVoice,
-			String phoneComeVibration, String phoneComeVoice, String watchOffAlarm, String rejectStrangers,
-			String timerSwitch, String disabledInClass, String reserveEmergencyPower, String somatosensory,
-			String reportCallLocation, String automaticAnswering, String sosMsgswitch, String flowerNumber,
-			String brightScreen, String language, String timeZone, String locationMode, String locationTime) {
+	public boolean updateWatchSet(Long id, String setInfo, Integer infoVibration, Integer infoVoice, Integer phoneComeVibration,
+			Integer phoneComeVoice, Integer watchOffAlarm, Integer rejectStrangers, Integer timerSwitch,
+			Integer disabledInClass, Integer reserveEmergencyPower, Integer somatosensory, Integer reportCallLocation,
+			Integer automaticAnswering, Integer sosMsgswitch, Integer flowerNumber, Integer brightScreen, Integer language,
+			Integer timeZone, Integer locationMode, Integer locationTime) {
 		Timestamp now = Utils.getCurrentTimestamp();
 		int i = jdbcTemplate.update(
 				"update watch_device_set set updatetime=? ,setInfo=?, infoVibration=?, infoVoice=?, phoneComeVibration=?, phoneComeVoice=?, watchOffAlarm=?, rejectStrangers=?, timerSwitch=?, disabledInClass=?, reserveEmergencyPower=?, somatosensory=?, reportCallLocation=?, automaticAnswering=?, sosMsgswitch=?, flowerNumber=?, brightScreen=?,  language=?, timeZone=?, locationMode=?, locationTime=?  where id = ?",
@@ -162,19 +162,19 @@ public class WatchSetServiceImpl implements WatchSetService {
 						watchOffAlarm, rejectStrangers, timerSwitch, disabledInClass, reserveEmergencyPower,
 						somatosensory, reportCallLocation, automaticAnswering, sosMsgswitch, flowerNumber, brightScreen,
 						language, timeZone, locationMode, locationTime, id },
-				new int[] { Types.TIMESTAMP, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
-						Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
-						Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
-						Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER });
+				new int[] { Types.TIMESTAMP, Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER,
+						Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER,
+						Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER,
+						Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER });
 		return i == 1;
 	}
 
 	@Override
-	public boolean insertWatchDeviceSet(String imei, String setInfo, String infoVibration, String infoVoice,
-			String phoneComeVibration, String phoneComeVoice, String watchOffAlarm, String rejectStrangers,
-			String timerSwitch, String disabledInClass, String reserveEmergencyPower, String somatosensory,
-			String reportCallLocation, String automaticAnswering, String sosMsgswitch, String flowerNumber,
-			String brightScreen, String language, String timeZone, String locationMode, String locationTime) {
+	public boolean insertWatchDeviceSet(String imei, String setInfo, Integer infoVibration, Integer infoVoice, Integer phoneComeVibration,
+			Integer phoneComeVoice, Integer watchOffAlarm, Integer rejectStrangers, Integer timerSwitch,
+			Integer disabledInClass, Integer reserveEmergencyPower, Integer somatosensory, Integer reportCallLocation,
+			Integer automaticAnswering, Integer sosMsgswitch, Integer flowerNumber, Integer brightScreen, Integer language,
+			Integer timeZone, Integer locationMode, Integer locationTime) {
 		Timestamp now = Utils.getCurrentTimestamp();
 		int i = jdbcTemplate.update(
 				"insert into watch_device_set ( imei, setInfo, infoVibration, infoVoice, phoneComeVibration, phoneComeVoice, watchOffAlarm, rejectStrangers, timerSwitch, disabledInClass, reserveEmergencyPower, somatosensory, reportCallLocation, automaticAnswering, sosMsgswitch, flowerNumber, brightScreen,  language, timeZone, locationMode, locationTime, createtime, updatetime) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
@@ -182,10 +182,10 @@ public class WatchSetServiceImpl implements WatchSetService {
 						watchOffAlarm, rejectStrangers, timerSwitch, disabledInClass, reserveEmergencyPower,
 						somatosensory, reportCallLocation, automaticAnswering, sosMsgswitch, flowerNumber, brightScreen,
 						language, timeZone, locationMode, locationTime, now, now },
-				new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
-						Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
-						Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
-						Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.TIMESTAMP, Types.TIMESTAMP });
+				new int[] { Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER,
+						Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER,
+						Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER,
+						Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.TIMESTAMP, Types.TIMESTAMP });
 		return i == 1;
 	}
 

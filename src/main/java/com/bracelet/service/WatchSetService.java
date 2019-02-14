@@ -32,17 +32,17 @@ public interface WatchSetService {
 
 	boolean insertWatchDeviceSet(String imei, String data);
 
-	boolean updateWatchSet(Long id, String setInfo, String infoVibration, String infoVoice, String phoneComeVibration,
-			String phoneComeVoice, String watchOffAlarm, String rejectStrangers, String timerSwitch,
-			String disabledInClass, String reserveEmergencyPower, String somatosensory, String reportCallLocation,
-			String automaticAnswering, String sosMsgswitch, String flowerNumber, String brightScreen, String language,
-			String timeZone, String locationMode, String locationTime);
+	boolean updateWatchSet(Long id, String setInfo, Integer infoVibration, Integer infoVoice, Integer phoneComeVibration,
+			Integer phoneComeVoice, Integer watchOffAlarm, Integer rejectStrangers, Integer timerSwitch,
+			Integer disabledInClass, Integer reserveEmergencyPower, Integer somatosensory, Integer reportCallLocation,
+			Integer automaticAnswering, Integer sosMsgswitch, Integer flowerNumber, Integer brightScreen, Integer language,
+			Integer timeZone, Integer locationMode, Integer locationTime);
 
-	boolean insertWatchDeviceSet(String imei, String setInfo, String infoVibration, String infoVoice,
-			String phoneComeVibration, String phoneComeVoice, String watchOffAlarm, String rejectStrangers,
-			String timerSwitch, String disabledInClass, String reserveEmergencyPower, String somatosensory,
-			String reportCallLocation, String automaticAnswering, String sosMsgswitch, String flowerNumber,
-			String brightScreen, String language, String timeZone, String locationMode, String locationTime);
+	boolean insertWatchDeviceSet(String imei, String setInfo, Integer infoVibration, Integer infoVoice, Integer phoneComeVibration,
+			Integer phoneComeVoice, Integer watchOffAlarm, Integer rejectStrangers, Integer timerSwitch,
+			Integer disabledInClass, Integer reserveEmergencyPower, Integer somatosensory, Integer reportCallLocation,
+			Integer automaticAnswering, Integer sosMsgswitch, Integer flowerNumber, Integer brightScreen, Integer language,
+			Integer timeZone, Integer locationMode, Integer locationTime);
 
 	LocationFrequency getLocationFrequencyByImei(String imei);
 

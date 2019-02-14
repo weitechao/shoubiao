@@ -132,7 +132,7 @@ public class WatchAppContDeviceController extends BaseController {
 			
 			String user_id = checkTokenWatchAndUser(token);
 			if ("0".equals(user_id)) {
-				bb.put("Code", -1);
+				bb.put("Code", -1); 
 				return bb.toString();
 			}
 			

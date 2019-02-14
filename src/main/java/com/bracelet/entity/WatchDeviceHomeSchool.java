@@ -10,7 +10,7 @@ public class WatchDeviceHomeSchool {
     private Timestamp updatetime;
     private String classDisable1;
     private String classDisable2;
-    private String weekDisable;
+    private String weekDisable1;
     private String schoolLat;
     private String schoolLng;
     private String schoolAddress;
@@ -56,11 +56,12 @@ public class WatchDeviceHomeSchool {
 	public void setClassDisable2(String classDisable2) {
 		this.classDisable2 = classDisable2;
 	}
-	public String getWeekDisable() {
-		return weekDisable;
+	
+	public String getWeekDisable1() {
+		return weekDisable1;
 	}
-	public void setWeekDisable(String weekDisable) {
-		this.weekDisable = weekDisable;
+	public void setWeekDisable1(String weekDisable1) {
+		this.weekDisable1 = weekDisable1;
 	}
 	public String getSchoolLat() {
 		return schoolLat;

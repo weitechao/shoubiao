@@ -12,6 +12,7 @@ import com.bracelet.entity.LocationOld;
 import com.bracelet.entity.LocationRequest;
 import com.bracelet.entity.OldBindDevice;
 import com.bracelet.entity.Step;
+import com.bracelet.entity.TimeSwitch;
 import com.bracelet.entity.UserInfo;
 import com.bracelet.entity.VersionInfo;
 import com.bracelet.entity.WatchDevice;
@@ -20,6 +21,7 @@ import com.bracelet.entity.WatchDeviceHomeSchool;
 import com.bracelet.entity.WatchDeviceSet;
 import com.bracelet.entity.WatchDialpad;
 import com.bracelet.exception.BizException;
+import com.bracelet.service.IConfService;
 import com.bracelet.service.IDeviceService;
 import com.bracelet.service.ILocationService;
 import com.bracelet.service.IStepService;
@@ -32,6 +34,7 @@ import com.bracelet.util.PushUtil;
 import com.bracelet.util.RadixUtil;
 import com.bracelet.util.RanomUtil;
 import com.bracelet.util.RespCode;
+import com.bracelet.util.StringUtil;
 import com.bracelet.util.Utils;
 
 import org.slf4j.Logger;
@@ -59,6 +62,9 @@ public class WatchAppSetController extends BaseController {
 	IStepService stepService;
 	@Autowired
 	WatchSetService watchSetService;
+
+	@Autowired
+	IConfService confService;
 
 	@Autowired
 	IDeviceService ideviceService;
@@ -140,39 +146,7 @@ public class WatchAppSetController extends BaseController {
 		 * 亮屏时间language： 语言timeZone：locationMode： 工作模式locationTime：工作时长
 		 */
 		String imei = jsonObject.getString("imei");
-		String setInfo = jsonObject.getString("setInfo");
-		String infoVibration = jsonObject.getString("infoVibration");// 手表信息震动
-		String infoVoice = jsonObject.getString("infoVoice");// 手表信息声音
-		String phoneComeVibration = jsonObject.getString("phoneComeVibration");// 手表来电话震动
-		String phoneComeVoice = jsonObject.getString("phoneComeVoice");// 手表来电话声音
-		String watchOffAlarm = jsonObject.getString("watchOffAlarm");// 手表脱落报警
-		String rejectStrangers = jsonObject.getString("rejectStrangers");// 拒绝陌生人来电
-		String timerSwitch = jsonObject.getString("timerSwitch");// 定时开关机
-		String disabledInClass = jsonObject.getString("disabledInClass");// 上课禁用
-		String reserveEmergencyPower = jsonObject.getString("reserveEmergencyPower");// 预留紧急电量6
-		String somatosensory = jsonObject.getString("somatosensory");// 体感接听
-		String reportCallLocation = jsonObject.getString("reportCallLocation");// 报告通话位置
-		String automaticAnswering = jsonObject.getString("automaticAnswering");// 自动接听
-		String sosMsgswitch = jsonObject.getString("sosMsgswitch");// sos开关
-		String flowerNumber = jsonObject.getString("flowerNumber");// 爱心奖励
-		String brightScreen = jsonObject.getString("brightScreen");// 亮屏时间
-		String language = jsonObject.getString("language");// 语言
-		String timeZone = jsonObject.getString("timeZone");// 时区
-		String locationMode = jsonObject.getString("locationMode");// 工作模式
-		String locationTime = jsonObject.getString("locationTime");// 工作时长
-
-		WatchDeviceSet deviceSet = watchSetService.getDeviceSetByImei(imei);
-		if (deviceSet != null) {
-			watchSetService.updateWatchSet(deviceSet.getId(), setInfo, infoVibration, infoVoice, phoneComeVibration,
-					phoneComeVoice, watchOffAlarm, rejectStrangers, timerSwitch, disabledInClass, reserveEmergencyPower,
-					somatosensory, reportCallLocation, automaticAnswering, sosMsgswitch, flowerNumber, brightScreen,
-					language, timeZone, locationMode, locationTime);
-		} else {
-			watchSetService.insertWatchDeviceSet(imei, setInfo, infoVibration, infoVoice, phoneComeVibration,
-					phoneComeVoice, watchOffAlarm, rejectStrangers, timerSwitch, disabledInClass, reserveEmergencyPower,
-					somatosensory, reportCallLocation, automaticAnswering, sosMsgswitch, flowerNumber, brightScreen,
-					language, timeZone, locationMode, locationTime);
-		}
+		
 
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
@@ -181,40 +155,117 @@ public class WatchAppSetController extends BaseController {
 			return bb.toString();
 		}
 		if (socketLoginDto.getChannel().isActive()) {
-			String msg = "SET," + "" + ",123456,F48," + disabledInClass + ",06:05,23:00," + brightScreen + ","
-					+ language + "," + timeZone + ",0,123456,07:00," + locationMode + "," + locationTime + ","
-					+ flowerNumber;
+			
+			String setInfo = jsonObject.getString("setInfo");
+			
+			Integer infoVibration = jsonObject.getInteger("infoVibration");// 手表信息震动
+			Integer infoVoice = jsonObject.getInteger("infoVoice");// 手表信息声音
+			Integer phoneComeVibration = jsonObject.getInteger("phoneComeVibration");// 手表来电话震动
+			Integer phoneComeVoice = jsonObject.getInteger("phoneComeVoice");// 手表来电话声音
+			Integer watchOffAlarm = jsonObject.getInteger("watchOffAlarm");// 手表脱落报警
+			Integer rejectStrangers = jsonObject.getInteger("rejectStrangers");// 拒绝陌生人来电
+			Integer timerSwitch = jsonObject.getInteger("timerSwitch");// 定时开关机
+			Integer disabledInClass = jsonObject.getInteger("disabledInClass");// 上课禁用
+			Integer reserveEmergencyPower = jsonObject.getInteger("reserveEmergencyPower");// 预留紧急电量6
+			Integer somatosensory = jsonObject.getInteger("somatosensory");// 体感接听
+			Integer reportCallLocation = jsonObject.getInteger("reportCallLocation");// 报告通话位置
+			Integer automaticAnswering = jsonObject.getInteger("automaticAnswering");// 自动接听
+			Integer sosMsgswitch = jsonObject.getInteger("sosMsgswitch");// sos开关
+			Integer flowerNumber = jsonObject.getInteger("flowerNumber");// 爱心奖励
+			Integer brightScreen = jsonObject.getInteger("brightScreen");// 亮屏时间
+			Integer language = jsonObject.getInteger("language");// 语言
+			Integer timeZone = jsonObject.getInteger("timeZone");// 时区
+			Integer locationMode = jsonObject.getInteger("locationMode");// 工作模式
+			Integer locationTime = jsonObject.getInteger("locationTime");// 工作时长
+
+			WatchDeviceSet deviceSet = watchSetService.getDeviceSetByImei(imei);
+			if (deviceSet != null) {
+				watchSetService.updateWatchSet(deviceSet.getId(), setInfo, infoVibration, infoVoice, phoneComeVibration,
+						phoneComeVoice, watchOffAlarm, rejectStrangers, timerSwitch, disabledInClass, reserveEmergencyPower,
+						somatosensory, reportCallLocation, automaticAnswering, sosMsgswitch, flowerNumber, brightScreen,
+						language, timeZone, locationMode, locationTime);
+			} else {
+				watchSetService.insertWatchDeviceSet(imei, setInfo, infoVibration, infoVoice, phoneComeVibration,
+						phoneComeVoice, watchOffAlarm, rejectStrangers, timerSwitch, disabledInClass, reserveEmergencyPower,
+						somatosensory, reportCallLocation, automaticAnswering, sosMsgswitch, flowerNumber, brightScreen,
+						language, timeZone, locationMode, locationTime);
+			}
+			
+
+			StringBuffer sendMsg = new StringBuffer("SET" + ",123456,F48,");
+
+			if ("1".equals(disabledInClass)) {
+				WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfo(imei);
+
+				if (whsc != null) {
+					sendMsg.append(whsc.getClassDisable1() + "|" + whsc.getClassDisable2() + "|"
+							+ whsc.getWeekDisable1() + ",");
+				} else {
+					sendMsg.append("08:00-11:30|14:00-16:30|12345,");
+				}
+			} else {
+				sendMsg.append("08:00-11:30|14:00-16:30|12345,");
+			}
+
+			if ("1".equals(timerSwitch)) {
+				TimeSwitch time = confService.getTimeSwitch(imei);
+				if (time != null) {
+					sendMsg.append(time.getTimeOpen() + "," + time.getTimeClose() + ",");
+				} else {
+					sendMsg.append("06:05,23:00,");
+				}
+			} else {
+				sendMsg.append("06:05,23:00,");
+			}
+			sendMsg.append(brightScreen + ",2,480,0,");
+
+			WatchDeviceAlarm watch = ideviceService.getDeviceAlarmInfo(imei);
+			if (watch != null) {
+				sendMsg.append(watch.getWeekAlarm1() + "," + watch.getWeekAlarm2() + "," + watch.getWeekAlarm3() + ","
+						+ watch.getAlarm1() + "," + watch.getAlarm2() + "," + watch.getAlarm3() + ",");
+			} else {
+				sendMsg.append("0:12345,0:0,");
+			}
+			sendMsg.append(locationMode + "," + locationTime + "," + flowerNumber);
+
 			/*
 			 * [YW*YYYYYYYYYY*NNNN*LEN*SET,
 			 * 手表电话号码，设置次数流水号,设置项,上课禁用时间段,定时开机时间,定时关机时间,亮屏时间,语言,时区,指示灯,
 			 * 闹钟1周期,闹钟2周期,闹钟3周期,闹钟1时间,闹钟2时间,闹钟3时间,定位模式,定位时间,小红花,睡眠,计步,心率,
 			 * SOS短信开关,手表宝贝名称,后续还会加设置需要保留扩展]
-			 * 
-			 * 实例:
+			 * [YW*872018020142169*0001*0056*SET,123456,F48,08:00-11:30|14:00-16
+			 * :30|12345,06:05,23:00,20,2,480,0,0:12345,0:0,2,10,5]
+			 * [YW*872018020142169*0001*006a*SET,123456,F48,08:00-11:30|14:00-16
+			 * :30|12345,06:05,23:00,60,2,480,0,1:234,0:0,0:0,02:00,00:00,00:00,
+			 * 2,10,2] 实例:
 			 * [YW*5678901234*0001*000A*SET,13232211111,1234,F48,08:00-11:30|14:
 			 * 00-16:30|12345,06:05,23:00,10,2,480,0 ,
 			 * 0:12345,0:0,0:0,06:30,00:00,00:00,1,60,,,,,,宝贝]
+			 * 
+			 * [YW*872018020142169*0001*0065*SET,123456,F48,10:00-12:00|15:00-17
+			 * :00|1245,
+			 * 06:05,23:00,5,,,1:123,0:25,0:234,02:00,03:00,21:00,2,10,4]
 			 */
-			String reps = "[YW*" + imei + "*0001*" + RadixUtil.changeRadix(msg) + "*" + msg + "]";
+			String reps = "[YW*" + imei + "*0001*" + RadixUtil.changeRadix(sendMsg.toString()) + "*"
+					+ sendMsg.toString() + "]";
 			logger.info("设备参数设置=" + reps);
 			socketLoginDto.getChannel().writeAndFlush(reps);
 			bb.put("Code", 1);
 			// bb.put("Message", "");
-			
-			
+
 			JSONObject push = new JSONObject();
 			JSONArray jsonArray = new JSONArray();
 			JSONObject dataMap = new JSONObject();
 			dataMap.put("DeviceID", "");
 			String deviceid = limitCache.getRedisKeyValue(imei + "_id");
-			if(deviceid !=null && !"0".equals(deviceid) && !"".equals(deviceid)){
+			if (deviceid != null && !"0".equals(deviceid) && !"".equals(deviceid)) {
 				dataMap.put("DeviceID", deviceid);
-			}else{
+			} else {
 				WatchDevice watchd = ideviceService.getDeviceInfo(imei);
 				if (watchd != null) {
-					deviceid=watchd.getId()+"";
+					deviceid = watchd.getId() + "";
 					dataMap.put("DeviceID", watchd.getId());
-					limitCache.addKey(imei + "_id", watchd.getId()+"");
+					limitCache.addKey(imei + "_id", watchd.getId() + "");
 				}
 			}
 			dataMap.put("Message", 1);
@@ -224,8 +275,6 @@ public class WatchAppSetController extends BaseController {
 			jsonArray.add(dataMap);
 			push.put("NewList", jsonArray);
 			JSONArray jsonArray1 = new JSONArray();
-			/*JSONObject dataMap1 = new JSONObject();
-			jsonArray1.add(dataMap1);*/
 			push.put("DeviceState", jsonArray1);
 
 			JSONArray jsonArray2 = new JSONArray();
@@ -237,8 +286,7 @@ public class WatchAppSetController extends BaseController {
 
 			push.put("Code", 1);
 			push.put("New", 1);
-			//PushUtil.push(token, "更新设备设置", push.toString(), "更新设备设置");	
-			
+			PushUtil.push(token, "成功更新设备设置", push.toString(), "成功更新设备设置");
 
 		} else {
 			bb.put("Code", 2);
@@ -268,10 +316,11 @@ public class WatchAppSetController extends BaseController {
 			bb.put("dialPad", "1");
 
 			WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfoByImei(imei);
+
 			if (whsc != null) {
 				bb.put("ClassDisabled1", whsc.getClassDisable1() + "");
 				bb.put("ClassDisabled2", whsc.getClassDisable2() + "");
-				bb.put("WeekDisabled", whsc.getWeekDisable() + "");
+				bb.put("WeekDisabled", whsc.getWeekDisable1() + "");
 			}
 
 			bb.put("TimerOpen", "07:00");
@@ -286,6 +335,7 @@ public class WatchAppSetController extends BaseController {
 			bb.put("Alarm3", "");
 
 			WatchDeviceAlarm watch = ideviceService.getDeviceAlarmInfo(imei);
+
 			if (watch != null) {
 				bb.put("WeekAlarm1", watch.getWeekAlarm1() + "");
 				bb.put("WeekAlarm2", watch.getWeekAlarm2() + "");
@@ -303,26 +353,20 @@ public class WatchAppSetController extends BaseController {
 			bb.put("CreateTime", deviceSet.getCreatetime().getTime());
 			bb.put("UpdateTime", deviceSet.getUpdatetime().getTime());
 
-			WatchDeviceSet deviceSetInfo = watchSetService.getDeviceSetByImei(imei);
-			if (deviceSetInfo != null) {
-				bb.put("BrightScreen", deviceSetInfo.getBrightScreen() + "");
-				bb.put("LocationMode", deviceSetInfo.getLocationMode() + "");
-				bb.put("LocationTime", deviceSetInfo.getLocationTime() + "");
-				if (!"".equals(deviceSetInfo.getFlowerNumber()) && deviceSetInfo.getFlowerNumber() != null) {
-					bb.put("FlowerNumber", Integer.valueOf(deviceSetInfo.getFlowerNumber() + ""));
-				}
+			bb.put("BrightScreen", deviceSet.getBrightScreen());
+			bb.put("LocationMode", deviceSet.getLocationMode());
+			bb.put("LocationTime", deviceSet.getLocationTime());
+			bb.put("FlowerNumber", deviceSet.getFlowerNumber());
+			bb.put("SosMsgswitch", deviceSet.getSosMsgswitch());
 
-				bb.put("SosMsgswitch", deviceSetInfo.getSosMsgswitch() + "");
+			LocationFrequency locaFre = watchSetService.getLocationFrequencyByImei(imei);
+			if (locaFre != null) {
+				bb.put("LocationMode", locaFre.getFrequency() + "");
 			}
-			
-			LocationFrequency  locaFre = watchSetService.getLocationFrequencyByImei(imei);
-			if(locaFre != null){
-				bb.put("LocationMode", locaFre.getFrequency()+"");
-			}
-			
+
 			WatchDialpad watDiapad = watchSetService.getWatchDialpad(imei);
-			if(watDiapad !=null ){
-				bb.put("dialPad", watDiapad.getType()+"");
+			if (watDiapad != null) {
+				bb.put("dialPad", watDiapad.getType() + "");
 			}
 
 		} else {
@@ -390,59 +434,57 @@ public class WatchAppSetController extends BaseController {
 	// 设置设备定位频率
 	@ResponseBody
 	@RequestMapping(value = "/setLocationFrequency/{token}/{imei}/{f}", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
-	public String setLocationFrequency(@PathVariable String token, @PathVariable String imei,
-			@PathVariable Integer f) {
+	public String setLocationFrequency(@PathVariable String token, @PathVariable String imei, @PathVariable Integer f) {
 		JSONObject bb = new JSONObject();
 		String userId = checkTokenWatchAndUser(token);
 		if ("0".equals(userId)) {
 			bb.put("Code", -1);
 			return bb.toString();
 		}
-		LocationFrequency  locaFre = watchSetService.getLocationFrequencyByImei(imei);
-		if(locaFre != null){
-			if(f == locaFre.getFrequency()){
+		LocationFrequency locaFre = watchSetService.getLocationFrequencyByImei(imei);
+		if (locaFre != null) {
+			if (f == locaFre.getFrequency()) {
 				bb.put("Code", 1);
-			}else{
-				if(watchSetService.updateLocationFrequencyById(locaFre.getId(),f)){
+			} else {
+				if (watchSetService.updateLocationFrequencyById(locaFre.getId(), f)) {
 					bb.put("Code", 1);
-				}else{
+				} else {
 					bb.put("Code", 0);
 				}
 			}
-		}else{
-			if(watchSetService.insertLocationFrequency(imei,f)){
+		} else {
+			if (watchSetService.insertLocationFrequency(imei, f)) {
 				bb.put("Code", 1);
-			}else{
+			} else {
 				bb.put("Code", 0);
 			}
 		}
-		
+
 		return bb.toString();
 
 	}
-	
-	
-	// 获取设备定位频率
-		@ResponseBody
-		@RequestMapping(value = "/getLocationFrequency/{token}/{imei}", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
-		public String getLocationFrequency(@PathVariable String token, @PathVariable String imei) {
-			JSONObject bb = new JSONObject();
-			String userId = checkTokenWatchAndUser(token);
-			if ("0".equals(userId)) {
-				bb.put("Code", -1);
-				return bb.toString();
-			}
-			LocationFrequency  locaFre = watchSetService.getLocationFrequencyByImei(imei);
-			if(locaFre != null){
-				bb.put("Code", 1);
-				bb.put("f", locaFre.getFrequency());
-			}else{
-				bb.put("Code", 1);
-				bb.put("f", 1);
-			}
-			
-			return bb.toString();
 
+	// 获取设备定位频率
+	@ResponseBody
+	@RequestMapping(value = "/getLocationFrequency/{token}/{imei}", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	public String getLocationFrequency(@PathVariable String token, @PathVariable String imei) {
+		JSONObject bb = new JSONObject();
+		String userId = checkTokenWatchAndUser(token);
+		if ("0".equals(userId)) {
+			bb.put("Code", -1);
+			return bb.toString();
 		}
+		LocationFrequency locaFre = watchSetService.getLocationFrequencyByImei(imei);
+		if (locaFre != null) {
+			bb.put("Code", 1);
+			bb.put("f", locaFre.getFrequency());
+		} else {
+			bb.put("Code", 1);
+			bb.put("f", 1);
+		}
+
+		return bb.toString();
+
+	}
 
 }

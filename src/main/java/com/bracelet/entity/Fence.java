@@ -19,6 +19,9 @@ public class Fence {
 	private Timestamp updatetime;
 	private String imei;
 	private String name;
+	private Integer is_entry;
+	private Integer is_exit;
+	private Integer is_enable;
 
 	public Long getId() {
 		return id;
@@ -104,6 +107,30 @@ public class Fence {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Integer getIs_entry() {
+		return is_entry;
+	}
+
+	public void setIs_entry(Integer is_entry) {
+		this.is_entry = is_entry;
+	}
+
+	public Integer getIs_exit() {
+		return is_exit;
+	}
+
+	public void setIs_exit(Integer is_exit) {
+		this.is_exit = is_exit;
+	}
+
+	public Integer getIs_enable() {
+		return is_enable;
+	}
+
+	public void setIs_enable(Integer is_enable) {
+		this.is_enable = is_enable;
 	}
 
 }

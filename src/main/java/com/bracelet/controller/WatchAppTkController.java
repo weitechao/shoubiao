@@ -81,21 +81,21 @@ public class WatchAppTkController extends BaseController {
 		}
 
 		String imei = jsonObject.getString("imei");
-	//	String phone = jsonObject.getString("phone");// 号码
+		String phone = jsonObject.getString("phone");// 号码
 		String voiceData = jsonObject.getString("voiceData");// 语音内容 base64转字符串
 		String sourceName = jsonObject.getString("sourceName");// 文件名字
 
 		 byte[] voicebyte = Base64.decodeBase64(voiceData);
 		 
-			Utils.createFileContent(Utils.VOICE_FILE_lINUX, "app_"+sourceName, voicebyte);
+		Utils.createFileContent(Utils.VOICE_FILE_lINUX, "app_"+sourceName, voicebyte);
 	
-		//SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
+		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 			JSONArray jsonArray = new JSONArray();
 			String msgNumber =Utils.randomString(5);
 		watchtkService.insertAppVoiceInfo("app", imei, sourceName, Utils.VOICE_URL + "app_"+sourceName, 0, msgNumber, 1, 1);
 		bb.put("Code", 1);
 		
-		//WatchVoiceInfo watchAppVoice = watchtkService.getAppVoiceInfoByImeiAndStatus(imei, 1);
+	   // WatchVoiceInfo watchAppVoice = watchtkService.getAppVoiceInfoByImeiAndStatus(imei, 1);
 		
 				JSONObject dataMap = new JSONObject();
 				dataMap.put("voiceUrl", "");
@@ -130,14 +130,14 @@ public class WatchAppTkController extends BaseController {
 				}
 				dataMap.put("Mark", "");
 				dataMap.put("Path",Utils.VOICE_URL + "app_"+sourceName);
-				dataMap.put("Length", 0);
+				dataMap.put("Length", 2);
 				dataMap.put("CreateTime", "");
 				dataMap.put("UpdateTime", "");
 				jsonArray.add(dataMap);
 		        bb.put("VoiceList", jsonArray);
 		
 		
-	/*	if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
+		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
 			bb.put("Code", 2);
 			return bb.toString();
 		}
@@ -174,11 +174,11 @@ public class WatchAppTkController extends BaseController {
 			
 		
 
-			watchtkService.insertAppVoiceInfo("app", imei, sourceName, voiceData, 1, numMessage, 1, 1);
+			watchtkService.insertAppVoiceInfo("app", imei, sourceName, voiceData, 1, msgNumber, 1, 1);
 		} else {
-			watchtkService.insertAppVoiceInfo("app", imei, sourceName, voiceData, 0, numMessage, 1, 1);
+			watchtkService.insertAppVoiceInfo("app", imei, sourceName, voiceData, 0, msgNumber, 1, 1);
 			bb.put("Code", 0);
-		}*/
+		}
 		return bb.toString();
 	}
 

@@ -32,28 +32,30 @@ public class WatchDeviceSet {
 
 	private Long id;
 	private String imei;
-	private String setInfo;
-	private String infoVibration;
-	private String infoVoice;
-	private String phoneComeVibration;
-	private String phoneComeVoice;
-	private String watchOffAlarm;
-	private String rejectStrangers;
-	private String timerSwitch;
-	private String disabledInClass;
-	private String reserveEmergencyPower;
-	private String somatosensory;
-	private String reportCallLocation;
-	private String automaticAnswering;
-	private String sosMsgswitch;
-	private String flowerNumber;
-	private String brightScreen;
-	private String language;
-	private String timeZone;
-	private String locationMode;
-	private String locationTime;
 	private Timestamp createtime;
 	private Timestamp updatetime;
+	private String setInfo;
+	
+	private Integer infoVibration;
+	private Integer infoVoice;
+	private Integer phoneComeVibration;
+	private Integer phoneComeVoice;
+	private Integer watchOffAlarm;
+	private Integer rejectStrangers;
+	private Integer timerSwitch;
+	private Integer disabledInClass;
+	private Integer reserveEmergencyPower;
+	private Integer somatosensory;
+	private Integer reportCallLocation;
+	private Integer automaticAnswering;
+	private Integer sosMsgswitch;
+	private Integer flowerNumber;
+	private Integer brightScreen;
+	private Integer language;
+	private Integer timeZone;
+	private Integer locationMode;
+	private Integer locationTime;
+	
 	public Long getId() {
 		return id;
 	}
@@ -72,120 +74,6 @@ public class WatchDeviceSet {
 	public void setSetInfo(String setInfo) {
 		this.setInfo = setInfo;
 	}
-	public String getInfoVibration() {
-		return infoVibration;
-	}
-	public void setInfoVibration(String infoVibration) {
-		this.infoVibration = infoVibration;
-	}
-	public String getInfoVoice() {
-		return infoVoice;
-	}
-	public void setInfoVoice(String infoVoice) {
-		this.infoVoice = infoVoice;
-	}
-	public String getPhoneComeVibration() {
-		return phoneComeVibration;
-	}
-	public void setPhoneComeVibration(String phoneComeVibration) {
-		this.phoneComeVibration = phoneComeVibration;
-	}
-	public String getPhoneComeVoice() {
-		return phoneComeVoice;
-	}
-	public void setPhoneComeVoice(String phoneComeVoice) {
-		this.phoneComeVoice = phoneComeVoice;
-	}
-	public String getWatchOffAlarm() {
-		return watchOffAlarm;
-	}
-	public void setWatchOffAlarm(String watchOffAlarm) {
-		this.watchOffAlarm = watchOffAlarm;
-	}
-	public String getRejectStrangers() {
-		return rejectStrangers;
-	}
-	public void setRejectStrangers(String rejectStrangers) {
-		this.rejectStrangers = rejectStrangers;
-	}
-	public String getTimerSwitch() {
-		return timerSwitch;
-	}
-	public void setTimerSwitch(String timerSwitch) {
-		this.timerSwitch = timerSwitch;
-	}
-	public String getDisabledInClass() {
-		return disabledInClass;
-	}
-	public void setDisabledInClass(String disabledInClass) {
-		this.disabledInClass = disabledInClass;
-	}
-	public String getReserveEmergencyPower() {
-		return reserveEmergencyPower;
-	}
-	public void setReserveEmergencyPower(String reserveEmergencyPower) {
-		this.reserveEmergencyPower = reserveEmergencyPower;
-	}
-	public String getSomatosensory() {
-		return somatosensory;
-	}
-	public void setSomatosensory(String somatosensory) {
-		this.somatosensory = somatosensory;
-	}
-	public String getReportCallLocation() {
-		return reportCallLocation;
-	}
-	public void setReportCallLocation(String reportCallLocation) {
-		this.reportCallLocation = reportCallLocation;
-	}
-	public String getAutomaticAnswering() {
-		return automaticAnswering;
-	}
-	public void setAutomaticAnswering(String automaticAnswering) {
-		this.automaticAnswering = automaticAnswering;
-	}
-	public String getSosMsgswitch() {
-		return sosMsgswitch;
-	}
-	public void setSosMsgswitch(String sosMsgswitch) {
-		this.sosMsgswitch = sosMsgswitch;
-	}
-	public String getFlowerNumber() {
-		return flowerNumber;
-	}
-	public void setFlowerNumber(String flowerNumber) {
-		this.flowerNumber = flowerNumber;
-	}
-	public String getBrightScreen() {
-		return brightScreen;
-	}
-	public void setBrightScreen(String brightScreen) {
-		this.brightScreen = brightScreen;
-	}
-	public String getLanguage() {
-		return language;
-	}
-	public void setLanguage(String language) {
-		this.language = language;
-	}
-	public String getTimeZone() {
-		return timeZone;
-	}
-	public void setTimeZone(String timeZone) {
-		this.timeZone = timeZone;
-	}
-	public String getLocationMode() {
-		return locationMode;
-	}
-	public void setLocationMode(String locationMode) {
-		this.locationMode = locationMode;
-	}
-	public String getLocationTime() {
-		return locationTime;
-	}
-	public void setLocationTime(String locationTime) {
-		this.locationTime = locationTime;
-	}
 	public Timestamp getCreatetime() {
 		return createtime;
 	}
@@ -198,5 +86,120 @@ public class WatchDeviceSet {
 	public void setUpdatetime(Timestamp updatetime) {
 		this.updatetime = updatetime;
 	}
+	public Integer getInfoVibration() {
+		return infoVibration;
+	}
+	public void setInfoVibration(Integer infoVibration) {
+		this.infoVibration = infoVibration;
+	}
+	public Integer getInfoVoice() {
+		return infoVoice;
+	}
+	public void setInfoVoice(Integer infoVoice) {
+		this.infoVoice = infoVoice;
+	}
+	public Integer getPhoneComeVibration() {
+		return phoneComeVibration;
+	}
+	public void setPhoneComeVibration(Integer phoneComeVibration) {
+		this.phoneComeVibration = phoneComeVibration;
+	}
+	public Integer getPhoneComeVoice() {
+		return phoneComeVoice;
+	}
+	public void setPhoneComeVoice(Integer phoneComeVoice) {
+		this.phoneComeVoice = phoneComeVoice;
+	}
+	public Integer getWatchOffAlarm() {
+		return watchOffAlarm;
+	}
+	public void setWatchOffAlarm(Integer watchOffAlarm) {
+		this.watchOffAlarm = watchOffAlarm;
+	}
+	public Integer getRejectStrangers() {
+		return rejectStrangers;
+	}
+	public void setRejectStrangers(Integer rejectStrangers) {
+		this.rejectStrangers = rejectStrangers;
+	}
+	public Integer getTimerSwitch() {
+		return timerSwitch;
+	}
+	public void setTimerSwitch(Integer timerSwitch) {
+		this.timerSwitch = timerSwitch;
+	}
+	public Integer getDisabledInClass() {
+		return disabledInClass;
+	}
+	public void setDisabledInClass(Integer disabledInClass) {
+		this.disabledInClass = disabledInClass;
+	}
+	public Integer getReserveEmergencyPower() {
+		return reserveEmergencyPower;
+	}
+	public void setReserveEmergencyPower(Integer reserveEmergencyPower) {
+		this.reserveEmergencyPower = reserveEmergencyPower;
+	}
+	public Integer getSomatosensory() {
+		return somatosensory;
+	}
+	public void setSomatosensory(Integer somatosensory) {
+		this.somatosensory = somatosensory;
+	}
+	public Integer getReportCallLocation() {
+		return reportCallLocation;
+	}
+	public void setReportCallLocation(Integer reportCallLocation) {
+		this.reportCallLocation = reportCallLocation;
+	}
+	public Integer getAutomaticAnswering() {
+		return automaticAnswering;
+	}
+	public void setAutomaticAnswering(Integer automaticAnswering) {
+		this.automaticAnswering = automaticAnswering;
+	}
+	public Integer getSosMsgswitch() {
+		return sosMsgswitch;
+	}
+	public void setSosMsgswitch(Integer sosMsgswitch) {
+		this.sosMsgswitch = sosMsgswitch;
+	}
+	public Integer getFlowerNumber() {
+		return flowerNumber;
+	}
+	public void setFlowerNumber(Integer flowerNumber) {
+		this.flowerNumber = flowerNumber;
+	}
+	public Integer getBrightScreen() {
+		return brightScreen;
+	}
+	public void setBrightScreen(Integer brightScreen) {
+		this.brightScreen = brightScreen;
+	}
+	public Integer getLanguage() {
+		return language;
+	}
+	public void setLanguage(Integer language) {
+		this.language = language;
+	}
+	public Integer getTimeZone() {
+		return timeZone;
+	}
+	public void setTimeZone(Integer timeZone) {
+		this.timeZone = timeZone;
+	}
+	public Integer getLocationMode() {
+		return locationMode;
+	}
+	public void setLocationMode(Integer locationMode) {
+		this.locationMode = locationMode;
+	}
+	public Integer getLocationTime() {
+		return locationTime;
+	}
+	public void setLocationTime(Integer locationTime) {
+		this.locationTime = locationTime;
+	}
+	
 
 }

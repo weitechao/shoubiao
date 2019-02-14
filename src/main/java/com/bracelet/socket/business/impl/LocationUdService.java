@@ -4,7 +4,9 @@ import io.netty.channel.Channel;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +18,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.bracelet.dto.SocketBaseDto;
 import com.bracelet.dto.SocketLoginDto;
 import com.bracelet.dto.WatchLatestLocation;
+import com.bracelet.entity.Fence;
 import com.bracelet.entity.WatchDevice;
+import com.bracelet.service.IFenceService;
 import com.bracelet.service.ILocationService;
 import com.bracelet.service.IVoltageService;
 import com.bracelet.socket.business.IService;
@@ -35,6 +39,9 @@ public class LocationUdService extends AbstractBizService {
 	/*
 	 * @Autowired IVoltageService voltageService;
 	 */
+
+	@Autowired
+	IFenceService fenceService;
 
 	@Override
 	protected SocketBaseDto process1(SocketLoginDto socketLoginDto, JSONObject jsonObject, Channel channel) {
@@ -55,26 +62,26 @@ public class LocationUdService extends AbstractBizService {
 		}
 		String imei = shuzu[1];// 设备imei
 		String no = shuzu[2];// 流水号
-
+		// 处理定位数据
 		chuliLocationInfo(imei, info, no, locationStyle);
 
 		if ("AL".equals(cmd)) {
-			
+
 			String token = limitCache.getRedisKeyValue(imei + "_push");
-			if( !StringUtil.isEmpty(token)){
+			if (!StringUtil.isEmpty(token)) {
 				JSONObject push = new JSONObject();
 				JSONArray jsonArray = new JSONArray();
 				JSONObject dataMap = new JSONObject();
 				dataMap.put("DeviceID", "");
 				String deviceid = limitCache.getRedisKeyValue(imei + "_id");
-				if(deviceid !=null && !"0".equals(deviceid) && !"".equals(deviceid)){
+				if (deviceid != null && !"0".equals(deviceid) && !"".equals(deviceid)) {
 					dataMap.put("DeviceID", deviceid);
-				}else{
+				} else {
 					WatchDevice watchd = ideviceService.getDeviceInfo(imei);
 					if (watchd != null) {
-						deviceid=watchd.getId()+"";
+						deviceid = watchd.getId() + "";
 						dataMap.put("DeviceID", watchd.getId());
-						limitCache.addKey(imei + "_id", watchd.getId()+"");
+						limitCache.addKey(imei + "_id", watchd.getId() + "");
 					}
 				}
 				dataMap.put("Message", 0);
@@ -97,16 +104,16 @@ public class LocationUdService extends AbstractBizService {
 
 				push.put("Code", 1);
 				push.put("New", 1);
-				PushUtil.push(token, "报警信息", push.toString(), "报警信息");	
+				PushUtil.push(token, "报警信息", push.toString(), "报警信息");
 			}
-			
+
 			return "[YW*" + imei + "*0001*0002*AL]";
 		}
 		return "";
 	}
 
 	public void chuliLocationInfo(String imei, String info, String no, Integer locationStyle) {
-		String city = "深圳市";
+		// String city = "深圳市";
 
 		logger.info("imei=" + imei + ",info=" + info + ",no=" + no);
 		String[] infoshuzu = info.split(",");
@@ -126,7 +133,8 @@ public class LocationUdService extends AbstractBizService {
 					+ ",energy=" + energy);
 
 			if (!"0.000000".equals(lat) && !"0.000000".equals(lng)) {
-				String url = Utils.GPS_URL + "?key=" + Utils.SSRH_TIANQI_KEY + "&coordsys=gps&locations=" + lng + "," + lat;
+				String url = Utils.GPS_URL + "?key=" + Utils.SSRH_TIANQI_KEY + "&coordsys=gps&locations=" + lng + ","
+						+ lat;
 				// http://restapi.amap.com/v3/assistant/coordinate/convert?key=c6a272fdecf96b343c31719d6b8cb0be&coordsys=gps&locations=114.0231567,22.5351085
 				logger.info("[LocationService]请求高德GPS位置转换,URL:" + url);
 				String responseJsonString = HttpClientGet.get(url);
@@ -142,16 +150,17 @@ public class LocationUdService extends AbstractBizService {
 					if (locationsArr.length == 2) {
 						lat = locationsArr[1];
 						lng = locationsArr[0];
-						locationService.insertUdInfo(imei, 1, lat, lng, status, time,
-								locationStyle);
-						
-						String locationValue=lat+","+lng+",1"+","+System.currentTimeMillis();
-						limitCache.addKey(imei+"_save",locationValue); 
-						limitCache.addKey(imei+"_last",locationValue); 
-					
+						locationService.insertUdInfo(imei, 1, lat, lng, status, time, locationStyle);
+
+						String locationValue = lat + "," + lng + ",1" + "," + System.currentTimeMillis();
+						limitCache.addKey(imei + "_save", locationValue);
+						limitCache.addKey(imei + "_last", locationValue);
+
+						checkWatchFence(imei, lat, lng);
+
 					}
 				}
-			
+
 			} else {
 				logger.info("GPS定位失败=" + lat + "," + lng);
 			}
@@ -196,44 +205,47 @@ public class LocationUdService extends AbstractBizService {
 
 						String[] arr = location.split(",");
 						if (arr.length == 2) {
-							 lat = arr[1];
-							 lng = arr[0];
+							lat = arr[1];
+							lng = arr[0];
 
-							 String locationValue=lat+","+lng+",2"+","+System.currentTimeMillis();
-						
-								
+							
+							
+							String locationValue = lat + "," + lng + ",2" + "," + System.currentTimeMillis();
+
 							if (locationStyle == 2) {
 								locationService.insertUdInfo(imei, 2, lat, lng, status, time, locationStyle);
-								limitCache.addKey(imei+"_save",locationValue); 
+								limitCache.addKey(imei + "_save", locationValue);
 							} else {
-							    String locationLastInfo = limitCache.getRedisKeyValue(imei+"_save");
+								String locationLastInfo = limitCache.getRedisKeyValue(imei + "_save");
 								if (!StringUtil.isEmpty(locationLastInfo)) {
-									
+
 									String[] locationShuzu = locationLastInfo.split(",");
 									Long timeStampSave = Long.valueOf(locationShuzu[3]);
 									String latSave = locationShuzu[0];
 									String lngSave = locationShuzu[1];
-									
-									if (((System.currentTimeMillis() - timeStampSave  ) / (60 * 1000)) >= 3) {
+
+									if (((System.currentTimeMillis() - timeStampSave) / (60 * 1000)) >= 3) {
 										locationService.insertUdInfo(imei, 2, lat, lng, status, time, locationStyle);
-										limitCache.addKey(imei+"_save",locationValue); 
+										limitCache.addKey(imei + "_save", locationValue);
 									} else {
 										double calcDistance = Utils.calcDistance(Double.valueOf(lngSave),
-												Double.valueOf(latSave), Double.valueOf(lng),
-												Double.valueOf(lat));
+												Double.valueOf(latSave), Double.valueOf(lng), Double.valueOf(lat));
 										if (calcDistance > 550) {
-											locationService.insertUdInfo(imei, 2, lat, lng, status, time, locationStyle);
-											limitCache.addKey(imei+"_save",locationValue); 
+											locationService.insertUdInfo(imei, 2, lat, lng, status, time,
+													locationStyle);
+											limitCache.addKey(imei + "_save", locationValue);
 										}
 									}
-									
+
 								} else {
 									locationService.insertUdInfo(imei, 2, lat, lng, status, time, locationStyle);
-									limitCache.addKey(imei+"_save",locationValue); 
+									limitCache.addKey(imei + "_save", locationValue);
 								}
 							}
-								
-							limitCache.addKey(imei+"_last",locationValue); 
+
+							limitCache.addKey(imei + "_last", locationValue);
+							
+							checkWatchFence(imei, lat, lng);
 						}
 					}
 				}
@@ -271,47 +283,48 @@ public class LocationUdService extends AbstractBizService {
 
 							String[] arr = location.split(",");
 							if (arr.length == 2) {
-								 lat = arr[1];
-								 lng = arr[0];
-								 
-								 String locationValue=lat+","+lng+",3"+","+System.currentTimeMillis();
-								 
-							
+								lat = arr[1];
+								lng = arr[0];
+								
+								String locationValue = lat + "," + lng + ",3" + "," + System.currentTimeMillis();
+
 								if (locationStyle == 2) {
 
 									locationService.insertUdInfo(imei, 3, lat, lng, status, time, locationStyle);
-									limitCache.addKey(imei+"_save",locationValue); 
+									limitCache.addKey(imei + "_save", locationValue);
 								} else {
-								    String locationLastInfo = limitCache.getRedisKeyValue(imei+"_save");
+									String locationLastInfo = limitCache.getRedisKeyValue(imei + "_save");
 									if (!StringUtil.isEmpty(locationLastInfo)) {
-										
+
 										String[] locationShuzu = locationLastInfo.split(",");
 										Long timeStampSave = Long.valueOf(locationShuzu[3]);
 										String latSave = locationShuzu[0];
 										String lngSave = locationShuzu[1];
-										
+
 										if (((System.currentTimeMillis() - timeStampSave) / (60 * 1000)) >= 3) {
-											locationService.insertUdInfo(imei, 3, lat, lng, status, time, locationStyle);
-											limitCache.addKey(imei+"_save",locationValue); 
-											
+											locationService.insertUdInfo(imei, 3, lat, lng, status, time,
+													locationStyle);
+											limitCache.addKey(imei + "_save", locationValue);
+
 										} else {
 											double calcDistance = Utils.calcDistance(Double.valueOf(lngSave),
-													Double.valueOf(latSave), Double.valueOf(lng),
-													Double.valueOf(lat));
+													Double.valueOf(latSave), Double.valueOf(lng), Double.valueOf(lat));
 											if (calcDistance > 550) {
-												locationService.insertUdInfo(imei, 3, lat, lng, status, time, locationStyle);
-												limitCache.addKey(imei+"_save",locationValue); 
+												locationService.insertUdInfo(imei, 3, lat, lng, status, time,
+														locationStyle);
+												limitCache.addKey(imei + "_save", locationValue);
 											}
 										}
-										
+
 									} else {
 										locationService.insertUdInfo(imei, 3, lat, lng, status, time, locationStyle);
-										limitCache.addKey(imei+"_save",locationValue); 
+										limitCache.addKey(imei + "_save", locationValue);
 									}
 								}
-							
-								limitCache.addKey(imei+"_last",locationValue); 
+
+								limitCache.addKey(imei + "_last", locationValue);
 								
+								checkWatchFence(imei, lat, lng);
 							}
 						}
 					}
@@ -320,6 +333,108 @@ public class LocationUdService extends AbstractBizService {
 		}
 	}
 
-	
-	
+	private void checkWatchFence(String imei, String lat, String lng) {
+		List<Fence> fenoneList = fenceService.getWatchFenceList(imei);
+		if (fenoneList != null) {
+			for (Fence fenone : fenoneList) {
+				if (fenone.getIs_enable() == 1) {
+					// 如果电子围栏的开关是开,就进行检查
+					// 计算距离
+					double distance = Utils.calcDistance(Double.parseDouble(lng), Double.parseDouble(lat),
+							Double.parseDouble(fenone.getLng()), Double.parseDouble(fenone.getLat()));
+					if (fenone.getIs_entry() == 1 && distance < fenone.getRadius()) {
+						// 进入电子围栏
+						String token = limitCache.getRedisKeyValue(imei + "_push");
+						if (!StringUtil.isEmpty(token)) {
+							JSONObject push = new JSONObject();
+							JSONArray jsonArray = new JSONArray();
+							JSONObject dataMap = new JSONObject();
+							dataMap.put("DeviceID", "");
+							String deviceid = limitCache.getRedisKeyValue(imei + "_id");
+							if (!StringUtil.isEmpty(deviceid) && !"0".equals(deviceid)) {
+								dataMap.put("DeviceID", deviceid);
+							} else {
+								WatchDevice watchd = ideviceService.getDeviceInfo(imei);
+								if (watchd != null) {
+									deviceid = watchd.getId() + "";
+									dataMap.put("DeviceID", watchd.getId());
+									limitCache.addKey(imei + "_id", watchd.getId() + "");
+								}
+							}
+							dataMap.put("Message", 1);
+							dataMap.put("Voice", 0);
+							dataMap.put("SMS", 0);
+							dataMap.put("Photo", 0);
+							jsonArray.add(dataMap);
+							push.put("NewList", jsonArray);
+							JSONArray jsonArray1 = new JSONArray();
+							JSONObject dataMap1 = new JSONObject();
+							jsonArray1.add(dataMap1);
+							push.put("DeviceState", jsonArray1);
+
+							JSONArray jsonArray2 = new JSONArray();
+							JSONObject dataMap2 = new JSONObject();
+							dataMap2.put("Type", 102);
+							dataMap2.put("DeviceID", deviceid);
+							jsonArray2.add(dataMap2);
+							push.put("Notification", jsonArray2);
+
+							push.put("Code", 1);
+							push.put("New", 1);
+							PushUtil.push(token, "手表进入名字叫" + fenone.getName() + "的电子围栏", push.toString(),
+									"手表进入名字叫" + fenone.getName() + "的电子围栏");
+						}
+
+					}
+
+					if (fenone.getIs_exit() == 1 && distance > fenone.getRadius()) {
+						// 离开电子围栏
+						String token = limitCache.getRedisKeyValue(imei + "_push");
+						if (!StringUtil.isEmpty(token)) {
+							JSONObject push = new JSONObject();
+							JSONArray jsonArray = new JSONArray();
+							JSONObject dataMap = new JSONObject();
+							dataMap.put("DeviceID", "");
+							String deviceid = limitCache.getRedisKeyValue(imei + "_id");
+							if (!StringUtil.isEmpty(deviceid) && !"0".equals(deviceid)) {
+								dataMap.put("DeviceID", deviceid);
+							} else {
+								WatchDevice watchd = ideviceService.getDeviceInfo(imei);
+								if (watchd != null) {
+									deviceid = watchd.getId() + "";
+									dataMap.put("DeviceID", watchd.getId());
+									limitCache.addKey(imei + "_id", watchd.getId() + "");
+								}
+							}
+							dataMap.put("Message", 1);
+							dataMap.put("Voice", 0);
+							dataMap.put("SMS", 0);
+							dataMap.put("Photo", 0);
+							jsonArray.add(dataMap);
+							push.put("NewList", jsonArray);
+							JSONArray jsonArray1 = new JSONArray();
+							JSONObject dataMap1 = new JSONObject();
+							jsonArray1.add(dataMap1);
+							push.put("DeviceState", jsonArray1);
+
+							JSONArray jsonArray2 = new JSONArray();
+							JSONObject dataMap2 = new JSONObject();
+							dataMap2.put("Type", 103);
+							dataMap2.put("DeviceID", deviceid);
+							jsonArray2.add(dataMap2);
+							push.put("Notification", jsonArray2);
+
+							push.put("Code", 1);
+							push.put("New", 1);
+							PushUtil.push(token, "手表离开了名字叫" + fenone.getName() + "的电子围栏", push.toString(),
+									"手表离开了名字叫" + fenone.getName() + "的电子围栏");
+						}
+
+					}
+
+				}
+			}
+		}
+	}
+
 }

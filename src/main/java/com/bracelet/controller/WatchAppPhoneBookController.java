@@ -86,17 +86,7 @@ public class WatchAppPhoneBookController extends BaseController {
 			return bb.toString();
 		}
 
-		WatchPhoneBook phoneBook = memberService.getPhoneBookByImeiAndPhone(imei, phone);
-	/*	if (phoneBook != null) {
-			bb.put("Code", 3);
-			return bb.toString();
-		}*/
-		if (phoneBook == null) {
-			memberService.insertPhoneBookInfo(imei, name, phone, cornet, headType, 1);
-			bb.put("DeviceContactId", memberService.getPhoneBookByImeiAndPhone(imei, phone).getId());
-		}else{
-			bb.put("DeviceContactId", phoneBook.getId());
-		}
+		
 
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 
@@ -107,6 +97,16 @@ public class WatchAppPhoneBookController extends BaseController {
 
 		StringBuffer sb = new StringBuffer("[YW*" + imei + "*0001*");
 		if (socketLoginDto.getChannel().isActive()) {
+			
+			WatchPhoneBook phoneBook = memberService.getPhoneBookByImeiAndPhone(imei, phone);
+			
+			if (phoneBook == null) {
+				memberService.insertPhoneBookInfo(imei, name, phone, cornet, headType, 1);
+				bb.put("DeviceContactId", memberService.getPhoneBookByImeiAndPhone(imei, phone).getId());
+			}else{
+				bb.put("DeviceContactId", phoneBook.getId());
+			}
+			
 			StringBuffer sb1 = new StringBuffer("");
 			StringBuffer sb2 = new StringBuffer("");
 

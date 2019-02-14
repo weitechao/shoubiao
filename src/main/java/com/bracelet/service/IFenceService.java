@@ -27,9 +27,9 @@ public interface IFenceService {
 
 	boolean deleteOddShape(Long id, Long user_id);
 
-	boolean insert(String imei, String name, String lat, String lng, String radius);
+	boolean insert(String imei, String name, String lat, String lng, String radius, Integer entry,Integer exit, Integer enable);
 
-	boolean updateWatchFence(Long id, String imei, String name, String lat, String lng, String radius);
+	boolean updateWatchFence(Long id, String imei, String name, String lat, String lng, String radius,Integer entry,Integer exit, Integer enable);
 
 	boolean deleteWatchFence(Long id);
 	
