@@ -24,6 +24,7 @@ import com.bracelet.service.IWatchDeviceService;
 import com.bracelet.util.ChannelMap;
 import com.bracelet.util.RadixUtil;
 import com.bracelet.util.RespCode;
+import com.bracelet.util.StringUtil;
 import com.bracelet.util.Utils;
 
 import org.apache.commons.codec.binary.Base64;
@@ -118,13 +119,31 @@ public class WatchDeviceInfoController extends BaseController {
 			WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfo(imei);
 			if (whsc != null) {
 				bb.put("SchoolAddress", whsc.getSchoolAddress()+"");
-				bb.put("SchoolLat", whsc.getSchoolLat()+"");
-				bb.put("SchoolLng", whsc.getSchoolLng()+"");
+				
 				bb.put("UpdateTime", whsc.getUpdatetime().getTime()+"");
 				bb.put("LatestTime", whsc.getLatestTime()+"");
 				bb.put("HomeAddress", whsc.getHomeAddress()+"");
-				bb.put("HomeLat", whsc.getHomeLat()+"");
-				bb.put("HomeLng", whsc.getHomeLng()+"");
+				
+				if(StringUtil.isEmpty(whsc.getSchoolLat())){
+					bb.put("SchoolLat","0");
+				}else{
+					bb.put("SchoolLat", whsc.getSchoolLat()+"");
+				}
+				if(StringUtil.isEmpty(whsc.getSchoolLng())){
+					bb.put("SchoolLng","0");
+				}else{
+					bb.put("SchoolLng", whsc.getSchoolLng()+"");
+				}
+				if(StringUtil.isEmpty(whsc.getHomeLat())){
+					bb.put("HomeLat","0");
+				}else{
+					bb.put("HomeLat",  whsc.getHomeLat()+"");
+				}
+				if(StringUtil.isEmpty(whsc.getHomeLng())){
+					bb.put("HomeLng","0");
+				}else{
+					bb.put("HomeLng",  whsc.getHomeLng()+"");
+				}
 			}
 
 		} else {
@@ -161,17 +180,43 @@ public class WatchDeviceInfoController extends BaseController {
 				
 				WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfo(imei);
 				if (whsc == null) {
-					ideviceService.insertDeviceHomeAndFamilyInfo(watchh.getId(), imei, "", "08:00-12:00", "14:00-17:00", "", "", "", "", "",
-							"", "");
+					ideviceService.insertDeviceHomeAndFamilyInfo(watchh.getId(), imei, "", "08:00-12:00", "14:00-17:00", "", "0", "0", "", "",
+							"0", "0");
 				}else{
 					bb.put("SchoolAddress", whsc.getSchoolAddress()+"");
-					bb.put("SchoolLat", whsc.getSchoolLat()+"");
-					bb.put("SchoolLng", whsc.getSchoolLng()+"");
+					
 					bb.put("UpdateTime", whsc.getUpdatetime().getTime());
 					bb.put("LatestTime", "");
+				
+					bb.put("HomeAddress",whsc.getHomeAddress()+"");
+					
+					bb.put("SchoolLat", whsc.getSchoolLat()+"");
+					bb.put("SchoolLng", whsc.getSchoolLng()+"");
 					bb.put("HomeLat", whsc.getHomeLat()+"");
 					bb.put("HomeLng", whsc.getHomeLng()+"");
-					bb.put("HomeAddress",whsc.getHomeAddress()+"");
+					
+					
+					if(StringUtil.isEmpty(whsc.getSchoolLat())){
+						bb.put("SchoolLat","0");
+					}else{
+						bb.put("SchoolLat", whsc.getSchoolLat()+"");
+					}
+					if(StringUtil.isEmpty(whsc.getSchoolLng())){
+						bb.put("SchoolLng","0");
+					}else{
+						bb.put("SchoolLng", whsc.getSchoolLng()+"");
+					}
+					if(StringUtil.isEmpty(whsc.getHomeLat())){
+						bb.put("HomeLat","0");
+					}else{
+						bb.put("HomeLat",  whsc.getHomeLat()+"");
+					}
+					if(StringUtil.isEmpty(whsc.getHomeLng())){
+						bb.put("HomeLng","0");
+					}else{
+						bb.put("HomeLng",  whsc.getHomeLng()+"");
+					}
+					
 				}
 				bb.put("Code", 1);
 

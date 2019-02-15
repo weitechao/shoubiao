@@ -117,7 +117,7 @@ public class WatchAppPhoneBookController extends BaseController {
 				sb1.append(",");
 				for (WatchPhoneBook WatchPhoneBook : watchbookList) {
 					if (sb2.toString().isEmpty()) {
-						sb2.append("1000000000");
+						sb2.append(WatchPhoneBook.getHeadtype());
 						sb2.append("-");
 						sb2.append(WatchPhoneBook.getName());
 						sb2.append("-");
@@ -129,10 +129,10 @@ public class WatchAppPhoneBookController extends BaseController {
 						sb2.append("-");
 						sb2.append("0000");
 						sb2.append("-");
-						sb2.append("95078001011");
+						sb2.append("");
 					} else {
 						sb2.append("|");
-						sb2.append("1000000000");
+						sb2.append(WatchPhoneBook.getHeadtype());
 						sb2.append("-");
 						sb2.append(WatchPhoneBook.getName());
 						sb2.append("-");
@@ -144,7 +144,7 @@ public class WatchAppPhoneBookController extends BaseController {
 						sb2.append("-");
 						sb2.append("0000");
 						sb2.append("-");
-						sb2.append("95078001011");
+						sb2.append("");
 					}
 				}
 			} else {
@@ -194,6 +194,8 @@ public class WatchAppPhoneBookController extends BaseController {
 				JSONObject dataMap2 = new JSONObject();
 				dataMap2.put("Type", 7);
 				dataMap2.put("DeviceID", deviceid);
+				dataMap2.put("Message", "通讯录已同步");
+				dataMap2.put("imei", imei);
 				jsonArray2.add(dataMap2);
 				push.put("Notification", jsonArray2);
 
@@ -281,7 +283,7 @@ public class WatchAppPhoneBookController extends BaseController {
 				sb1.append(",");
 				for (WatchPhoneBook WatchPhoneBook : watchbookList) {
 					if (sb2.toString().isEmpty()) {
-						sb2.append("1000000000");
+						sb2.append(WatchPhoneBook.getHeadtype());
 						sb2.append("-");
 						sb2.append(WatchPhoneBook.getName());
 						sb2.append("-");
@@ -293,10 +295,10 @@ public class WatchAppPhoneBookController extends BaseController {
 						sb2.append("-");
 						sb2.append("0000");
 						sb2.append("-");
-						sb2.append("95078001011");
+						sb2.append("");
 					} else {
 						sb2.append("|");
-						sb2.append("1000000000");
+						sb2.append(WatchPhoneBook.getHeadtype());
 						sb2.append("-");
 						sb2.append(WatchPhoneBook.getName());
 						sb2.append("-");
@@ -308,7 +310,7 @@ public class WatchAppPhoneBookController extends BaseController {
 						sb2.append("-");
 						sb2.append("0000");
 						sb2.append("-");
-						sb2.append("95078001011");
+						sb2.append("");
 					}
 				}
 			} else {
@@ -356,6 +358,7 @@ public class WatchAppPhoneBookController extends BaseController {
 			JSONObject dataMap2 = new JSONObject();
 			dataMap2.put("Type", 7);
 			dataMap2.put("DeviceID", deviceid);
+			dataMap2.put("Message", "通讯录已同步");
 			jsonArray2.add(dataMap2);
 			push.put("Notification", jsonArray2);
 
@@ -409,7 +412,7 @@ public class WatchAppPhoneBookController extends BaseController {
 				sb1.append(",");
 				for (WatchPhoneBook WatchPhoneBook : watchbookList) {
 					if (sb2.toString().isEmpty()) {
-						sb2.append("1000000000");
+						sb2.append(WatchPhoneBook.getHeadtype());
 						sb2.append("-");
 						sb2.append(WatchPhoneBook.getName());
 						sb2.append("-");
@@ -421,10 +424,10 @@ public class WatchAppPhoneBookController extends BaseController {
 						sb2.append("-");
 						sb2.append("0000");
 						sb2.append("-");
-						sb2.append("95078001011");
+						sb2.append("");
 					} else {
 						sb2.append("|");
-						sb2.append("1000000000");
+						sb2.append(WatchPhoneBook.getHeadtype());
 						sb2.append("-");
 						sb2.append(WatchPhoneBook.getName());
 						sb2.append("-");
@@ -436,7 +439,7 @@ public class WatchAppPhoneBookController extends BaseController {
 						sb2.append("-");
 						sb2.append("0000");
 						sb2.append("-");
-						sb2.append("95078001011");
+						sb2.append("");
 					}
 				}
 			} else {
@@ -485,6 +488,7 @@ public class WatchAppPhoneBookController extends BaseController {
 			JSONObject dataMap2 = new JSONObject();
 			dataMap2.put("Type", 7);
 			dataMap2.put("DeviceID", deviceid);
+			dataMap2.put("Message", "通讯录已同步");
 			jsonArray2.add(dataMap2);
 			push.put("Notification", jsonArray2);
 

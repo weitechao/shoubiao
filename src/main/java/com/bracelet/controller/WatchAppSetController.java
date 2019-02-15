@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.bracelet.dto.HttpBaseDto;
 import com.bracelet.dto.SocketLoginDto;
 import com.bracelet.entity.BindDevice;
+import com.bracelet.entity.HealthStepManagement;
 import com.bracelet.entity.Location;
 import com.bracelet.entity.LocationFrequency;
 import com.bracelet.entity.LocationOld;
@@ -192,7 +193,7 @@ public class WatchAppSetController extends BaseController {
 			}
 			
 
-			StringBuffer sendMsg = new StringBuffer("SET" + ",123456,F48,");
+			StringBuffer sendMsg = new StringBuffer("SET" + ",,1234,F48,");
 
 			if ("1".equals(disabledInClass)) {
 				WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfo(imei);
@@ -281,6 +282,8 @@ public class WatchAppSetController extends BaseController {
 			JSONObject dataMap2 = new JSONObject();
 			dataMap2.put("Type", 231);
 			dataMap2.put("DeviceID", deviceid);
+			dataMap2.put("Message", "成功更新设备设置");
+			dataMap2.put("imei", imei);
 			jsonArray2.add(dataMap2);
 			push.put("Notification", jsonArray2);
 
@@ -350,14 +353,22 @@ public class WatchAppSetController extends BaseController {
 			bb.put("StepCalculate", "");
 			bb.put("HrCalculate", "");
 			bb.put("SosMsgswitch", "");
+			
 			bb.put("CreateTime", deviceSet.getCreatetime().getTime());
 			bb.put("UpdateTime", deviceSet.getUpdatetime().getTime());
-
+			
 			bb.put("BrightScreen", deviceSet.getBrightScreen());
 			bb.put("LocationMode", deviceSet.getLocationMode());
 			bb.put("LocationTime", deviceSet.getLocationTime());
 			bb.put("FlowerNumber", deviceSet.getFlowerNumber());
 			bb.put("SosMsgswitch", deviceSet.getSosMsgswitch());
+			
+			HealthStepManagement  heathM = confService.getHeathStepInfo(imei);
+	   		if(heathM != null){
+	   		   bb.put("sleepCalculate", heathM.getSleepCalculate()+"");
+	   		   bb.put("hrCalculate", heathM.getHrCalculate()+"");
+	   		   bb.put("stepCalculate", heathM.getStepCalculate()+"");
+	   		}
 
 			LocationFrequency locaFre = watchSetService.getLocationFrequencyByImei(imei);
 			if (locaFre != null) {

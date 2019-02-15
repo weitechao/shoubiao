@@ -87,12 +87,14 @@ public class WatchAppTkController extends BaseController {
 
 		 byte[] voicebyte = Base64.decodeBase64(voiceData);
 		 
+		 
+		 
 		Utils.createFileContent(Utils.VOICE_FILE_lINUX, "app_"+sourceName, voicebyte);
 	
-		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
-			JSONArray jsonArray = new JSONArray();
-			String msgNumber =Utils.randomString(5);
-		watchtkService.insertAppVoiceInfo("app", imei, sourceName, Utils.VOICE_URL + "app_"+sourceName, 0, msgNumber, 1, 1);
+		
+		JSONArray jsonArray = new JSONArray();
+		String msgNumber =Utils.randomString(5);
+		
 		bb.put("Code", 1);
 		
 	   // WatchVoiceInfo watchAppVoice = watchtkService.getAppVoiceInfoByImeiAndStatus(imei, 1);
@@ -136,7 +138,7 @@ public class WatchAppTkController extends BaseController {
 				jsonArray.add(dataMap);
 		        bb.put("VoiceList", jsonArray);
 		
-		
+	     SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
 			bb.put("Code", 2);
 			return bb.toString();
@@ -144,39 +146,38 @@ public class WatchAppTkController extends BaseController {
 
 		if (socketLoginDto.getChannel().isActive()) {
 			bb.put("Code", 1);
-			if(voicebyte.length>1024){
-				Integer zheng = voicebyte.length/1024;
-				Integer shengyu = voicebyte.length%1024;
-				if(shengyu>0){
-					zheng+=1;
-				}
-				for(int i =0;i<zheng;i++){
-					if(i-zheng != -1){
-						String msg = "TK," + phone + "," + sourceName + ","+ (i+1) +","+zheng+",";
-						String reps = "[YW*" + imei + "*0003*" + RadixUtil.changeRadix(msg.length()+1024) + "*";
+			try {
+				String voicebyteUtf8 = new String(voicebyte,"UTF-8");
+				int a = voicebyteUtf8.length()/1024;
+				for(int i=0;i<a+1;i++){
+					if(i !=a){
+						String sendVoice = voicebyteUtf8.substring(1024*i,(i+1)*1024);
+						
+						String msg = "TK," + phone + "," + sourceName + ","+(i+1) + ","+(a+1)+","+sendVoice;
+						String reps = "[YW*" + imei + "*0003*" + RadixUtil.changeRadix(msg) +"*"+ msg + "]";
+						logger.info("app语音发送="+reps);
 						socketLoginDto.getChannel().writeAndFlush(reps);
-						byte[] voiceSubByte = Utils.subByte(voicebyte, 1024*i, 1024*(i+1));
-						socketLoginDto.getChannel().writeAndFlush(voiceSubByte);
+						
 					}else{
-						String msg = "TK," + phone + "," + sourceName + ","+ (i+1) +","+zheng+",";
-						String reps = "[YW*" + imei + "*0003*" + RadixUtil.changeRadix(msg.length()+(voicebyte.length-i*1024)) + "*";
+						String sendVoice = voicebyteUtf8.substring(1024*i,voicebyteUtf8.length());
+						
+						String msg = "TK," + phone + "," + sourceName + ","+(i+1) + ","+(a+1)+","+sendVoice;
+						String reps = "[YW*" + imei + "*0003*" + RadixUtil.changeRadix(msg) +"*"+ msg + "]";
+						logger.info("app语音发送="+reps);
 						socketLoginDto.getChannel().writeAndFlush(reps);
-						byte[] voiceSubByte = Utils.subByte(voicebyte, 1024*i, voicebyte.length-i*1024);
-						socketLoginDto.getChannel().writeAndFlush(voiceSubByte);
 					}
 				}
-			}else{
-				String msg = "TK," + phone + "," + sourceName + ","+ 1 +","+1+",";
-				String reps = "[YW*" + imei + "*0003*" + RadixUtil.changeRadix(msg.length()+voicebyte.length) + "*";
-				socketLoginDto.getChannel().writeAndFlush(reps);
-				socketLoginDto.getChannel().writeAndFlush(voicebyte);
+			
+				
+			
+			watchtkService.insertAppVoiceInfo("app", imei, sourceName, Utils.VOICE_URL + "app_"+sourceName, 1, msgNumber, 1, 1);
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 			
-		
-
-			watchtkService.insertAppVoiceInfo("app", imei, sourceName, voiceData, 1, msgNumber, 1, 1);
 		} else {
-			watchtkService.insertAppVoiceInfo("app", imei, sourceName, voiceData, 0, msgNumber, 1, 1);
+			watchtkService.insertAppVoiceInfo("app", imei, sourceName, Utils.VOICE_URL + "app_"+sourceName, 0, msgNumber, 1, 1);
 			bb.put("Code", 0);
 		}
 		return bb.toString();
@@ -278,7 +279,7 @@ public class WatchAppTkController extends BaseController {
 				dataMap.put("ObjectId", "");
 				dataMap.put("Mark", "");
 				dataMap.put("Path", WatchVoiceInfo.getSource_name());
-				dataMap.put("Length", 0);
+				dataMap.put("Length", 2);
 				dataMap.put("CreateTime", "");
 				dataMap.put("UpdateTime", "");
 				jsonArray.add(dataMap);

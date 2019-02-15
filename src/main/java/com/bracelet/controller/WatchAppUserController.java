@@ -32,6 +32,7 @@ import com.bracelet.service.WatchTkService;
 import com.bracelet.util.ChannelMap;
 import com.bracelet.util.RanomUtil;
 import com.bracelet.util.RespCode;
+import com.bracelet.util.StringUtil;
 import com.bracelet.util.Utils;
 
 import org.apache.commons.codec.binary.Base64;
@@ -113,7 +114,8 @@ public class WatchAppUserController extends BaseController {
 					bb.put("NotificationVibration", "True");
 					bb.put("ip", Utils.IP + ":" + Utils.PORT_HTTP);
 
-					if (ipport != null && !"".equals(ipport)) {
+					
+					if (!StringUtil.isEmpty(ipport)) {
 						bb.put("ip", ipport);
 					}
 
@@ -359,17 +361,20 @@ public class WatchAppUserController extends BaseController {
 				dataMap.put("Grade", 0);
 				dataMap.put("HireExpireDate", "0");
 				dataMap.put("HireStartDate", "0");
-				dataMap.put("HomeAddress", "0");
+				
+				dataMap.put("HomeAddress", "");
 				dataMap.put("HomeLat", "0");
 				dataMap.put("HomeLng", "0");
+				dataMap.put("SchoolLat", "0");
+				dataMap.put("SchoolLng", "0");
+				dataMap.put("SchoolAddress", "");
+				
 				dataMap.put("IsGuard", "0");
 				dataMap.put("Password", "0");
 				dataMap.put("PhoneCornet", "");
 				dataMap.put("PhoneNumber", "");
 				dataMap.put("Photo", "0");
-				dataMap.put("SchoolAddress", "0");
-				dataMap.put("SchoolLat", "0");
-				dataMap.put("SchoolLng", "0");
+			
 				dataMap.put("SerialNumber", location.getImei());
 				dataMap.put("LatestTime", "0");
 				dataMap.put("UpdateTime", "0");

@@ -143,15 +143,15 @@ public class DeviceServiceImpl implements IDeviceService {
 
 	@Override
 	@DataSourceChange(slave = true)
-	public WatchDeviceHomeSchool getDeviceHomeAndFamilyInfo(String id) {
+	public WatchDeviceHomeSchool getDeviceHomeAndFamilyInfo(String imei) {
 		String sql = "select * from device_watch_hf_info where imei=? LIMIT 1";
-		List<WatchDeviceHomeSchool> list = jdbcTemplate.query(sql, new Object[] { id },
+		List<WatchDeviceHomeSchool> list = jdbcTemplate.query(sql, new Object[] { imei },
 				new BeanPropertyRowMapper<WatchDeviceHomeSchool>(WatchDeviceHomeSchool.class));
 
 		if (list != null && !list.isEmpty()) {
 			return list.get(0);
 		} else {
-			logger.info("get getDeviceInfo imei:" + id);
+			logger.info("get getDeviceInfo imei:" + imei);
 		}
 		return null;
 	}

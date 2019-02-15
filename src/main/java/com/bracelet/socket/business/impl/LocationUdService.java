@@ -2,11 +2,8 @@ package com.bracelet.socket.business.impl;
 
 import io.netty.channel.Channel;
 
-import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +14,10 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.bracelet.dto.SocketBaseDto;
 import com.bracelet.dto.SocketLoginDto;
-import com.bracelet.dto.WatchLatestLocation;
 import com.bracelet.entity.Fence;
 import com.bracelet.entity.WatchDevice;
 import com.bracelet.service.IFenceService;
 import com.bracelet.service.ILocationService;
-import com.bracelet.service.IVoltageService;
-import com.bracelet.socket.business.IService;
-import com.bracelet.util.ChannelMap;
 import com.bracelet.util.HttpClientGet;
 import com.bracelet.util.PushUtil;
 import com.bracelet.util.StringUtil;
@@ -99,6 +92,8 @@ public class LocationUdService extends AbstractBizService {
 				JSONObject dataMap2 = new JSONObject();
 				dataMap2.put("Type", 101);
 				dataMap2.put("DeviceID", deviceid);
+				dataMap2.put("Message", "报警信息");
+				dataMap2.put("imei", imei);
 				jsonArray2.add(dataMap2);
 				push.put("Notification", jsonArray2);
 
@@ -155,8 +150,12 @@ public class LocationUdService extends AbstractBizService {
 						String locationValue = lat + "," + lng + ",1" + "," + System.currentTimeMillis();
 						limitCache.addKey(imei + "_save", locationValue);
 						limitCache.addKey(imei + "_last", locationValue);
-
-						checkWatchFence(imei, lat, lng);
+						
+						String token = limitCache.getRedisKeyValue(imei + "_push");
+						//触发时间
+						String triggerTime = Utils.getTime(System.currentTimeMillis());
+						pushDeviceLocationSuccess(token,"设备"+triggerTime+"成功定位",imei);
+						pushCheckWatchFence(token, imei, lat, lng, triggerTime);
 
 					}
 				}
@@ -245,7 +244,11 @@ public class LocationUdService extends AbstractBizService {
 
 							limitCache.addKey(imei + "_last", locationValue);
 							
-							checkWatchFence(imei, lat, lng);
+							String token = limitCache.getRedisKeyValue(imei + "_push");
+							String triggerTime = Utils.getTime(System.currentTimeMillis());
+							pushDeviceLocationSuccess(token,"设备"+triggerTime+"成功定位",imei);
+							pushCheckWatchFence(token, imei, lat, lng, triggerTime);
+							
 						}
 					}
 				}
@@ -324,7 +327,10 @@ public class LocationUdService extends AbstractBizService {
 
 								limitCache.addKey(imei + "_last", locationValue);
 								
-								checkWatchFence(imei, lat, lng);
+								String token = limitCache.getRedisKeyValue(imei + "_push");
+								String triggerTime = Utils.getTime(System.currentTimeMillis());
+								pushDeviceLocationSuccess(token,"设备"+triggerTime+"成功定位",imei);
+								pushCheckWatchFence(token, imei, lat, lng, triggerTime);
 							}
 						}
 					}
@@ -333,7 +339,52 @@ public class LocationUdService extends AbstractBizService {
 		}
 	}
 
-	private void checkWatchFence(String imei, String lat, String lng) {
+	private void pushDeviceLocationSuccess(String token,String msg,String imei) {	
+		
+	   if (!StringUtil.isEmpty(token)) {
+		JSONObject push = new JSONObject();
+		JSONArray jsonArray = new JSONArray();
+		JSONObject dataMap = new JSONObject();
+		dataMap.put("DeviceID", "");
+		String deviceid = limitCache.getRedisKeyValue(imei + "_id");
+		if (!StringUtil.isEmpty(deviceid) && !"0".equals(deviceid)) {
+			dataMap.put("DeviceID", deviceid);
+		} else {
+			WatchDevice watchd = ideviceService.getDeviceInfo(imei);
+			if (watchd != null) {
+				deviceid = watchd.getId() + "";
+				dataMap.put("DeviceID", watchd.getId());
+				limitCache.addKey(imei + "_id", watchd.getId() + "");
+			}
+		}
+		dataMap.put("Message", 1);
+		dataMap.put("Voice", 0);
+		dataMap.put("SMS", 0);
+		dataMap.put("Photo", 0);
+		jsonArray.add(dataMap);
+		push.put("NewList", jsonArray);
+		JSONArray jsonArray1 = new JSONArray();
+		JSONObject dataMap1 = new JSONObject();
+		jsonArray1.add(dataMap1);
+		push.put("DeviceState", jsonArray1);
+
+		JSONArray jsonArray2 = new JSONArray();
+		JSONObject dataMap2 = new JSONObject();
+		dataMap2.put("Type", 103);
+		dataMap2.put("DeviceID", deviceid);
+		dataMap2.put("Message", msg);
+		dataMap2.put("imei", imei);
+		jsonArray2.add(dataMap2);
+		push.put("Notification", jsonArray2);
+
+		push.put("Code", 1);
+		push.put("New", 1);
+		PushUtil.push(token, msg, push.toString(),msg);
+	}
+	   
+	}
+
+	private void pushCheckWatchFence(String token, String imei ,String lat, String lng,String triggerTime) {
 		List<Fence> fenoneList = fenceService.getWatchFenceList(imei);
 		if (fenoneList != null) {
 			for (Fence fenone : fenoneList) {
@@ -344,7 +395,7 @@ public class LocationUdService extends AbstractBizService {
 							Double.parseDouble(fenone.getLng()), Double.parseDouble(fenone.getLat()));
 					if (fenone.getIs_entry() == 1 && distance < fenone.getRadius()) {
 						// 进入电子围栏
-						String token = limitCache.getRedisKeyValue(imei + "_push");
+					
 						if (!StringUtil.isEmpty(token)) {
 							JSONObject push = new JSONObject();
 							JSONArray jsonArray = new JSONArray();
@@ -376,20 +427,21 @@ public class LocationUdService extends AbstractBizService {
 							JSONObject dataMap2 = new JSONObject();
 							dataMap2.put("Type", 102);
 							dataMap2.put("DeviceID", deviceid);
+							dataMap2.put("Message", "手表"+triggerTime+"进入名字叫" + fenone.getName() + "的电子围栏");
+							dataMap2.put("imei", imei);
 							jsonArray2.add(dataMap2);
 							push.put("Notification", jsonArray2);
-
 							push.put("Code", 1);
 							push.put("New", 1);
-							PushUtil.push(token, "手表进入名字叫" + fenone.getName() + "的电子围栏", push.toString(),
-									"手表进入名字叫" + fenone.getName() + "的电子围栏");
+							PushUtil.push(token, "手表"+triggerTime+"进入名字叫" + fenone.getName() + "的电子围栏", push.toString(),
+									"手表"+triggerTime+"进入名字叫" + fenone.getName() + "的电子围栏");
 						}
 
 					}
 
 					if (fenone.getIs_exit() == 1 && distance > fenone.getRadius()) {
 						// 离开电子围栏
-						String token = limitCache.getRedisKeyValue(imei + "_push");
+					//	String token = limitCache.getRedisKeyValue(imei + "_push");
 						if (!StringUtil.isEmpty(token)) {
 							JSONObject push = new JSONObject();
 							JSONArray jsonArray = new JSONArray();
@@ -421,13 +473,15 @@ public class LocationUdService extends AbstractBizService {
 							JSONObject dataMap2 = new JSONObject();
 							dataMap2.put("Type", 103);
 							dataMap2.put("DeviceID", deviceid);
+							dataMap2.put("Message", "手表"+triggerTime+"离开了名字叫" + fenone.getName() + "的电子围栏");
+							dataMap2.put("imei", imei);
 							jsonArray2.add(dataMap2);
 							push.put("Notification", jsonArray2);
 
 							push.put("Code", 1);
 							push.put("New", 1);
-							PushUtil.push(token, "手表离开了名字叫" + fenone.getName() + "的电子围栏", push.toString(),
-									"手表离开了名字叫" + fenone.getName() + "的电子围栏");
+							PushUtil.push(token, "手表"+triggerTime+"离开了名字叫" + fenone.getName() + "的电子围栏", push.toString(),
+									"手表"+triggerTime+"离开了名字叫" + fenone.getName() + "的电子围栏");
 						}
 
 					}

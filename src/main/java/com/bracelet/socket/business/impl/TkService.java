@@ -90,15 +90,15 @@ public class TkService extends AbstractBizService {
 					jsonArray.add(dataMap);
 					push.put("NewList", jsonArray);
 					JSONArray jsonArray1 = new JSONArray();
-					/*JSONObject dataMap1 = new JSONObject();
-					jsonArray1.add(dataMap1);*/
+					
 					push.put("DeviceState", jsonArray1);
 
 					JSONArray jsonArray2 = new JSONArray();
 					JSONObject dataMap2 = new JSONObject();
 					dataMap2.put("Type", 1);
 					dataMap2.put("DeviceID", deviceid);
-					
+					dataMap2.put("Message", "新语音");
+					dataMap2.put("imei", imei);
 					
 					
 					//dataMap2.put("voiceUrl", Utils.VOICE_URL + voiceName);
@@ -106,7 +106,8 @@ public class TkService extends AbstractBizService {
 					JSONObject dataMapVoice = new JSONObject();
 					dataMapVoice.put("voiceUrl", "");
 					dataMapVoice.put("DeviceVoiceId",((int)((Math.random()*9+1)*10000))+"");
-					dataMapVoice.put("DeviceID", deviceid);
+					//dataMapVoice.put("DeviceID", deviceid);
+					dataMapVoice.put("DeviceID", "");
 					dataMapVoice.put("State", 1);
 					dataMapVoice.put("Type", 3);
 					dataMapVoice.put("MsgType", 0);

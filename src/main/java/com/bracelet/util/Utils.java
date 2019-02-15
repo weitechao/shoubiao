@@ -96,16 +96,16 @@ public class Utils {
 	
 	//LINUX voice上传地址和URL
 	public final static String VOICE_FILE_lINUX = "/usr/local/resin/resin-pro-4.0.53-8080/webapps/GXCareDevice/watchvoice/device";
-	public final static String VOICE_URL = "http://47.92.30.81:8080/GXCareDevice/watchvoice/device/";
+	public final static String VOICE_URL = "http://"+IP+":8080/GXCareDevice/watchvoice/device/";
 	//LINUX 设备上传图片 和URL
 	public final static String PHOTO_FILE_lINUX = "/usr/local/resin/resin-pro-4.0.53-8080/webapps/GXCareDevice/watchphoto/device";
-	public final static String PHOTO_URL = "http://47.92.30.81:8080/GXCareDevice/watchphoto/device/";
+	public final static String PHOTO_URL = "http://"+IP+":8080/GXCareDevice/watchphoto/device/";
 	// app头像图片地址和url
-	public final static String APP_PHOTO_UTL = "http://47.92.30.81:8080/GXCareDevice/headPhoto/appset/";
 	public final static String PHOTT_FILE_lINUX = "/usr/local/resin/resin-pro-4.0.53-8080/webapps/GXCareDevice/headPhoto/appset";
+	public final static String APP_PHOTO_UTL = "http://"+IP+":8080/GXCareDevice/headPhoto/appset/";
 	//通讯录头像
-	public final static String PHONEBook_PHOTO_UTL = "http://47.92.30.81:8080/GXCareDevice/headImg/";
 	public final static String PHONEBook_FILE_lINUX = "/usr/local/resin/resin-pro-4.0.53-8080/webapps/GXCareDevice/headImg";
+	public final static String PHONEBook_PHOTO_UTL = "http://"+IP+":8080/GXCareDevice/headImg/";
 
 	public static String randomString(int len) {
 		if (len <= 0) {

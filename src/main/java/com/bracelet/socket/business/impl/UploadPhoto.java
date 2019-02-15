@@ -154,8 +154,7 @@ public class UploadPhoto extends AbstractBizService {
 					jsonArray.add(dataMap);
 					push.put("NewList", jsonArray);
 					JSONArray jsonArray1 = new JSONArray();
-					/*JSONObject dataMap1 = new JSONObject();
-					jsonArray1.add(dataMap1);*/
+				
 					push.put("DeviceState", jsonArray1);
 
 					JSONArray jsonArray2 = new JSONArray();
@@ -163,6 +162,8 @@ public class UploadPhoto extends AbstractBizService {
 					dataMap2.put("Type", 11);
 					dataMap2.put("DeviceID", deviceid);
 					dataMap2.put("photoUrl", Utils.PHOTO_URL+ photoName);
+					dataMap2.put("Message","新图片");
+					dataMap2.put("imei", imei);
 					jsonArray2.add(dataMap2);
 					push.put("Notification", jsonArray2);
 					

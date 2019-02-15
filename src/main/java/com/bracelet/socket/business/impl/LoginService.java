@@ -139,7 +139,7 @@ public class LoginService implements IService {
 			ChannelMap.addChannel(channel, channelDto);
 		}
 
-		limitCache.addKey(imei, Utils.IP + ":" + Utils.PORT_HTTP);
+		limitCache.addKey(imei, Utils.IP + ":" + Utils.PORT_HTTP);//设备要先登录，服务器记录设备登录的http ip端口
 		String resp = "[YW*" + imei + "*0001*0006*INIT,1]";
 		logger.info("返回设备登录信息=" + resp+",redis 里的key为="+limitCache.getRedisKeyValue(imei + "_id"));
 		return resp;
