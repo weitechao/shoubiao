@@ -20,6 +20,7 @@ import com.bracelet.entity.WatchDevice;
 import com.bracelet.entity.WatchUploadPhotoInfo;
 import com.bracelet.exception.BizException;
 import com.bracelet.service.ILocationService;
+import com.bracelet.service.IPushlogService;
 import com.bracelet.service.IUploadPhotoService;
 import com.bracelet.service.IVoltageService;
 import com.bracelet.socket.business.IService;
@@ -49,6 +50,9 @@ public class UploadPhoto extends AbstractBizService {
 	
 	@Autowired
 	IVoltageService voltageService;
+	
+	@Autowired
+	IPushlogService pushlogService;
 
 	@Override
 	protected SocketBaseDto process1(SocketLoginDto socketLoginDto, JSONObject jsonObject, Channel channel) {
@@ -189,7 +193,9 @@ public class UploadPhoto extends AbstractBizService {
 					
 					push.put("Code", 1);
 					push.put("New", 1);
-					PushUtil.push(token, "新图片", push.toString(), "新图片");	
+					 String targettime = Utils.getTime(System.currentTimeMillis());
+					 pushlogService.insertMsgInfo(imei, 11, deviceid, "新图片"+targettime, "新图片"+targettime);
+					PushUtil.push(token, "新图片"+targettime, push.toString(), "新图片"+targettime);	
 				}
 				
 			}

@@ -6,6 +6,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.bracelet.dto.HttpBaseDto;
 import com.bracelet.dto.SocketLoginDto;
 import com.bracelet.entity.DeviceCarrierInfo;
+import com.bracelet.entity.LocationWatch;
+import com.bracelet.entity.MsgInfo;
 import com.bracelet.entity.PhoneCharge;
 import com.bracelet.entity.Pushlog;
 import com.bracelet.entity.SmsInfo;
@@ -17,6 +19,7 @@ import com.bracelet.service.PageParam;
 import com.bracelet.service.Pagination;
 import com.bracelet.util.ChannelMap;
 import com.bracelet.util.RadixUtil;
+import com.bracelet.util.Utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -197,8 +200,8 @@ public class MessageController extends BaseController {
 
 	/* 手表短信列表 */
 	@ResponseBody
-	@RequestMapping(value = "/msglist/{token}/{deviceId}", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
-	public String msglist(@PathVariable String token, @PathVariable String deviceId) {
+	@RequestMapping(value = "/msglist/{token}/{imei}", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	public String msglist(@PathVariable String token, @PathVariable String imei) {
 		JSONObject bb = new JSONObject();
 
 		String user_id = checkTokenWatchAndUser(token);
@@ -208,33 +211,23 @@ public class MessageController extends BaseController {
 		}
 		// List 数组{ Type ，DeviceID ，Content，Message，CreateTime }
 		JSONArray jsonArray = new JSONArray();
-
-		JSONObject dataMap = new JSONObject();
-		dataMap.put("Type", "1");
-
-		String deviceid = limitCache.getRedisKeyValue(deviceId + "_id");
-		if (deviceid != null && !"0".equals(deviceid) && !"".equals(deviceid)) {
-			dataMap.put("DeviceID", deviceid);
-		} else {
-			WatchDevice watchd = ideviceService.getDeviceInfo(deviceId);
-			if (watchd != null) {
-				dataMap.put("DeviceID", watchd.getId());
-				limitCache.addKey(deviceId + "_id", watchd.getId() + "");
+		List<MsgInfo> msgList = pushlogService.getMsgInfoList(imei);
+		if (msgList != null) {
+			for (MsgInfo msginfo : msgList) {
+				JSONObject dataMap = new JSONObject();
+				dataMap.put("Type", msginfo.getType());
+				dataMap.put("DeviceID", msginfo.getDevice_id());
+				dataMap.put("Content", msginfo.getContent()+"");
+				dataMap.put("Message", msginfo.getMessage()+"");
+				dataMap.put("CreateTime",  Utils.getTime(msginfo.getCreatetime().getTime()));
+				jsonArray.add(dataMap);
 			}
 		}
 		/*
 		 * "Type":"106","DeviceID":"805592","Content":"22.7032466399987-113.964199185461","Message":"设备进行过通话","CreateTime":"2018/12/18 16:49:16" 
 		 * */
-
-		
-		dataMap.put("Content", "");
-		dataMap.put("Message", "");
-		dataMap.put("CreateTime", "");
-		jsonArray.add(dataMap);
-
 		bb.put("Code", 1);
 		bb.put("List", jsonArray);
-
 		return bb.toString();
 	}
 

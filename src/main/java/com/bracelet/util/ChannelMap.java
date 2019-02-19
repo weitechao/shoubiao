@@ -35,6 +35,9 @@ public class ChannelMap {
 	private static Map<String, Integer> IntegerMap = new HashMap<String, Integer>();
 
 	private static Map<String, String> contentMap = new HashMap<String, String>();
+	
+	//app 发送的 语音map
+	private static Map<String, byte[]> appVoiceByteMap = new HashMap<String, byte[]>();
 
 	/**
 	 * 
@@ -138,5 +141,18 @@ public class ChannelMap {
 	 * 
 	 * public static void getEnergy(String imei) { energyMap.get(imei); }
 	 */
+	
+	public static void addvoicebyte(String voiceName, byte[] voiceByte) {
+		appVoiceByteMap.put(voiceName, voiceByte);
+	}
+
+	public static byte[] getAppVoiceByte(String voiceName) {
+		return appVoiceByteMap.get(voiceName);
+	}
+
+	public static void removeVoiceByte(String voiceName) {
+		appVoiceByteMap.remove(voiceName);
+	}
+
 
 }

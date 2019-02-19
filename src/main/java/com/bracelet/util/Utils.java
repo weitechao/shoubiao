@@ -6,15 +6,19 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -107,6 +111,41 @@ public class Utils {
 	public final static String PHONEBook_FILE_lINUX = "/usr/local/resin/resin-pro-4.0.53-8080/webapps/GXCareDevice/headImg";
 	public final static String PHONEBook_PHOTO_UTL = "http://"+IP+":8080/GXCareDevice/headImg/";
 
+	
+	//获取amr语音文件长度
+	 public static int getAmrDuration(File file) throws IOException {
+	        long duration = -1;
+	        int[] packedSize = { 12, 13, 15, 17, 19, 20, 26, 31, 5, 0, 0, 0, 0, 0,
+	                0, 0 };
+	        RandomAccessFile randomAccessFile = null;
+	        try {
+	            randomAccessFile = new RandomAccessFile(file, "rw");
+	            long length = file.length();// 文件的长度
+	            int pos = 6;// 设置初始位置
+	            int frameCount = 0;// 初始帧数
+	            int packedPos = -1;
+	 
+	            byte[] datas = new byte[1];// 初始数据值
+	            while (pos <= length) {
+	                randomAccessFile.seek(pos);
+	                if (randomAccessFile.read(datas, 0, 1) != 1) {
+	                    duration = length > 0 ? ((length - 6) / 650) : 0;
+	                    break;
+	                }
+	                packedPos = (datas[0] >> 3) & 0x0F;
+	                pos += packedSize[packedPos] + 1;
+	                frameCount++;
+	            }
+	 
+	            duration += frameCount * 20;// 帧数*20
+	        } finally {
+	            if (randomAccessFile != null) {
+	                randomAccessFile.close();
+	            }
+	        }
+	        return (int)((duration/1000)+1);
+	    }
+	 
 	public static String randomString(int len) {
 		if (len <= 0) {
 			len = 32;
@@ -625,6 +664,47 @@ public class Utils {
 	 * return result
 	 * 
 	 */
+	
+	public static byte[] getAmrByte(String lujing){
+
+		    byte[] b = null ;
+			//InputStream:是一个抽象类
+			// \:是一个 转移符
+			//表示磁盘路径的两种表示方式：1、\\   2、/
+			try {
+				//从文件地址中读取内容到程序中
+				//1、建立连接
+				InputStream is = new FileInputStream(lujing);
+				//2、开始读取信息	
+				//先定义一个字节数组存放数据
+				b = new byte[is.available()];//把所有的数据读取到这个字节当中
+				//is.available()：返回文件的大小
+		//		while(is.available()==0);//不等于0时才停止循环
+				//完整的读取一个文件
+				int off = 0;
+				int le = 2;
+				while(is.read(b, off, 2)!=-1){
+					off+=1;
+				}
+				is.read(b,off,2);
+				//read:返回的是读取的文件大小
+				//最大不超过b.length，返回实际读取的字节个数
+				System.out.println(Arrays.toString(b));//读取的是字节数组
+				//把字节数组转成字符串
+				System.out.println(new String(b));
+				//关闭流
+				is.close();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				//系统强制解决的问题：文件没有找到
+				e.printStackTrace();
+			} catch (IOException e) {
+				//文件读写异常
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return b;
+	}
 
 	public static void main(String[] args) throws UnsupportedEncodingException {
 		System.out.println(getRiQi());

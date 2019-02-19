@@ -18,6 +18,7 @@ import com.bracelet.entity.Fence;
 import com.bracelet.entity.WatchDevice;
 import com.bracelet.service.IFenceService;
 import com.bracelet.service.ILocationService;
+import com.bracelet.service.IPushlogService;
 import com.bracelet.util.HttpClientGet;
 import com.bracelet.util.PushUtil;
 import com.bracelet.util.StringUtil;
@@ -35,6 +36,8 @@ public class LocationUdService extends AbstractBizService {
 
 	@Autowired
 	IFenceService fenceService;
+	@Autowired
+	IPushlogService pushlogService;
 
 	@Override
 	protected SocketBaseDto process1(SocketLoginDto socketLoginDto, JSONObject jsonObject, Channel channel) {
@@ -99,7 +102,10 @@ public class LocationUdService extends AbstractBizService {
 
 				push.put("Code", 1);
 				push.put("New", 1);
-				PushUtil.push(token, "报警信息", push.toString(), "报警信息");
+				String triggerTime = Utils.getTime(System.currentTimeMillis());
+				
+				pushlogService.insertMsgInfo(imei, 101, deviceid, "设备"+triggerTime+"报警", "设备"+triggerTime+"报警");
+				PushUtil.push(token, "设备"+triggerTime+"报警", push.toString(), "设备"+triggerTime+"报警");
 			}
 
 			return "[YW*" + imei + "*0001*0002*AL]";
@@ -433,6 +439,7 @@ public class LocationUdService extends AbstractBizService {
 							push.put("Notification", jsonArray2);
 							push.put("Code", 1);
 							push.put("New", 1);
+							pushlogService.insertMsgInfo(imei, 102, deviceid, "手表"+triggerTime+"进入名字叫" + fenone.getName() + "的电子围栏", "手表"+triggerTime+"进入名字叫" + fenone.getName() + "的电子围栏");
 							PushUtil.push(token, "手表"+triggerTime+"进入名字叫" + fenone.getName() + "的电子围栏", push.toString(),
 									"手表"+triggerTime+"进入名字叫" + fenone.getName() + "的电子围栏");
 						}
@@ -480,6 +487,8 @@ public class LocationUdService extends AbstractBizService {
 
 							push.put("Code", 1);
 							push.put("New", 1);
+							pushlogService.insertMsgInfo(imei, 103, deviceid, "手表"+triggerTime+"离开了名字叫" + fenone.getName() + "的电子围栏", "手表"+triggerTime+"离开了名字叫" + fenone.getName() + "的电子围栏");
+							
 							PushUtil.push(token, "手表"+triggerTime+"离开了名字叫" + fenone.getName() + "的电子围栏", push.toString(),
 									"手表"+triggerTime+"离开了名字叫" + fenone.getName() + "的电子围栏");
 						}

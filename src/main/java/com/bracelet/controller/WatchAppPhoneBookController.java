@@ -18,6 +18,7 @@ import com.bracelet.entity.WatchPhoneBook;
 import com.bracelet.exception.BizException;
 import com.bracelet.service.ILocationService;
 import com.bracelet.service.IMemService;
+import com.bracelet.service.IPushlogService;
 import com.bracelet.service.IStepService;
 import com.bracelet.service.IUserInfoService;
 import com.bracelet.service.WatchFriendService;
@@ -63,8 +64,11 @@ public class WatchAppPhoneBookController extends BaseController {
 	WatchFriendService watchfriendService;
 	@Autowired
 	IMemService memberService;
+	
 	@Resource
 	BaseChannelHandler baseChannelHandler;
+	@Autowired
+	IPushlogService pushlogService;
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	/* 添加 */
@@ -201,6 +205,9 @@ public class WatchAppPhoneBookController extends BaseController {
 
 				push.put("Code", 1);
 				push.put("New", 1);
+				
+				pushlogService.insertMsgInfo(imei, 7, deviceid, "通讯录已同步", "通讯录已同步");
+				
 				PushUtil.push(token, "通讯录已同步", push.toString(), "通讯录已同步");	
 						
 		} else {
@@ -364,6 +371,7 @@ public class WatchAppPhoneBookController extends BaseController {
 
 			push.put("Code", 1);
 			push.put("New", 1);
+			pushlogService.insertMsgInfo(imei, 7, deviceid, "通讯录已同步", "通讯录已同步");
 			PushUtil.push(token, "通讯录已同步", push.toString(), "通讯录已同步");	
 			
 		} else {
@@ -494,6 +502,7 @@ public class WatchAppPhoneBookController extends BaseController {
 
 			push.put("Code", 1);
 			push.put("New", 1);
+			pushlogService.insertMsgInfo(imei, 7, deviceid, "通讯录已同步", "通讯录已同步");
 			PushUtil.push(token, "通讯录已同步", push.toString(), "通讯录已同步");	
 			
 		} else {

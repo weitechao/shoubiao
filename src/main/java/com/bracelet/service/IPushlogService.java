@@ -3,6 +3,7 @@ package com.bracelet.service;
 import java.util.List;
 
 import com.bracelet.entity.DeviceCarrierInfo;
+import com.bracelet.entity.MsgInfo;
 import com.bracelet.entity.PhoneCharge;
 import com.bracelet.entity.Pushlog;
 import com.bracelet.entity.SmsInfo;
@@ -26,5 +27,9 @@ public interface IPushlogService {
 	boolean insertCarrier(String deviceId, String smsNumber, String smsBalanceKey, String smsFlowKey);
 
 	boolean insertErrorInfo(Long userId, String content);
+
+	List<MsgInfo> getMsgInfoList(String imei);
+
+	boolean insertMsgInfo(String imei, Integer type, String deviceid, String content, String message);
 
 }

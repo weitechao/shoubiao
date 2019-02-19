@@ -1,7 +1,10 @@
 package com.bracelet.socket.business.impl;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 
+import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 
 import org.apache.commons.lang3.StringUtils;
@@ -16,9 +19,11 @@ import com.bracelet.dto.SocketBaseDto;
 import com.bracelet.dto.SocketLoginDto;
 import com.bracelet.entity.UserInfo;
 import com.bracelet.entity.WatchDevice;
+import com.bracelet.service.IPushlogService;
 import com.bracelet.service.WatchTkService;
 import com.bracelet.util.ChannelMap;
 import com.bracelet.util.PushUtil;
+import com.bracelet.util.RadixUtil;
 import com.bracelet.util.StringUtil;
 import com.bracelet.util.Utils;
 
@@ -28,6 +33,9 @@ public class TkService extends AbstractBizService {
 
 	@Autowired
 	WatchTkService watchtkService;
+
+	@Autowired
+	IPushlogService pushlogService;
 
 	@Override
 	protected String process2(SocketLoginDto socketLoginDto, String jsonInfo, Channel channel) {
@@ -52,35 +60,51 @@ public class TkService extends AbstractBizService {
 			} else {
 				voiceName = imei + "_" + voiceName;
 			}
-			logger.info("amr的位置和65比较="+jsonInfo.lastIndexOf(".amr")+"");
+			int amr65 = jsonInfo.lastIndexOf(".amr");
+
+			logger.info("amr的位置和65比较=" + amr65);
+			if (amr65 == -1) {
+				
+				return "";
+			}
 			byte[] vocieByte = ChannelMap.getByte(channel.remoteAddress() + "_byte");
 
 			byte[] voiceSubByte = Utils.subByte(vocieByte, 65, vocieByte.length - 65);
 
 			Utils.createFileContent(Utils.VOICE_FILE_lINUX, voiceName, voiceSubByte);
-			
-			ChannelMap.removeAll(channel.remoteAddress()+"");
-			
+
+			ChannelMap.removeAll(channel.remoteAddress() + "");
+
 			if (thisNumber == allNumber && allNumber != 0) {
 				// 如果这个语音已经全部传完。就置空voiceName 不置空 可能还会有遗留
 				// ChannelMap.addVoiceName(imei, "");
-				watchtkService.insertVoiceInfo(imei, "1", Utils.VOICE_URL + voiceName, "1", 0, "1", 1, 1);
-				
+
+				try {
+					File source = new File(Utils.VOICE_FILE_lINUX + "/" + voiceName);
+					int voiceLength = Utils.getAmrDuration(source);
+					watchtkService.insertVoiceInfo(imei, "1", Utils.VOICE_URL + voiceName, "1", 0, "1", 1, 1,
+							voiceLength);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					logger.error("语音长度获取错误=" + e);
+				}
+
 				String token = limitCache.getRedisKeyValue(imei + "_push");
-				if( !StringUtil.isEmpty(token)){
+				if (!StringUtil.isEmpty(token)) {
 					JSONObject push = new JSONObject();
 					JSONArray jsonArray = new JSONArray();
 					JSONObject dataMap = new JSONObject();
 					dataMap.put("DeviceID", "");
 					String deviceid = limitCache.getRedisKeyValue(imei + "_id");
-					if(deviceid !=null && !"0".equals(deviceid) && !"".equals(deviceid)){
+					if (deviceid != null && !"0".equals(deviceid) && !"".equals(deviceid)) {
 						dataMap.put("DeviceID", deviceid);
-					}else{
+					} else {
 						WatchDevice watchd = ideviceService.getDeviceInfo(imei);
 						if (watchd != null) {
-							deviceid=watchd.getId()+"";
+							deviceid = watchd.getId() + "";
 							dataMap.put("DeviceID", watchd.getId());
-							limitCache.addKey(imei + "_id", watchd.getId()+"");
+							limitCache.addKey(imei + "_id", watchd.getId() + "");
 						}
 					}
 					dataMap.put("Message", 0);
@@ -90,7 +114,7 @@ public class TkService extends AbstractBizService {
 					jsonArray.add(dataMap);
 					push.put("NewList", jsonArray);
 					JSONArray jsonArray1 = new JSONArray();
-					
+
 					push.put("DeviceState", jsonArray1);
 
 					JSONArray jsonArray2 = new JSONArray();
@@ -99,39 +123,73 @@ public class TkService extends AbstractBizService {
 					dataMap2.put("DeviceID", deviceid);
 					dataMap2.put("Message", "新语音");
 					dataMap2.put("imei", imei);
-					
-					
-					//dataMap2.put("voiceUrl", Utils.VOICE_URL + voiceName);
-					JSONArray jsonArrayVoice = new JSONArray();					
+
+					// dataMap2.put("voiceUrl", Utils.VOICE_URL + voiceName);
+					JSONArray jsonArrayVoice = new JSONArray();
 					JSONObject dataMapVoice = new JSONObject();
 					dataMapVoice.put("voiceUrl", "");
-					dataMapVoice.put("DeviceVoiceId",((int)((Math.random()*9+1)*10000))+"");
-					//dataMapVoice.put("DeviceID", deviceid);
+					dataMapVoice.put("DeviceVoiceId", ((int) ((Math.random() * 9 + 1) * 10000)) + "");
+					// dataMapVoice.put("DeviceID", deviceid);
 					dataMapVoice.put("DeviceID", "");
 					dataMapVoice.put("State", 1);
 					dataMapVoice.put("Type", 3);
 					dataMapVoice.put("MsgType", 0);
 					dataMapVoice.put("ObjectId", "");
 					dataMapVoice.put("Mark", "");
-					dataMapVoice.put("Path",Utils.VOICE_URL + voiceName);
+					dataMapVoice.put("Path", Utils.VOICE_URL + voiceName);
 					dataMapVoice.put("Length", 2);
 					dataMapVoice.put("CreateTime", "");
 					dataMapVoice.put("UpdateTime", "");
 					jsonArrayVoice.add(dataMapVoice);
 					dataMap2.put("VoiceList", jsonArrayVoice);
- 			        
-					
+
 					jsonArray2.add(dataMap2);
 					push.put("Notification", jsonArray2);
 
 					push.put("Code", 1);
 					push.put("New", 1);
-					PushUtil.push(token, "新语音", push.toString(), "新语音");	
+					String targettime = Utils.getTime(System.currentTimeMillis());
+					pushlogService.insertMsgInfo(imei, 1, deviceid, "新语音" + targettime, "新语音" + targettime);
+					PushUtil.push(token, "新语音" + targettime, push.toString(), "新语音" + targettime);
 				}
-				
+
 			}
 			return "[YW*" + imei + "*0001*0004*TK,1]";
-		} else {
+		} else if(status == 1){
+			logger.info("语音status=" + status);
+			 byte[] voicebyte = ChannelMap.getAppVoiceByte(voiceName);//原始语音byte文件
+			 
+			 if((allNumber-thisNumber) == 0){
+				 return "";
+			 }else if((allNumber- thisNumber) != 1){
+				 byte[] sendVoiceByte = Utils.subByte(voicebyte, thisNumber*1024, 1024);
+					String msg = "TK,0," + voiceName + ","+ (thisNumber+1) +","+ allNumber +",";
+					String reps = "[YW*" + imei + "*0003*" + RadixUtil.changeRadix(msg.length()+sendVoiceByte.length) +"*"+msg;
+					logger.info(" TKservice 语音发送="+reps);
+					channel.write(reps);
+					channel.write(Unpooled.copiedBuffer(sendVoiceByte));
+					String endSystembol = "]";
+					channel.write(endSystembol);
+					channel.flush();
+			 }else if((allNumber- thisNumber) == 1){
+				 //差一个说明是最后一个
+
+				 byte[] sendVoiceByte = Utils.subByte(voicebyte, thisNumber*1024, voicebyte.length-thisNumber*1024);
+					String msg = "TK,0," + voiceName + ","+ (thisNumber+1) +","+ allNumber +",";
+					String reps = "[YW*" + imei + "*0003*" + RadixUtil.changeRadix(msg.length()+sendVoiceByte.length) +"*"+msg;
+					logger.info(" TKservice 语音发送="+reps);
+					channel.write(reps);
+					channel.write(Unpooled.copiedBuffer(sendVoiceByte));
+					String endSystembol = "]";
+					channel.write(endSystembol);
+					channel.flush();
+					ChannelMap.removeVoiceByte(voiceName);
+			 }else{
+				 return "";
+			 }
+			
+			 
+		}else{
 			logger.info("语音status=" + status);
 		}
 
@@ -145,6 +203,5 @@ public class TkService extends AbstractBizService {
 	protected SocketBaseDto process1(SocketLoginDto socketLoginDto, JSONObject jsonObject, Channel channel) {
 		return null;
 	}
-	
 
 }

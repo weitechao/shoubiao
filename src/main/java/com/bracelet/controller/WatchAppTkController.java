@@ -32,7 +32,11 @@ import com.bracelet.util.HttpClientGet;
 import com.bracelet.util.RadixUtil;
 import com.bracelet.util.RanomUtil;
 import com.bracelet.util.RespCode;
+import com.bracelet.util.StringUtil;
 import com.bracelet.util.Utils;
+
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
@@ -81,82 +85,133 @@ public class WatchAppTkController extends BaseController {
 		}
 
 		String imei = jsonObject.getString("imei");
-		String phone = jsonObject.getString("phone");// 号码
-		String voiceData = jsonObject.getString("voiceData");// 语音内容 base64转字符串
-		String sourceName = jsonObject.getString("sourceName");// 文件名字
-
-		 byte[] voicebyte = Base64.decodeBase64(voiceData);
-		 
-		 
-		 
-		Utils.createFileContent(Utils.VOICE_FILE_lINUX, "app_"+sourceName, voicebyte);
-	
 		
-		JSONArray jsonArray = new JSONArray();
-		String msgNumber =Utils.randomString(5);
 		
-		bb.put("Code", 1);
-		
-	   // WatchVoiceInfo watchAppVoice = watchtkService.getAppVoiceInfoByImeiAndStatus(imei, 1);
-		
-				JSONObject dataMap = new JSONObject();
-				dataMap.put("voiceUrl", "");
-				dataMap.put("DeviceVoiceId",((int)((Math.random()*9+1)*10000))+"");
-				dataMap.put("DeviceID", 0);
-				
-				String deviceid = limitCache.getRedisKeyValue(imei + "_id");
-				if(deviceid !=null && !"0".equals(deviceid) && !"".equals(deviceid)){
-					dataMap.put("DeviceID", deviceid);
-				}else{
-					WatchDevice watchd = ideviceService.getDeviceInfo(imei);
-					if (watchd != null) {
-						dataMap.put("DeviceID", watchd.getId());
-						limitCache.addKey(imei + "_id", watchd.getId()+"");
-					}
-				}
-				
-				dataMap.put("State", 1);
-				dataMap.put("Type", 3);
-				dataMap.put("MsgType", 0);
-				dataMap.put("ObjectId", "0");
-				if(StringUtils.isEmpty(limitCache.getRedisKeyValue(imei + "_userid"))){
-					UserInfo userInfo = userInfoService.getUserInfoByUsername(imei);
-					if(userInfo !=null ){
-						dataMap.put("ObjectId", userInfo.getUser_id()+"");
-						limitCache.addKey(imei + "_userid", userInfo.getUser_id() + "");
-					}
-					
-				}else{
-					
-					dataMap.put("ObjectId", limitCache.getRedisKeyValue(imei + "_userid"));
-				}
-				dataMap.put("Mark", "");
-				dataMap.put("Path",Utils.VOICE_URL + "app_"+sourceName);
-				dataMap.put("Length", 2);
-				dataMap.put("CreateTime", "");
-				dataMap.put("UpdateTime", "");
-				jsonArray.add(dataMap);
-		        bb.put("VoiceList", jsonArray);
 		
 	     SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
 			bb.put("Code", 2);
 			return bb.toString();
 		}
+		
+		
+		        
+		        
 
 		if (socketLoginDto.getChannel().isActive()) {
+			
+			String phone = jsonObject.getString("phone");// 号码
+			String voiceData = jsonObject.getString("voiceData");// 语音内容 base64转字符串
+			String sourceName = jsonObject.getString("sourceName");// 文件名字
+	        Integer voiceLength = jsonObject.getInteger("voiceLength");
+	        if(StringUtil.isEmpty(voiceLength)){
+	        	voiceLength = 2;
+	        }
+	        
+			 byte[] voicebyte = Base64.decodeBase64(voiceData);
+			 
+			 
+			Utils.createFileContent(Utils.VOICE_FILE_lINUX, "app_"+sourceName, voicebyte);
+		
+			
+			JSONArray jsonArray = new JSONArray();
+			String msgNumber =Utils.randomString(5);
+			
 			bb.put("Code", 1);
-			try {
+			
+		   // WatchVoiceInfo watchAppVoice = watchtkService.getAppVoiceInfoByImeiAndStatus(imei, 1);
+			
+					JSONObject dataMap = new JSONObject();
+					dataMap.put("voiceUrl", "");
+					dataMap.put("DeviceVoiceId",((int)((Math.random()*9+1)*10000))+"");
+					dataMap.put("DeviceID", 0);
+					
+					String deviceid = limitCache.getRedisKeyValue(imei + "_id");
+					if(deviceid !=null && !"0".equals(deviceid) && !"".equals(deviceid)){
+						dataMap.put("DeviceID", deviceid);
+					}else{
+						WatchDevice watchd = ideviceService.getDeviceInfo(imei);
+						if (watchd != null) {
+							dataMap.put("DeviceID", watchd.getId());
+							limitCache.addKey(imei + "_id", watchd.getId()+"");
+						}
+					}
+					
+					dataMap.put("State", 1);
+					dataMap.put("Type", 3);
+					dataMap.put("MsgType", 0);
+					dataMap.put("ObjectId", "0");
+					if(StringUtils.isEmpty(limitCache.getRedisKeyValue(imei + "_userid"))){
+						UserInfo userInfo = userInfoService.getUserInfoByUsername(imei);
+						if(userInfo !=null ){
+							dataMap.put("ObjectId", userInfo.getUser_id()+"");
+							limitCache.addKey(imei + "_userid", userInfo.getUser_id() + "");
+						}
+						
+					}else{
+						
+						dataMap.put("ObjectId", limitCache.getRedisKeyValue(imei + "_userid"));
+					}
+					dataMap.put("Mark", "");
+					dataMap.put("Path",Utils.VOICE_URL + "app_"+sourceName);
+					dataMap.put("Length", voiceLength);
+					dataMap.put("CreateTime", "");
+					dataMap.put("UpdateTime", "");
+					jsonArray.add(dataMap);
+			        bb.put("VoiceList", jsonArray);
+			        
+			        
+			bb.put("Code", 1);
+			logger.info("app发送语音byte长度为="+voicebyte.length);
+			
+			if(voicebyte.length>1024){
+				int a = voicebyte.length/1024;
+				byte[] sendVoiceByte = Utils.subByte(voicebyte, 0, 1024);
+				String msg = "TK,0," + sourceName + ",1,"+(a+1)+",";
+				String reps = "[YW*" + imei + "*0003*" + RadixUtil.changeRadix(msg.length()+sendVoiceByte.length) +"*"+msg;
+				logger.info("app语音发送="+reps);
+				socketLoginDto.getChannel().write(reps);
+				socketLoginDto.getChannel().write(Unpooled.copiedBuffer(sendVoiceByte));
+				String endSystembol = "]";
+				socketLoginDto.getChannel().write(endSystembol);
+				socketLoginDto.getChannel().flush();
+				//将语音byte放在map里
+				ChannelMap.addvoicebyte(sourceName, voicebyte);
+			}else{
+				String msg = "TK,0," + sourceName + ",1,1,";
+				String reps = "[YW*" + imei + "*0003*" + RadixUtil.changeRadix(msg.length()+voicebyte.length) +"*"+msg;
+				logger.info("app语音发送="+reps);
+				socketLoginDto.getChannel().write(reps);
+				socketLoginDto.getChannel().write(Unpooled.copiedBuffer(voicebyte));
+				String endSystembol = "]";
+				socketLoginDto.getChannel().write(endSystembol);
+				socketLoginDto.getChannel().flush();
+			}
+			
+				
+				
+				//socketLoginDto.getChannel().writeAndFlush(reps);
+				//byte[] voiceSubByte = Utils.subByte(voicebyte, 0, 1024);
+				//socketLoginDto.getChannel().writeAndFlush(Unpooled.copiedBuffer(voiceSubByte));
+				//socketLoginDto.getChannel().writeAndFlush(Unpooled.copiedBuffer(voicebyte));
+				//socketLoginDto.getChannel().writeAndFlush("]");
+				
+			
+			//socketLoginDto.getChannel().writeAndFlush(Unpooled.copiedBuffer(voicebyte));
+		/*	try {
 				String voicebyteUtf8 = new String(voicebyte,"UTF-8");
 				int a = voicebyteUtf8.length()/1024;
 				for(int i=0;i<a+1;i++){
 					if(i !=a){
-						String sendVoice = voicebyteUtf8.substring(1024*i,(i+1)*1024);
+						if(i==0){
+							String sendVoice = voicebyteUtf8.substring(1024*i,(i+1)*1024);
+							
+							String msg = "TK,0," + sourceName + ","+(i+1) + ","+(a+1)+","+sendVoice;
+							String reps = "[YW*" + imei + "*0003*" + RadixUtil.changeRadix(msg) +"*"+ msg + "]";
+							logger.info("app语音发送="+reps);
+							socketLoginDto.getChannel().writeAndFlush(reps);
+						}
 						
-						String msg = "TK," + phone + "," + sourceName + ","+(i+1) + ","+(a+1)+","+sendVoice;
-						String reps = "[YW*" + imei + "*0003*" + RadixUtil.changeRadix(msg) +"*"+ msg + "]";
-						logger.info("app语音发送="+reps);
-						socketLoginDto.getChannel().writeAndFlush(reps);
 						
 					}else{
 						String sendVoice = voicebyteUtf8.substring(1024*i,voicebyteUtf8.length());
@@ -170,14 +225,14 @@ public class WatchAppTkController extends BaseController {
 			
 				
 			
-			watchtkService.insertAppVoiceInfo("app", imei, sourceName, Utils.VOICE_URL + "app_"+sourceName, 1, msgNumber, 1, 1);
+			watchtkService.insertAppVoiceInfo("app", imei, sourceName, Utils.VOICE_URL + "app_"+sourceName, 1, msgNumber, 1, 1,voiceLength);
 			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
+			
 				e.printStackTrace();
-			}
+			}*/
 			
 		} else {
-			watchtkService.insertAppVoiceInfo("app", imei, sourceName, Utils.VOICE_URL + "app_"+sourceName, 0, msgNumber, 1, 1);
+			//watchtkService.insertAppVoiceInfo("app", imei, sourceName, Utils.VOICE_URL + "app_"+sourceName, 0, msgNumber, 1, 1,voiceLength);
 			bb.put("Code", 0);
 		}
 		return bb.toString();
@@ -263,7 +318,7 @@ public class WatchAppTkController extends BaseController {
 				dataMap.put("DeviceID", 0);
 				
 				String deviceid = limitCache.getRedisKeyValue(imei + "_id");
-				if(deviceid !=null && !"0".equals(deviceid) && !"".equals(deviceid)){
+				if(!StringUtil.isEmpty(deviceid) && !"0".equals(deviceid)){
 					dataMap.put("DeviceID", deviceid);
 				}else{
 					WatchDevice watchd = ideviceService.getDeviceInfo(imei);
@@ -278,8 +333,8 @@ public class WatchAppTkController extends BaseController {
 				dataMap.put("MsgType", 0);
 				dataMap.put("ObjectId", "");
 				dataMap.put("Mark", "");
-				dataMap.put("Path", WatchVoiceInfo.getSource_name());
-				dataMap.put("Length", 2);
+				dataMap.put("Path", WatchVoiceInfo.getSource_name()+"");
+				dataMap.put("Length", WatchVoiceInfo.getVoice_length());
 				dataMap.put("CreateTime", "");
 				dataMap.put("UpdateTime", "");
 				jsonArray.add(dataMap);
@@ -290,6 +345,56 @@ public class WatchAppTkController extends BaseController {
 			bb.put("Code", 0);
 		}
 		bb.put("VoiceList", jsonArray);
+		return bb.toString();
+	}
+	
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/testTkToDevice/{imei}", method = RequestMethod.GET)
+	public String testTkToDevice(@PathVariable String imei){
+		JSONObject bb = new JSONObject();
+	     SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
+		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
+			bb.put("Code", 4);
+			return bb.toString();
+		}
+		 byte[] voicebyte = Utils.getAmrByte("/usr/local/resin/resin-pro-4.0.53-8080/webapps/GXCareDevice/watchvoice/device/aaa_test.amr"); 
+		if (socketLoginDto.getChannel().isActive()) {
+			socketLoginDto.getChannel().writeAndFlush(Unpooled.copiedBuffer(voicebyte));
+			
+			
+			
+			bb.put("Code", 1);
+		/*	try {
+				String voicebyteUtf8 = new String(voicebyte,"UTF-8");
+				int a = voicebyteUtf8.length()/1024;
+				for(int i=0;i<a+1;i++){
+					if(i !=a){
+						if(i==0){
+							String sendVoice = voicebyteUtf8.substring(1024*i,(i+1)*1024);
+							
+							String msg = "TK,0," + "test.amr" + ","+(i+1) + ","+(a+1)+","+sendVoice;
+							String reps = "[YW*" + imei + "*0003*" + RadixUtil.changeRadix(msg) +"*"+ msg + "]";
+							logger.info("app语音发送="+reps);
+							socketLoginDto.getChannel().writeAndFlush(reps);
+						}
+					}else{
+						String sendVoice = voicebyteUtf8.substring(1024*i,voicebyteUtf8.length());
+						
+						String msg = "TK," + "0" + "," + "test.amr" + ","+(i+1) + ","+(a+1)+","+sendVoice;
+						String reps = "[YW*" + imei + "*0003*" + RadixUtil.changeRadix(msg) +"*"+ msg + "]";
+						//logger.info("app语音发送="+reps);
+						//socketLoginDto.getChannel().writeAndFlush(reps);
+					}
+				}
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}*/
+			bb.put("Code", 1);
+		} else {
+			bb.put("Code", 0);
+		}
 		return bb.toString();
 	}
 	

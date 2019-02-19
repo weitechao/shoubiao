@@ -24,15 +24,15 @@ public class WatchTkServiceImpl implements WatchTkService {
 
 	@Override
 	public boolean insertVoiceInfo(String sender, String receiver, String sourceName, String voiceData, Integer status,
-			String numMessage, Integer thisNubmer, Integer allNumber) {
+			String numMessage, Integer thisNubmer, Integer allNumber,Integer voiceLength) {
 		Timestamp now = Utils.getCurrentTimestamp();
 		// status 0表示新增 1表示已阅读
 		int i = jdbcTemplate.update(
-				"insert into watch_voice_info (sender, receiver, voice_content, status, source_name, createtime,no,updatetime,this_number,all_number) values (?,?,?,?,?,?,?,?,?,?)",
+				"insert into watch_voice_info (sender, receiver, voice_content, status, source_name, createtime,no,updatetime,this_number,all_number,voice_length) values (?,?,?,?,?,?,?,?,?,?,?)",
 				new Object[] { sender, receiver, voiceData, status, sourceName, now, numMessage, now, thisNubmer,
-						allNumber },
+						allNumber,voiceLength },
 				new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.VARCHAR, Types.TIMESTAMP,
-						Types.VARCHAR, Types.TIMESTAMP, Types.INTEGER, Types.INTEGER });
+						Types.VARCHAR, Types.TIMESTAMP, Types.INTEGER, Types.INTEGER, Types.INTEGER });
 		return i == 1;
 	}
 
@@ -69,15 +69,15 @@ public class WatchTkServiceImpl implements WatchTkService {
 
 	@Override
 	public boolean insertAppVoiceInfo(String sender, String receiver, String sourceName, String voiceData,
-			Integer status, String numMessage, Integer thisNubmer, Integer allNumber) {
+			Integer status, String numMessage, Integer thisNubmer, Integer allNumber,Integer voiceLength) {
 		Timestamp now = Utils.getCurrentTimestamp();
 		// status 0表示新增 1表示已阅读
 		int i = jdbcTemplate.update(
-				"insert into app_voice_info (sender, receiver, voice_content, status, source_name, createtime,no,updatetime,this_number,all_number) values (?,?,?,?,?,?,?,?,?,?)",
+				"insert into app_voice_info (sender, receiver, voice_content, status, source_name, createtime,no,updatetime,this_number,all_number,voice_length) values (?,?,?,?,?,?,?,?,?,?,?)",
 				new Object[] { sender, receiver, voiceData, status, sourceName, now, numMessage, now, thisNubmer,
-						allNumber },
+						allNumber ,voiceLength},
 				new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.VARCHAR, Types.TIMESTAMP,
-						Types.VARCHAR, Types.TIMESTAMP, Types.INTEGER, Types.INTEGER });
+						Types.VARCHAR, Types.TIMESTAMP, Types.INTEGER, Types.INTEGER, Types.INTEGER });
 		return i == 1;
 	}
 

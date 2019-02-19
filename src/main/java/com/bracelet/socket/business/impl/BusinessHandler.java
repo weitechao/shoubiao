@@ -18,6 +18,7 @@ import com.bracelet.exception.BizException;
 import com.bracelet.service.IApilogService;
 import com.bracelet.util.ChannelMap;
 import com.bracelet.util.RespCode;
+import com.bracelet.util.StringUtil;
 import com.bracelet.util.Utils;
 import com.bracelet.socket.business.IBusinessHandler;
 import com.bracelet.socket.business.IService;
@@ -90,7 +91,9 @@ public class BusinessHandler implements IBusinessHandler {
 		 * 如果a是1，表示应答，则无需返回结果 incoming.writeAndFlush(responseJson + "\r\n"); }
 		 */
         logger.info("cmd:"+cmd+"=返回:"+reponse);
-		incoming.writeAndFlush(reponse);
+        if(!StringUtil.isEmpty(reponse)){
+        	incoming.writeAndFlush(reponse);
+        }
 		if(!"LK".equals(cmd)){
 			if("TPBK".equals(cmd) || "TK".equals(cmd)){
 				apilogService.insert(serviceName, cmd, reponse, imei, rstatus, rmsg, time);

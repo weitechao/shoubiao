@@ -18,6 +18,7 @@ public class WatchVoiceInfo {
 	private String no;
 	private Integer this_number;
 	private Integer all_number;
+	private Integer voice_length;
 	public Long getId() {
 		return id;
 	}
@@ -84,4 +85,11 @@ public class WatchVoiceInfo {
 	public void setAll_number(Integer all_number) {
 		this.all_number = all_number;
 	}
+	public Integer getVoice_length() {
+		return voice_length;
+	}
+	public void setVoice_length(Integer voice_length) {
+		this.voice_length = voice_length;
+	}
+	
 }

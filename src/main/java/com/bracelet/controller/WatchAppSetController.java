@@ -25,6 +25,7 @@ import com.bracelet.exception.BizException;
 import com.bracelet.service.IConfService;
 import com.bracelet.service.IDeviceService;
 import com.bracelet.service.ILocationService;
+import com.bracelet.service.IPushlogService;
 import com.bracelet.service.IStepService;
 import com.bracelet.service.IUserInfoService;
 import com.bracelet.service.WatchSetService;
@@ -69,6 +70,9 @@ public class WatchAppSetController extends BaseController {
 
 	@Autowired
 	IDeviceService ideviceService;
+	@Autowired
+	IPushlogService pushlogService;
+	
 	@Resource
 	BaseChannelHandler baseChannelHandler;
 	private Logger logger = LoggerFactory.getLogger(getClass());
@@ -289,6 +293,7 @@ public class WatchAppSetController extends BaseController {
 
 			push.put("Code", 1);
 			push.put("New", 1);
+			pushlogService.insertMsgInfo(imei, 231, deviceid, "成功更新设备设置", "成功更新设备设置");
 			PushUtil.push(token, "成功更新设备设置", push.toString(), "成功更新设备设置");
 
 		} else {

@@ -2,6 +2,7 @@ package com.bracelet.service.impl;
 
 import com.bracelet.entity.DeviceCarrierInfo;
 import com.bracelet.entity.MomentPwdInfo;
+import com.bracelet.entity.MsgInfo;
 import com.bracelet.entity.PhoneCharge;
 import com.bracelet.entity.Pushlog;
 import com.bracelet.entity.PwdInfo;
@@ -119,6 +120,48 @@ public class PushlogServiceImpl implements IPushlogService {
 				new Object[] { userId, content, now ,now}, new int[] {
 						Types.INTEGER, Types.VARCHAR, Types.TIMESTAMP,  Types.TIMESTAMP });
 		return i == 1;
+	}
+
+	@Override
+	public List<MsgInfo> getMsgInfoList(String imei) {
+		String table = "msg_0_info";
+		Integer count = Integer.valueOf(imei.substring(imei.length() - 1, imei.length())) % 4;
+		if (count == 1) {
+			table = "msg_1_info";
+		} else if (count == 2) {
+			table = "msg_2_info";
+		} else if (count == 3) {
+			table = "msg_3_info";
+		}
+		
+		String sql = "select * from " + table+ " where imei = ?  order by id desc limit 10";
+		List<MsgInfo> list = jdbcTemplate.query(sql, new Object[] {
+				imei }, new BeanPropertyRowMapper<MsgInfo>(
+						MsgInfo.class));
+		return list;
+	}
+
+	@Override
+	public boolean insertMsgInfo(String imei, Integer type, String deviceid, String content, String message) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		
+		String table = "msg_0_info";
+		Integer count = Integer.valueOf(imei.substring(imei.length() - 1, imei.length())) % 4;
+		if (count == 1) {
+			table = "msg_1_info";
+		} else if (count == 2) {
+			table = "msg_2_info";
+		} else if (count == 3) {
+			table = "msg_3_info";
+		}
+		
+
+		int i = jdbcTemplate.update(
+				"insert into "+ table +" (imei, type , device_id, content, message, createtime, updatetime) values (?,?,?,?,?,?,?)",
+				new Object[] { imei, type, deviceid, content, message,now, now}, new int[] {
+						 Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.TIMESTAMP,  Types.TIMESTAMP });
+		return i == 1;
+	
 	}
 
 }

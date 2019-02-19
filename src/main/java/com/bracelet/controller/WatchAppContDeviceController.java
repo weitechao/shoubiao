@@ -13,6 +13,8 @@ import com.bracelet.util.ChannelMap;
 import com.bracelet.util.RadixUtil;
 import com.bracelet.util.Utils;
 
+import io.netty.buffer.Unpooled;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
 import javax.annotation.Resource;
 
@@ -177,6 +180,8 @@ public class WatchAppContDeviceController extends BaseController {
 			if (socketLoginDto.getChannel().isActive()) {
 				String msg="MESSAGE,"+message;
 				String reps = "[YW*"+imei+"*0001*"+RadixUtil.changeRadix(msg)+"*"+msg+"]";
+				//Unpooled.copiedBuffer(msg, Charset.forName("UTF-8"));
+				//socketLoginDto.getChannel().writeAndFlush(Unpooled.copiedBuffer(reps, Charset.forName("UTF-8")));
 				socketLoginDto.getChannel().writeAndFlush(reps);
 				bb.put("Code", 1);
 				pushMsgService.insertPushMsg(imei,message,1);
