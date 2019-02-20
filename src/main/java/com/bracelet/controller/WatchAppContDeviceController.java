@@ -179,10 +179,18 @@ public class WatchAppContDeviceController extends BaseController {
 			}
 			if (socketLoginDto.getChannel().isActive()) {
 				String msg="MESSAGE,"+message;
-				String reps = "[YW*"+imei+"*0001*"+RadixUtil.changeRadix(msg)+"*"+msg+"]";
-				//Unpooled.copiedBuffer(msg, Charset.forName("UTF-8"));
-				//socketLoginDto.getChannel().writeAndFlush(Unpooled.copiedBuffer(reps, Charset.forName("UTF-8")));
-				socketLoginDto.getChannel().writeAndFlush(reps);
+				try {
+					int msglength = msg.getBytes("UTF-8").length;
+					String reps = "[YW*"+imei+"*0001*"+RadixUtil.changeRadix(msglength)+"*"+msg+"]";
+					logger.info("app发送文字="+reps);
+					//Unpooled.copiedBuffer(msg, Charset.forName("UTF-8"));
+					//socketLoginDto.getChannel().writeAndFlush(Unpooled.copiedBuffer(reps, Charset.forName("UTF-8")));
+					socketLoginDto.getChannel().writeAndFlush(reps);
+				} catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 				bb.put("Code", 1);
 				pushMsgService.insertPushMsg(imei,message,1);
 			} else {

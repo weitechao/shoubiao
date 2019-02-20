@@ -32,4 +32,6 @@ public interface IPushlogService {
 
 	boolean insertMsgInfo(String imei, Integer type, String deviceid, String content, String message);
 
+	boolean deleteMsgInfo(String imei,Long id);
+
 }

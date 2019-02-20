@@ -215,6 +215,7 @@ public class MessageController extends BaseController {
 		if (msgList != null) {
 			for (MsgInfo msginfo : msgList) {
 				JSONObject dataMap = new JSONObject();
+				dataMap.put("id", msginfo.getId());
 				dataMap.put("Type", msginfo.getType());
 				dataMap.put("DeviceID", msginfo.getDevice_id());
 				dataMap.put("Content", msginfo.getContent()+"");
@@ -230,5 +231,25 @@ public class MessageController extends BaseController {
 		bb.put("List", jsonArray);
 		return bb.toString();
 	}
+	
+	/* 手表短信列表 */
+	@ResponseBody
+	@RequestMapping(value = "/deleteMsg/{token}/{imei}/{id}", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	public String msglist(@PathVariable String token,@PathVariable String imei, @PathVariable Long id) {
+		JSONObject bb = new JSONObject();
+
+		String user_id = checkTokenWatchAndUser(token);
+		if ("0".equals(user_id)) {
+			bb.put("Code", -1);
+			return bb.toString();
+		}
+		
+		pushlogService.deleteMsgInfo(imei,id);
+	
+		bb.put("Code", 1);
+	
+		return bb.toString();
+	}
+	
 
 }

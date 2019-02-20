@@ -164,4 +164,21 @@ public class PushlogServiceImpl implements IPushlogService {
 	
 	}
 
+	@Override
+	public boolean deleteMsgInfo(String imei,Long id) {
+		String table = "msg_0_info";
+		Integer count = Integer.valueOf(imei.substring(imei.length() - 1, imei.length())) % 4;
+		if (count == 1) {
+			table = "msg_1_info";
+		} else if (count == 2) {
+			table = "msg_2_info";
+		} else if (count == 3) {
+			table = "msg_3_info";
+		}
+		
+		jdbcTemplate.update("delete from "+ table +" where id = ?", new Object[] { id },
+				new int[] { Types.INTEGER });
+		return true;
+	}
+
 }
