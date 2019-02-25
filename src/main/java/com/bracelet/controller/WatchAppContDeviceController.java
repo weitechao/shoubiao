@@ -1,8 +1,10 @@
 package com.bracelet.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.bracelet.dto.SocketLoginDto;
+import com.bracelet.entity.WatchDevice;
 import com.bracelet.service.ILocationService;
 import com.bracelet.service.IPushlogService;
 import com.bracelet.service.IStepService;
@@ -179,10 +181,39 @@ public class WatchAppContDeviceController extends BaseController {
 			}
 			if (socketLoginDto.getChannel().isActive()) {
 				String msg="MESSAGE,"+message;
+				JSONArray jsonArray = new JSONArray();
 				try {
 					int msglength = msg.getBytes("UTF-8").length;
 					String reps = "[YW*"+imei+"*0001*"+RadixUtil.changeRadix(msglength)+"*"+msg+"]";
 					logger.info("app发送文字="+reps);
+					
+					
+					
+					JSONObject dataMap = new JSONObject();
+					dataMap.put("DeviceVoiceId", "14297010");
+					dataMap.put("DeviceID", 0);
+
+					String deviceid = limitCache.getRedisKeyValue(imei + "_id");
+					if (deviceid != null && !"0".equals(deviceid) && !"".equals(deviceid)) {
+						dataMap.put("DeviceID", deviceid);
+					} else {
+						WatchDevice watchd = ideviceService.getDeviceInfo(imei);
+						if (watchd != null) {
+							dataMap.put("DeviceID", watchd.getId());
+							limitCache.addKey(imei + "_id", watchd.getId() + "");
+						}
+					}
+					dataMap.put("State", 1);
+					dataMap.put("Type", 3);
+					dataMap.put("MsgType", 1);
+					dataMap.put("ObjectId", "1968143");
+					dataMap.put("Mark", "_4_20190225055346");
+					dataMap.put("Path", "805592/_4_20190225055346.txt");
+					dataMap.put("Length", "4");
+					dataMap.put("CreateTime", "2019/02/25 17:53:46");
+					dataMap.put("UpdateTime", "2019/02/25 17:53:46");
+					
+					jsonArray.add(dataMap);
 					//Unpooled.copiedBuffer(msg, Charset.forName("UTF-8"));
 					//socketLoginDto.getChannel().writeAndFlush(Unpooled.copiedBuffer(reps, Charset.forName("UTF-8")));
 					socketLoginDto.getChannel().writeAndFlush(reps);
@@ -190,7 +221,19 @@ public class WatchAppContDeviceController extends BaseController {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				/*
+				 * {"Code":"1",
+				 * "VoiceList":
+				 * [{"DeviceVoiceId":"14297010",
+				 * "DeviceID":"805592",
+				 * "State":"1",
+				 * "Type":"3","MsgType":"1","ObjectId":"1968143","Mark":"_4_20190225055346",
+				 * "Path":"805592/_4_20190225055346.txt","Length":"4",
+				 * "CreateTime":"2019/02/25 17:53:46"
+				 * ,"UpdateTime":"2019/02/25 17:53:46"}]}、
+				 * */
 				
+				bb.put("VoiceList", jsonArray);
 				bb.put("Code", 1);
 				pushMsgService.insertPushMsg(imei,message,1);
 			} else {

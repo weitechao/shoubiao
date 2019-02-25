@@ -326,6 +326,14 @@ public class DeviceServiceImpl implements IDeviceService {
 		return i == 1;
 	}
 
+	@Override
+	public boolean updateAdminPhoneById(Long deviceId, String phone) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate.update("update device_watch_info set phone=? ,updatetime=? where id = ?",
+				new Object[] { phone, now, deviceId }, new int[] { Types.VARCHAR,java.sql.Types.TIMESTAMP, java.sql.Types.INTEGER });
+		return i == 1;
+	}
+
 	
 	
 }

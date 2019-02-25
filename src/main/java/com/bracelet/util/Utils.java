@@ -97,6 +97,7 @@ public class Utils {
 	public static final String IP = "47.92.30.81";
 	public static final String PORT_TCP = "7780";
 	public static final String PORT_HTTP = "8088";
+	public static final String PORT_HTTP_TEST = "9999";
 	
 	//LINUX voice上传地址和URL
 	public final static String VOICE_FILE_lINUX = "/usr/local/resin/resin-pro-4.0.53-8080/webapps/GXCareDevice/watchvoice/device";

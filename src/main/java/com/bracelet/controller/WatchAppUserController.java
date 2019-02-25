@@ -10,6 +10,7 @@ import com.bracelet.entity.Location;
 import com.bracelet.entity.LocationOld;
 import com.bracelet.entity.LocationWatch;
 import com.bracelet.entity.NoticeInfo;
+import com.bracelet.entity.OpenDoorInfo;
 import com.bracelet.entity.UserInfo;
 import com.bracelet.entity.VersionInfo;
 import com.bracelet.entity.WatchAppVersionInfo;
@@ -137,6 +138,7 @@ public class WatchAppUserController extends BaseController {
 					if (watchd != null) {
 						bb.put("DeviceID", watchd.getId());
 						limitCache.addKey(tel + "_id", watchd.getId() + "");
+						bb.put("phone", watchd.getPhone()+"");
 					}
 					/* } */
 
@@ -186,9 +188,11 @@ public class WatchAppUserController extends BaseController {
 					bb.put("DeviceID", watchd.getId());
 					bb.put("Birthday", watchd.getBirday() + "");
 					limitCache.addKey(tel + "_id", watchd.getId() + "");
+					bb.put("phone", watchd.getPhone()+"");
 				} else {
 
 					ideviceService.insertNewImei(tel, "1", 0, "1");
+					bb.put("phone", "1");
 					WatchDevice watchdd = ideviceService.getDeviceInfo(tel);
 					if (watchdd != null) {
 						bb.put("DeviceID", watchdd.getId());
@@ -341,7 +345,7 @@ public class WatchAppUserController extends BaseController {
 				dataMap.put("SmsNumber", "0");
 				dataMap.put("SmsBalanceKey", "0");
 				dataMap.put("SmsFlowKey", "0");
-				dataMap.put("DeviceID", "");
+				dataMap.put("DeviceID", "1");
 
 				String deviceid = limitCache.getRedisKeyValue(location.getImei() + "_id");
 				if (deviceid != null && !"0".equals(deviceid) && !"".equals(deviceid)) {
@@ -666,5 +670,97 @@ public class WatchAppUserController extends BaseController {
 		bb.put("Code", 1);
 		return bb.toString();
 	}
+	
+	//绑定设备
+	@ResponseBody
+	@RequestMapping(value = "/bindOtherImei/{token}/{imei}", method = RequestMethod.GET)
+	public String bindOtherImei(@PathVariable String token, @PathVariable String imei) {
+		JSONObject bb = new JSONObject();
+		String userId = checkTokenWatchAndUser(token);
+		if ("0".equals(userId)) {
+			bb.put("Code", -1);
+			// bb.put("Message", "");
+			return bb.toString();
+		}
+		BindDevice  bindDevice= userInfoService.getBindInfoByImeiAndUserId( imei, Long.valueOf(userId));	
+		if(bindDevice != null){
+			bb.put("Code", 2);
+		}else{
+			//Long user_id, String imei, String name, Integer status
+			if(userInfoService.saveBindInfo(Long.valueOf(userId), imei, "1", 1)){
+				bb.put("Code", 1);
+			}else{
+				bb.put("Code", 3);
+			}
+		}
+		return bb.toString();
+	}
+	
+	//获取绑定列表
+		@ResponseBody
+		@RequestMapping(value = "/getBindList/{token}", method = RequestMethod.GET)
+		public String getBindList(@PathVariable String token) {
+			JSONObject bb = new JSONObject();
+			String userId = checkTokenWatchAndUser(token);
+			if ("0".equals(userId)) {
+				bb.put("Code", -1);
+				// bb.put("Message", "");
+				return bb.toString();
+			}
+			List<BindDevice> list = userInfoService.getBindInfoById(Long.valueOf(userId));
+			JSONArray jsonArray = new JSONArray();
+			if (list != null && !list.isEmpty()) {
+				for (BindDevice wlInfo : list) {
+					JSONObject dataMap = new JSONObject();
+					dataMap.put("imei", wlInfo.getImei());
+					dataMap.put("id", wlInfo.getId());
+					jsonArray.add(dataMap);
+				}
+			}
+			bb.put("Code", 1);
+			bb.put("List", jsonArray);
+			return bb.toString();
+		}
+		
+		
+		//删除绑定设备
+		@ResponseBody
+		@RequestMapping(value = "/deletebindDeviceById/{token}/{id}", method = RequestMethod.GET)
+		public String bindOtherImei(@PathVariable String token, @PathVariable Integer id) {
+			JSONObject bb = new JSONObject();
+			String userId = checkTokenWatchAndUser(token);
+			if ("0".equals(userId)) {
+				bb.put("Code", -1);
+				return bb.toString();
+			}
+			if(userInfoService.unbindDevice(Long.valueOf(userId), id)){
+				bb.put("Code", 1);
+			}else{
+				bb.put("Code", 2);
+			}
+			
+			return bb.toString();
+		}
+		
+		
+		//修改管理员电话号码
+		@ResponseBody
+		@RequestMapping(value = "/updateAdminPhone/{token}/{deviceId}/{phone}", method = RequestMethod.GET)
+		public String updateAdminPhone(@PathVariable String token, @PathVariable Long deviceId ,@PathVariable String phone) {
+			JSONObject bb = new JSONObject();
+			String userId = checkTokenWatchAndUser(token);
+			if ("0".equals(userId)) {
+				bb.put("Code", -1);
+				return bb.toString();
+			}
+			if(ideviceService.updateAdminPhoneById(deviceId, phone)){
+				bb.put("Code", 1);
+			}else{
+				bb.put("Code", 2);
+			}
+			
+			return bb.toString();
+		}
+		
 
 }

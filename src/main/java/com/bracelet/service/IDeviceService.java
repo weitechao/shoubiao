@@ -73,6 +73,8 @@ public interface IDeviceService {
 
 	boolean deleteDeviceAlarmInfo(String imei);
 
+	boolean updateAdminPhoneById(Long deviceId, String phone);
+
 
 
 }

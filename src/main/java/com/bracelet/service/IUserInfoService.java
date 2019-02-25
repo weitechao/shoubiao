@@ -104,7 +104,8 @@ public interface IUserInfoService {
 
 	boolean updateUserPassword(Long user_id, String password);
 	
- boolean saveBindInfo(Long user_id, String imei, String name, Integer status) ;
+    boolean saveBindInfo(Long user_id, String imei, String name, Integer status) ;
+
 
 	
 
