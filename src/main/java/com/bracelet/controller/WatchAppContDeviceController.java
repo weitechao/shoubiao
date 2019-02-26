@@ -159,7 +159,7 @@ public class WatchAppContDeviceController extends BaseController {
 
 		/* 文字推送 */
 		@ResponseBody
-		@RequestMapping(value = "/pushMessage", method = RequestMethod.POST)
+		@RequestMapping(value = "/pushMessage", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 		public String pushMessage(@RequestBody String body) {
 			JSONObject bb = new JSONObject();
 			JSONObject jsonObject = (JSONObject) JSON.parse(body);
@@ -190,7 +190,7 @@ public class WatchAppContDeviceController extends BaseController {
 					
 					
 					JSONObject dataMap = new JSONObject();
-					dataMap.put("DeviceVoiceId", "14297010");
+					dataMap.put("DeviceVoiceId", ((int) ((Math.random() * 9 + 1) * 10000)) + "");
 					dataMap.put("DeviceID", 0);
 
 					String deviceid = limitCache.getRedisKeyValue(imei + "_id");
@@ -208,10 +208,11 @@ public class WatchAppContDeviceController extends BaseController {
 					dataMap.put("MsgType", 1);
 					dataMap.put("ObjectId", "1968143");
 					dataMap.put("Mark", "_4_20190225055346");
-					dataMap.put("Path", "805592/_4_20190225055346.txt");
+					dataMap.put("Path", message);
 					dataMap.put("Length", "4");
-					dataMap.put("CreateTime", "2019/02/25 17:53:46");
-					dataMap.put("UpdateTime", "2019/02/25 17:53:46");
+					String time = Utils.getLocationTime(System.currentTimeMillis());
+					dataMap.put("CreateTime", time);
+					dataMap.put("UpdateTime", time);
 					
 					jsonArray.add(dataMap);
 					//Unpooled.copiedBuffer(msg, Charset.forName("UTF-8"));

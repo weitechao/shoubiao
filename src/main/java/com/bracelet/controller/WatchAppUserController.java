@@ -415,19 +415,22 @@ public class WatchAppUserController extends BaseController {
 					deviceSet.put("WeekDisabled", whsc.getWeekDisable1() + "");
 				}
 
-				deviceSet.put("TimerOpen", "0");
-				deviceSet.put("TimerClose", "0");
+				deviceSet.put("TimerOpen", "07:00");
+				deviceSet.put("TimerClose", "00:00");
 				deviceSet.put("BrightScreen", "0");
 
-				deviceSet.put("LocationMode", 0);
+				deviceSet.put("LocationMode", 2);
 				deviceSet.put("LocationTime", "0");
-				deviceSet.put("FlowerNumber", 0);
-				deviceSet.put("SleepCalculate", "0");
-				deviceSet.put("StepCalculate", "0");
+				deviceSet.put("FlowerNumber", 1);
+				deviceSet.put("SleepCalculate", "1|23:00-23:59|05:00-06:00");
+				deviceSet.put("sleepCalculate", "1|23:00-23:59|05:00-06:00");
+				deviceSet.put("StepCalculate", "1");
+				deviceSet.put("stepCalculate", "1");
 				deviceSet.put("HrCalculate", "0");
+				deviceSet.put("hrCalculate", "1");
 				deviceSet.put("SosMsgswitch", "0");
-				deviceSet.put("CreateTime", "0");
-				deviceSet.put("UpdateTime", "0");
+				deviceSet.put("CreateTime", "1550130107000");
+				deviceSet.put("UpdateTime", "1550130107000");
 				deviceSet.put("dialPad", "1");
 				
 				WatchDialpad watDiapad = watchSetService.getWatchDialpad(location.getImei());
@@ -556,21 +559,26 @@ public class WatchAppUserController extends BaseController {
 						deviceSet.put("WeekDisabled", whsc.getWeekDisable1() + "");
 					}
 
-					deviceSet.put("TimerOpen", "0");
-					deviceSet.put("TimerClose", "0");
+					deviceSet.put("TimerOpen", "07:00");
+					deviceSet.put("TimerClose", "00:00");
 					deviceSet.put("BrightScreen", "0");
 
-					deviceSet.put("LocationMode", 0);
+					deviceSet.put("LocationMode", 2);
 					deviceSet.put("LocationTime", "0");
-					deviceSet.put("FlowerNumber", 0);
-					deviceSet.put("SleepCalculate", "0");
-					deviceSet.put("StepCalculate", "0");
+					deviceSet.put("FlowerNumber", 1);
+					deviceSet.put("SleepCalculate", "1|23:00-23:59|05:00-06:00");
+					deviceSet.put("sleepCalculate", "1|23:00-23:59|05:00-06:00");
+					deviceSet.put("StepCalculate", "1");
+					deviceSet.put("stepCalculate", "1");
 					deviceSet.put("HrCalculate", "0");
+					deviceSet.put("hrCalculate", "1");
 					deviceSet.put("SosMsgswitch", "0");
-					deviceSet.put("CreateTime", "0");
-					deviceSet.put("UpdateTime", "0");
+					deviceSet.put("CreateTime", "1550130107000");
+					deviceSet.put("UpdateTime", "1550130107000");
 					deviceSet.put("dialPad", "1");
 					dataMap.put("DeviceSet", deviceSet);
+					
+				
 
 					JSONObject deviceState = new JSONObject();
 					deviceState.put("Altitude", 0);
@@ -654,6 +662,8 @@ public class WatchAppUserController extends BaseController {
 		// 删闹钟
 		ideviceService.deleteDeviceAlarmInfo(imei);
 		
+		userInfoService.deleteWatchBindByUserId(Long.valueOf(userId));
+		
 		UserInfo userInfo = userInfoService.getUserInfoByUsername(imei);
 		if (userInfo != null) {
 				userInfoService.updateUserPassword(userInfo.getUser_id(), "123456");
@@ -673,8 +683,8 @@ public class WatchAppUserController extends BaseController {
 	
 	//绑定设备
 	@ResponseBody
-	@RequestMapping(value = "/bindOtherImei/{token}/{imei}", method = RequestMethod.GET)
-	public String bindOtherImei(@PathVariable String token, @PathVariable String imei) {
+	@RequestMapping(value = "/bindOtherImei/{token}/{imei}/{name}", method = RequestMethod.GET)
+	public String bindOtherImei(@PathVariable String token, @PathVariable String imei,@PathVariable String name) {
 		JSONObject bb = new JSONObject();
 		String userId = checkTokenWatchAndUser(token);
 		if ("0".equals(userId)) {
@@ -682,17 +692,30 @@ public class WatchAppUserController extends BaseController {
 			// bb.put("Message", "");
 			return bb.toString();
 		}
-		BindDevice  bindDevice= userInfoService.getBindInfoByImeiAndUserId( imei, Long.valueOf(userId));	
-		if(bindDevice != null){
-			bb.put("Code", 2);
-		}else{
-			//Long user_id, String imei, String name, Integer status
-			if(userInfoService.saveBindInfo(Long.valueOf(userId), imei, "1", 1)){
-				bb.put("Code", 1);
+		
+		
+		BindDevice  bindDeviceApp= userInfoService.getWatchBindInfoByUserId(Long.valueOf(userId));
+		if(bindDeviceApp != null){
+			BindDevice  bindDevice= userInfoService.getWatchBindInfoByImeiAndUserId( imei, Long.valueOf(userId));	
+			if(bindDevice != null){
+				bb.put("Code", 2);
 			}else{
-				bb.put("Code", 3);
+				//Long user_id, String imei, String name, Integer status
+				if(userInfoService.saveWatchBindInfo(Long.valueOf(userId), imei, name, 1)){
+					bb.put("Code", 1);
+				}else{
+					bb.put("Code", 3);
+				}
 			}
+		}else{
+			userInfoService.saveWatchBindInfo(Long.valueOf(userId), imei, name, 1);
+			String imeii = userInfoService.getUserInfoById(Long.valueOf(userId)).getUsername()+"";
+			userInfoService.saveWatchBindInfo(Long.valueOf(userId), imeii, imeii, 1);
+			bb.put("Code", 1);
 		}
+		//String appImei = userInfoService.getUserInfoById(Long.valueOf(userId)).getImei();
+		
+		
 		return bb.toString();
 	}
 	
@@ -707,13 +730,20 @@ public class WatchAppUserController extends BaseController {
 				// bb.put("Message", "");
 				return bb.toString();
 			}
-			List<BindDevice> list = userInfoService.getBindInfoById(Long.valueOf(userId));
+			
+			BindDevice  bindDeviceApp= userInfoService.getWatchBindInfoByUserId(Long.valueOf(userId));
+			if(bindDeviceApp == null ){
+				String imei =userInfoService.getUserInfoById(Long.valueOf(userId)).getUsername()+"";
+				userInfoService.saveWatchBindInfo(Long.valueOf(userId), imei, imei, 1);
+			}
+			List<BindDevice> list = userInfoService.getWatchBindInfoById(Long.valueOf(userId));
 			JSONArray jsonArray = new JSONArray();
 			if (list != null && !list.isEmpty()) {
 				for (BindDevice wlInfo : list) {
 					JSONObject dataMap = new JSONObject();
 					dataMap.put("imei", wlInfo.getImei());
 					dataMap.put("id", wlInfo.getId());
+					dataMap.put("name", wlInfo.getName()+"");
 					jsonArray.add(dataMap);
 				}
 			}
@@ -733,7 +763,7 @@ public class WatchAppUserController extends BaseController {
 				bb.put("Code", -1);
 				return bb.toString();
 			}
-			if(userInfoService.unbindDevice(Long.valueOf(userId), id)){
+			if(userInfoService.unWatchbindDevice(Long.valueOf(userId), id)){
 				bb.put("Code", 1);
 			}else{
 				bb.put("Code", 2);
@@ -745,20 +775,64 @@ public class WatchAppUserController extends BaseController {
 		
 		//修改管理员电话号码
 		@ResponseBody
-		@RequestMapping(value = "/updateAdminPhone/{token}/{deviceId}/{phone}", method = RequestMethod.GET)
-		public String updateAdminPhone(@PathVariable String token, @PathVariable Long deviceId ,@PathVariable String phone) {
+		@RequestMapping(value = "/updateAdminPhone/{token}/{imei}/{phone}", method = RequestMethod.GET)
+		public String updateAdminPhone(@PathVariable String token, @PathVariable String imei ,@PathVariable String phone) {
 			JSONObject bb = new JSONObject();
 			String userId = checkTokenWatchAndUser(token);
 			if ("0".equals(userId)) {
 				bb.put("Code", -1);
 				return bb.toString();
 			}
-			if(ideviceService.updateAdminPhoneById(deviceId, phone)){
+			if(ideviceService.updateAdminPhoneById(imei, phone)){
 				bb.put("Code", 1);
 			}else{
 				bb.put("Code", 2);
 			}
 			
+			return bb.toString();
+		}
+		
+		
+		
+		
+		
+		
+		// 解除绑定通过imei 1.清空设置 2.电子围栏 3.通讯录
+		@ResponseBody
+		@RequestMapping(value = "/shoudongUnbindByImei/{imei}", method = RequestMethod.GET)
+		public String shoudongUnbindByImei(@PathVariable String imei) {
+			JSONObject bb = new JSONObject();
+			// 清空设置信息 device_watch_info
+			WatchDevice watch = ideviceService.getDeviceInfo(imei);
+			if (watch != null) {
+				this.ideviceService.updateWatchImeiInfoById(watch.getId(), "", "", 1, "", "", "", "", "", "");
+			}
+			ideviceService.updateImeiHeadInfoByImei(watch.getId(), "");
+
+			WatchDeviceHomeSchool watchSchool = ideviceService.getDeviceHomeAndFamilyInfo(imei);
+			if (watchSchool != null) {
+				ideviceService.updateImeiHomeAndFamilyInfoById(watchSchool.getId(), "08:00-12:00", "14:00-17:00", "", "",
+						"", "", "", "", "", "");
+			}
+
+			fenceService.deleteWatchFenceByImei(imei);
+			memService.deleteWatchMemberByImei(imei);
+			// 删语音 删定位
+			locationService.deleteByImei(imei);
+			watchtkService.delteByImei(imei);
+			// 删闹钟
+			ideviceService.deleteDeviceAlarmInfo(imei);
+			
+			
+			
+			UserInfo userInfo = userInfoService.getUserInfoByUsername(imei);
+			if (userInfo != null) {
+				     Long userId = userInfo.getUser_id();
+			     	userInfoService.deleteWatchBindByUserId(Long.valueOf(userId));
+					userInfoService.updateUserPassword(userInfo.getUser_id(), "123456");
+			}
+			bb.put("Code", 1);
+		    bb.put("Message", "手动解绑成功");
 			return bb.toString();
 		}
 		

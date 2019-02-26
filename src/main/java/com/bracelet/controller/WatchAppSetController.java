@@ -386,7 +386,7 @@ public class WatchAppSetController extends BaseController {
 			}
 
 		} else {
-			bb.put("Code", 0);
+			bb.put("Code", 1);
 			bb.put("SetInfo", "1-1-1-1-0-0-0-0-1-0-1-0");
 			bb.put("ClassDisabled1", "08:00-12:00");
 			bb.put("ClassDisabled2", "14:00-17:00");
@@ -400,13 +400,16 @@ public class WatchAppSetController extends BaseController {
 			bb.put("Alarm1", "");
 			bb.put("Alarm2", "");
 			bb.put("Alarm3", "");
-			bb.put("LocationMode", "");
-			bb.put("LocationTime", "");
-			bb.put("FlowerNumber", "");
-			bb.put("SleepCalculate", "");
-			bb.put("StepCalculate", "");
+			bb.put("LocationMode", "2");
+			bb.put("LocationTime", 0);
+			bb.put("FlowerNumber", 1);
+			bb.put("SleepCalculate", "1|23:00-23:59|05:00-06:00");
+			bb.put("sleepCalculate", "1|23:00-23:59|05:00-06:00");
+			bb.put("StepCalculate", "1");
+			bb.put("stepCalculate", "1");
 			bb.put("HrCalculate", "");
-			bb.put("SosMsgswitch", "");
+			bb.put("hrCalculate", 0);
+			bb.put("SosMsgswitch", 0);
 			bb.put("CreateTime", "");
 			bb.put("UpdateTime", "");
 			bb.put("dialPad", "1");

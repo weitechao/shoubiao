@@ -438,4 +438,63 @@ public class UserInfoServiceImpl implements IUserInfoService {
 		return i == 1;
 	}
 
+	@Override
+	public BindDevice getWatchBindInfoByImeiAndUserId(String imei, Long user_id) {
+		String sql = "select * from watch_bind_device where user_id=? and imei =?  LIMIT 1";
+		List<BindDevice> list = jdbcTemplate.query(sql, new Object[] { user_id, imei },
+				new BeanPropertyRowMapper<BindDevice>(BindDevice.class));
+		if (list != null && !list.isEmpty()) {
+			return list.get(0);
+		}
+		return null;
+	}
+
+	@Override
+	public boolean saveWatchBindInfo(Long user_id, String imei, String name, Integer status) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate.update(
+				"insert into watch_bind_device (user_id, imei, name,status,createtime) values (?,?,?,?,?)",
+				new Object[] { user_id, imei, name, status, now },
+				new int[] { Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.TIMESTAMP });
+		return i == 1;
+	}
+
+	@Override
+	public List<BindDevice> getWatchBindInfoById(Long user_id) {
+		String sql = "select * from watch_bind_device where user_id=?";
+		List<BindDevice> list = jdbcTemplate.query(sql, new Object[] { user_id },
+				new BeanPropertyRowMapper<BindDevice>(BindDevice.class));
+		if (list != null && !list.isEmpty()) {
+			return list;
+		} else {
+			logger.info("cannot find userinfo:");
+		}
+		return null;
+	}
+
+	@Override
+	public boolean unWatchbindDevice(Long user_id, Integer id) {
+		int i = jdbcTemplate.update("delete from watch_bind_device where id = ? and user_id = ?",
+				new Object[] { id, user_id }, new int[] { Types.INTEGER, Types.INTEGER });
+		return i == 1;
+	}
+
+	@Override
+	public boolean deleteWatchBindByUserId(Long userId) {
+		jdbcTemplate.update("delete from watch_bind_device where   user_id = ?", new Object[] { userId },
+				new int[] { Types.INTEGER });
+		return true;
+	}
+
+	@Override
+	public BindDevice getWatchBindInfoByUserId(Long userId) {
+		String sql = "select * from watch_bind_device where user_id=?   LIMIT 1";
+		List<BindDevice> list = jdbcTemplate.query(sql, new Object[] { userId },
+				new BeanPropertyRowMapper<BindDevice>(BindDevice.class));
+		if (list != null && !list.isEmpty()) {
+			return list.get(0);
+		}
+		return null;
+	}
+
 }
