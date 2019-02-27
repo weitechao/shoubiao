@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.bracelet.dto.HttpBaseDto;
 import com.bracelet.dto.SocketLoginDto;
 import com.bracelet.entity.BindDevice;
+import com.bracelet.entity.HealthStepManagement;
 import com.bracelet.entity.Location;
 import com.bracelet.entity.LocationOld;
 import com.bracelet.entity.LocationWatch;
@@ -21,6 +22,7 @@ import com.bracelet.entity.WatchDialpad;
 import com.bracelet.exception.BizException;
 import com.bracelet.redis.LimitCache;
 import com.bracelet.service.IAuthcodeService;
+import com.bracelet.service.IConfService;
 import com.bracelet.service.IDeviceService;
 import com.bracelet.service.IFenceService;
 import com.bracelet.service.ILocationService;
@@ -78,6 +80,10 @@ public class WatchAppUserController extends BaseController {
 
 	@Autowired
 	IDeviceService ideviceService;
+	
+	
+	@Autowired
+	IConfService confService;
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	// 登录
@@ -664,6 +670,11 @@ public class WatchAppUserController extends BaseController {
 		
 		userInfoService.deleteWatchBindByUserId(Long.valueOf(userId));
 		
+		HealthStepManagement  heathM = confService.getHeathStepInfo(imei);
+		if(heathM != null){
+			confService.deteHeathyInfoByImei(heathM.getId());
+		}
+		
 		UserInfo userInfo = userInfoService.getUserInfoByUsername(imei);
 		if (userInfo != null) {
 				userInfoService.updateUserPassword(userInfo.getUser_id(), "123456");
@@ -823,6 +834,10 @@ public class WatchAppUserController extends BaseController {
 			// 删闹钟
 			ideviceService.deleteDeviceAlarmInfo(imei);
 			
+			HealthStepManagement  heathM = confService.getHeathStepInfo(imei);
+			if(heathM != null){
+				confService.deteHeathyInfoByImei(heathM.getId());
+			}
 			
 			
 			UserInfo userInfo = userInfoService.getUserInfoByUsername(imei);

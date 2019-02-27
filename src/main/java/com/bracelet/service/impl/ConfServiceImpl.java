@@ -170,4 +170,11 @@ public class ConfServiceImpl implements IConfService {
 		return i == 1;
 	}
 
+	@Override
+	public boolean deteHeathyInfoByImei(Long id) {
+		jdbcTemplate.update("delete from healthStepManagement where   id = ?",
+				new Object[] { id }, new int[] { Types.INTEGER });
+		return true;
+	}
+
 }

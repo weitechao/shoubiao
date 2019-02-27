@@ -38,5 +38,7 @@ public interface IConfService {
 
 	boolean insertNotify(String deviceId, String notification, String notificationSound, String notificationVibration);
 
+	boolean deteHeathyInfoByImei(Long id);
+
 
 }

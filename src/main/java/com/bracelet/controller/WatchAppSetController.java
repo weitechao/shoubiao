@@ -354,10 +354,10 @@ public class WatchAppSetController extends BaseController {
 			}
 			bb.put("LocationMode", "1");
 			bb.put("FlowerNumber", 0);
-			bb.put("SleepCalculate", "");
-			bb.put("StepCalculate", "");
-			bb.put("HrCalculate", "");
-			bb.put("SosMsgswitch", "");
+			bb.put("SleepCalculate", "1|23:00-23:59|05:00-06:00");
+			bb.put("StepCalculate", "0");
+			bb.put("HrCalculate", "0");
+			bb.put("SosMsgswitch", "0");
 			
 			bb.put("CreateTime", deviceSet.getCreatetime().getTime());
 			bb.put("UpdateTime", deviceSet.getUpdatetime().getTime());
@@ -370,10 +370,10 @@ public class WatchAppSetController extends BaseController {
 			
 			HealthStepManagement  heathM = confService.getHeathStepInfo(imei);
 	   		if(heathM != null){
-	   		   bb.put("sleepCalculate", heathM.getSleepCalculate()+"");
-	   		   bb.put("hrCalculate", heathM.getHrCalculate()+"");
-	   		   bb.put("stepCalculate", heathM.getStepCalculate()+"");
-	   		}
+		   		   bb.put("SleepCalculate", heathM.getSleepCalculate()+"");
+		   		   bb.put("HrCalculate", heathM.getHrCalculate()+"");
+		   		   bb.put("StepCalculate", heathM.getStepCalculate()+"");
+		   		}
 
 			LocationFrequency locaFre = watchSetService.getLocationFrequencyByImei(imei);
 			if (locaFre != null) {
@@ -404,15 +404,19 @@ public class WatchAppSetController extends BaseController {
 			bb.put("LocationTime", 0);
 			bb.put("FlowerNumber", 1);
 			bb.put("SleepCalculate", "1|23:00-23:59|05:00-06:00");
-			bb.put("sleepCalculate", "1|23:00-23:59|05:00-06:00");
-			bb.put("StepCalculate", "1");
-			bb.put("stepCalculate", "1");
-			bb.put("HrCalculate", "");
-			bb.put("hrCalculate", 0);
+			bb.put("StepCalculate", "0");
+			bb.put("HrCalculate", "0");
 			bb.put("SosMsgswitch", 0);
 			bb.put("CreateTime", "");
 			bb.put("UpdateTime", "");
 			bb.put("dialPad", "1");
+			
+			HealthStepManagement  heathM = confService.getHeathStepInfo(imei);
+	   		if(heathM != null){
+		   		   bb.put("SleepCalculate", heathM.getSleepCalculate()+"");
+		   		   bb.put("HrCalculate", heathM.getHrCalculate()+"");
+		   		   bb.put("StepCalculate", heathM.getStepCalculate()+"");
+		   		}
 		}
 		return bb.toString();
 	}
