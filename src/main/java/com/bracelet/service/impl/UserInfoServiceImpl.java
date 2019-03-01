@@ -450,12 +450,12 @@ public class UserInfoServiceImpl implements IUserInfoService {
 	}
 
 	@Override
-	public boolean saveWatchBindInfo(Long user_id, String imei, String name, Integer status) {
+	public boolean saveWatchBindInfo(Long user_id, String imei, String name, Integer status,String bimei) {
 		Timestamp now = Utils.getCurrentTimestamp();
 		int i = jdbcTemplate.update(
-				"insert into watch_bind_device (user_id, imei, name,status,createtime) values (?,?,?,?,?)",
-				new Object[] { user_id, imei, name, status, now },
-				new int[] { Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.TIMESTAMP });
+				"insert into watch_bind_device (user_id, imei, name,status,createtime,b_imei) values (?,?,?,?,?,?)",
+				new Object[] { user_id, imei, name, status, now ,bimei},
+				new int[] { Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.TIMESTAMP , Types.VARCHAR});
 		return i == 1;
 	}
 
@@ -473,9 +473,9 @@ public class UserInfoServiceImpl implements IUserInfoService {
 	}
 
 	@Override
-	public boolean unWatchbindDevice(Long user_id, Integer id) {
-		int i = jdbcTemplate.update("delete from watch_bind_device where id = ? and user_id = ?",
-				new Object[] { id, user_id }, new int[] { Types.INTEGER, Types.INTEGER });
+	public boolean unWatchbindDevice(Long  id) {
+		int i = jdbcTemplate.update("delete from watch_bind_device where id = ?",
+				new Object[] { id }, new int[] { Types.INTEGER });
 		return i == 1;
 	}
 
@@ -493,6 +493,19 @@ public class UserInfoServiceImpl implements IUserInfoService {
 				new BeanPropertyRowMapper<BindDevice>(BindDevice.class));
 		if (list != null && !list.isEmpty()) {
 			return list.get(0);
+		}
+		return null;
+	}
+
+	@Override
+	public List<BindDevice> getWatchBindInfoByBimei(String bimei) {
+		String sql = "select * from watch_bind_device where b_imei=?";
+		List<BindDevice> list = jdbcTemplate.query(sql, new Object[] { bimei },
+				new BeanPropertyRowMapper<BindDevice>(BindDevice.class));
+		if (list != null && !list.isEmpty()) {
+			return list;
+		} else {
+			logger.info("cannot find userinfo:");
 		}
 		return null;
 	}

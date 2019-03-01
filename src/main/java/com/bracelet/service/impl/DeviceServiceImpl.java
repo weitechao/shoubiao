@@ -1,6 +1,7 @@
 package com.bracelet.service.impl;
 
 import com.bracelet.datasource.DataSourceChange;
+import com.bracelet.entity.DeviceManagePhone;
 import com.bracelet.entity.IpAddressInfo;
 import com.bracelet.entity.WatchDevice;
 import com.bracelet.entity.WatchDeviceAlarm;
@@ -327,10 +328,41 @@ public class DeviceServiceImpl implements IDeviceService {
 	}
 
 	@Override
-	public boolean updateAdminPhoneById(String imei, String phone) {
+	public boolean updateAdminPhoneById(Long id, String phone) {
 		Timestamp now = Utils.getCurrentTimestamp();
-		int i = jdbcTemplate.update("update device_watch_info set phone=? ,updatetime=? where imei = ?",
-				new Object[] { phone, now, imei }, new int[] { Types.VARCHAR,java.sql.Types.TIMESTAMP, java.sql.Types.VARCHAR });
+		int i = jdbcTemplate.update("update device_manage_phone set phone=? ,createtime=? where id = ?",
+				new Object[] { phone, now, id }, new int[] { Types.VARCHAR,java.sql.Types.TIMESTAMP, java.sql.Types.INTEGER });
+		return i == 1;
+	}
+
+	@Override
+	public DeviceManagePhone getManagePhoneByImei(String imei) {
+		String sql = "select * from device_manage_phone where imei=? LIMIT 1";
+		List<DeviceManagePhone> list = jdbcTemplate.query(sql, new Object[] { imei },
+				new BeanPropertyRowMapper<DeviceManagePhone>(DeviceManagePhone.class));
+
+		if (list != null && !list.isEmpty()) {
+			return list.get(0);
+		} else {
+			logger.info("get DeviceManagePhone imei:" + imei);
+		}
+		return null;
+	}
+
+	@Override
+	public boolean insertDeviceAdminPhone(String imei, String phone) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate.update("insert into device_manage_phone (imei, tel, createtime) values (?,?,?)",
+				new Object[] { imei, phone, now },
+				new int[] { java.sql.Types.VARCHAR, java.sql.Types.VARCHAR, java.sql.Types.TIMESTAMP });
+		return i == 1;
+	}
+
+	@Override
+	public boolean deleteBindDevicebyImei(String imei) {
+		int i = jdbcTemplate.update(
+				"delete from watch_bind_device where b_imei = ?",
+				new Object[] { imei }, new int[] { Types.VARCHAR});
 		return i == 1;
 	}
 

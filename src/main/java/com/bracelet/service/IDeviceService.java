@@ -3,6 +3,7 @@ package com.bracelet.service;
 import java.util.List;
 
 import com.bracelet.datasource.DataSourceChange;
+import com.bracelet.entity.DeviceManagePhone;
 import com.bracelet.entity.IpAddressInfo;
 import com.bracelet.entity.WatchDevice;
 import com.bracelet.entity.WatchDeviceAlarm;
@@ -73,7 +74,14 @@ public interface IDeviceService {
 
 	boolean deleteDeviceAlarmInfo(String imei);
 
-	boolean updateAdminPhoneById(String imei, String phone);
+	boolean updateAdminPhoneById(Long id, String phone);
+
+	DeviceManagePhone getManagePhoneByImei(String imei);
+
+	boolean insertDeviceAdminPhone(String imei, String phone);
+
+	boolean deleteBindDevicebyImei(String imei);
+
 
 
 

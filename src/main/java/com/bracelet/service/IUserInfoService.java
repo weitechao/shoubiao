@@ -108,15 +108,17 @@ public interface IUserInfoService {
 
 	BindDevice getWatchBindInfoByImeiAndUserId(String imei, Long valueOf);
 
-	boolean saveWatchBindInfo(Long user_id, String imei, String name, Integer status);
+	boolean saveWatchBindInfo(Long user_id, String imei, String name, Integer status,String bimei);
 
 	List<BindDevice> getWatchBindInfoById(Long user_id);
 
-	boolean unWatchbindDevice(Long user_id, Integer id);
+	boolean unWatchbindDevice(Long id);
 
 	boolean deleteWatchBindByUserId(Long userId);
 
 	BindDevice getWatchBindInfoByUserId(Long userId);
+
+	List<BindDevice> getWatchBindInfoByBimei(String imei);
 
 
 	

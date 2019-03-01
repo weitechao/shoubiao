@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.bracelet.dto.HttpBaseDto;
 import com.bracelet.dto.SocketLoginDto;
 import com.bracelet.entity.BindDevice;
+import com.bracelet.entity.DeviceManagePhone;
 import com.bracelet.entity.HealthStepManagement;
 import com.bracelet.entity.Location;
 import com.bracelet.entity.LocationOld;
@@ -125,26 +126,15 @@ public class WatchAppUserController extends BaseController {
 					if (!StringUtil.isEmpty(ipport)) {
 						bb.put("ip", ipport);
 					}
-
-					/*
-					 * SocketLoginDto socketLoginDto =
-					 * ChannelMap.getChannel(tel); if (socketLoginDto == null ||
-					 * socketLoginDto.getChannel() == null) { WatchDevice watchd
-					 * = ideviceService.getDeviceInfo(tel); bb.put("DeviceID",
-					 * watchd.getId()); } else { bb.put("DeviceID",
-					 * socketLoginDto.getUser_id()); }
-					 */
-					/*
-					 * String deviceid = limitCache.getRedisKeyValue(tel +
-					 * "_id"); if (deviceid != null && !"0".equals(deviceid) &&
-					 * !"".equals(deviceid)) { bb.put("DeviceID", deviceid); }
-					 * else {
-					 */
 					WatchDevice watchd = ideviceService.getDeviceInfo(tel);
 					if (watchd != null) {
 						bb.put("DeviceID", watchd.getId());
 						limitCache.addKey(tel + "_id", watchd.getId() + "");
-						bb.put("phone", watchd.getPhone()+"");
+					}
+					bb.put("phone", "");
+					DeviceManagePhone demp = ideviceService.getManagePhoneByImei(tel);
+					if(demp != null){
+						bb.put("phone", demp.getTel()+"");
 					}
 					/* } */
 
@@ -153,8 +143,7 @@ public class WatchAppUserController extends BaseController {
 					bb.put("Message", "");// 2表示密码错误
 				}
 			} else {
-				// UserInfo userInfoLuRu =
-				// userInfoService.getUserInfoLuRuByUsername(tel);//这里查询录入表
+				
 				// if(userInfoLuRu !=null ){//说明已经录入 第一次登录
 				userInfoService.saveUserInfo(tel, "123456", 1);// 表示新注册
 
@@ -194,11 +183,16 @@ public class WatchAppUserController extends BaseController {
 					bb.put("DeviceID", watchd.getId());
 					bb.put("Birthday", watchd.getBirday() + "");
 					limitCache.addKey(tel + "_id", watchd.getId() + "");
-					bb.put("phone", watchd.getPhone()+"");
+					
+					bb.put("phone", "");
+					DeviceManagePhone demp = ideviceService.getManagePhoneByImei(tel);
+					if(demp != null){
+						bb.put("phone", demp.getTel()+"");
+					}
 				} else {
 
 					ideviceService.insertNewImei(tel, "1", 0, "1");
-					bb.put("phone", "1");
+					bb.put("phone", "");
 					WatchDevice watchdd = ideviceService.getDeviceInfo(tel);
 					if (watchdd != null) {
 						bb.put("DeviceID", watchdd.getId());
@@ -669,7 +663,8 @@ public class WatchAppUserController extends BaseController {
 		ideviceService.deleteDeviceAlarmInfo(imei);
 		
 		userInfoService.deleteWatchBindByUserId(Long.valueOf(userId));
-		
+		//删除绑定设备
+		ideviceService.deleteBindDevicebyImei(imei);
 		HealthStepManagement  heathM = confService.getHeathStepInfo(imei);
 		if(heathM != null){
 			confService.deteHeathyInfoByImei(heathM.getId());
@@ -705,23 +700,23 @@ public class WatchAppUserController extends BaseController {
 		}
 		
 		
+		
+		
 		BindDevice  bindDeviceApp= userInfoService.getWatchBindInfoByUserId(Long.valueOf(userId));
 		if(bindDeviceApp != null){
-			BindDevice  bindDevice= userInfoService.getWatchBindInfoByImeiAndUserId( imei, Long.valueOf(userId));	
+			BindDevice  bindDevice= userInfoService.getWatchBindInfoByImeiAndUserId(imei, Long.valueOf(userId));	
 			if(bindDevice != null){
 				bb.put("Code", 2);
 			}else{
-				//Long user_id, String imei, String name, Integer status
-				if(userInfoService.saveWatchBindInfo(Long.valueOf(userId), imei, name, 1)){
-					bb.put("Code", 1);
-				}else{
-					bb.put("Code", 3);
-				}
+				userInfoService.saveWatchBindInfo(Long.valueOf("1"), bindDeviceApp.getImei()+"", name, 1, imei);
+				userInfoService.saveWatchBindInfo(Long.valueOf("1"), imei, name, 1, bindDeviceApp.getImei()+"");
+				
+				bb.put("Code", 1);
 			}
 		}else{
-			userInfoService.saveWatchBindInfo(Long.valueOf(userId), imei, name, 1);
 			String imeii = userInfoService.getUserInfoById(Long.valueOf(userId)).getUsername()+"";
-			userInfoService.saveWatchBindInfo(Long.valueOf(userId), imeii, imeii, 1);
+			userInfoService.saveWatchBindInfo(Long.valueOf("1"), imeii, imeii, 1, imeii);
+			userInfoService.saveWatchBindInfo(Long.valueOf("1"), imeii, name, 1, imei);
 			bb.put("Code", 1);
 		}
 		//String appImei = userInfoService.getUserInfoById(Long.valueOf(userId)).getImei();
@@ -743,11 +738,11 @@ public class WatchAppUserController extends BaseController {
 			}
 			
 			BindDevice  bindDeviceApp= userInfoService.getWatchBindInfoByUserId(Long.valueOf(userId));
+			String imei =userInfoService.getUserInfoById(Long.valueOf(userId)).getUsername()+"";
 			if(bindDeviceApp == null ){
-				String imei =userInfoService.getUserInfoById(Long.valueOf(userId)).getUsername()+"";
-				userInfoService.saveWatchBindInfo(Long.valueOf(userId), imei, imei, 1);
+				userInfoService.saveWatchBindInfo(Long.valueOf(userId), imei, imei, 1, imei);
 			}
-			List<BindDevice> list = userInfoService.getWatchBindInfoById(Long.valueOf(userId));
+			List<BindDevice> list = userInfoService.getWatchBindInfoByBimei(imei);
 			JSONArray jsonArray = new JSONArray();
 			if (list != null && !list.isEmpty()) {
 				for (BindDevice wlInfo : list) {
@@ -767,14 +762,14 @@ public class WatchAppUserController extends BaseController {
 		//删除绑定设备
 		@ResponseBody
 		@RequestMapping(value = "/deletebindDeviceById/{token}/{id}", method = RequestMethod.GET)
-		public String bindOtherImei(@PathVariable String token, @PathVariable Integer id) {
+		public String bindOtherImei(@PathVariable String token, @PathVariable Long id) {
 			JSONObject bb = new JSONObject();
 			String userId = checkTokenWatchAndUser(token);
 			if ("0".equals(userId)) {
 				bb.put("Code", -1);
 				return bb.toString();
 			}
-			if(userInfoService.unWatchbindDevice(Long.valueOf(userId), id)){
+			if(userInfoService.unWatchbindDevice(id)){
 				bb.put("Code", 1);
 			}else{
 				bb.put("Code", 2);
@@ -794,11 +789,19 @@ public class WatchAppUserController extends BaseController {
 				bb.put("Code", -1);
 				return bb.toString();
 			}
-			if(ideviceService.updateAdminPhoneById(imei, phone)){
-				bb.put("Code", 1);
+			
+			DeviceManagePhone demp = ideviceService.getManagePhoneByImei(imei);
+			if(demp != null){
+				if(ideviceService.updateAdminPhoneById(demp.getId(), phone)){
+					bb.put("Code", 1);
+				}else{
+					bb.put("Code", 2);
+				}
 			}else{
-				bb.put("Code", 2);
+				ideviceService.insertDeviceAdminPhone(imei,phone);
+				bb.put("Code", 1);
 			}
+			
 			
 			return bb.toString();
 		}
@@ -810,7 +813,7 @@ public class WatchAppUserController extends BaseController {
 		
 		// 解除绑定通过imei 1.清空设置 2.电子围栏 3.通讯录
 		@ResponseBody
-		@RequestMapping(value = "/shoudongUnbindByImei/{imei}", method = RequestMethod.GET)
+		@RequestMapping(value = "/shoudongUnbindByImei/{imei}", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
 		public String shoudongUnbindByImei(@PathVariable String imei) {
 			JSONObject bb = new JSONObject();
 			// 清空设置信息 device_watch_info
@@ -833,7 +836,8 @@ public class WatchAppUserController extends BaseController {
 			watchtkService.delteByImei(imei);
 			// 删闹钟
 			ideviceService.deleteDeviceAlarmInfo(imei);
-			
+			//删除绑定设备
+			ideviceService.deleteBindDevicebyImei(imei);
 			HealthStepManagement  heathM = confService.getHeathStepInfo(imei);
 			if(heathM != null){
 				confService.deteHeathyInfoByImei(heathM.getId());
@@ -850,6 +854,121 @@ public class WatchAppUserController extends BaseController {
 		    bb.put("Message", "手动解绑成功");
 			return bb.toString();
 		}
+		
+		
+		
+		// 切换设备
+		@ResponseBody
+		@RequestMapping(value = "/switchDevice/{imei}", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+		public String switchDevice(@PathVariable String tel) {
+			try {
+				JSONObject bb = new JSONObject();
+				// 先检查登录表，如果登录表里有，检查密码，如果密码正确则登录OK，判断设备是否在线，在线，则发送定位请求，不在线则查询最后一次定位，
+				UserInfo userInfo = userInfoService.getUserInfoByUsername(tel);
+				String ipport = limitCache.getRedisKeyValue(tel);
+				if (userInfo != null) {
+						String token = tokenInfoService.genToken(userInfo.getUser_id());
+						bb.put("Code", 1);// 1表示login succes
+						bb.put("token", token);
+						bb.put("LoginId", "0");
+						bb.put("UserId", userInfo.getUser_id());
+						limitCache.addKey(tel + "_userid", userInfo.getUser_id() + "");
+						limitCache.addKey(tel + "_push", token);
+						bb.put("PhoneNumber", "0");
+						bb.put("BindNumber", "0");
+						bb.put("Birthday", "");
+						bb.put("UserType", 0);
+						bb.put("Name", "0");
+						bb.put("Notification", "True");
+						bb.put("NotificationSound", "True");
+						bb.put("NotificationVibration", "True");
+						bb.put("ip", Utils.IP + ":" + Utils.PORT_HTTP);
+
+						
+						if (!StringUtil.isEmpty(ipport)) {
+							bb.put("ip", ipport);
+						}
+						WatchDevice watchd = ideviceService.getDeviceInfo(tel);
+						if (watchd != null) {
+							bb.put("DeviceID", watchd.getId());
+							limitCache.addKey(tel + "_id", watchd.getId() + "");
+						}
+						bb.put("phone", "");
+						DeviceManagePhone demp = ideviceService.getManagePhoneByImei(tel);
+						if(demp != null){
+							bb.put("phone", demp.getTel()+"");
+						}
+						/* } */
+
+					
+				} else {
+					
+					// if(userInfoLuRu !=null ){//说明已经录入 第一次登录
+					userInfoService.saveUserInfo(tel, "123456", 1);// 表示新注册
+
+					String token = tokenInfoService.genToken(userInfoService.getUserInfoByUsername(tel).getUser_id());
+					bb.put("Code", 1);// 1表示login succes
+					bb.put("token", token);
+					bb.put("LoginId", "0");
+					bb.put("UserId", "0");
+					UserInfo userInfoo = userInfoService.getUserInfoByUsername(tel);
+					if (userInfoo != null) {
+						bb.put("UserId", userInfoo.getUser_id() + "");
+						limitCache.addKey(tel + "_userid", userInfoo.getUser_id() + "");
+					}
+					limitCache.addKey(tel + "_push", token);
+
+					bb.put("PhoneNumber", "0");
+					bb.put("BindNumber", "0");
+					bb.put("UserType", 0);
+					bb.put("Name", "0");
+					bb.put("Notification", "True");
+					bb.put("NotificationSound", "True");
+					bb.put("NotificationVibration", "True");
+					bb.put("Birthday", "");
+					bb.put("ip", Utils.IP + ":" + Utils.PORT_HTTP);
+					if (ipport != null && !"".equals(ipport)) {
+						bb.put("ip", ipport);
+					}
+
+					/*
+					 * String deviceid = limitCache.getRedisKeyValue(tel + "_id");
+					 * if (deviceid != null && !"0".equals(deviceid) &&
+					 * !"".equals(deviceid)) { bb.put("DeviceID", deviceid); } else
+					 * {
+					 */
+					WatchDevice watchd = ideviceService.getDeviceInfo(tel);
+					if (watchd != null) {
+						bb.put("DeviceID", watchd.getId());
+						bb.put("Birthday", watchd.getBirday() + "");
+						limitCache.addKey(tel + "_id", watchd.getId() + "");
+						
+						bb.put("phone", "");
+						DeviceManagePhone demp = ideviceService.getManagePhoneByImei(tel);
+						if(demp != null){
+							bb.put("phone", demp.getTel()+"");
+						}
+					} else {
+
+						ideviceService.insertNewImei(tel, "1", 0, "1");
+						bb.put("phone", "");
+						WatchDevice watchdd = ideviceService.getDeviceInfo(tel);
+						if (watchdd != null) {
+							bb.put("DeviceID", watchdd.getId());
+							limitCache.addKey(tel + "_id", watchdd.getId() + "");
+						}
+
+					}
+					/* } */
+
+				}
+				logger.info("app登录deviceid=" + limitCache.getRedisKeyValue(tel + "_id"));
+				return bb.toString();
+			} catch (Exception e) {
+				return e.getMessage() + "";
+			}
+		}
+		
 		
 
 }

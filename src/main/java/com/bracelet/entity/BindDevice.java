@@ -8,6 +8,7 @@ public class BindDevice {
 	private Long user_id;
 	private String  imei;
 	private String name;
+	private String b_imei;
 	private Timestamp createtime;
 	private Integer status;
 	
@@ -47,6 +48,12 @@ public class BindDevice {
 	}
 	public void setStatus(Integer status) {
 		this.status = status;
+	}
+	public String getB_imei() {
+		return b_imei;
+	}
+	public void setB_imei(String b_imei) {
+		this.b_imei = b_imei;
 	}
 	
 }

@@ -70,8 +70,9 @@ public class LoginService implements IService {
 		String dv = infoshuzu[3];// 设备固件版本
 
 		String haveValue = limitCache.getRedisKeyValue(imei + "_have");
-
+             //判断是否有登陆过
 		if (StringUtil.isEmpty(haveValue)) {
+			
 			WatchDeviceBak watchd = ideviceService.getDeviceBakInfo(imei);
 			if (watchd != null) {
 
