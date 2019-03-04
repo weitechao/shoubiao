@@ -43,7 +43,18 @@ public class TokenInfoServiceImpl implements ITokenInfoService {
 	@Override
 	@DataSourceChange(slave = true)
 	public String getTokenByUserId(Long userId) {
-		String sql = "select t_id,token,user_id,createtime  from token_info where user_id=? order by createtime LIMIT 1";
+		
+		String table = "token_info";
+		Long jisuan = userId%4;
+		if(jisuan == 1){
+			table = "token_1_info";
+		}else if(jisuan == 2){
+			table = "token_2_info";
+		}else if(jisuan == 3){
+			table = "token_3_info";
+		}
+		
+		String sql = "select t_id,token,user_id,createtime  from  "+ table +"   where user_id=? order by createtime LIMIT 1";
 		List<TokenInfo> list = jdbcTemplate.query(sql, new Object[] { userId },
 				new BeanPropertyRowMapper<TokenInfo>(TokenInfo.class));
 		if (list != null && !list.isEmpty()) {
@@ -65,7 +76,18 @@ public class TokenInfoServiceImpl implements ITokenInfoService {
 
 		// save to db
 		Timestamp now = Utils.getCurrentTimestamp();
-		jdbcTemplate.update("replace into token_info (token, user_id, createtime) values (?,?,?)",
+		
+		String table = "token_info";
+		Long jisuan = userId%4;
+		if(jisuan == 1){
+			table = "token_1_info";
+		}else if(jisuan == 2){
+			table = "token_2_info";
+		}else if(jisuan == 3){
+			table = "token_3_info";
+		}
+		
+		jdbcTemplate.update("replace into "+ table + "  (token, user_id, createtime) values (?,?,?)",
 				new Object[] { token, userId, now }, new int[] { Types.VARCHAR, Types.INTEGER, Types.TIMESTAMP });
 		limitCache.addToken(token, userId+"");
 		return token;

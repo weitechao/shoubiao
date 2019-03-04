@@ -82,6 +82,9 @@ public class WatchAppUserController extends BaseController {
 	@Autowired
 	IDeviceService ideviceService;
 	
+	@Autowired
+	IMemService memberService;
+	
 	
 	@Autowired
 	IConfService confService;
@@ -793,11 +796,13 @@ public class WatchAppUserController extends BaseController {
 			DeviceManagePhone demp = ideviceService.getManagePhoneByImei(imei);
 			if(demp != null){
 				if(ideviceService.updateAdminPhoneById(demp.getId(), phone)){
+					memberService.insertPhoneBookInfo(imei, "爸爸", phone, "", "1", 1);
 					bb.put("Code", 1);
 				}else{
 					bb.put("Code", 2);
 				}
 			}else{
+				memberService.insertPhoneBookInfo(imei, "爸爸", phone, "", "1", 1);
 				ideviceService.insertDeviceAdminPhone(imei,phone);
 				bb.put("Code", 1);
 			}
