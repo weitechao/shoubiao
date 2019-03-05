@@ -3,25 +3,14 @@ package com.bracelet.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.bracelet.dto.HttpBaseDto;
-import com.bracelet.dto.SocketLoginDto;
 import com.bracelet.entity.BindDevice;
 import com.bracelet.entity.DeviceManagePhone;
 import com.bracelet.entity.HealthStepManagement;
-import com.bracelet.entity.Location;
-import com.bracelet.entity.LocationOld;
-import com.bracelet.entity.LocationWatch;
-import com.bracelet.entity.NoticeInfo;
-import com.bracelet.entity.OpenDoorInfo;
 import com.bracelet.entity.UserInfo;
-import com.bracelet.entity.VersionInfo;
-import com.bracelet.entity.WatchAppVersionInfo;
 import com.bracelet.entity.WatchDevice;
 import com.bracelet.entity.WatchDeviceAlarm;
 import com.bracelet.entity.WatchDeviceHomeSchool;
 import com.bracelet.entity.WatchDialpad;
-import com.bracelet.exception.BizException;
-import com.bracelet.redis.LimitCache;
 import com.bracelet.service.IAuthcodeService;
 import com.bracelet.service.IConfService;
 import com.bracelet.service.IDeviceService;
@@ -33,7 +22,6 @@ import com.bracelet.service.IUserInfoService;
 import com.bracelet.service.IVoltageService;
 import com.bracelet.service.WatchSetService;
 import com.bracelet.service.WatchTkService;
-import com.bracelet.util.ChannelMap;
 import com.bracelet.util.RanomUtil;
 import com.bracelet.util.RespCode;
 import com.bracelet.util.StringUtil;
@@ -656,6 +644,11 @@ public class WatchAppUserController extends BaseController {
 			ideviceService.updateImeiHomeAndFamilyInfoById(watchSchool.getId(), "08:00-12:00", "14:00-17:00", "", "",
 					"", "", "", "", "", "");
 		}
+		
+		DeviceManagePhone demp = ideviceService.getManagePhoneByImei(imei);
+		if(demp != null){
+			ideviceService.updateAdminPhoneById(demp.getId(), "");	
+		}
 
 		fenceService.deleteWatchFenceByImei(imei);
 		memService.deleteWatchMemberByImei(imei);
@@ -848,6 +841,10 @@ public class WatchAppUserController extends BaseController {
 				confService.deteHeathyInfoByImei(heathM.getId());
 			}
 			
+			DeviceManagePhone demp = ideviceService.getManagePhoneByImei(imei);
+			if(demp != null){
+				ideviceService.updateAdminPhoneById(demp.getId(), "");	
+			}
 			
 			UserInfo userInfo = userInfoService.getUserInfoByUsername(imei);
 			if (userInfo != null) {

@@ -330,7 +330,7 @@ public class DeviceServiceImpl implements IDeviceService {
 	@Override
 	public boolean updateAdminPhoneById(Long id, String phone) {
 		Timestamp now = Utils.getCurrentTimestamp();
-		int i = jdbcTemplate.update("update device_manage_phone set phone=? ,createtime=? where id = ?",
+		int i = jdbcTemplate.update("update device_manage_phone set tel=? ,createtime=? where id = ?",
 				new Object[] { phone, now, id }, new int[] { Types.VARCHAR,java.sql.Types.TIMESTAMP, java.sql.Types.INTEGER });
 		return i == 1;
 	}

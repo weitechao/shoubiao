@@ -94,14 +94,14 @@ public class BusinessHandler implements IBusinessHandler {
         if(!StringUtil.isEmpty(reponse)){
         	incoming.writeAndFlush(reponse);
         }
-         if(time > 500){
+        // if(time > 500){
 		if(!"LK".equals(cmd)){
 			if("TPBK".equals(cmd) || "TK".equals(cmd)){
 				apilogService.insert(serviceName, cmd, reponse, imei, rstatus, rmsg, time);
 			}else{
 				apilogService.insert(serviceName, json, reponse, imei, rstatus, rmsg,time);
 			}
-         }
+        // }
          }
 	}
 
