@@ -685,7 +685,7 @@ public class WatchAppUserController extends BaseController {
 	
 	//绑定设备
 	@ResponseBody
-	@RequestMapping(value = "/bindOtherImei/{token}/{imei}/{name}", method = RequestMethod.GET)
+	@RequestMapping(value = "/bindOtherImei/{token}/{imei}/{name}", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
 	public String bindOtherImei(@PathVariable String token, @PathVariable String imei,@PathVariable String name) {
 		JSONObject bb = new JSONObject();
 		String userId = checkTokenWatchAndUser(token);
@@ -723,7 +723,7 @@ public class WatchAppUserController extends BaseController {
 	
 	//获取绑定列表
 		@ResponseBody
-		@RequestMapping(value = "/getBindList/{token}", method = RequestMethod.GET)
+		@RequestMapping(value = "/getBindList/{token}", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
 		public String getBindList(@PathVariable String token) {
 			JSONObject bb = new JSONObject();
 			String userId = checkTokenWatchAndUser(token);
