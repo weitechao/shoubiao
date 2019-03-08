@@ -3,6 +3,7 @@ package com.bracelet.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.bracelet.dto.SocketLoginDto;
 import com.bracelet.entity.BindDevice;
 import com.bracelet.entity.DeviceManagePhone;
 import com.bracelet.entity.HealthStepManagement;
@@ -11,6 +12,7 @@ import com.bracelet.entity.WatchDevice;
 import com.bracelet.entity.WatchDeviceAlarm;
 import com.bracelet.entity.WatchDeviceHomeSchool;
 import com.bracelet.entity.WatchDialpad;
+import com.bracelet.entity.WatchPhoneBook;
 import com.bracelet.service.IAuthcodeService;
 import com.bracelet.service.IConfService;
 import com.bracelet.service.IDeviceService;
@@ -18,10 +20,14 @@ import com.bracelet.service.IFenceService;
 import com.bracelet.service.ILocationService;
 import com.bracelet.service.IMemService;
 import com.bracelet.service.IOpenDoorService;
+import com.bracelet.service.IPushlogService;
 import com.bracelet.service.IUserInfoService;
 import com.bracelet.service.IVoltageService;
 import com.bracelet.service.WatchSetService;
 import com.bracelet.service.WatchTkService;
+import com.bracelet.util.ChannelMap;
+import com.bracelet.util.PushUtil;
+import com.bracelet.util.RadixUtil;
 import com.bracelet.util.RanomUtil;
 import com.bracelet.util.RespCode;
 import com.bracelet.util.StringUtil;
@@ -72,7 +78,8 @@ public class WatchAppUserController extends BaseController {
 	
 	@Autowired
 	IMemService memberService;
-	
+	@Autowired
+	IPushlogService pushlogService;
 	
 	@Autowired
 	IConfService confService;
@@ -685,17 +692,18 @@ public class WatchAppUserController extends BaseController {
 	
 	//绑定设备
 	@ResponseBody
-	@RequestMapping(value = "/bindOtherImei/{token}/{imei}/{name}", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
-	public String bindOtherImei(@PathVariable String token, @PathVariable String imei,@PathVariable String name) {
+	@RequestMapping(value = "/bindOtherImei", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	public String bindOtherImei(@RequestBody String body) {
 		JSONObject bb = new JSONObject();
+		JSONObject jsonObject = (JSONObject) JSON.parse(body);
+		String token = jsonObject.getString("token");
 		String userId = checkTokenWatchAndUser(token);
 		if ("0".equals(userId)) {
 			bb.put("Code", -1);
-			// bb.put("Message", "");
 			return bb.toString();
 		}
-		
-		
+		String imei = jsonObject.getString("imei");
+		String name = jsonObject.getString("name");
 		
 		
 		BindDevice  bindDeviceApp= userInfoService.getWatchBindInfoByUserId(Long.valueOf(userId));
@@ -786,19 +794,135 @@ public class WatchAppUserController extends BaseController {
 				return bb.toString();
 			}
 			
-			DeviceManagePhone demp = ideviceService.getManagePhoneByImei(imei);
-			if(demp != null){
-				if(ideviceService.updateAdminPhoneById(demp.getId(), phone)){
-					memberService.insertPhoneBookInfo(imei, "爸爸", phone, "", "1", 1);
-					bb.put("Code", 1);
-				}else{
-					bb.put("Code", 2);
-				}
-			}else{
-				memberService.insertPhoneBookInfo(imei, "爸爸", phone, "", "1", 1);
-				ideviceService.insertDeviceAdminPhone(imei,phone);
-				bb.put("Code", 1);
+			SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
+
+			if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
+				bb.put("Code", 4);
+				return bb.toString();
 			}
+
+			StringBuffer sb = new StringBuffer("[YW*" + imei + "*0001*");
+			if (socketLoginDto.getChannel().isActive()) {
+				
+				DeviceManagePhone demp = ideviceService.getManagePhoneByImei(imei);
+				if(demp != null){
+					if(ideviceService.updateAdminPhoneById(demp.getId(), phone)){
+						memberService.insertPhoneBookInfo(imei, "爸爸", phone, "", "1", 1);
+						bb.put("Code", 1);
+					}else{
+						bb.put("Code", 2);
+					}
+				}else{
+					memberService.insertPhoneBookInfo(imei, "爸爸", phone, "", "1", 1);
+					ideviceService.insertDeviceAdminPhone(imei,phone);
+					bb.put("Code", 1);
+				}
+				
+				
+				StringBuffer sb1 = new StringBuffer("");
+				StringBuffer sb2 = new StringBuffer("");
+
+				List<WatchPhoneBook> watchbookList = memberService.getPhoneBookByImei(imei);
+
+				if (watchbookList.size() > 0) {
+					sb1.append(watchbookList.size());
+					sb1.append(",");
+					for (WatchPhoneBook WatchPhoneBook : watchbookList) {
+						if (sb2.toString().isEmpty()) {
+							sb2.append(WatchPhoneBook.getHeadtype());
+							sb2.append("-");
+							sb2.append(WatchPhoneBook.getName());
+							sb2.append("-");
+							sb2.append(WatchPhoneBook.getPhone());
+							sb2.append("-");
+							sb2.append(WatchPhoneBook.getCornet());
+							sb2.append("-");
+							sb2.append(WatchPhoneBook.getHeadtype());
+							sb2.append("-");
+							sb2.append("0000");
+							sb2.append("-");
+							sb2.append("");
+						} else {
+							sb2.append("|");
+							sb2.append(WatchPhoneBook.getHeadtype());
+							sb2.append("-");
+							sb2.append(WatchPhoneBook.getName());
+							sb2.append("-");
+							sb2.append(WatchPhoneBook.getPhone());
+							sb2.append("-");
+							sb2.append(WatchPhoneBook.getCornet());
+							sb2.append("-");
+							sb2.append(WatchPhoneBook.getHeadtype());
+							sb2.append("-");
+							sb2.append("0000");
+							sb2.append("-");
+							sb2.append("");
+						}
+					}
+				} else {
+					sb1.append("0");
+				}
+				// PHB,1234, 001B*
+				String msg = "PHB,1234," + sb1.toString()+sb2.toString();
+				sb.append(RadixUtil.changeRadix(msg));
+				sb.append("*");
+				sb.append(msg);
+				sb.append("]");
+				logger.info("设备通讯录增加更新="+sb.toString());
+				socketLoginDto.getChannel().writeAndFlush(sb.toString());
+				bb.put("Code", 1);
+				bb.put("Message", "通讯录添加成功");
+				
+				
+				
+				
+					JSONObject push = new JSONObject();
+					JSONArray jsonArray = new JSONArray();
+					JSONObject dataMap = new JSONObject();
+					dataMap.put("DeviceID", "");
+					String deviceid = limitCache.getRedisKeyValue(imei + "_id");
+					if( !StringUtil.isEmpty(deviceid)){
+						dataMap.put("DeviceID", deviceid);
+					}else{
+						WatchDevice watchd = ideviceService.getDeviceInfo(imei);
+						if (watchd != null) {
+							deviceid=watchd.getId()+"";
+							dataMap.put("DeviceID", watchd.getId());
+							limitCache.addKey(imei + "_id", watchd.getId()+"");
+						}
+					}
+					dataMap.put("Message", 1);
+					dataMap.put("Voice", 0);
+					dataMap.put("SMS", 0);
+					dataMap.put("Photo", 0);
+					jsonArray.add(dataMap);
+					push.put("NewList", jsonArray);
+					JSONArray jsonArray1 = new JSONArray();
+					JSONObject dataMap1 = new JSONObject();
+					jsonArray1.add(dataMap1);
+					push.put("DeviceState", jsonArray1);
+
+					JSONArray jsonArray2 = new JSONArray();
+					JSONObject dataMap2 = new JSONObject();
+					dataMap2.put("Type", 7);
+					dataMap2.put("DeviceID", deviceid);
+					dataMap2.put("Message", "通讯录已同步");
+					dataMap2.put("imei", imei);
+					jsonArray2.add(dataMap2);
+					push.put("Notification", jsonArray2);
+
+					push.put("Code", 1);
+					push.put("New", 1);
+					
+					pushlogService.insertMsgInfo(imei, 7, deviceid, "通讯录已同步", "通讯录已同步");
+					
+					PushUtil.push(token, "通讯录已同步", push.toString(), "通讯录已同步");	
+							
+			} else {
+				bb.put("Code", 2);
+				bb.put("Message", "");
+			}
+			
 			
 			
 			return bb.toString();
@@ -861,7 +985,7 @@ public class WatchAppUserController extends BaseController {
 		
 		// 切换设备
 		@ResponseBody
-		@RequestMapping(value = "/switchDevice/{imei}", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+		@RequestMapping(value = "/switchDevice/{tel}", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
 		public String switchDevice(@PathVariable String tel) {
 			try {
 				JSONObject bb = new JSONObject();

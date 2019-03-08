@@ -21,7 +21,8 @@ public class PushUtil {
 	private static Logger logger = LoggerFactory.getLogger(PushUtil.class);
 	private static IClientProfile profile = DefaultProfile.getProfile(
 			"cn-hangzhou", Utils.accessKeyIdOfWatch, Utils.accessKeySecretOfWatch);
-	private static Long appKey = 25337001L;
+	//private static Long appKey = 25337001L;//乐点
+	private static Long appKey = 25825614L;//安全伴侣
 
 	/*@Autowired
 	private static IPushlogService pushlogService;*/

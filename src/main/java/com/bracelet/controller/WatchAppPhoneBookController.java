@@ -243,7 +243,7 @@ public class WatchAppPhoneBookController extends BaseController {
 				dataMap.put("Relationship", location.getName());
 				dataMap.put("timestamp", location.getCreatetime().getTime());
 				dataMap.put("ObjectId", 0);
-				dataMap.put("Photo","123456");
+				dataMap.put("Photo",location.getHeadtype());
 				dataMap.put("PhoneNumber",location.getCornet()+"");
 				dataMap.put("Type",1);
 				dataMap.put("HeadImg",location.getHeadImg()+"");
@@ -263,7 +263,7 @@ public class WatchAppPhoneBookController extends BaseController {
 	/* 删除 通讯录 */
 	@ResponseBody
 	@RequestMapping(value = "/deletePhoneBook/{token}/{id}/{imei}", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
-	public String selectfriend(@PathVariable String token, @PathVariable Long id, @PathVariable String imei) {
+	public String deletePhoneBook(@PathVariable String token, @PathVariable Long id, @PathVariable String imei) {
 		JSONObject bb = new JSONObject();
 
 		String userId = checkTokenWatchAndUser(token);

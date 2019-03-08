@@ -19,16 +19,16 @@
 	</appender>
 
 	<!-- 日志级别 -->
-	<!-- <root>
+	 <root>
 		<level value="info" />
 		<appender-ref ref="console" />
 		<appender-ref ref="info" />
-	</root> -->
+	</root>
 	
-	<root>
+	<!-- <root>
 		<level value="warn" />
 		<appender-ref ref="console" />
 		<appender-ref ref="info" />
-	</root>
+	</root> -->
 
 </configuration>   
