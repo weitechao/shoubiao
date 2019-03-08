@@ -785,8 +785,8 @@ public class WatchAppUserController extends BaseController {
 		
 		//修改管理员电话号码
 		@ResponseBody
-		@RequestMapping(value = "/updateAdminPhone/{token}/{imei}/{phone}", method = RequestMethod.GET)
-		public String updateAdminPhone(@PathVariable String token, @PathVariable String imei ,@PathVariable String phone) {
+		@RequestMapping(value = "/updateAdminPhone/{token}/{imei}/{phone}/{cornet}", method = RequestMethod.GET)
+		public String updateAdminPhone(@PathVariable String token, @PathVariable String imei ,@PathVariable String phone,@PathVariable String cornet) {
 			JSONObject bb = new JSONObject();
 			String userId = checkTokenWatchAndUser(token);
 			if ("0".equals(userId)) {
@@ -807,13 +807,13 @@ public class WatchAppUserController extends BaseController {
 				DeviceManagePhone demp = ideviceService.getManagePhoneByImei(imei);
 				if(demp != null){
 					if(ideviceService.updateAdminPhoneById(demp.getId(), phone)){
-						memberService.insertPhoneBookInfo(imei, "爸爸", phone, "", "1", 1);
+						memberService.insertPhoneBookInfo(imei, "管理员", phone, cornet, "7", 1);
 						bb.put("Code", 1);
 					}else{
 						bb.put("Code", 2);
 					}
 				}else{
-					memberService.insertPhoneBookInfo(imei, "爸爸", phone, "", "1", 1);
+					memberService.insertPhoneBookInfo(imei, "管理员", phone, cornet, "7", 1);
 					ideviceService.insertDeviceAdminPhone(imei,phone);
 					bb.put("Code", 1);
 				}
