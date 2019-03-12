@@ -44,7 +44,7 @@ CREATE TABLE `api_applog` (
   `time` int(11) NOT NULL DEFAULT '0',
   `createtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2612 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=626 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `apilog` */
 
@@ -61,7 +61,7 @@ CREATE TABLE `apilog` (
   `time` int(11) NOT NULL DEFAULT '0',
   `createtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2175 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `app_voice_info` */
 
@@ -107,7 +107,7 @@ CREATE TABLE `bind_device` (
   `createtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `status` int(1) NOT NULL DEFAULT '0' COMMENT '0不是管理员1是管理员',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `blood_oxygen_info` */
 
@@ -202,6 +202,18 @@ CREATE TABLE `device_location_fequency` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
+/*Table structure for table `device_manage_phone` */
+
+DROP TABLE IF EXISTS `device_manage_phone`;
+
+CREATE TABLE `device_manage_phone` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `imei` varchar(15) NOT NULL,
+  `tel` varchar(13) NOT NULL,
+  `createtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+
 /*Table structure for table `device_watch_alarm_info` */
 
 DROP TABLE IF EXISTS `device_watch_alarm_info`;
@@ -218,7 +230,7 @@ CREATE TABLE `device_watch_alarm_info` (
   `alarm2` varchar(128) DEFAULT '',
   `alarm3` varchar(128) DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `device_watch_bak_info` */
 
@@ -230,7 +242,7 @@ CREATE TABLE `device_watch_bak_info` (
   `imei` varchar(128) NOT NULL,
   `createtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `device_watch_hf_info` */
 
@@ -253,7 +265,7 @@ CREATE TABLE `device_watch_hf_info` (
   `homeLng` varchar(256) NOT NULL DEFAULT '0',
   `homeLat` varchar(256) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `device_watch_info` */
 
@@ -262,7 +274,7 @@ DROP TABLE IF EXISTS `device_watch_info`;
 CREATE TABLE `device_watch_info` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `imei` varchar(128) NOT NULL,
-  `phone` varchar(11) NOT NULL,
+  `phone` varchar(11) DEFAULT NULL,
   `nickname` varchar(256) DEFAULT '',
   `createtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `dv` varchar(256) DEFAULT '',
@@ -280,7 +292,7 @@ CREATE TABLE `device_watch_info` (
   `short_number` varchar(128) DEFAULT '',
   `family_number` varchar(128) DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `dialpad_info` */
 
@@ -294,7 +306,7 @@ CREATE TABLE `dialpad_info` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_idx_token` (`imei`),
   UNIQUE KEY `unique_idx_user_id` (`type`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `feedback` */
 
@@ -307,7 +319,7 @@ CREATE TABLE `feedback` (
   `contact` varchar(20) DEFAULT NULL,
   `createtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `fence` */
 
@@ -374,7 +386,7 @@ CREATE TABLE `healthStepManagement` (
   `createtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatetime` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `heart_pressure` */
 
@@ -462,7 +474,7 @@ CREATE TABLE `location_1_watchinfo` (
   `location_time` varchar(16) NOT NULL,
   `location_style` tinyint(2) NOT NULL COMMENT '1正常2报警3天气4拍照',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=894 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1513 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `location_2_watchinfo` */
 
@@ -526,7 +538,7 @@ CREATE TABLE `location_watchinfo` (
   `location_time` varchar(16) NOT NULL,
   `location_style` tinyint(2) NOT NULL COMMENT '1正常2报警3天气4拍照',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `member_info` */
 
@@ -571,7 +583,7 @@ CREATE TABLE `msg_0_info` (
   `createtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatetime` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `msg_1_info` */
 
@@ -587,7 +599,7 @@ CREATE TABLE `msg_1_info` (
   `createtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatetime` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `msg_2_info` */
 
@@ -648,7 +660,7 @@ CREATE TABLE `notify_info` (
   `createtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatetime` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `olddevice_bind` */
 
@@ -695,7 +707,7 @@ CREATE TABLE `photo_location_watchinfo` (
   `location_style` tinyint(2) NOT NULL COMMENT '1正常2报警3天气4拍照',
   `photo_name` varchar(256) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `push_message` */
 
@@ -709,7 +721,7 @@ CREATE TABLE `push_message` (
   `createtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatetime` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `pushlog` */
 
@@ -752,7 +764,7 @@ CREATE TABLE `school_guard` (
   `createtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatetime` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `sensitive_point` */
 
@@ -960,6 +972,48 @@ CREATE TABLE `sys_user_role` (
   PRIMARY KEY (`USER_ID`,`ROLE_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+/*Table structure for table `token_1_info` */
+
+DROP TABLE IF EXISTS `token_1_info`;
+
+CREATE TABLE `token_1_info` (
+  `t_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `token` varchar(128) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `createtime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`t_id`),
+  UNIQUE KEY `unique_idx_token` (`token`),
+  UNIQUE KEY `unique_idx_user_id` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=185 DEFAULT CHARSET=utf8;
+
+/*Table structure for table `token_2_info` */
+
+DROP TABLE IF EXISTS `token_2_info`;
+
+CREATE TABLE `token_2_info` (
+  `t_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `token` varchar(128) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `createtime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`t_id`),
+  UNIQUE KEY `unique_idx_token` (`token`),
+  UNIQUE KEY `unique_idx_user_id` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=171 DEFAULT CHARSET=utf8;
+
+/*Table structure for table `token_3_info` */
+
+DROP TABLE IF EXISTS `token_3_info`;
+
+CREATE TABLE `token_3_info` (
+  `t_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `token` varchar(128) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `createtime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`t_id`),
+  UNIQUE KEY `unique_idx_token` (`token`),
+  UNIQUE KEY `unique_idx_user_id` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=206 DEFAULT CHARSET=utf8;
+
 /*Table structure for table `token_info` */
 
 DROP TABLE IF EXISTS `token_info`;
@@ -972,7 +1026,7 @@ CREATE TABLE `token_info` (
   PRIMARY KEY (`t_id`),
   UNIQUE KEY `unique_idx_token` (`token`),
   UNIQUE KEY `unique_idx_user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=565932 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=330 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `upload_photo` */
 
@@ -1012,7 +1066,7 @@ CREATE TABLE `user_info` (
   `head` varchar(128) DEFAULT NULL COMMENT '头像链接',
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `unique_idx_username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=92 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `user_luru_info` */
 
@@ -1079,6 +1133,21 @@ CREATE TABLE `watch_addfriend_log` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+/*Table structure for table `watch_bind_device` */
+
+DROP TABLE IF EXISTS `watch_bind_device`;
+
+CREATE TABLE `watch_bind_device` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `imei` varchar(128) DEFAULT NULL,
+  `name` varchar(128) DEFAULT NULL,
+  `createtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `status` int(1) NOT NULL DEFAULT '0' COMMENT '0不是管理员1是管理员',
+  `b_imei` varchar(15) NOT NULL COMMENT '谁发起的绑定',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=104 DEFAULT CHARSET=utf8;
+
 /*Table structure for table `watch_carrier` */
 
 DROP TABLE IF EXISTS `watch_carrier`;
@@ -1138,7 +1207,7 @@ CREATE TABLE `watch_device_set` (
   `locationTime` tinyint(2) DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_idx_dv` (`imei`(191)) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `watch_errorinfo` */
 
@@ -1171,7 +1240,7 @@ CREATE TABLE `watch_fence` (
   `is_exit` tinyint(1) NOT NULL COMMENT '出电子围栏报警',
   `is_enable` tinyint(1) NOT NULL COMMENT '电子围栏开关',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `watch_friend_info` */
 
@@ -1226,13 +1295,13 @@ CREATE TABLE `watch_phonebook_info` (
   `name` varchar(128) DEFAULT '',
   `phone` varchar(128) NOT NULL,
   `cornet` varchar(128) DEFAULT '',
-  `headtype` varchar(12) DEFAULT NULL,
+  `headtype` varchar(2) DEFAULT NULL,
   `status` tinyint(2) DEFAULT '0',
   `createtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatetime` timestamp NULL DEFAULT NULL,
   `headImg` varchar(256) DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `watch_setapn_log` */
 
@@ -1385,7 +1454,7 @@ CREATE TABLE `watch_upload_photo` (
   `status` tinyint(2) DEFAULT '0',
   `updatetime` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `watch_voice_info` */
 
@@ -1405,7 +1474,7 @@ CREATE TABLE `watch_voice_info` (
   `all_number` tinyint(2) NOT NULL COMMENT '总包',
   `voice_length` tinyint(2) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=utf8;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
