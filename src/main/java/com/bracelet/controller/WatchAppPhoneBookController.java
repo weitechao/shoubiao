@@ -83,6 +83,7 @@ public class WatchAppPhoneBookController extends BaseController {
 		String phone = jsonObject.getString("phone");// 号码
 		String cornet = jsonObject.getString("cornet");// 短号
 		String headType = jsonObject.getString("headtype");// 头像类型
+		Integer isAdmin = jsonObject.getInteger("isadmin");//1是管理员 0不是
 
 		String userId = checkTokenWatchAndUser(token);
 		if ("0".equals(userId)) {
@@ -105,7 +106,7 @@ public class WatchAppPhoneBookController extends BaseController {
 			WatchPhoneBook phoneBook = memberService.getPhoneBookByImeiAndPhone(imei, phone);
 			
 			if (phoneBook == null) {
-				memberService.insertPhoneBookInfo(imei, name, phone, cornet, headType, 1);
+				memberService.insertPhoneBookInfo(imei, name, phone, cornet, headType, isAdmin);
 				bb.put("DeviceContactId", memberService.getPhoneBookByImeiAndPhone(imei, phone).getId());
 			}else{
 				bb.put("DeviceContactId", phoneBook.getId());
@@ -242,11 +243,12 @@ public class WatchAppPhoneBookController extends BaseController {
 				dataMap.put("phone", location.getPhone());
 				dataMap.put("Relationship", location.getName());
 				dataMap.put("timestamp", location.getCreatetime().getTime());
-				dataMap.put("ObjectId", 0);
+				dataMap.put("ObjectId", location.getStatus()+"");
 				dataMap.put("Photo",location.getHeadtype());
-				dataMap.put("PhoneNumber",location.getCornet()+"");
+				dataMap.put("PhoneNumber",location.getPhone()+"");
 				dataMap.put("Type",1);
 				dataMap.put("HeadImg",location.getHeadImg()+"");
+			
 				
 				jsonArray.add(dataMap);
 			}

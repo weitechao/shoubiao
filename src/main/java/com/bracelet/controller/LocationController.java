@@ -85,7 +85,15 @@ public class LocationController extends BaseController {
 			bb.put("Code", 1);
 
 			JSONObject dataMap = new JSONObject();
-			dataMap.put("DeviceID", limitCache.getRedisKeyValue(imei + "_id"));
+			JSONObject dataMap1 = new JSONObject();
+			String DEVICEID = limitCache.getRedisKeyValue(imei + "_id");
+			dataMap.put("DeviceID", 0);
+			dataMap1.put("DeviceID", 0);
+			if(!StringUtil.isEmpty(DEVICEID)){
+				dataMap.put("DeviceID",DEVICEID );
+				dataMap1.put("DeviceID", DEVICEID);
+			}
+			
 			dataMap.put("Message", 0);
 			dataMap.put("Voice", 0);
 			dataMap.put("SMS", 0);
@@ -94,8 +102,8 @@ public class LocationController extends BaseController {
 			jsonArray.add(dataMap);
 			bb.put("NewList", jsonArray);
 
-			JSONObject dataMap1 = new JSONObject();
-			dataMap1.put("DeviceID", limitCache.getRedisKeyValue(imei + "_id"));
+			
+			
 			dataMap1.put("Altitude", 0);
 			dataMap1.put("Course", 0);
 			dataMap1.put("LocationType", locationTypeSave);

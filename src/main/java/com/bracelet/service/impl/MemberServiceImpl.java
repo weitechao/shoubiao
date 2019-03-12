@@ -178,4 +178,17 @@ public class MemberServiceImpl implements IMemService {
 		return true;
 	}
 
+	@Override
+	public WatchPhoneBook getPhoneBookByImeiAndStatus(String imei, Integer status) {
+		String sql = "select * from watch_phonebook_info where imei =? and status =? LIMIT 1";
+		List<WatchPhoneBook> list = jdbcTemplate.query(sql, new Object[] { imei, status }, new BeanPropertyRowMapper<WatchPhoneBook>(
+						WatchPhoneBook.class));
+		if (list != null && !list.isEmpty()) {
+			return list.get(0);
+		} else {
+			logger.info("get getPhoneBookByImeiAndPhone null.user_id:" + imei+","+imei);
+		}
+		return null;
+	}
+
 }

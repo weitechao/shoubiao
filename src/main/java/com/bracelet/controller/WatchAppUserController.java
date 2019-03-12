@@ -111,7 +111,7 @@ public class WatchAppUserController extends BaseController {
 					limitCache.addKey(tel + "_userid", userInfo.getUser_id() + "");
 					limitCache.addKey(tel + "_push", token);
 					bb.put("PhoneNumber", "0");
-					bb.put("BindNumber", "0");
+					bb.put("BindNumber", tel+"");
 					bb.put("Birthday", "");
 					bb.put("UserType", 0);
 					bb.put("Name", "0");
@@ -130,11 +130,13 @@ public class WatchAppUserController extends BaseController {
 						limitCache.addKey(tel + "_id", watchd.getId() + "");
 					}
 					bb.put("phone", "");
-					DeviceManagePhone demp = ideviceService.getManagePhoneByImei(tel);
-					if(demp != null){
-						bb.put("phone", demp.getTel()+"");
+					
+					WatchPhoneBook phoneBook = memberService.getPhoneBookByImeiAndStatus(tel, 1);
+					
+					if(phoneBook != null){
+						bb.put("phone", "1");
 					}
-					/* } */
+					
 
 				} else {
 					bb.put("Code", 2);// 2表示密码错误
@@ -158,7 +160,7 @@ public class WatchAppUserController extends BaseController {
 				limitCache.addKey(tel + "_push", token);
 
 				bb.put("PhoneNumber", "0");
-				bb.put("BindNumber", "0");
+				bb.put("BindNumber", tel+"");
 				bb.put("UserType", 0);
 				bb.put("Name", "0");
 				bb.put("Notification", "True");
@@ -183,9 +185,9 @@ public class WatchAppUserController extends BaseController {
 					limitCache.addKey(tel + "_id", watchd.getId() + "");
 					
 					bb.put("phone", "");
-					DeviceManagePhone demp = ideviceService.getManagePhoneByImei(tel);
-					if(demp != null){
-						bb.put("phone", demp.getTel()+"");
+                   WatchPhoneBook phoneBook = memberService.getPhoneBookByImeiAndStatus(tel, 1);
+					if(phoneBook != null){
+						bb.put("phone", "1");
 					}
 				} else {
 
@@ -785,8 +787,8 @@ public class WatchAppUserController extends BaseController {
 		
 		//修改管理员电话号码
 		@ResponseBody
-		@RequestMapping(value = "/updateAdminPhone/{token}/{imei}/{phone}/{cornet}", method = RequestMethod.GET)
-		public String updateAdminPhone(@PathVariable String token, @PathVariable String imei ,@PathVariable String phone,@PathVariable String cornet) {
+		@RequestMapping(value = "/updateAdminPhone/{token}/{imei}/{phone}", method = RequestMethod.GET)
+		public String updateAdminPhone(@PathVariable String token, @PathVariable String imei ,@PathVariable String phone) {
 			JSONObject bb = new JSONObject();
 			String userId = checkTokenWatchAndUser(token);
 			if ("0".equals(userId)) {
@@ -807,13 +809,13 @@ public class WatchAppUserController extends BaseController {
 				DeviceManagePhone demp = ideviceService.getManagePhoneByImei(imei);
 				if(demp != null){
 					if(ideviceService.updateAdminPhoneById(demp.getId(), phone)){
-						memberService.insertPhoneBookInfo(imei, "管理员", phone, cornet, "7", 1);
+						memberService.insertPhoneBookInfo(imei, "管理员", phone, phone, "10", 1);
 						bb.put("Code", 1);
 					}else{
 						bb.put("Code", 2);
 					}
 				}else{
-					memberService.insertPhoneBookInfo(imei, "管理员", phone, cornet, "7", 1);
+					memberService.insertPhoneBookInfo(imei, "管理员", phone, phone, "10", 1);
 					ideviceService.insertDeviceAdminPhone(imei,phone);
 					bb.put("Code", 1);
 				}
@@ -1001,7 +1003,7 @@ public class WatchAppUserController extends BaseController {
 						limitCache.addKey(tel + "_userid", userInfo.getUser_id() + "");
 						limitCache.addKey(tel + "_push", token);
 						bb.put("PhoneNumber", "0");
-						bb.put("BindNumber", "0");
+						bb.put("BindNumber", tel+"");
 						bb.put("Birthday", "");
 						bb.put("UserType", 0);
 						bb.put("Name", "0");
@@ -1020,10 +1022,10 @@ public class WatchAppUserController extends BaseController {
 							limitCache.addKey(tel + "_id", watchd.getId() + "");
 						}
 						bb.put("phone", "");
-						DeviceManagePhone demp = ideviceService.getManagePhoneByImei(tel);
-						if(demp != null){
-							bb.put("phone", demp.getTel()+"");
-						}
+						  WatchPhoneBook phoneBook = memberService.getPhoneBookByImeiAndStatus(tel, 1);
+							if(phoneBook != null){
+								bb.put("phone", "1");
+							}
 						/* } */
 
 					
@@ -1045,7 +1047,7 @@ public class WatchAppUserController extends BaseController {
 					limitCache.addKey(tel + "_push", token);
 
 					bb.put("PhoneNumber", "0");
-					bb.put("BindNumber", "0");
+					bb.put("BindNumber", tel+"");
 					bb.put("UserType", 0);
 					bb.put("Name", "0");
 					bb.put("Notification", "True");
@@ -1070,10 +1072,10 @@ public class WatchAppUserController extends BaseController {
 						limitCache.addKey(tel + "_id", watchd.getId() + "");
 						
 						bb.put("phone", "");
-						DeviceManagePhone demp = ideviceService.getManagePhoneByImei(tel);
-						if(demp != null){
-							bb.put("phone", demp.getTel()+"");
-						}
+						  WatchPhoneBook phoneBook = memberService.getPhoneBookByImeiAndStatus(tel, 1);
+							if(phoneBook != null){
+								bb.put("phone", "1");
+							}
 					} else {
 
 						ideviceService.insertNewImei(tel, "1", 0, "1");

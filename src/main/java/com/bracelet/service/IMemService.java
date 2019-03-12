@@ -38,4 +38,6 @@ public interface IMemService {
 
 	boolean deleteWatchMemberByImei(String imei);
 
+	WatchPhoneBook getPhoneBookByImeiAndStatus(String imei, Integer status);
+
 }

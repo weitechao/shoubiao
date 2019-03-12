@@ -19,6 +19,7 @@ import com.bracelet.entity.WatchDevice;
 import com.bracelet.service.IFenceService;
 import com.bracelet.service.ILocationService;
 import com.bracelet.service.IPushlogService;
+import com.bracelet.util.ChannelMap;
 import com.bracelet.util.HttpClientGet;
 import com.bracelet.util.PushUtil;
 import com.bracelet.util.StringUtil;
@@ -103,9 +104,9 @@ public class LocationUdService extends AbstractBizService {
 				push.put("Code", 1);
 				push.put("New", 1);
 				String triggerTime = Utils.getTime(System.currentTimeMillis());
-				
-				pushlogService.insertMsgInfo(imei, 101, deviceid, "设备"+triggerTime+"报警", "设备"+triggerTime+"报警");
-				PushUtil.push(token, "设备"+triggerTime+"报警", push.toString(), "设备"+triggerTime+"报警");
+
+				pushlogService.insertMsgInfo(imei, 101, deviceid, "设备" + triggerTime + "报警", "设备" + triggerTime + "报警");
+				PushUtil.push(token, "设备" + triggerTime + "报警", push.toString(), "设备" + triggerTime + "报警");
 			}
 
 			return "[YW*" + imei + "*0001*0002*AL]";
@@ -156,11 +157,11 @@ public class LocationUdService extends AbstractBizService {
 						String locationValue = lat + "," + lng + ",1" + "," + System.currentTimeMillis();
 						limitCache.addKey(imei + "_save", locationValue);
 						limitCache.addKey(imei + "_last", locationValue);
-						
+
 						String token = limitCache.getRedisKeyValue(imei + "_push");
-						//触发时间
+						// 触发时间
 						String triggerTime = Utils.getTime(System.currentTimeMillis());
-						pushDeviceLocationSuccess(token,"设备"+triggerTime+"成功定位",imei);
+						pushDeviceLocationSuccess(token, "设备" + triggerTime + "成功定位", imei, lat, lng, triggerTime, 1);
 						pushCheckWatchFence(token, imei, lat, lng, triggerTime);
 
 					}
@@ -213,8 +214,6 @@ public class LocationUdService extends AbstractBizService {
 							lat = arr[1];
 							lng = arr[0];
 
-							
-							
 							String locationValue = lat + "," + lng + ",2" + "," + System.currentTimeMillis();
 
 							if (locationStyle == 2) {
@@ -249,12 +248,13 @@ public class LocationUdService extends AbstractBizService {
 							}
 
 							limitCache.addKey(imei + "_last", locationValue);
-							
+
 							String token = limitCache.getRedisKeyValue(imei + "_push");
 							String triggerTime = Utils.getTime(System.currentTimeMillis());
-							pushDeviceLocationSuccess(token,"设备"+triggerTime+"成功定位",imei);
+							pushDeviceLocationSuccess(token, "设备" + triggerTime + "成功定位", imei, lat, lng, triggerTime,
+									2);
 							pushCheckWatchFence(token, imei, lat, lng, triggerTime);
-							
+
 						}
 					}
 				}
@@ -294,7 +294,7 @@ public class LocationUdService extends AbstractBizService {
 							if (arr.length == 2) {
 								lat = arr[1];
 								lng = arr[0];
-								
+
 								String locationValue = lat + "," + lng + ",3" + "," + System.currentTimeMillis();
 
 								if (locationStyle == 2) {
@@ -332,10 +332,11 @@ public class LocationUdService extends AbstractBizService {
 								}
 
 								limitCache.addKey(imei + "_last", locationValue);
-								
+
 								String token = limitCache.getRedisKeyValue(imei + "_push");
 								String triggerTime = Utils.getTime(System.currentTimeMillis());
-								pushDeviceLocationSuccess(token,"设备"+triggerTime+"成功定位",imei);
+								pushDeviceLocationSuccess(token, "设备" + triggerTime + "成功定位", imei, lat, lng,
+										triggerTime, 3);
 								pushCheckWatchFence(token, imei, lat, lng, triggerTime);
 							}
 						}
@@ -345,52 +346,74 @@ public class LocationUdService extends AbstractBizService {
 		}
 	}
 
-	private void pushDeviceLocationSuccess(String token,String msg,String imei) {	
-		
-	   if (!StringUtil.isEmpty(token)) {
-		JSONObject push = new JSONObject();
-		JSONArray jsonArray = new JSONArray();
-		JSONObject dataMap = new JSONObject();
-		dataMap.put("DeviceID", "");
-		String deviceid = limitCache.getRedisKeyValue(imei + "_id");
-		if (!StringUtil.isEmpty(deviceid) && !"0".equals(deviceid)) {
-			dataMap.put("DeviceID", deviceid);
-		} else {
-			WatchDevice watchd = ideviceService.getDeviceInfo(imei);
-			if (watchd != null) {
-				deviceid = watchd.getId() + "";
-				dataMap.put("DeviceID", watchd.getId());
-				limitCache.addKey(imei + "_id", watchd.getId() + "");
+	private void pushDeviceLocationSuccess(String token, String msg, String imei, String lat, String lng,
+			String triggerTime, Integer locationType) {
+
+		if (!StringUtil.isEmpty(token)) {
+			JSONObject bb = new JSONObject();
+
+			JSONArray jsonArray = new JSONArray();
+			JSONObject dataMap = new JSONObject();
+			dataMap.put("DeviceID", "");
+			
+			String deviceid = limitCache.getRedisKeyValue(imei + "_id");
+			if(deviceid !=null && !"0".equals(deviceid) && !"".equals(deviceid)){
+				dataMap.put("DeviceID", deviceid);
+			}else{
+				WatchDevice watchd = ideviceService.getDeviceInfo(imei);
+				if (watchd != null) {
+					dataMap.put("DeviceID", watchd.getId());
+					limitCache.addKey(imei + "_id", watchd.getId()+"");
+				}
 			}
+			
+			
+			dataMap.put("Message", 0);
+			dataMap.put("Voice", 0);
+			dataMap.put("SMS", 0);
+			dataMap.put("Photo", 0);
+			jsonArray.add(dataMap);
+			bb.put("NewList", jsonArray);
+
+			JSONArray jsonArray1 = new JSONArray();
+			JSONObject dataMap1 = new JSONObject();
+			dataMap1.put("DeviceID", deviceid);
+			dataMap1.put("Altitude", 0);
+			dataMap1.put("Course", 0);
+			dataMap1.put("LocationType", locationType);
+			dataMap1.put("wifi", "");
+			dataMap1.put("CreateTime", "");
+			dataMap1.put("DeviceTime", "");
+			dataMap1.put("Electricity", 100);
+			String energy = limitCache.getRedisKeyValue(imei + "_energy");
+			if (energy != null) {
+				dataMap1.put("Electricity", energy);
+			}
+			
+			dataMap1.put("GSM", 76);
+			dataMap1.put("Step", 0);
+			dataMap1.put("Health", "0:0");
+			dataMap1.put("Latitude", lat);
+			dataMap1.put("Longitude", lng);
+			dataMap1.put("Online", "0");
+			dataMap1.put("SatelliteNumber", "0");
+			dataMap1.put("ServerTime", "");
+			dataMap1.put("Speed", "0");
+			dataMap1.put("UpdateTime", "0");
+			jsonArray1.add(dataMap1);
+			bb.put("DeviceState", jsonArray1);
+
+			JSONArray jsonArray2 = new JSONArray();
+			bb.put("Notification", jsonArray2);
+
+			bb.put("Code", 1);
+			bb.put("New", 0);
+			PushUtil.push(token, msg, bb.toString(), msg);
 		}
-		dataMap.put("Message", 1);
-		dataMap.put("Voice", 0);
-		dataMap.put("SMS", 0);
-		dataMap.put("Photo", 0);
-		jsonArray.add(dataMap);
-		push.put("NewList", jsonArray);
-		JSONArray jsonArray1 = new JSONArray();
-		JSONObject dataMap1 = new JSONObject();
-		jsonArray1.add(dataMap1);
-		push.put("DeviceState", jsonArray1);
 
-		JSONArray jsonArray2 = new JSONArray();
-		JSONObject dataMap2 = new JSONObject();
-		dataMap2.put("Type", 103);
-		dataMap2.put("DeviceID", deviceid);
-		dataMap2.put("Message", msg);
-		dataMap2.put("imei", imei);
-		jsonArray2.add(dataMap2);
-		push.put("Notification", jsonArray2);
-
-		push.put("Code", 1);
-		push.put("New", 1);
-		PushUtil.push(token, msg, push.toString(),msg);
-	}
-	   
 	}
 
-	private void pushCheckWatchFence(String token, String imei ,String lat, String lng,String triggerTime) {
+	private void pushCheckWatchFence(String token, String imei, String lat, String lng, String triggerTime) {
 		List<Fence> fenoneList = fenceService.getWatchFenceList(imei);
 		if (fenoneList != null) {
 			for (Fence fenone : fenoneList) {
@@ -401,7 +424,7 @@ public class LocationUdService extends AbstractBizService {
 							Double.parseDouble(fenone.getLng()), Double.parseDouble(fenone.getLat()));
 					if (fenone.getIs_entry() == 1 && distance < fenone.getRadius()) {
 						// 进入电子围栏
-					
+
 						if (!StringUtil.isEmpty(token)) {
 							JSONObject push = new JSONObject();
 							JSONArray jsonArray = new JSONArray();
@@ -433,22 +456,25 @@ public class LocationUdService extends AbstractBizService {
 							JSONObject dataMap2 = new JSONObject();
 							dataMap2.put("Type", 102);
 							dataMap2.put("DeviceID", deviceid);
-							dataMap2.put("Message", "手表"+triggerTime+"进入名字叫" + fenone.getName() + "的电子围栏");
+							dataMap2.put("Message", "手表" + triggerTime + "进入名字叫" + fenone.getName() + "的电子围栏");
 							dataMap2.put("imei", imei);
 							jsonArray2.add(dataMap2);
 							push.put("Notification", jsonArray2);
 							push.put("Code", 1);
 							push.put("New", 1);
-							pushlogService.insertMsgInfo(imei, 102, deviceid, "手表"+triggerTime+"进入名字叫" + fenone.getName() + "的电子围栏", "手表"+triggerTime+"进入名字叫" + fenone.getName() + "的电子围栏");
-							PushUtil.push(token, "手表"+triggerTime+"进入名字叫" + fenone.getName() + "的电子围栏", push.toString(),
-									"手表"+triggerTime+"进入名字叫" + fenone.getName() + "的电子围栏");
+							pushlogService.insertMsgInfo(imei, 102, deviceid,
+									"手表" + triggerTime + "进入名字叫" + fenone.getName() + "的电子围栏",
+									"手表" + triggerTime + "进入名字叫" + fenone.getName() + "的电子围栏");
+							PushUtil.push(token, "手表" + triggerTime + "进入名字叫" + fenone.getName() + "的电子围栏",
+									push.toString(), "手表" + triggerTime + "进入名字叫" + fenone.getName() + "的电子围栏");
 						}
 
 					}
 
 					if (fenone.getIs_exit() == 1 && distance > fenone.getRadius()) {
 						// 离开电子围栏
-					//	String token = limitCache.getRedisKeyValue(imei + "_push");
+						// String token = limitCache.getRedisKeyValue(imei +
+						// "_push");
 						if (!StringUtil.isEmpty(token)) {
 							JSONObject push = new JSONObject();
 							JSONArray jsonArray = new JSONArray();
@@ -480,17 +506,19 @@ public class LocationUdService extends AbstractBizService {
 							JSONObject dataMap2 = new JSONObject();
 							dataMap2.put("Type", 103);
 							dataMap2.put("DeviceID", deviceid);
-							dataMap2.put("Message", "手表"+triggerTime+"离开了名字叫" + fenone.getName() + "的电子围栏");
+							dataMap2.put("Message", "手表" + triggerTime + "离开了名字叫" + fenone.getName() + "的电子围栏");
 							dataMap2.put("imei", imei);
 							jsonArray2.add(dataMap2);
 							push.put("Notification", jsonArray2);
 
 							push.put("Code", 1);
 							push.put("New", 1);
-							pushlogService.insertMsgInfo(imei, 103, deviceid, "手表"+triggerTime+"离开了名字叫" + fenone.getName() + "的电子围栏", "手表"+triggerTime+"离开了名字叫" + fenone.getName() + "的电子围栏");
-							
-							PushUtil.push(token, "手表"+triggerTime+"离开了名字叫" + fenone.getName() + "的电子围栏", push.toString(),
-									"手表"+triggerTime+"离开了名字叫" + fenone.getName() + "的电子围栏");
+							pushlogService.insertMsgInfo(imei, 103, deviceid,
+									"手表" + triggerTime + "离开了名字叫" + fenone.getName() + "的电子围栏",
+									"手表" + triggerTime + "离开了名字叫" + fenone.getName() + "的电子围栏");
+
+							PushUtil.push(token, "手表" + triggerTime + "离开了名字叫" + fenone.getName() + "的电子围栏",
+									push.toString(), "手表" + triggerTime + "离开了名字叫" + fenone.getName() + "的电子围栏");
 						}
 
 					}

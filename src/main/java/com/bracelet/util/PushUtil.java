@@ -86,17 +86,17 @@ public class PushUtil {
 			pushRequest.setPushType("NOTICE");
 			pushRequest.setDeviceType("ANDROID");
 			// TODO iOS
-			// pushRequest.setDeviceType("ALL");
+		    pushRequest.setDeviceType("ALL");
 			pushRequest.setTitle(title);
 			pushRequest.setBody(notifyContent);
 			// 推送配置: iOS
 			// TODO iOS
-			// pushRequest.setIOSBadge(1);
-			// pushRequest.setIOSMutableContent(true);
-			// pushRequest.setIOSApnsEnv("PRODUCT");
-			// pushRequest.setIOSRemind(true);
-			// pushRequest.setIOSRemindBody(title);
-			// pushRequest.setIOSExtParameters(content);
+			 pushRequest.setIOSBadge(1);
+			 pushRequest.setIOSMutableContent(true);
+			 pushRequest.setIOSApnsEnv("PRODUCT");
+			 pushRequest.setIOSRemind(true);
+			 pushRequest.setIOSRemindBody(title);
+			 pushRequest.setIOSExtParameters(content);
 
 			// 推送配置: Android
 			pushRequest.setAndroidNotificationBarType(1);
