@@ -31,7 +31,7 @@ import com.bracelet.service.ISoslogService;
 import com.bracelet.service.ISosService;
 import com.bracelet.service.ITokenInfoService;
 import com.bracelet.service.IUserInfoService;
-import com.bracelet.util.PushUtil;
+import com.bracelet.util.AndroidPushUtil;
 import com.bracelet.util.SingleCallByTxtUtil;
 
 @Component
@@ -70,7 +70,7 @@ public class SosService extends AbstractBizService {
 			String title = "SOS报警";
 			String content = JSON.toJSONString(sosDto);
 			String notifyContent = "收到SOS报警，请点击查看";
-			PushUtil.push(target, title, content, notifyContent);
+			AndroidPushUtil.push(target, title, content, notifyContent);
 			// save push log
 			this.pushlogService.insert(userId, imei, 0, target, title, content);
 		}

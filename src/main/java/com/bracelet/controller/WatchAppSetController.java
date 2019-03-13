@@ -32,7 +32,8 @@ import com.bracelet.service.WatchSetService;
 import com.bracelet.socket.BaseChannelHandler;
 import com.bracelet.util.ChannelMap;
 import com.bracelet.util.HttpClientGet;
-import com.bracelet.util.PushUtil;
+import com.bracelet.util.IOSPushUtil;
+import com.bracelet.util.AndroidPushUtil;
 import com.bracelet.util.RadixUtil;
 import com.bracelet.util.RanomUtil;
 import com.bracelet.util.RespCode;
@@ -294,7 +295,8 @@ public class WatchAppSetController extends BaseController {
 			push.put("Code", 1);
 			push.put("New", 1);
 			pushlogService.insertMsgInfo(imei, 231, deviceid, "成功更新设备设置", "成功更新设备设置");
-			PushUtil.push(token, "成功更新设备设置", push.toString(), "成功更新设备设置");
+			AndroidPushUtil.push(token, "成功更新设备设置", push.toString(), "成功更新设备设置");
+			IOSPushUtil.push(token, "成功更新设备设置", push.toString(), "成功更新设备设置");
 
 		} else {
 			bb.put("Code", 2);

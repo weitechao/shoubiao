@@ -17,12 +17,12 @@ import com.bracelet.service.IPushlogService;
 
 import java.util.Date;
 
-public class PushUtil {
-	private static Logger logger = LoggerFactory.getLogger(PushUtil.class);
+public class IOSPushUtil {
+	private static Logger logger = LoggerFactory.getLogger(IOSPushUtil.class);
 	private static IClientProfile profile = DefaultProfile.getProfile(
 			"cn-hangzhou", Utils.accessKeyIdOfWatch, Utils.accessKeySecretOfWatch);
-	//private static Long appKey = 25337001L;//乐点
-	private static Long appKey = 25825614L;//安全伴侣
+	
+	private static Long appKey = 25809649L;//苹果安全伴侣
 
 	/*@Autowired
 	private static IPushlogService pushlogService;*/
@@ -64,7 +64,7 @@ public class PushUtil {
 					+ "] -> RequestId: " + result.getRequestId()
 					+ ", MessageId:" + result.getMessageId());
 		} catch (Exception e) {
-			logger.info("推送发送错误:", e);
+			logger.warn("推送发送错误:", e);
 		}
 		return result;
 	}
@@ -80,29 +80,24 @@ public class PushUtil {
 			pushRequest.setProtocol(ProtocolType.HTTP);
 			// 内容较大的请求，使用POST请求
 			pushRequest.setMethod(MethodType.POST);
+			pushRequest.setActionName("Push");
 			pushRequest.setAppKey(appKey);
 			pushRequest.setTarget("ACCOUNT");
 			pushRequest.setTargetValue(targetValue);
+			pushRequest.setDeviceType("iOS");
 			pushRequest.setPushType("NOTICE");
-			pushRequest.setDeviceType("ANDROID");
-			// TODO iOS
-		    pushRequest.setDeviceType("ALL");
 			pushRequest.setTitle(title);
+		  
 			pushRequest.setBody(notifyContent);
-			// 推送配置: iOS
-			// TODO iOS
-			 pushRequest.setIOSBadge(1);
-			 pushRequest.setIOSMutableContent(true);
-			 pushRequest.setIOSApnsEnv("PRODUCT");
-			 pushRequest.setIOSRemind(true);
-			 pushRequest.setIOSRemindBody(title);
-			 pushRequest.setIOSExtParameters(content);
-
-			// 推送配置: Android
-			pushRequest.setAndroidNotificationBarType(1);
-			pushRequest.setAndroidNotificationBarPriority(1);
-			pushRequest.setAndroidOpenType("APPLICATION");
-			pushRequest.setAndroidExtParameters(content);
+		
+			 
+			       pushRequest.setIOSBadge(1);
+				 pushRequest.setIOSMutableContent(true);
+				 pushRequest.setIOSApnsEnv("PRODUCT");
+				 pushRequest.setIOSRemind(true);
+				 pushRequest.setIOSRemindBody(title);
+				 pushRequest.setIOSExtParameters(content);
+			 
 			// 推送控制
 			Date pushDate = new Date(System.currentTimeMillis() + second * 1000);
 			String pushTime = ParameterHelper.getISO8601Time(pushDate);
@@ -114,7 +109,7 @@ public class PushUtil {
 					+ "] -> RequestId: " + result.getRequestId()
 					+ ", MessageId:" + result.getMessageId());
 		} catch (Exception e) {
-			logger.info("推送发送错误:", e);
+			logger.warn("推送发送错误:", e);
 		}
 		return result;
 	}

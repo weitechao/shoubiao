@@ -22,7 +22,8 @@ import com.bracelet.entity.WatchDevice;
 import com.bracelet.service.IPushlogService;
 import com.bracelet.service.WatchTkService;
 import com.bracelet.util.ChannelMap;
-import com.bracelet.util.PushUtil;
+import com.bracelet.util.IOSPushUtil;
+import com.bracelet.util.AndroidPushUtil;
 import com.bracelet.util.RadixUtil;
 import com.bracelet.util.StringUtil;
 import com.bracelet.util.Utils;
@@ -150,7 +151,8 @@ public class TkService extends AbstractBizService {
 					push.put("New", 1);
 					String targettime = Utils.getTime(System.currentTimeMillis());
 					pushlogService.insertMsgInfo(imei, 1, deviceid, "新语音" + targettime, "新语音" + targettime);
-					PushUtil.push(token, "新语音" + targettime, push.toString(), "新语音" + targettime);
+					AndroidPushUtil.push(token, "新语音" + targettime, push.toString(), "新语音" + targettime);
+					IOSPushUtil.push(token, "新语音" + targettime, push.toString(), "新语音" + targettime);
 				}
 
 			}

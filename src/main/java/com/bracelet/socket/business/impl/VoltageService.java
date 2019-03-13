@@ -27,7 +27,7 @@ import com.bracelet.service.ITokenInfoService;
 import com.bracelet.service.IUserInfoService;
 import com.bracelet.service.IVoltageService;
 import com.bracelet.socket.business.IService;
-import com.bracelet.util.PushUtil;
+import com.bracelet.util.AndroidPushUtil;
 import com.bracelet.util.RespCode;
 import com.bracelet.util.SmsUtil;
 import com.taobao.api.ApiException;
@@ -75,7 +75,7 @@ public class VoltageService implements IService {
 		String target = tokenInfoService.getTokenByUserId(bindd.getUser_id());
 		String title = "低电量提示";
 		String content = JSON.toJSONString(sosDto);
-		PushUtil.push(target, title, content, notifyContent);
+		AndroidPushUtil.push(target, title, content, notifyContent);
 		// save push log
 		this.pushlogService.insert(bindd.getUser_id(), imei, 0, target, title,
 				content);

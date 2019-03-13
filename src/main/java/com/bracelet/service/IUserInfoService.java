@@ -120,6 +120,8 @@ public interface IUserInfoService {
 
 	List<BindDevice> getWatchBindInfoByBimei(String imei);
 
+	BindDevice getWatchBindInfoByImei(String imei);
+
 
 	
 

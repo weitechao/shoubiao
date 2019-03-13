@@ -5,7 +5,8 @@ import java.util.Date;
 import com.alibaba.fastjson.JSON;
 import com.bracelet.dto.OpenDoorDto;
 import com.bracelet.dto.SosDto;
-import com.bracelet.util.PushUtil;
+import com.bracelet.util.AndroidPushUtil;
+import com.bracelet.util.IOSPushUtil;
 
 public class PushTest {
     public static void main(String[] args) {
@@ -30,6 +31,6 @@ public class PushTest {
 	
 		String title = "哈哈哈哈";
 		String content = JSON.toJSONString(sosDto);
-		PushUtil.push("7E26A2307007D0A762FFDB08D9BA6096", title, content, "77777777777777");
+		IOSPushUtil.push("7E26A2307007D0A762FFDB08D9BA6096", title, content, "77777777777777");
     }
 }

@@ -26,3 +26,88 @@
 2018-12-27 17:47:12,519 [main] INFO  PushUtil - 收到推送[消息]结果[targetValue:7E26A2307007D0A762FFDB08D9BA6096,title:哈哈哈哈,content:{"content":"123123","imei":"4568456456","name":"11","side":1,"timestamp":1545904031744,"way":0},second:0] -> RequestId: D63CBE99-828F-4B35-A097-80EC0037B4ED, MessageId:500024
 2018-12-27 17:47:12,519 [main] INFO  PushUtil - 开始推送[通知][targetValue:7E26A2307007D0A762FFDB08D9BA6096,title:哈哈哈哈,content:{"content":"123123","imei":"4568456456","name":"11","side":1,"timestamp":1545904031744,"way":0},second:0]
 2018-12-27 17:47:12,634 [main] INFO  PushUtil - 收到推送[通知]结果[targetValue:7E26A2307007D0A762FFDB08D9BA6096,title:哈哈哈哈,content:{"content":"123123","imei":"4568456456","name":"11","side":1,"timestamp":1545904031744,"way":0},second:0] -> RequestId: A4FE5CC5-5525-4E0D-90D2-B4026B780107, MessageId:500025
+2019-03-13 11:41:27,173 [main] WARN  IOSPushUtil - 开始推送[消息][targetValue:TEst,title:AppTest,content:AppTest,second:0]
+2019-03-13 11:41:27,919 [main] WARN  IOSPushUtil - 收到推送[消息]结果[targetValue:TEst,title:AppTest,content:AppTest,second:0] -> RequestId: F0B7A02D-2156-493F-9884-7A5587A190DB, MessageId:500014
+2019-03-13 11:41:27,919 [main] WARN  IOSPushUtil - 开始推送[通知][targetValue:TEst,title:AppTest,content:AppTest,second:0]
+2019-03-13 11:41:28,025 [main] WARN  IOSPushUtil - 推送发送错误:
+com.aliyuncs.exceptions.ClientException: InvalidiOSExtParameters.Format : Specified iOSExtParameters format is not valid.
+RequestId : 53D5C856-3ED5-45B7-91B1-1C2F41B85857
+	at com.aliyuncs.DefaultAcsClient.parseAcsResponse(DefaultAcsClient.java:170)
+	at com.aliyuncs.DefaultAcsClient.getAcsResponse(DefaultAcsClient.java:106)
+	at com.bracelet.util.IOSPushUtil.pushNotify(IOSPushUtil.java:112)
+	at com.bracelet.util.IOSPushUtil.push(IOSPushUtil.java:34)
+	at com.bracelet.controller.BloodFatController.main(BloodFatController.java:75)
+2019-03-13 11:44:24,889 [main] WARN  IOSPushUtil - 开始推送[消息][targetValue:TEst,title:AppTest,content:AppTest,second:0]
+2019-03-13 11:44:25,373 [main] WARN  IOSPushUtil - 收到推送[消息]结果[targetValue:TEst,title:AppTest,content:AppTest,second:0] -> RequestId: 86A9E5E9-60F9-405F-8CB4-C76CF3B0B450, MessageId:500015
+2019-03-13 11:44:25,373 [main] WARN  IOSPushUtil - 开始推送[通知][targetValue:TEst,title:AppTest,content:AppTest,second:0]
+2019-03-13 11:44:25,448 [main] WARN  IOSPushUtil - 推送发送错误:
+com.aliyuncs.exceptions.ClientException: InvalidiOSExtParameters.Format : Specified iOSExtParameters format is not valid.
+RequestId : 808CBAB9-818F-4582-9FF8-CF149DC28D0D
+	at com.aliyuncs.DefaultAcsClient.parseAcsResponse(DefaultAcsClient.java:170)
+	at com.aliyuncs.DefaultAcsClient.getAcsResponse(DefaultAcsClient.java:106)
+	at com.bracelet.util.IOSPushUtil.pushNotify(IOSPushUtil.java:112)
+	at com.bracelet.util.IOSPushUtil.push(IOSPushUtil.java:34)
+	at com.bracelet.controller.BloodFatController.main(BloodFatController.java:75)
+2019-03-13 11:49:49,204 [main] WARN  IOSPushUtil - 开始推送[消息][targetValue:TEst,title:AppTest,content:AppTest,second:0]
+2019-03-13 11:49:49,699 [main] WARN  IOSPushUtil - 收到推送[消息]结果[targetValue:TEst,title:AppTest,content:AppTest,second:0] -> RequestId: 741D0739-2DC1-4905-80AA-9068DE87AD49, MessageId:500016
+2019-03-13 11:49:49,699 [main] WARN  IOSPushUtil - 开始推送[通知][targetValue:TEst,title:AppTest,content:AppTest,second:0]
+2019-03-13 11:49:49,812 [main] WARN  IOSPushUtil - 推送发送错误:
+com.aliyuncs.exceptions.ClientException: MissingApnsEnv : ApnsEnv is mandatory for this action.
+RequestId : 12941D6A-5840-4239-95D0-8BC17EF30B6E
+	at com.aliyuncs.DefaultAcsClient.parseAcsResponse(DefaultAcsClient.java:170)
+	at com.aliyuncs.DefaultAcsClient.getAcsResponse(DefaultAcsClient.java:106)
+	at com.bracelet.util.IOSPushUtil.pushNotify(IOSPushUtil.java:118)
+	at com.bracelet.util.IOSPushUtil.push(IOSPushUtil.java:34)
+	at com.bracelet.controller.BloodFatController.main(BloodFatController.java:75)
+2019-03-13 11:50:06,396 [main] WARN  IOSPushUtil - 开始推送[消息][targetValue:TEst,title:AppTest,content:AppTest,second:0]
+2019-03-13 11:50:06,891 [main] WARN  IOSPushUtil - 收到推送[消息]结果[targetValue:TEst,title:AppTest,content:AppTest,second:0] -> RequestId: 36ED43D1-6C6F-42EB-929D-A8477DC2319A, MessageId:500017
+2019-03-13 11:50:06,891 [main] WARN  IOSPushUtil - 开始推送[通知][targetValue:TEst,title:AppTest,content:AppTest,second:0]
+2019-03-13 11:50:06,965 [main] WARN  IOSPushUtil - 推送发送错误:
+com.aliyuncs.exceptions.ClientException: MissingPushType : PushType is mandatory for this action.
+RequestId : C4AA7A7F-CDED-4176-A470-159E9DBEDFCD
+	at com.aliyuncs.DefaultAcsClient.parseAcsResponse(DefaultAcsClient.java:170)
+	at com.aliyuncs.DefaultAcsClient.getAcsResponse(DefaultAcsClient.java:106)
+	at com.bracelet.util.IOSPushUtil.pushNotify(IOSPushUtil.java:118)
+	at com.bracelet.util.IOSPushUtil.push(IOSPushUtil.java:34)
+	at com.bracelet.controller.BloodFatController.main(BloodFatController.java:75)
+2019-03-13 11:50:27,874 [main] WARN  IOSPushUtil - 开始推送[消息][targetValue:TEst,title:AppTest,content:AppTest,second:0]
+2019-03-13 11:50:28,351 [main] WARN  IOSPushUtil - 收到推送[消息]结果[targetValue:TEst,title:AppTest,content:AppTest,second:0] -> RequestId: 2A04E465-227C-4A2B-982E-A52828B5709F, MessageId:500018
+2019-03-13 11:50:28,351 [main] WARN  IOSPushUtil - 开始推送[通知][targetValue:TEst,title:AppTest,content:AppTest,second:0]
+2019-03-13 11:50:28,427 [main] WARN  IOSPushUtil - 推送发送错误:
+com.aliyuncs.exceptions.ClientException: MissingApnsEnv : ApnsEnv is mandatory for this action.
+RequestId : 71B24479-192D-4AC7-8DF1-44D87BAF5605
+	at com.aliyuncs.DefaultAcsClient.parseAcsResponse(DefaultAcsClient.java:170)
+	at com.aliyuncs.DefaultAcsClient.getAcsResponse(DefaultAcsClient.java:106)
+	at com.bracelet.util.IOSPushUtil.pushNotify(IOSPushUtil.java:118)
+	at com.bracelet.util.IOSPushUtil.push(IOSPushUtil.java:34)
+	at com.bracelet.controller.BloodFatController.main(BloodFatController.java:75)
+2019-03-13 11:50:44,335 [main] WARN  IOSPushUtil - 开始推送[消息][targetValue:TEst,title:AppTest,content:AppTest,second:0]
+2019-03-13 11:50:44,781 [main] WARN  IOSPushUtil - 收到推送[消息]结果[targetValue:TEst,title:AppTest,content:AppTest,second:0] -> RequestId: 2CBC11E2-80E3-4529-A156-B1F76F6D8521, MessageId:500019
+2019-03-13 11:50:44,781 [main] WARN  IOSPushUtil - 开始推送[通知][targetValue:TEst,title:AppTest,content:AppTest,second:0]
+2019-03-13 11:50:44,861 [main] WARN  IOSPushUtil - 推送发送错误:
+com.aliyuncs.exceptions.ClientException: MissingApnsEnv : ApnsEnv is mandatory for this action.
+RequestId : 2ADCFFE7-3B81-4C8E-8937-E9C7BB0779D1
+	at com.aliyuncs.DefaultAcsClient.parseAcsResponse(DefaultAcsClient.java:170)
+	at com.aliyuncs.DefaultAcsClient.getAcsResponse(DefaultAcsClient.java:106)
+	at com.bracelet.util.IOSPushUtil.pushNotify(IOSPushUtil.java:118)
+	at com.bracelet.util.IOSPushUtil.push(IOSPushUtil.java:34)
+	at com.bracelet.controller.BloodFatController.main(BloodFatController.java:75)
+2019-03-13 11:54:49,608 [main] WARN  IOSPushUtil - 开始推送[消息][targetValue:TEst,title:AppTest,content:AppTest,second:0]
+2019-03-13 11:54:50,161 [main] WARN  IOSPushUtil - 收到推送[消息]结果[targetValue:TEst,title:AppTest,content:AppTest,second:0] -> RequestId: 95EA8FDC-FB30-4D5F-A446-24D42D749A1F, MessageId:500020
+2019-03-13 11:54:50,161 [main] WARN  IOSPushUtil - 开始推送[通知][targetValue:TEst,title:AppTest,content:AppTest,second:0]
+2019-03-13 11:54:50,268 [main] WARN  IOSPushUtil - 推送发送错误:
+com.aliyuncs.exceptions.ClientException: InvalidiOSExtParameters.Format : Specified iOSExtParameters format is not valid.
+RequestId : 2CBFF087-A693-4A50-BC2B-A73CFD5FE8C6
+	at com.aliyuncs.DefaultAcsClient.parseAcsResponse(DefaultAcsClient.java:170)
+	at com.aliyuncs.DefaultAcsClient.getAcsResponse(DefaultAcsClient.java:106)
+	at com.bracelet.util.IOSPushUtil.pushNotify(IOSPushUtil.java:120)
+	at com.bracelet.util.IOSPushUtil.push(IOSPushUtil.java:34)
+	at com.bracelet.controller.BloodFatController.main(BloodFatController.java:75)
+2019-03-13 11:55:46,198 [main] WARN  IOSPushUtil - 开始推送[消息][targetValue:7E26A2307007D0A762FFDB08D9BA6096,title:哈哈哈哈,content:{"content":"123123","imei":"4568456456","name":"11","side":1,"timestamp":1552449345919,"way":0},second:0]
+2019-03-13 11:55:46,640 [main] WARN  IOSPushUtil - 收到推送[消息]结果[targetValue:7E26A2307007D0A762FFDB08D9BA6096,title:哈哈哈哈,content:{"content":"123123","imei":"4568456456","name":"11","side":1,"timestamp":1552449345919,"way":0},second:0] -> RequestId: 39F2F2BE-2618-4F9A-A511-67E7970D608B, MessageId:500021
+2019-03-13 11:55:46,640 [main] WARN  IOSPushUtil - 开始推送[通知][targetValue:7E26A2307007D0A762FFDB08D9BA6096,title:哈哈哈哈,content:{"content":"123123","imei":"4568456456","name":"11","side":1,"timestamp":1552449345919,"way":0},second:0]
+2019-03-13 11:55:46,729 [main] WARN  IOSPushUtil - 收到推送[通知]结果[targetValue:7E26A2307007D0A762FFDB08D9BA6096,title:哈哈哈哈,content:{"content":"123123","imei":"4568456456","name":"11","side":1,"timestamp":1552449345919,"way":0},second:0] -> RequestId: DE3C4A1B-92D9-4370-8E51-9DF244FDD6EB, MessageId:500022
+2019-03-13 11:58:32,020 [main] WARN  IOSPushUtil - 开始推送[消息][targetValue:7E26A2307007D0A762FFDB08D9BA6096,title:哈哈哈哈,content:{"content":"123123","imei":"4568456456","name":"11","side":1,"timestamp":1552449511763,"way":0},second:0]
+2019-03-13 11:58:32,462 [main] WARN  IOSPushUtil - 收到推送[消息]结果[targetValue:7E26A2307007D0A762FFDB08D9BA6096,title:哈哈哈哈,content:{"content":"123123","imei":"4568456456","name":"11","side":1,"timestamp":1552449511763,"way":0},second:0] -> RequestId: F7854C40-19B6-4819-99D2-9F431A85A40D, MessageId:500023
+2019-03-13 11:58:32,462 [main] WARN  IOSPushUtil - 开始推送[通知][targetValue:7E26A2307007D0A762FFDB08D9BA6096,title:哈哈哈哈,content:{"content":"123123","imei":"4568456456","name":"11","side":1,"timestamp":1552449511763,"way":0},second:0]
+2019-03-13 11:58:32,610 [main] WARN  IOSPushUtil - 收到推送[通知]结果[targetValue:7E26A2307007D0A762FFDB08D9BA6096,title:哈哈哈哈,content:{"content":"123123","imei":"4568456456","name":"11","side":1,"timestamp":1552449511763,"way":0},second:0] -> RequestId: E0D66CE2-C132-4F5D-A56A-A9BED414F8D4, MessageId:500024

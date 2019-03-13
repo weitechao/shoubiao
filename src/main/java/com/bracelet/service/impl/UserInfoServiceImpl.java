@@ -510,4 +510,17 @@ public class UserInfoServiceImpl implements IUserInfoService {
 		return null;
 	}
 
+	@Override
+	public BindDevice getWatchBindInfoByImei(String imei) {
+		String sql = "select * from watch_bind_device where  imei=?  LIMIT 1";
+		List<BindDevice> list = jdbcTemplate.query(sql, new Object[] { imei },
+				new BeanPropertyRowMapper<BindDevice>(BindDevice.class));
+		if (list != null && !list.isEmpty()) {
+			return list.get(0);
+		} else {
+			logger.info("cannot find userinfo,imei:" + imei);
+		}
+		return null;
+	}
+
 }

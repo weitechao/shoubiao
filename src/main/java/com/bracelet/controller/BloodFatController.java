@@ -1,9 +1,11 @@
 package com.bracelet.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.bracelet.dto.HttpBaseDto;
 import com.bracelet.dto.LatestBloodFatDto;
 import com.bracelet.dto.LatestBloodSugarDto;
+import com.bracelet.dto.OpenDoorDto;
 import com.bracelet.dto.SocketLoginDto;
 import com.bracelet.entity.BloodFat;
 import com.bracelet.entity.BloodSugar;
@@ -12,6 +14,7 @@ import com.bracelet.service.IBloodSugarService;
 import com.bracelet.util.ChannelMap;
 import com.bracelet.util.HostUtil;
 import com.bracelet.util.HttpClientGet;
+import com.bracelet.util.IOSPushUtil;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -61,4 +64,25 @@ public class BloodFatController extends BaseController {
 	public String getHost(){
 		return HostUtil.get();
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/pushTest", method = RequestMethod.GET)
+	public Integer pushTest(){
+		
+		 
+		OpenDoorDto sosDto = new OpenDoorDto();
+		sosDto.setName("11");
+		sosDto.setImei("4568456456");
+		sosDto.setTimestamp(System.currentTimeMillis());
+		sosDto.setSide(1);
+		sosDto.setWay(0);
+		sosDto.setContent("123123");
+	
+		String title = "哈哈哈哈";
+		String content = JSON.toJSONString(sosDto);
+		IOSPushUtil.push("7E26A2307007D0A762FFDB08D9BA6096", title, content, "77777777777777");
+		return 1;
+	}
+	
+
 }

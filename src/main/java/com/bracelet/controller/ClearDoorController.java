@@ -35,7 +35,7 @@ import com.bracelet.service.IPushlogService;
 import com.bracelet.service.IPwdService;
 import com.bracelet.service.ISosService;
 import com.bracelet.service.IUserInfoService;
-import com.bracelet.util.PushUtil;
+import com.bracelet.util.AndroidPushUtil;
 import com.bracelet.util.RespCode;
 import com.bracelet.util.StringUtil;
 
@@ -89,7 +89,7 @@ public class ClearDoorController extends BaseController {
 					String title = "设备清除信息";
 					String content = JSON.toJSONString(sosDto);
 					String notifyContent = "您绑定的门锁"+name+"正在清除信息,请知悉!";
-					PushUtil.push(target, title, content, notifyContent);
+					AndroidPushUtil.push(target, title, content, notifyContent);
 					// save push log
 					this.pushlogService.insert(userId, imei, 0, target, title, content);
 				}

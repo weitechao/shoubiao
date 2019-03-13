@@ -26,7 +26,8 @@ import com.bracelet.service.IVoltageService;
 import com.bracelet.socket.business.IService;
 import com.bracelet.util.ChannelMap;
 import com.bracelet.util.HttpClientGet;
-import com.bracelet.util.PushUtil;
+import com.bracelet.util.IOSPushUtil;
+import com.bracelet.util.AndroidPushUtil;
 import com.bracelet.util.RadixUtil;
 import com.bracelet.util.RespCode;
 import com.bracelet.util.StringUtil;
@@ -195,7 +196,8 @@ public class UploadPhoto extends AbstractBizService {
 					push.put("New", 1);
 					 String targettime = Utils.getTime(System.currentTimeMillis());
 					 pushlogService.insertMsgInfo(imei, 11, deviceid, "新图片"+targettime, "新图片"+targettime);
-					PushUtil.push(token, "新图片"+targettime, push.toString(), "新图片"+targettime);	
+					AndroidPushUtil.push(token, "新图片"+targettime, push.toString(), "新图片"+targettime);	
+					IOSPushUtil.push(token, "新图片"+targettime, push.toString(), "新图片"+targettime);	
 				}
 				
 			}

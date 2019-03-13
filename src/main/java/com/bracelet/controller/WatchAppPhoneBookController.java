@@ -26,7 +26,8 @@ import com.bracelet.service.WatchSetService;
 import com.bracelet.socket.BaseChannelHandler;
 import com.bracelet.util.ChannelMap;
 import com.bracelet.util.HttpClientGet;
-import com.bracelet.util.PushUtil;
+import com.bracelet.util.IOSPushUtil;
+import com.bracelet.util.AndroidPushUtil;
 import com.bracelet.util.RadixUtil;
 import com.bracelet.util.RanomUtil;
 import com.bracelet.util.RespCode;
@@ -209,7 +210,8 @@ public class WatchAppPhoneBookController extends BaseController {
 				
 				pushlogService.insertMsgInfo(imei, 7, deviceid, "通讯录已同步", "通讯录已同步");
 				
-				PushUtil.push(token, "通讯录已同步", push.toString(), "通讯录已同步");	
+				AndroidPushUtil.push(token, "通讯录已同步", push.toString(), "通讯录已同步");	
+				IOSPushUtil.push(token, "通讯录已同步", push.toString(), "通讯录已同步");	
 						
 		} else {
 			bb.put("Code", 2);
@@ -374,8 +376,8 @@ public class WatchAppPhoneBookController extends BaseController {
 			push.put("Code", 1);
 			push.put("New", 1);
 			pushlogService.insertMsgInfo(imei, 7, deviceid, "通讯录已同步", "通讯录已同步");
-			PushUtil.push(token, "通讯录已同步", push.toString(), "通讯录已同步");	
-			
+			AndroidPushUtil.push(token, "通讯录已同步", push.toString(), "通讯录已同步");	
+			IOSPushUtil.push(token, "通讯录已同步", push.toString(), "通讯录已同步");	
 		} else {
 			bb.put("Code", 2);
 		}
@@ -505,7 +507,8 @@ public class WatchAppPhoneBookController extends BaseController {
 			push.put("Code", 1);
 			push.put("New", 1);
 			pushlogService.insertMsgInfo(imei, 7, deviceid, "通讯录已同步", "通讯录已同步");
-			PushUtil.push(token, "通讯录已同步", push.toString(), "通讯录已同步");	
+			AndroidPushUtil.push(token, "通讯录已同步", push.toString(), "通讯录已同步");	
+			IOSPushUtil.push(token, "通讯录已同步", push.toString(), "通讯录已同步");	
 			
 		} else {
 			bb.put("Code", 2);

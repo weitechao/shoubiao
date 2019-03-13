@@ -20,7 +20,7 @@ import com.bracelet.entity.MemberInfo;
 import com.bracelet.entity.NoticeInfo;
 import com.bracelet.entity.UserInfo;
 import com.bracelet.exception.BizException;
-import com.bracelet.util.PushUtil;
+import com.bracelet.util.AndroidPushUtil;
 import com.bracelet.util.RespCode;
 import com.bracelet.util.SmsUtil;
 import com.bracelet.service.IFingerService;
@@ -163,7 +163,7 @@ public class FingerService implements IService {
 						// xx 使用报警指纹开锁，请注意！
 						NoticeInfo vinfo = userInfoService.getNoticeSet(userId);
 						if(vinfo == null || vinfo.getMemberunlockswitch() == 1 ){
-							PushUtil.push(target, title, content, notifyContent);
+							AndroidPushUtil.push(target, title, content, notifyContent);
 							// save push log
 							this.pushlogService.insert(userId, imei, 0, target,title, content);
 						}

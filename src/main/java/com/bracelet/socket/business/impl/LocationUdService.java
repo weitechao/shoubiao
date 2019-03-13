@@ -21,7 +21,8 @@ import com.bracelet.service.ILocationService;
 import com.bracelet.service.IPushlogService;
 import com.bracelet.util.ChannelMap;
 import com.bracelet.util.HttpClientGet;
-import com.bracelet.util.PushUtil;
+import com.bracelet.util.IOSPushUtil;
+import com.bracelet.util.AndroidPushUtil;
 import com.bracelet.util.StringUtil;
 import com.bracelet.util.Utils;
 
@@ -106,7 +107,8 @@ public class LocationUdService extends AbstractBizService {
 				String triggerTime = Utils.getTime(System.currentTimeMillis());
 
 				pushlogService.insertMsgInfo(imei, 101, deviceid, "设备" + triggerTime + "报警", "设备" + triggerTime + "报警");
-				PushUtil.push(token, "设备" + triggerTime + "报警", push.toString(), "设备" + triggerTime + "报警");
+				AndroidPushUtil.push(token, "设备" + triggerTime + "报警", push.toString(), "设备" + triggerTime + "报警");
+				IOSPushUtil.push(token, "设备" + triggerTime + "报警", push.toString(), "设备" + triggerTime + "报警");
 			}
 
 			return "[YW*" + imei + "*0001*0002*AL]";
@@ -408,7 +410,8 @@ public class LocationUdService extends AbstractBizService {
 
 			bb.put("Code", 1);
 			bb.put("New", 0);
-			PushUtil.push(token, msg, bb.toString(), msg);
+			AndroidPushUtil.push(token, msg, bb.toString(), msg);
+			IOSPushUtil.push(token, msg, bb.toString(), msg);
 		}
 
 	}
@@ -465,8 +468,8 @@ public class LocationUdService extends AbstractBizService {
 							pushlogService.insertMsgInfo(imei, 102, deviceid,
 									"手表" + triggerTime + "进入名字叫" + fenone.getName() + "的电子围栏",
 									"手表" + triggerTime + "进入名字叫" + fenone.getName() + "的电子围栏");
-							PushUtil.push(token, "手表" + triggerTime + "进入名字叫" + fenone.getName() + "的电子围栏",
-									push.toString(), "手表" + triggerTime + "进入名字叫" + fenone.getName() + "的电子围栏");
+							AndroidPushUtil.push(token, "手表" + triggerTime + "进入名字叫" + fenone.getName() + "的电子围栏",push.toString(), "手表" + triggerTime + "进入名字叫" + fenone.getName() + "的电子围栏");
+							IOSPushUtil.push(token, "手表" + triggerTime + "进入名字叫" + fenone.getName() + "的电子围栏",push.toString(), "手表" + triggerTime + "进入名字叫" + fenone.getName() + "的电子围栏");
 						}
 
 					}
@@ -517,8 +520,8 @@ public class LocationUdService extends AbstractBizService {
 									"手表" + triggerTime + "离开了名字叫" + fenone.getName() + "的电子围栏",
 									"手表" + triggerTime + "离开了名字叫" + fenone.getName() + "的电子围栏");
 
-							PushUtil.push(token, "手表" + triggerTime + "离开了名字叫" + fenone.getName() + "的电子围栏",
-									push.toString(), "手表" + triggerTime + "离开了名字叫" + fenone.getName() + "的电子围栏");
+							AndroidPushUtil.push(token, "手表" + triggerTime + "离开了名字叫" + fenone.getName() + "的电子围栏",push.toString(), "手表" + triggerTime + "离开了名字叫" + fenone.getName() + "的电子围栏");
+							IOSPushUtil.push(token, "手表" + triggerTime + "离开了名字叫" + fenone.getName() + "的电子围栏",push.toString(), "手表" + triggerTime + "离开了名字叫" + fenone.getName() + "的电子围栏");
 						}
 
 					}

@@ -26,7 +26,8 @@ import com.bracelet.service.IVoltageService;
 import com.bracelet.service.WatchSetService;
 import com.bracelet.service.WatchTkService;
 import com.bracelet.util.ChannelMap;
-import com.bracelet.util.PushUtil;
+import com.bracelet.util.IOSPushUtil;
+import com.bracelet.util.AndroidPushUtil;
 import com.bracelet.util.RadixUtil;
 import com.bracelet.util.RanomUtil;
 import com.bracelet.util.RespCode;
@@ -714,15 +715,15 @@ public class WatchAppUserController extends BaseController {
 			if(bindDevice != null){
 				bb.put("Code", 2);
 			}else{
-				userInfoService.saveWatchBindInfo(Long.valueOf("1"), bindDeviceApp.getImei()+"", name, 1, imei);
-				userInfoService.saveWatchBindInfo(Long.valueOf("1"), imei, name, 1, bindDeviceApp.getImei()+"");
+				userInfoService.saveWatchBindInfo(Long.valueOf("1"), bindDeviceApp.getImei()+"", bindDeviceApp.getImei()+"", 1, imei);
+				userInfoService.saveWatchBindInfo(Long.valueOf("2"), imei, name, 1, bindDeviceApp.getImei()+"");
 				
 				bb.put("Code", 1);
 			}
 		}else{
 			String imeii = userInfoService.getUserInfoById(Long.valueOf(userId)).getUsername()+"";
 			userInfoService.saveWatchBindInfo(Long.valueOf("1"), imeii, imeii, 1, imeii);
-			userInfoService.saveWatchBindInfo(Long.valueOf("1"), imeii, name, 1, imei);
+			userInfoService.saveWatchBindInfo(Long.valueOf("2"), imeii, name, 1, imei);
 			bb.put("Code", 1);
 		}
 		//String appImei = userInfoService.getUserInfoById(Long.valueOf(userId)).getImei();
@@ -918,7 +919,8 @@ public class WatchAppUserController extends BaseController {
 					
 					pushlogService.insertMsgInfo(imei, 7, deviceid, "通讯录已同步", "通讯录已同步");
 					
-					PushUtil.push(token, "通讯录已同步", push.toString(), "通讯录已同步");	
+					AndroidPushUtil.push(token, "通讯录已同步", push.toString(), "通讯录已同步");	
+					IOSPushUtil.push(token, "通讯录已同步", push.toString(), "通讯录已同步");	
 							
 			} else {
 				bb.put("Code", 2);
