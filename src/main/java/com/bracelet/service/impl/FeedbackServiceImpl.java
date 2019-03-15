@@ -1,7 +1,6 @@
 package com.bracelet.service.impl;
 
 import com.bracelet.entity.Feedback;
-import com.bracelet.entity.Fence;
 import com.bracelet.service.IFeedbackService;
 import com.bracelet.util.Utils;
 import org.slf4j.Logger;
@@ -35,6 +34,13 @@ public class FeedbackServiceImpl implements IFeedbackService {
 		String sql = "select * from feedback where user_id=?";
 		List<Feedback> list = jdbcTemplate.query(sql, new Object[] { userId }, new BeanPropertyRowMapper<Feedback>(Feedback.class));
 		return list;
+	}
+
+	@Override
+	public boolean deleteInfoById(Long id) {
+		int i = jdbcTemplate.update("delete from feedback where id = ? ", new Object[] { id },
+				new int[] { Types.INTEGER});
+		return i == 1;
 	}
 
 }

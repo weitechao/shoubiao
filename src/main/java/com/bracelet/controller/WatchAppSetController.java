@@ -170,8 +170,8 @@ public class WatchAppSetController extends BaseController {
 			Integer phoneComeVoice = jsonObject.getInteger("phoneComeVoice");// 手表来电话声音
 			Integer watchOffAlarm = jsonObject.getInteger("watchOffAlarm");// 手表脱落报警
 			Integer rejectStrangers = jsonObject.getInteger("rejectStrangers");// 拒绝陌生人来电
-			Integer timerSwitch = jsonObject.getInteger("timerSwitch");// 定时开关机
-			Integer disabledInClass = jsonObject.getInteger("disabledInClass");// 上课禁用
+			String timerSwitch = jsonObject.getString("timerSwitch");// 定时开关机
+			String disabledInClass = jsonObject.getString("disabledInClass");// 上课禁用
 			Integer reserveEmergencyPower = jsonObject.getInteger("reserveEmergencyPower");// 预留紧急电量6
 			Integer somatosensory = jsonObject.getInteger("somatosensory");// 体感接听
 			Integer reportCallLocation = jsonObject.getInteger("reportCallLocation");// 报告通话位置
@@ -184,25 +184,26 @@ public class WatchAppSetController extends BaseController {
 			Integer locationMode = jsonObject.getInteger("locationMode");// 工作模式
 			Integer locationTime = jsonObject.getInteger("locationTime");// 工作时长
 
-			WatchDeviceSet deviceSet = watchSetService.getDeviceSetByImei(imei);
+			
+			 WatchDeviceSet deviceSet = watchSetService.getDeviceSetByImei(Long.valueOf(userId));
 			if (deviceSet != null) {
 				watchSetService.updateWatchSet(deviceSet.getId(), setInfo, infoVibration, infoVoice, phoneComeVibration,
-						phoneComeVoice, watchOffAlarm, rejectStrangers, timerSwitch, disabledInClass, reserveEmergencyPower,
+						phoneComeVoice, watchOffAlarm, rejectStrangers, Integer.valueOf(timerSwitch), Integer.valueOf(disabledInClass), reserveEmergencyPower,
 						somatosensory, reportCallLocation, automaticAnswering, sosMsgswitch, flowerNumber, brightScreen,
 						language, timeZone, locationMode, locationTime);
 			} else {
-				watchSetService.insertWatchDeviceSet(imei, setInfo, infoVibration, infoVoice, phoneComeVibration,
-						phoneComeVoice, watchOffAlarm, rejectStrangers, timerSwitch, disabledInClass, reserveEmergencyPower,
+				watchSetService.insertWatchDeviceSet(Long.valueOf(userId),imei, setInfo, infoVibration, infoVoice, phoneComeVibration,
+						phoneComeVoice, watchOffAlarm, rejectStrangers, Integer.valueOf(timerSwitch), Integer.valueOf(disabledInClass), reserveEmergencyPower,
 						somatosensory, reportCallLocation, automaticAnswering, sosMsgswitch, flowerNumber, brightScreen,
 						language, timeZone, locationMode, locationTime);
 			}
 			
 
 			StringBuffer sendMsg = new StringBuffer("SET" + ",,1234,F48,");
+//[YW*872018020142169*0001*0066*SET,,1234,F48,08:00-11:30|14:00-16:30|12345,06:05,23:00,0,2,480,0,1:24,0:4,0:0,04:00,00:00,00:00,2,0,1]
 
 			if ("1".equals(disabledInClass)) {
-				WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfo(imei);
-
+				WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfo(Long.valueOf(userId));
 				if (whsc != null) {
 					sendMsg.append(whsc.getClassDisable1() + "|" + whsc.getClassDisable2() + "|"
 							+ whsc.getWeekDisable1() + ",");
@@ -214,7 +215,7 @@ public class WatchAppSetController extends BaseController {
 			}
 
 			if ("1".equals(timerSwitch)) {
-				TimeSwitch time = confService.getTimeSwitch(imei);
+				TimeSwitch time = confService.getTimeSwitch(Long.valueOf(userId));
 				if (time != null) {
 					sendMsg.append(time.getTimeOpen() + "," + time.getTimeClose() + ",");
 				} else {
@@ -315,7 +316,7 @@ public class WatchAppSetController extends BaseController {
 			bb.put("Code", -1);
 			return bb.toString();
 		}
-		WatchDeviceSet deviceSet = watchSetService.getDeviceSetByImei(imei);
+		WatchDeviceSet deviceSet = watchSetService.getDeviceSetByImei(Long.valueOf(userId));
 		if (deviceSet != null) {
 			// bb.put("data", deviceSet.getData());
 			bb.put("Code", 1);

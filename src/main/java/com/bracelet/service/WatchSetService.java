@@ -28,7 +28,7 @@ public interface WatchSetService {
 
 	boolean updateWatchSet(Long id, String data);
 	@DataSourceChange(slave = true)
-	WatchDeviceSet getDeviceSetByImei(String imei);
+	WatchDeviceSet getDeviceSetByImei(Long userID);
 
 	boolean insertWatchDeviceSet(String imei, String data);
 
@@ -38,7 +38,7 @@ public interface WatchSetService {
 			Integer automaticAnswering, Integer sosMsgswitch, Integer flowerNumber, Integer brightScreen, Integer language,
 			Integer timeZone, Integer locationMode, Integer locationTime);
 
-	boolean insertWatchDeviceSet(String imei, String setInfo, Integer infoVibration, Integer infoVoice, Integer phoneComeVibration,
+	boolean insertWatchDeviceSet(Long userId,String imei, String setInfo, Integer infoVibration, Integer infoVoice, Integer phoneComeVibration,
 			Integer phoneComeVoice, Integer watchOffAlarm, Integer rejectStrangers, Integer timerSwitch,
 			Integer disabledInClass, Integer reserveEmergencyPower, Integer somatosensory, Integer reportCallLocation,
 			Integer automaticAnswering, Integer sosMsgswitch, Integer flowerNumber, Integer brightScreen, Integer language,

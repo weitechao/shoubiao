@@ -116,7 +116,7 @@ public class WatchDeviceInfoController extends BaseController {
 			
 			/*shortNumber，PhoneCornet）,( phone, PhoneNumber) ,( schoolAge, Grade)，(sex, Gender)*/
 
-			WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfo(imei);
+			WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfo(Long.valueOf(userId));
 			if (whsc != null) {
 				bb.put("SchoolAddress", whsc.getSchoolAddress()+"");
 				
@@ -178,9 +178,9 @@ public class WatchDeviceInfoController extends BaseController {
 				bb.put("HomeLng", "0");
 				bb.put("HomeAddress", watchh.getHome_info()+"");
 				
-				WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfo(imei);
+				WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfo(Long.valueOf(userId));
 				if (whsc == null) {
-					ideviceService.insertDeviceHomeAndFamilyInfo(watchh.getId(), imei, "", "08:00-12:00", "14:00-17:00", "", "0", "0", "", "",
+					ideviceService.insertDeviceHomeAndFamilyInfo(Long.valueOf(userId), imei, "", "08:00-12:00", "14:00-17:00", "", "0", "0", "", "",
 							"0", "0");
 				}else{
 					bb.put("SchoolAddress", whsc.getSchoolAddress()+"");
@@ -282,7 +282,7 @@ public class WatchDeviceInfoController extends BaseController {
 		String nickname = jsonObject.getString("nickname");
 		Integer sex = jsonObject.getInteger("sex");
 		String birday = jsonObject.getString("birday");
-		String school_age = jsonObject.getString("school_age");
+		String school_age = jsonObject.getString("schoolAge");
 		String weight = jsonObject.getString("weight");
 		String height = jsonObject.getString("height");
 		/*
@@ -391,7 +391,7 @@ public class WatchDeviceInfoController extends BaseController {
 		String homeLat = jsonObject.getString("homeLat");
 		String homeLng = jsonObject.getString("homeLng");
 
-		WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfo(imei);
+		WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfo(Long.valueOf(userId));
 		if (whsc != null) {
 			if (this.ideviceService.updateImeiHomeAndFamilyInfoById(whsc.getId(), classDisable1, classDisable2, weekDisable,
 					schoolAddress, schoolLat, schoolLng, latestTime, homeAddress, homeLat, homeLng)) {
@@ -400,7 +400,7 @@ public class WatchDeviceInfoController extends BaseController {
 				bb.put("Code", 0);
 			}
 		} else {
-			if (ideviceService.insertDeviceHomeAndFamilyInfo(Long.valueOf("1"), imei, schoolAddress, classDisable1, classDisable2,
+			if (ideviceService.insertDeviceHomeAndFamilyInfo(Long.valueOf(userId), imei, schoolAddress, classDisable1, classDisable2,
 					weekDisable, schoolLat, schoolLng, latestTime, homeAddress, homeLng, homeLat)) {
 				bb.put("Code", 1);
 			} else {

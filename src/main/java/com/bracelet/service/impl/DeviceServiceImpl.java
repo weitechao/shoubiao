@@ -144,15 +144,15 @@ public class DeviceServiceImpl implements IDeviceService {
 
 	@Override
 	@DataSourceChange(slave = true)
-	public WatchDeviceHomeSchool getDeviceHomeAndFamilyInfo(String imei) {
-		String sql = "select * from device_watch_hf_info where imei=? LIMIT 1";
-		List<WatchDeviceHomeSchool> list = jdbcTemplate.query(sql, new Object[] { imei },
+	public WatchDeviceHomeSchool getDeviceHomeAndFamilyInfo(Long userID) {
+		String sql = "select * from device_watch_hf_info where w_id=? LIMIT 1";
+		List<WatchDeviceHomeSchool> list = jdbcTemplate.query(sql, new Object[] { userID },
 				new BeanPropertyRowMapper<WatchDeviceHomeSchool>(WatchDeviceHomeSchool.class));
 
 		if (list != null && !list.isEmpty()) {
 			return list.get(0);
 		} else {
-			logger.info("get getDeviceInfo imei:" + imei);
+			logger.info("get getDeviceInfo imei:" + userID);
 		}
 		return null;
 	}
@@ -364,6 +364,20 @@ public class DeviceServiceImpl implements IDeviceService {
 				"delete from watch_bind_device where b_imei = ?",
 				new Object[] { imei }, new int[] { Types.VARCHAR});
 		return i == 1;
+	}
+
+	@Override
+	public WatchDeviceHomeSchool getDeviceHomeAndFamilyByImei(String imei) {
+		String sql = "select * from device_watch_hf_info where imei=? LIMIT 1";
+		List<WatchDeviceHomeSchool> list = jdbcTemplate.query(sql, new Object[] { imei },
+				new BeanPropertyRowMapper<WatchDeviceHomeSchool>(WatchDeviceHomeSchool.class));
+
+		if (list != null && !list.isEmpty()) {
+			return list.get(0);
+		} else {
+			logger.info("get getDeviceInfo imei:" + imei);
+		}
+		return null;
 	}
 
 	

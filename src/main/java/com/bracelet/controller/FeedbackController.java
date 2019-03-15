@@ -91,8 +91,9 @@ public class FeedbackController extends BaseController {
 		if (feedList != null) {
 			for (Feedback feed : feedList) {
 				JSONObject dataMap = new JSONObject();
-				dataMap.put("AnswerContent", "");
-				dataMap.put("AnswerUserID", "");
+				dataMap.put("id", feed.getId());
+				dataMap.put("AnswerContent", feed.getAnswer_content()+"");
+				dataMap.put("AnswerUserID", feed.getUser_id());
 				dataMap.put("CreateTime", "");
 				dataMap.put("FeedbackID", "");
 				dataMap.put("FeedbackState", "");
@@ -107,6 +108,23 @@ public class FeedbackController extends BaseController {
 		}
 		bb.put("Code", 1);
 		bb.put("Arr", jsonArray);
+		return bb.toString();
+	}
+	
+	/* 意见反馈 */
+	@ResponseBody
+	@RequestMapping(value = "/deletefeedback/{token}/{id}", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	public String deletefeedback(@PathVariable String token,@PathVariable Long id) {
+		JSONObject bb = new JSONObject();
+	
+		String userId = checkTokenWatchAndUser(token);
+		if ("0".equals(userId)) {
+			bb.put("Code", -1);
+			return bb.toString();
+		}
+		feedbackService.deleteInfoById(id);
+		bb.put("Code", 1);
+		
 		return bb.toString();
 	}
 

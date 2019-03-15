@@ -95,7 +95,7 @@ public class CallPhoneController extends BaseController {
          String timeClose = jsonObject.getString("timeClose");
          String timeOpen  = jsonObject.getString("timeOpen");
          
-         TimeSwitch time = confService.getTimeSwitch(deviceId);
+         TimeSwitch time = confService.getTimeSwitch(Long.valueOf(user_id));
          if(time != null ){
             if(confService.updateTimeSwitchById(time.getId(), timeClose, timeOpen)){
             	bb.put("Code", 1);
@@ -103,7 +103,7 @@ public class CallPhoneController extends BaseController {
             	bb.put("Code", 0);
             }
          }else{
-        	 if(confService.insertTimeSwtich(deviceId,timeClose,timeOpen)){
+        	 if(confService.insertTimeSwtich(Long.valueOf(user_id),timeClose,timeOpen)){
         		 bb.put("Code", 1);
         	 }else{
         		 bb.put("Code", 0);

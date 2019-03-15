@@ -649,7 +649,7 @@ public class WatchAppUserController extends BaseController {
 		}
 		ideviceService.updateImeiHeadInfoByImei(watch.getId(), "");
 
-		WatchDeviceHomeSchool watchSchool = ideviceService.getDeviceHomeAndFamilyInfo(imei);
+		WatchDeviceHomeSchool watchSchool = ideviceService.getDeviceHomeAndFamilyInfo(Long.valueOf(userId));
 		if (watchSchool != null) {
 			ideviceService.updateImeiHomeAndFamilyInfoById(watchSchool.getId(), "08:00-12:00", "14:00-17:00", "", "",
 					"", "", "", "", "", "");
@@ -949,7 +949,7 @@ public class WatchAppUserController extends BaseController {
 			}
 			ideviceService.updateImeiHeadInfoByImei(watch.getId(), "");
 
-			WatchDeviceHomeSchool watchSchool = ideviceService.getDeviceHomeAndFamilyInfo(imei);
+			WatchDeviceHomeSchool watchSchool = ideviceService.getDeviceHomeAndFamilyByImei(imei);
 			if (watchSchool != null) {
 				ideviceService.updateImeiHomeAndFamilyInfoById(watchSchool.getId(), "08:00-12:00", "14:00-17:00", "", "",
 						"", "", "", "", "", "");
@@ -1100,5 +1100,45 @@ public class WatchAppUserController extends BaseController {
 		}
 		
 		
+		// 如果管理员跟IMEI匹配则可以直接修改密码
+		@ResponseBody
+		@RequestMapping(value = "/udpatePwdByImei", method = RequestMethod.POST)
+		public String udpatePwdByImei(@RequestBody String body) {
+			JSONObject jsonObject = (JSONObject) JSON.parse(body);
+			JSONObject bb = new JSONObject();
+		
+			String tel = jsonObject.getString("imei");
+			String password = jsonObject.getString("pwd");// 默认123456
+		
+			UserInfo userInfo = userInfoService.getUserInfoByUsername(tel);
+			if (userInfo != null) {
+					userInfoService.updateUserPassword(userInfo.getUser_id(), password);
+					bb.put("Code", 1);
+			} else {
+				bb.put("Code", 0);
+			}
+			return bb.toString();
+		}
+		
+		
+		
+		/*验证用户输入的管理员手机号是否正确*/
+		@ResponseBody
+		@RequestMapping(value = "/verificationImeiAdmin/{imei}/{phone}", method = RequestMethod.GET)
+		public String getSchoolInfo(@PathVariable String phone, @PathVariable String imei) {
+			JSONObject bb = new JSONObject();
+
+			WatchPhoneBook phoneBook = memberService.getPhoneBookByImeiAndStatus(imei, 1);
+			if(phoneBook != null){
+				if(phone.equals(phoneBook.getPhone())){
+					bb.put("Code", 1);
+				}else{
+					bb.put("Code", 2);
+				}
+			}else{
+				bb.put("Code", 3);
+			}
+			return bb.toString();
+		}
 
 }

@@ -65,15 +65,15 @@ public class ConfServiceImpl implements IConfService {
 	}
 
 	@Override
-	public TimeSwitch getTimeSwitch(String deviceId) {
+	public TimeSwitch getTimeSwitch(Long userId) {
 		String sql = "select * from watch_time_switch where deviceId=?  LIMIT 1";
-		List<TimeSwitch> list = jdbcTemplate.query(sql, new Object[] { deviceId },
+		List<TimeSwitch> list = jdbcTemplate.query(sql, new Object[] { userId },
 				new BeanPropertyRowMapper<TimeSwitch>(TimeSwitch.class));
 
 		if (list != null && !list.isEmpty()) {
 			return list.get(0);
 		} else {
-			logger.info("getLatest return null.user_id:" + deviceId);
+			logger.info("getLatest return null.user_id:" + userId);
 		}
 		return null;
 	}
@@ -87,12 +87,12 @@ public class ConfServiceImpl implements IConfService {
 	}
 
 	@Override
-	public boolean insertTimeSwtich(String deviceId, String timeClose, String timeOpen) {
+	public boolean insertTimeSwtich(Long userId, String timeClose, String timeOpen) {
 		Timestamp now = Utils.getCurrentTimestamp();
 		int i = jdbcTemplate.update(
 				"insert into watch_time_switch (deviceId, timeOpen, timeClose, createtime, updatetime) values (?,?,?,?,?)",
-				new Object[] { deviceId,timeOpen, timeClose, now, now },
-				new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,  Types.TIMESTAMP, Types.TIMESTAMP });
+				new Object[] { userId, timeOpen, timeClose, now, now },
+				new int[] { Types.INTEGER, Types.VARCHAR, Types.VARCHAR,  Types.TIMESTAMP, Types.TIMESTAMP });
 		return i == 1;
 	}
 

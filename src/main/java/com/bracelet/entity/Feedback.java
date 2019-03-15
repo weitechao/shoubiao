@@ -12,6 +12,7 @@ public class Feedback {
 	private String content;
 	private String contact;
 	private Timestamp createtime;
+	private String answer_content;
 
 	public Long getId() {
 		return id;
@@ -70,5 +71,14 @@ public class Feedback {
 	public void setContact(String contact) {
 		this.contact = contact;
 	}
+
+	public String getAnswer_content() {
+		return answer_content;
+	}
+
+	public void setAnswer_content(String answer_content) {
+		this.answer_content = answer_content;
+	}
+	
 
 }

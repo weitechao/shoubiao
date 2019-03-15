@@ -16,7 +16,7 @@ public interface IDeviceService {
 	WatchDevice getDeviceInfo(String addimei);
 	
 	@DataSourceChange(slave = true)
-	WatchDeviceHomeSchool getDeviceHomeAndFamilyInfo(String imei);
+	WatchDeviceHomeSchool getDeviceHomeAndFamilyInfo(Long userID);
 
 	List<IpAddressInfo> getipinfo();
 
@@ -81,6 +81,8 @@ public interface IDeviceService {
 	boolean insertDeviceAdminPhone(String imei, String phone);
 
 	boolean deleteBindDevicebyImei(String imei);
+
+	WatchDeviceHomeSchool getDeviceHomeAndFamilyByImei(String imei);
 
 
 

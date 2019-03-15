@@ -10,4 +10,6 @@ public interface IFeedbackService {
 
 	List<Feedback> getFeedBackList(Long userId);
 
+	boolean deleteInfoById(Long id);
+
 }

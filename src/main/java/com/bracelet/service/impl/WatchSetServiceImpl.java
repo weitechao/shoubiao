@@ -127,14 +127,14 @@ public class WatchSetServiceImpl implements WatchSetService {
 
 	@Override
 	@DataSourceChange(slave = true)
-	public WatchDeviceSet getDeviceSetByImei(String imei) {
-		String sql = "select * from watch_device_set where  imei=? limit 1";
-		List<WatchDeviceSet> list = jdbcTemplate.query(sql, new Object[] { imei },
+	public WatchDeviceSet getDeviceSetByImei(Long user_id) {
+		String sql = "select * from watch_device_set where  user_id=? limit 1";
+		List<WatchDeviceSet> list = jdbcTemplate.query(sql, new Object[] { user_id },
 				new BeanPropertyRowMapper<WatchDeviceSet>(WatchDeviceSet.class));
 		if (list != null && !list.isEmpty()) {
 			return list.get(0);
 		} else {
-			logger.info("cannot find WatchDeviceSet,imei:" + imei);
+			logger.info("cannot find WatchDeviceSet,imei:" + user_id);
 		}
 		return null;
 	}
@@ -170,19 +170,19 @@ public class WatchSetServiceImpl implements WatchSetService {
 	}
 
 	@Override
-	public boolean insertWatchDeviceSet(String imei, String setInfo, Integer infoVibration, Integer infoVoice, Integer phoneComeVibration,
+	public boolean insertWatchDeviceSet(Long userId, String imei, String setInfo, Integer infoVibration, Integer infoVoice, Integer phoneComeVibration,
 			Integer phoneComeVoice, Integer watchOffAlarm, Integer rejectStrangers, Integer timerSwitch,
 			Integer disabledInClass, Integer reserveEmergencyPower, Integer somatosensory, Integer reportCallLocation,
 			Integer automaticAnswering, Integer sosMsgswitch, Integer flowerNumber, Integer brightScreen, Integer language,
 			Integer timeZone, Integer locationMode, Integer locationTime) {
 		Timestamp now = Utils.getCurrentTimestamp();
 		int i = jdbcTemplate.update(
-				"insert into watch_device_set ( imei, setInfo, infoVibration, infoVoice, phoneComeVibration, phoneComeVoice, watchOffAlarm, rejectStrangers, timerSwitch, disabledInClass, reserveEmergencyPower, somatosensory, reportCallLocation, automaticAnswering, sosMsgswitch, flowerNumber, brightScreen,  language, timeZone, locationMode, locationTime, createtime, updatetime) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-				new Object[] { imei, setInfo, infoVibration, infoVoice, phoneComeVibration, phoneComeVoice,
+				"insert into watch_device_set ( user_id, imei, setInfo, infoVibration, infoVoice, phoneComeVibration, phoneComeVoice, watchOffAlarm, rejectStrangers, timerSwitch, disabledInClass, reserveEmergencyPower, somatosensory, reportCallLocation, automaticAnswering, sosMsgswitch, flowerNumber, brightScreen,  language, timeZone, locationMode, locationTime, createtime, updatetime) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+				new Object[] {userId, imei, setInfo, infoVibration, infoVoice, phoneComeVibration, phoneComeVoice,
 						watchOffAlarm, rejectStrangers, timerSwitch, disabledInClass, reserveEmergencyPower,
 						somatosensory, reportCallLocation, automaticAnswering, sosMsgswitch, flowerNumber, brightScreen,
 						language, timeZone, locationMode, locationTime, now, now },
-				new int[] { Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER,
+				new int[] {Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER,
 						Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER,
 						Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER,
 						Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.TIMESTAMP, Types.TIMESTAMP });

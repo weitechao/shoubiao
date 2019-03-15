@@ -18,11 +18,11 @@ public interface IConfService {
 
 	boolean insertGuardOffOn(String deviceId, Integer status);
 
-	TimeSwitch getTimeSwitch(String deviceId);
+	TimeSwitch getTimeSwitch(Long userId);
 
 	boolean updateTimeSwitchById(Long id, String timeClose, String timeOpen);
 
-	boolean insertTimeSwtich(String deviceId, String timeClose, String timeOpen);
+	boolean insertTimeSwtich(Long userId, String timeClose, String timeOpen);
 
 	HealthStepManagement getHeathStepInfo(String deviceId);
 

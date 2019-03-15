@@ -95,6 +95,8 @@ public class SchoolController extends BaseController {
 		return bb.toString();
 	}
 
+	/*
+	 * 上学守护开关设置*/
 	@ResponseBody
 	@RequestMapping(value = "/updateGuardStatus/{token}/{deviceId}/{status}", method = RequestMethod.GET)
 	public String updateGuardStatus(@PathVariable String token, @PathVariable String deviceId, @PathVariable Integer status) {
@@ -167,7 +169,7 @@ public class SchoolController extends BaseController {
          String timeClose = jsonObject.getString("timeClose");
          String timeOpen  = jsonObject.getString("timeOpen");
          
-         TimeSwitch time = confService.getTimeSwitch(imei);
+         TimeSwitch time = confService.getTimeSwitch(Long.valueOf(user_id));
          if(time != null ){
             if(confService.updateTimeSwitchById(time.getId(), timeClose, timeOpen)){
             	bb.put("Code", 1);
@@ -175,7 +177,7 @@ public class SchoolController extends BaseController {
             	bb.put("Code", 0);
             }
          }else{
-        	 if(confService.insertTimeSwtich(imei,timeClose,timeOpen)){
+        	 if(confService.insertTimeSwtich(Long.valueOf(user_id),timeClose,timeOpen)){
         		 bb.put("Code", 1);
         	 }else{
         		 bb.put("Code", 0);
