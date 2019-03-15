@@ -185,18 +185,7 @@ public class WatchAppSetController extends BaseController {
 			Integer locationTime = jsonObject.getInteger("locationTime");// 工作时长
 
 			
-			 WatchDeviceSet deviceSet = watchSetService.getDeviceSetByImei(Long.valueOf(userId));
-			if (deviceSet != null) {
-				watchSetService.updateWatchSet(deviceSet.getId(), setInfo, infoVibration, infoVoice, phoneComeVibration,
-						phoneComeVoice, watchOffAlarm, rejectStrangers, Integer.valueOf(timerSwitch), Integer.valueOf(disabledInClass), reserveEmergencyPower,
-						somatosensory, reportCallLocation, automaticAnswering, sosMsgswitch, flowerNumber, brightScreen,
-						language, timeZone, locationMode, locationTime);
-			} else {
-				watchSetService.insertWatchDeviceSet(Long.valueOf(userId),imei, setInfo, infoVibration, infoVoice, phoneComeVibration,
-						phoneComeVoice, watchOffAlarm, rejectStrangers, Integer.valueOf(timerSwitch), Integer.valueOf(disabledInClass), reserveEmergencyPower,
-						somatosensory, reportCallLocation, automaticAnswering, sosMsgswitch, flowerNumber, brightScreen,
-						language, timeZone, locationMode, locationTime);
-			}
+			
 			
 
 			StringBuffer sendMsg = new StringBuffer("SET" + ",,1234,F48,");
@@ -259,6 +248,23 @@ public class WatchAppSetController extends BaseController {
 			socketLoginDto.getChannel().writeAndFlush(reps);
 			bb.put("Code", 1);
 			// bb.put("Message", "");
+			
+			//修改数据库的数据
+			 WatchDeviceSet deviceSet = watchSetService.getDeviceSetByImei(Long.valueOf(userId));
+				if (deviceSet != null) {
+					watchSetService.updateWatchSet(deviceSet.getId(), setInfo, infoVibration, infoVoice, phoneComeVibration,
+							phoneComeVoice, watchOffAlarm, rejectStrangers, Integer.valueOf(timerSwitch), Integer.valueOf(disabledInClass), reserveEmergencyPower,
+							somatosensory, reportCallLocation, automaticAnswering, sosMsgswitch, flowerNumber, brightScreen,
+							language, timeZone, locationMode, locationTime);
+				} else {
+					watchSetService.insertWatchDeviceSet(Long.valueOf(userId),imei, setInfo, infoVibration, infoVoice, phoneComeVibration,
+							phoneComeVoice, watchOffAlarm, rejectStrangers, Integer.valueOf(timerSwitch), Integer.valueOf(disabledInClass), reserveEmergencyPower,
+							somatosensory, reportCallLocation, automaticAnswering, sosMsgswitch, flowerNumber, brightScreen,
+							language, timeZone, locationMode, locationTime);
+				}
+				
+				
+				//下面开始推送组包
 
 			JSONObject push = new JSONObject();
 			JSONArray jsonArray = new JSONArray();

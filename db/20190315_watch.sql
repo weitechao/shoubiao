@@ -44,7 +44,7 @@ CREATE TABLE `api_applog` (
   `time` int(11) NOT NULL DEFAULT '0',
   `createtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3098 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3119 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `apilog` */
 
@@ -61,7 +61,7 @@ CREATE TABLE `apilog` (
   `time` int(11) NOT NULL DEFAULT '0',
   `createtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13890 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13891 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `app_voice_info` */
 
@@ -511,6 +511,108 @@ CREATE TABLE `location_3_watchinfo` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 
+/*Table structure for table `location_4_watchinfo` */
+
+DROP TABLE IF EXISTS `location_4_watchinfo`;
+
+CREATE TABLE `location_4_watchinfo` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `imei` varchar(128) DEFAULT NULL,
+  `location_type` tinyint(2) NOT NULL COMMENT '类型，0：gps， 1：基站 2:wifi',
+  `lat` varchar(64) NOT NULL,
+  `lng` varchar(64) NOT NULL,
+  `status` varchar(64) NOT NULL DEFAULT '0000',
+  `upload_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `location_time` varchar(16) NOT NULL,
+  `location_style` tinyint(2) NOT NULL COMMENT '1正常2报警3天气4拍照',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
+
+/*Table structure for table `location_5_watchinfo` */
+
+DROP TABLE IF EXISTS `location_5_watchinfo`;
+
+CREATE TABLE `location_5_watchinfo` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `imei` varchar(128) DEFAULT NULL,
+  `location_type` tinyint(2) NOT NULL COMMENT '类型，0：gps， 1：基站 2:wifi',
+  `lat` varchar(64) NOT NULL,
+  `lng` varchar(64) NOT NULL,
+  `status` varchar(64) NOT NULL DEFAULT '0000',
+  `upload_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `location_time` varchar(16) NOT NULL,
+  `location_style` tinyint(2) NOT NULL COMMENT '1正常2报警3天气4拍照',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
+
+/*Table structure for table `location_6_watchinfo` */
+
+DROP TABLE IF EXISTS `location_6_watchinfo`;
+
+CREATE TABLE `location_6_watchinfo` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `imei` varchar(128) DEFAULT NULL,
+  `location_type` tinyint(2) NOT NULL COMMENT '类型，0：gps， 1：基站 2:wifi',
+  `lat` varchar(64) NOT NULL,
+  `lng` varchar(64) NOT NULL,
+  `status` varchar(64) NOT NULL DEFAULT '0000',
+  `upload_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `location_time` varchar(16) NOT NULL,
+  `location_style` tinyint(2) NOT NULL COMMENT '1正常2报警3天气4拍照',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
+
+/*Table structure for table `location_7_watchinfo` */
+
+DROP TABLE IF EXISTS `location_7_watchinfo`;
+
+CREATE TABLE `location_7_watchinfo` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `imei` varchar(128) DEFAULT NULL,
+  `location_type` tinyint(2) NOT NULL COMMENT '类型，0：gps， 1：基站 2:wifi',
+  `lat` varchar(64) NOT NULL,
+  `lng` varchar(64) NOT NULL,
+  `status` varchar(64) NOT NULL DEFAULT '0000',
+  `upload_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `location_time` varchar(16) NOT NULL,
+  `location_style` tinyint(2) NOT NULL COMMENT '1正常2报警3天气4拍照',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
+
+/*Table structure for table `location_8_watchinfo` */
+
+DROP TABLE IF EXISTS `location_8_watchinfo`;
+
+CREATE TABLE `location_8_watchinfo` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `imei` varchar(128) DEFAULT NULL,
+  `location_type` tinyint(2) NOT NULL COMMENT '类型，0：gps， 1：基站 2:wifi',
+  `lat` varchar(64) NOT NULL,
+  `lng` varchar(64) NOT NULL,
+  `status` varchar(64) NOT NULL DEFAULT '0000',
+  `upload_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `location_time` varchar(16) NOT NULL,
+  `location_style` tinyint(2) NOT NULL COMMENT '1正常2报警3天气4拍照',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
+
+/*Table structure for table `location_9_watchinfo` */
+
+DROP TABLE IF EXISTS `location_9_watchinfo`;
+
+CREATE TABLE `location_9_watchinfo` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `imei` varchar(128) DEFAULT NULL,
+  `location_type` tinyint(2) NOT NULL COMMENT '类型，0：gps， 1：基站 2:wifi',
+  `lat` varchar(64) NOT NULL,
+  `lng` varchar(64) NOT NULL,
+  `status` varchar(64) NOT NULL DEFAULT '0000',
+  `upload_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `location_time` varchar(16) NOT NULL,
+  `location_style` tinyint(2) NOT NULL COMMENT '1正常2报警3天气4拍照',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
+
 /*Table structure for table `location_old` */
 
 DROP TABLE IF EXISTS `location_old`;
@@ -600,7 +702,7 @@ CREATE TABLE `msg_1_info` (
   `createtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatetime` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=83 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `msg_2_info` */
 
@@ -1027,7 +1129,7 @@ CREATE TABLE `token_info` (
   PRIMARY KEY (`t_id`),
   UNIQUE KEY `unique_idx_token` (`token`),
   UNIQUE KEY `unique_idx_user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=409 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=410 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `upload_photo` */
 

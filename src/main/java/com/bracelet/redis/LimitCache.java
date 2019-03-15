@@ -59,7 +59,7 @@ public class LimitCache extends BasicRedisSupport {
 	public boolean addKey(String key, String value) {
 		boolean flag = true;
 		Jedis jedis = getJedis();
-		jedis.set(key, value);
+		jedis.setex(key, 259200, value);
 		flag = jedis.exists(key);
 		returnResource(jedis);
 		return flag;
@@ -68,9 +68,15 @@ public class LimitCache extends BasicRedisSupport {
 	// 得到 value
 	public String getRedisKeyValue(String key) {
 		Jedis jedis = getJedis();
-		String value = jedis.get(key);
-		returnResource(jedis);
-		return value;
+		boolean exists = jedis.exists(key);
+		if(exists){
+			String value = jedis.get(key);
+			returnResource(jedis);
+			return value;
+		}else{
+			returnResource(jedis);
+			return "";
+		}
 	}
 
 	// 删除key
@@ -113,8 +119,8 @@ public class LimitCache extends BasicRedisSupport {
 			String oldtoken = jedis.get(userId);
 			jedis.del(oldtoken);
 		}
-		jedis.set(token, userId);
-		jedis.set(userId, token);
+		jedis.setex(token, 259200, userId );//259200是三天
+		jedis.setex(userId, 259200, token );//259200是三天
 		returnResource(jedis);
 	}
 	
