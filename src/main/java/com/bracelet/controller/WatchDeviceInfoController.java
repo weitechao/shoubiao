@@ -109,7 +109,7 @@ public class WatchDeviceInfoController extends BaseController {
 			bb.put("SchoolLat", "0");
 			bb.put("SchoolLng", "0");
 			bb.put("UpdateTime", "");
-			bb.put("LatestTime", "");
+			bb.put("LatestTime", "00:00");
 			bb.put("HomeAddress", "");
 			bb.put("HomeLat", "0");
 			bb.put("HomeLng", "0");
@@ -172,7 +172,7 @@ public class WatchDeviceInfoController extends BaseController {
 				bb.put("SchoolLat", "0");
 				bb.put("SchoolLng", "0");
 				bb.put("UpdateTime", "");
-				bb.put("LatestTime", "");
+				bb.put("LatestTime", "00:00");
 				bb.put("HomeAddress", "");
 				bb.put("HomeLat", "0");
 				bb.put("HomeLng", "0");
@@ -186,7 +186,7 @@ public class WatchDeviceInfoController extends BaseController {
 					bb.put("SchoolAddress", whsc.getSchoolAddress()+"");
 					
 					bb.put("UpdateTime", whsc.getUpdatetime().getTime());
-					bb.put("LatestTime", "");
+					bb.put("LatestTime", "00:00");
 				
 					bb.put("HomeAddress",whsc.getHomeAddress()+"");
 					

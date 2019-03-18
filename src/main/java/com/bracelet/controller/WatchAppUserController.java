@@ -126,16 +126,19 @@ public class WatchAppUserController extends BaseController {
 						bb.put("ip", ipport);
 					}
 					WatchDevice watchd = ideviceService.getDeviceInfo(tel);
+					
 					if (watchd != null) {
 						bb.put("DeviceID", watchd.getId());
 						limitCache.addKey(tel + "_id", watchd.getId() + "");
+						bb.put("PhoneNumber", watchd.getPhone()+"");
+						bb.put("PhoneCornet", watchd.getShort_number()+"");
 					}
 					bb.put("phone", "");
 					
 					WatchPhoneBook phoneBook = memberService.getPhoneBookByImeiAndStatus(tel, 1);
 					
 					if(phoneBook != null){
-						bb.put("phone", "1");
+						bb.put("phone", phoneBook.getPhone()+"");
 					}
 					
 
@@ -169,10 +172,9 @@ public class WatchAppUserController extends BaseController {
 				bb.put("NotificationVibration", "True");
 				bb.put("Birthday", "");
 				bb.put("ip", Utils.IP + ":" + Utils.PORT_HTTP);
-				if (ipport != null && !"".equals(ipport)) {
+				if (!StringUtil.isEmpty(ipport)) {
 					bb.put("ip", ipport);
 				}
-
 				/*
 				 * String deviceid = limitCache.getRedisKeyValue(tel + "_id");
 				 * if (deviceid != null && !"0".equals(deviceid) &&
@@ -188,7 +190,7 @@ public class WatchAppUserController extends BaseController {
 					bb.put("phone", "");
                    WatchPhoneBook phoneBook = memberService.getPhoneBookByImeiAndStatus(tel, 1);
 					if(phoneBook != null){
-						bb.put("phone", "1");
+						bb.put("phone", phoneBook.getPhone()+"");
 					}
 				} else {
 
@@ -374,14 +376,23 @@ public class WatchAppUserController extends BaseController {
 				dataMap.put("SchoolLng", "0");
 				dataMap.put("SchoolAddress", "");
 				
+					
+			
+				
 				dataMap.put("IsGuard", "0");
 				dataMap.put("Password", "0");
 				dataMap.put("PhoneCornet", "");
 				dataMap.put("PhoneNumber", "");
+				WatchDevice watchphone = ideviceService.getDeviceInfo(location.getImei());
+				if(watchphone != null){
+					dataMap.put("PhoneNumber", watchphone.getPhone()+"");
+					dataMap.put("PhoneCornet", watchphone.getShort_number()+"");
+				}
+				
 				dataMap.put("Photo", "0");
 			
 				dataMap.put("SerialNumber", location.getImei());
-				dataMap.put("LatestTime", "0");
+				dataMap.put("LatestTime", "00:00");
 				dataMap.put("UpdateTime", "0");
 				dataMap.put("CloudPlatform", 0);
 
@@ -414,6 +425,8 @@ public class WatchAppUserController extends BaseController {
 					deviceSet.put("ClassDisabled1", whsc.getClassDisable1() + "");
 					deviceSet.put("ClassDisabled2", whsc.getClassDisable2() + "");
 					deviceSet.put("WeekDisabled", whsc.getWeekDisable1() + "");
+					deviceSet.put("SchoolAddress", whsc.getSchoolAddress()+"");
+					deviceSet.put("HomeAddress", whsc.getHomeAddress()+"");
 				}
 
 				deviceSet.put("TimerOpen", "07:00");
@@ -525,9 +538,16 @@ public class WatchAppUserController extends BaseController {
 					dataMap.put("SchoolLat", "0");
 					dataMap.put("SchoolLng", "0");
 					dataMap.put("SerialNumber", location.getImei());
-					dataMap.put("LatestTime", "0");
+					dataMap.put("LatestTime", "00:00");
 					dataMap.put("UpdateTime", "0");
 					dataMap.put("CloudPlatform", 0);
+					
+					WatchDevice watchphone = ideviceService.getDeviceInfo(location.getImei());
+					if(watchphone != null){
+						dataMap.put("PhoneNumber", watchphone.getPhone()+"");
+						dataMap.put("PhoneCornet", watchphone.getShort_number()+"");
+					}
+					
 
 					JSONObject deviceSet = new JSONObject();
 					deviceSet.put("SetInfo", "1-1-1-1-0-0-0-0-1-0-1-0");
@@ -558,6 +578,8 @@ public class WatchAppUserController extends BaseController {
 						deviceSet.put("ClassDisabled1", whsc.getClassDisable1() + "");
 						deviceSet.put("ClassDisabled2", whsc.getClassDisable2() + "");
 						deviceSet.put("WeekDisabled", whsc.getWeekDisable1() + "");
+						deviceSet.put("SchoolAddress", whsc.getSchoolAddress()+"");
+						deviceSet.put("HomeAddress", whsc.getHomeAddress()+"");
 					}
 
 					deviceSet.put("TimerOpen", "07:00");
@@ -1125,7 +1147,7 @@ public class WatchAppUserController extends BaseController {
 		/*验证用户输入的管理员手机号是否正确*/
 		@ResponseBody
 		@RequestMapping(value = "/verificationImeiAdmin/{imei}/{phone}", method = RequestMethod.GET)
-		public String getSchoolInfo(@PathVariable String phone, @PathVariable String imei) {
+		public String verificationImeiAdmin(@PathVariable String phone, @PathVariable String imei) {
 			JSONObject bb = new JSONObject();
 
 			WatchPhoneBook phoneBook = memberService.getPhoneBookByImeiAndStatus(imei, 1);
@@ -1136,7 +1158,7 @@ public class WatchAppUserController extends BaseController {
 					bb.put("Code", 2);
 				}
 			}else{
-				bb.put("Code", 3);
+				bb.put("Code", 2);
 			}
 			return bb.toString();
 		}
