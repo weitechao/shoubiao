@@ -108,11 +108,11 @@ public class LocationController extends BaseController {
 			dataMap1.put("Course", 0);
 			dataMap1.put("LocationType", locationTypeSave);
 
-			dataMap1.put("CreateTime", "");
-			dataMap1.put("Electricity", 100);
+			dataMap1.put("CreateTime", Utils.getLocationTime(System.currentTimeMillis()));
+			dataMap1.put("Electricity", "100");
 
 			String energy = limitCache.getRedisKeyValue(imei + "_energy");
-			if (energy != null) {
+			if (!StringUtil.isEmpty(energy)) {
 				dataMap1.put("Electricity", energy);
 			}
 			dataMap1.put("wifi", "");
@@ -164,8 +164,8 @@ public class LocationController extends BaseController {
 				dataMap1.put("Course", 0);
 				dataMap1.put("LocationType", locationWatch.getLocation_type());
 				dataMap1.put("wifi", "");
-				dataMap1.put("CreateTime", "");
-				dataMap1.put("Electricity", 100);
+				dataMap1.put("CreateTime", Utils.getLocationTime(System.currentTimeMillis()));
+				dataMap1.put("Electricity", "100");
 
 				String energy = limitCache.getRedisKeyValue(imei + "_energy");
 				if (energy != null) {
@@ -226,7 +226,8 @@ public class LocationController extends BaseController {
 				dataMap.put("Latitude", location.getLat());
 				dataMap.put("Longitude", location.getLng());
 				dataMap.put("LocationType", location.getLocation_type());
-				dataMap.put("CreateTime", location.getUpload_time().getTime() + "");
+				dataMap.put("CreateTime", Utils.getLocationTime(location.getUpload_time().getTime()));
+				
 				dataMap.put("UpdateTime", location.getUpload_time().getTime() + "");
 				jsonArray.add(dataMap);
 			}
@@ -696,10 +697,10 @@ public class LocationController extends BaseController {
 			bb.put("LocationType", locationTypeSave);
 
 			bb.put("CreateTime", time);
-			bb.put("Electricity", 100);
+			bb.put("Electricity", "100");
 
 			String energy = limitCache.getRedisKeyValue(imei + "_energy");
-			if (energy != null) {
+			if (!StringUtil.isEmpty(energy)) {
 				bb.put("Electricity", energy);
 			}
 			bb.put("wifi", "");
@@ -739,7 +740,7 @@ public class LocationController extends BaseController {
 				bb.put("LocationType", locationWatch.getLocation_type());
 				bb.put("wifi", "");
 				bb.put("CreateTime", timee);
-				bb.put("Electricity", 100);
+				bb.put("Electricity", "100");
 
 				String energy = limitCache.getRedisKeyValue(imei + "_energy");
 				if (energy != null) {

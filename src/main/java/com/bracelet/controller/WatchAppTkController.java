@@ -149,7 +149,7 @@ public class WatchAppTkController extends BaseController {
 			dataMap.put("Mark", "");
 			dataMap.put("Path", Utils.VOICE_URL + "app_" + sourceName);
 			dataMap.put("Length", voiceLength);
-			dataMap.put("CreateTime", "");
+			dataMap.put("CreateTime", Utils.getLocationTime(System.currentTimeMillis()));
 			dataMap.put("UpdateTime", "");
 			jsonArray.add(dataMap);
 			bb.put("VoiceList", jsonArray);
@@ -195,7 +195,7 @@ public class WatchAppTkController extends BaseController {
 	/* 获取 */
 	@ResponseBody
 	@RequestMapping(value = "/getDevicePhoto/{token}/{imei}", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
-	public String getDeviceTk(@PathVariable String token, @PathVariable String imei) {
+	public String getDevicePhoto(@PathVariable String token, @PathVariable String imei) {
 
 		JSONObject bb = new JSONObject();
 
@@ -233,7 +233,7 @@ public class WatchAppTkController extends BaseController {
 				dataMap.put("Mark", "");
 				dataMap.put("Path", fileInfo.getSource());
 				dataMap.put("Thumb", "");
-				dataMap.put("CreateTime", "");
+				dataMap.put("CreateTime", Utils.getLocationTime(System.currentTimeMillis()));
 				dataMap.put("UpdateTime", "");
 				jsonArray.add(dataMap);
 				iUploadPhotoService.updateStatusById(fileInfo.getId(), 1);
@@ -288,7 +288,7 @@ public class WatchAppTkController extends BaseController {
 				dataMap.put("Mark", "");
 				dataMap.put("Path", WatchVoiceInfo.getSource_name() + "");
 				dataMap.put("Length", WatchVoiceInfo.getVoice_length());
-				dataMap.put("CreateTime", "");
+				dataMap.put("CreateTime", Utils.getLocationTime(System.currentTimeMillis()));
 				dataMap.put("UpdateTime", "");
 				jsonArray.add(dataMap);
 				watchtkService.updateStatusById(WatchVoiceInfo.getId(), 1);

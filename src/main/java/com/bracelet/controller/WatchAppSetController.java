@@ -368,7 +368,7 @@ public class WatchAppSetController extends BaseController {
 			bb.put("HrCalculate", "0");
 			bb.put("SosMsgswitch", "0");
 			
-			bb.put("CreateTime", deviceSet.getCreatetime().getTime());
+			bb.put("CreateTime", Utils.getLocationTime(deviceSet.getCreatetime().getTime()));
 			bb.put("UpdateTime", deviceSet.getUpdatetime().getTime());
 			
 			bb.put("BrightScreen", deviceSet.getBrightScreen());
@@ -416,7 +416,7 @@ public class WatchAppSetController extends BaseController {
 			bb.put("StepCalculate", "0");
 			bb.put("HrCalculate", "0");
 			bb.put("SosMsgswitch", 0);
-			bb.put("CreateTime", "");
+			bb.put("CreateTime", Utils.getLocationTime(System.currentTimeMillis()));
 			bb.put("UpdateTime", "");
 			bb.put("dialPad", "1");
 			

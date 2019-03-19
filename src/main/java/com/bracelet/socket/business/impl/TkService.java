@@ -139,7 +139,7 @@ public class TkService extends AbstractBizService {
 					dataMapVoice.put("Mark", "");
 					dataMapVoice.put("Path", Utils.VOICE_URL + voiceName);
 					dataMapVoice.put("Length", 2);
-					dataMapVoice.put("CreateTime", "");
+					dataMapVoice.put("CreateTime", Utils.getLocationTime(System.currentTimeMillis()));
 					dataMapVoice.put("UpdateTime", "");
 					jsonArrayVoice.add(dataMapVoice);
 					dataMap2.put("VoiceList", jsonArrayVoice);

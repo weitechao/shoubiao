@@ -75,7 +75,7 @@ public class SecurityController extends BaseController {
 				dataMap.put("Entry", fenone.getIs_entry());
 				dataMap.put("Exit", fenone.getIs_exit());
 				dataMap.put("Enable", fenone.getIs_enable());
-				dataMap.put("CreateTime", "");
+				dataMap.put("CreateTime", Utils.getLocationTime(System.currentTimeMillis()));
 				dataMap.put("UpdateTime", "");
 				dataMap.put("Description", "");
 				dataMap.put("Lat", fenone.getLat());

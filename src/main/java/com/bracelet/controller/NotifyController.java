@@ -8,6 +8,7 @@ import com.bracelet.entity.NotifyInfo;
 import com.bracelet.entity.WatchDevice;
 import com.bracelet.service.IConfService;
 import com.bracelet.service.IDeviceService;
+import com.bracelet.util.Utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -109,9 +110,9 @@ public class NotifyController extends BaseController {
 		dataMap1.put("Course", 0);
 		dataMap1.put("LocationType", 2);
 		dataMap1.put("wifi", "");
-		dataMap1.put("CreateTime", "");
+		dataMap1.put("CreateTime", Utils.getLocationTime(System.currentTimeMillis()));
 		dataMap1.put("DeviceTime", "");
-		dataMap1.put("Electricity", 100);
+		dataMap1.put("Electricity", "100");
 		dataMap1.put("GSM", 76);
 		dataMap1.put("Step", 0);
 		dataMap1.put("Health", "0:0");

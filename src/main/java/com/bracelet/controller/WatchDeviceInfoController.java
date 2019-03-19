@@ -76,7 +76,8 @@ public class WatchDeviceInfoController extends BaseController {
 			bb.put("ActiveDate", "");
 			bb.put("BabyName", watch.getNickname() + "");
 			bb.put("BindNumber", imei);
-			bb.put("CreateTime", watch.getCreatetime().getTime());
+			
+			bb.put("CreateTime", Utils.getLocationTime(watch.getCreatetime().getTime()));
 			bb.put("CurrentFirmware", "Y01_K2_RDA6625_RENQI_LE_DIAN_LINUX.0.967.QGJ_V1.0");
 			bb.put("SetVersionNO", 1);
 			bb.put("ContactVersionNO", 1);
@@ -121,7 +122,8 @@ public class WatchDeviceInfoController extends BaseController {
 				bb.put("SchoolAddress", whsc.getSchoolAddress()+"");
 				
 				bb.put("UpdateTime", whsc.getUpdatetime().getTime()+"");
-				bb.put("LatestTime", whsc.getLatestTime()+"");
+				//bb.put("LatestTime", whsc.getLatestTime()+"");
+				bb.put("LatestTime", "00:00");
 				bb.put("HomeAddress", whsc.getHomeAddress()+"");
 				
 				if(StringUtil.isEmpty(whsc.getSchoolLat())){
@@ -223,7 +225,8 @@ public class WatchDeviceInfoController extends BaseController {
 				bb.put("ActiveDate", "");
 				bb.put("BabyName", watchh.getNickname() + "");
 				bb.put("BindNumber", imei);
-				bb.put("CreateTime", watchh.getCreatetime().getTime());
+				
+				bb.put("CreateTime", Utils.getLocationTime(watchh.getCreatetime().getTime()));
 				bb.put("CurrentFirmware", "Y01_K2_RDA6625_RENQI_LE_DIAN_LINUX.0.967.QGJ_V1.0");
 				bb.put("SetVersionNO", 1);
 				bb.put("ContactVersionNO", 1);

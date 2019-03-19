@@ -12,6 +12,7 @@ import com.bracelet.exception.BizException;
 import com.bracelet.service.IFeedbackService;
 import com.bracelet.service.IUserInfoService;
 import com.bracelet.util.RespCode;
+import com.bracelet.util.Utils;
 
 import java.util.List;
 
@@ -94,8 +95,8 @@ public class FeedbackController extends BaseController {
 				dataMap.put("id", feed.getId());
 				dataMap.put("AnswerContent", feed.getAnswer_content()+"");
 				dataMap.put("AnswerUserID", feed.getUser_id());
-				dataMap.put("CreateTime", "");
-				dataMap.put("FeedbackID", "");
+				dataMap.put("CreateTime", Utils.getLocationTime(System.currentTimeMillis()));
+				dataMap.put("FeedbackID", feed.getId());
 				dataMap.put("FeedbackState", "");
 				dataMap.put("HandleTime", feed.getCreatetime().getTime());
 				dataMap.put("HandleUserID", feed.getUser_id());

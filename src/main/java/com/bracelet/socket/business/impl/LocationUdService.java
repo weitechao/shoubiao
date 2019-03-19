@@ -384,11 +384,11 @@ public class LocationUdService extends AbstractBizService {
 			dataMap1.put("Course", 0);
 			dataMap1.put("LocationType", locationType);
 			dataMap1.put("wifi", "");
-			dataMap1.put("CreateTime", "");
+			dataMap1.put("CreateTime", Utils.getLocationTime(System.currentTimeMillis()));
 			dataMap1.put("DeviceTime", "");
-			dataMap1.put("Electricity", 100);
+			dataMap1.put("Electricity", "100");
 			String energy = limitCache.getRedisKeyValue(imei + "_energy");
-			if (energy != null) {
+			if (!StringUtil.isEmpty(energy)) {
 				dataMap1.put("Electricity", energy);
 			}
 			

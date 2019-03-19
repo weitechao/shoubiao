@@ -340,7 +340,7 @@ public class WatchAppUserController extends BaseController {
 				dataMap.put("BindNumber", location.getImei());
 				dataMap.put("DeviceType", 1);
 				dataMap.put("Birthday", "0");
-				dataMap.put("CreateTime", "0");
+				dataMap.put("CreateTime", Utils.getLocationTime(System.currentTimeMillis()));
 				dataMap.put("CurrentFirmware", "Y01_K2_RDA6625_RENQI_LE_DIAN_LINUX.0.967.QGJ_V1.0");
 				dataMap.put("SetVersionNO", "0");
 				dataMap.put("ContactVersionNO", "0");
@@ -443,7 +443,7 @@ public class WatchAppUserController extends BaseController {
 				deviceSet.put("HrCalculate", "0");
 				deviceSet.put("hrCalculate", "1");
 				deviceSet.put("SosMsgswitch", "0");
-				deviceSet.put("CreateTime", "1550130107000");
+				deviceSet.put("CreateTime", Utils.getLocationTime(System.currentTimeMillis()));
 				deviceSet.put("UpdateTime", "1550130107000");
 				deviceSet.put("dialPad", "1");
 				
@@ -458,9 +458,9 @@ public class WatchAppUserController extends BaseController {
 				deviceState.put("Altitude", 0);
 				deviceState.put("Course", 0);
 				deviceState.put("LocationType", 0);
-				deviceState.put("CreateTime", "0");
+				deviceState.put("CreateTime", Utils.getLocationTime(System.currentTimeMillis()));
 				deviceState.put("DeviceTime", "0");
-				deviceState.put("Electricity", 0);
+				deviceState.put("Electricity", "0");
 				deviceState.put("GSM", 0);
 				deviceState.put("Step", 0);
 				deviceState.put("Health", "0");
@@ -498,7 +498,7 @@ public class WatchAppUserController extends BaseController {
 					dataMap.put("BindNumber", location.getImei());
 					dataMap.put("DeviceType", 1);
 					dataMap.put("Birthday", "0");
-					dataMap.put("CreateTime", "0");
+					dataMap.put("CreateTime", Utils.getLocationTime(System.currentTimeMillis()));
 					dataMap.put("CurrentFirmware", "Y01_K2_RDA6625_RENQI_LE_DIAN_LINUX.0.967.QGJ_V1.0");
 					dataMap.put("SetVersionNO", "0");
 					dataMap.put("ContactVersionNO", "0");
@@ -596,7 +596,7 @@ public class WatchAppUserController extends BaseController {
 					deviceSet.put("HrCalculate", "0");
 					deviceSet.put("hrCalculate", "1");
 					deviceSet.put("SosMsgswitch", "0");
-					deviceSet.put("CreateTime", "1550130107000");
+					deviceSet.put("CreateTime", Utils.getLocationTime(System.currentTimeMillis()));
 					deviceSet.put("UpdateTime", "1550130107000");
 					deviceSet.put("dialPad", "1");
 					dataMap.put("DeviceSet", deviceSet);
@@ -607,9 +607,9 @@ public class WatchAppUserController extends BaseController {
 					deviceState.put("Altitude", 0);
 					deviceState.put("Course", 0);
 					deviceState.put("LocationType", 0);
-					deviceState.put("CreateTime", "0");
+					deviceState.put("CreateTime", Utils.getLocationTime(System.currentTimeMillis()));
 					deviceState.put("DeviceTime", "0");
-					deviceState.put("Electricity", 0);
+					deviceState.put("Electricity", "0");
 					deviceState.put("GSM", 0);
 					deviceState.put("Step", 0);
 					deviceState.put("Health", "0");

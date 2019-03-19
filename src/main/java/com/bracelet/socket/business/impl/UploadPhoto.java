@@ -185,7 +185,7 @@ public class UploadPhoto extends AbstractBizService {
 					dataMapPhoto.put("Mark", "");
 					dataMapPhoto.put("Path", Utils.PHOTO_URL+ photoName);
 					dataMapPhoto.put("Thumb", "");
-					dataMapPhoto.put("CreateTime", "");
+					dataMapPhoto.put("CreateTime", Utils.getLocationTime(System.currentTimeMillis()));
 					dataMapPhoto.put("UpdateTime", "");
 					JSONArray jsonArrayPhoto = new JSONArray();
 					jsonArrayPhoto.add(dataMapPhoto);
