@@ -191,7 +191,7 @@ public class WatchAppContDeviceController extends BaseController {
 					
 					JSONObject dataMap = new JSONObject();
 					dataMap.put("DeviceVoiceId", ((int) ((Math.random() * 9 + 1) * 10000)) + "");
-					dataMap.put("DeviceID", 0);
+					dataMap.put("DeviceID","0");
 
 					String deviceid = limitCache.getRedisKeyValue(imei + "_id");
 					if (deviceid != null && !"0".equals(deviceid) && !"".equals(deviceid)) {
@@ -206,7 +206,7 @@ public class WatchAppContDeviceController extends BaseController {
 					dataMap.put("State", 1);
 					dataMap.put("Type", 3);
 					dataMap.put("MsgType", 1);
-					dataMap.put("ObjectId", "1968143");
+					dataMap.put("ObjectId", deviceid);
 					dataMap.put("Mark", "_4_20190225055346");
 					dataMap.put("Path", message);
 					dataMap.put("Length", "4");

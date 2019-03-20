@@ -177,14 +177,20 @@ public class WatchAppSetController extends BaseController {
 			Integer reportCallLocation = jsonObject.getInteger("reportCallLocation");// 报告通话位置
 			Integer automaticAnswering = jsonObject.getInteger("automaticAnswering");// 自动接听
 			Integer sosMsgswitch = jsonObject.getInteger("sosMsgswitch");// sos开关
-			Integer flowerNumber = jsonObject.getInteger("flowerNumber");// 爱心奖励
+			String flowerNumber = jsonObject.getString("flowerNumber");// 爱心奖励
 			Integer brightScreen = jsonObject.getInteger("brightScreen");// 亮屏时间
 			Integer language = jsonObject.getInteger("language");// 语言
 			Integer timeZone = jsonObject.getInteger("timeZone");// 时区
 			Integer locationMode = jsonObject.getInteger("locationMode");// 工作模式
 			Integer locationTime = jsonObject.getInteger("locationTime");// 工作时长
 
-			
+			/*
+			 * ["{\n  \"brightScreen\" :
+			 *  \"0\",\n  \"flowerNumber\" : \"4\",
+			 *  \n  \"phoneComeVibration\" : \"1\",
+			 *  \n  \"language\" : \"\",\n  \
+			 *  "infoVibration\" : \"1\",\n  \"disabledInClass\" : \"0\",\n  \"imei\" : \"872018020142168\",\n  \"rejectStrangers\" : \"0\",\n  \"timerSwitch\" : \"0\",\n  \"reportCallLocation\" : \"1\",\n  \"phoneComeVoice\" : \"1\",\n  \"watchOffAlarm\" : \"0\",\n  \"setInfo\" : \"1-1-1-1-0-0-0-0-1-0-1-0\",\n  \"locationMode\" : \"2\",\n  \"timeZone\" : \"\",\n  \"infoVoice\" : \"1\",\n  \"token\" : \"D9934C15BE042FE36DEBB455B03949D6\",\n  \"locationTime\" : \"0\",\n  \"reserveEmergencyPower\" : \"1\",\n  \"sosMsgswitch\" : \"0\",\n  \"automaticAnswering\" : \"0\",\n  \"somatosensory\" : \"0\"\n}"]
+			 * */
 			
 			
 
@@ -254,12 +260,12 @@ public class WatchAppSetController extends BaseController {
 				if (deviceSet != null) {
 					watchSetService.updateWatchSet(deviceSet.getId(), setInfo, infoVibration, infoVoice, phoneComeVibration,
 							phoneComeVoice, watchOffAlarm, rejectStrangers, Integer.valueOf(timerSwitch), Integer.valueOf(disabledInClass), reserveEmergencyPower,
-							somatosensory, reportCallLocation, automaticAnswering, sosMsgswitch, flowerNumber, brightScreen,
+							somatosensory, reportCallLocation, automaticAnswering, sosMsgswitch, Integer.valueOf(flowerNumber), brightScreen,
 							language, timeZone, locationMode, locationTime);
 				} else {
 					watchSetService.insertWatchDeviceSet(Long.valueOf(userId),imei, setInfo, infoVibration, infoVoice, phoneComeVibration,
 							phoneComeVoice, watchOffAlarm, rejectStrangers, Integer.valueOf(timerSwitch), Integer.valueOf(disabledInClass), reserveEmergencyPower,
-							somatosensory, reportCallLocation, automaticAnswering, sosMsgswitch, flowerNumber, brightScreen,
+							somatosensory, reportCallLocation, automaticAnswering, sosMsgswitch, Integer.valueOf(flowerNumber), brightScreen,
 							language, timeZone, locationMode, locationTime);
 				}
 				

@@ -392,7 +392,7 @@ public class WatchAppUserController extends BaseController {
 				dataMap.put("Photo", "0");
 			
 				dataMap.put("SerialNumber", location.getImei());
-				dataMap.put("LatestTime", "00:00");
+				dataMap.put("LatestTime", "23:00");
 				dataMap.put("UpdateTime", "0");
 				dataMap.put("CloudPlatform", 0);
 
@@ -538,7 +538,7 @@ public class WatchAppUserController extends BaseController {
 					dataMap.put("SchoolLat", "0");
 					dataMap.put("SchoolLng", "0");
 					dataMap.put("SerialNumber", location.getImei());
-					dataMap.put("LatestTime", "00:00");
+					dataMap.put("LatestTime", "23:00");
 					dataMap.put("UpdateTime", "0");
 					dataMap.put("CloudPlatform", 0);
 					

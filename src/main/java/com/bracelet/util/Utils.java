@@ -94,24 +94,38 @@ public class Utils {
 	public final static String VOICE_FILE_WINDOWS = "F:/test";
 	
 	/*更换服务器部署一定要修改这两个参数*/
-	public static final String IP = "47.92.30.81";
+	
+	
 	public static final String PORT_TCP = "7780";
 	public static final String PORT_HTTP = "8088";
-	public static final String PORT_HTTP_TEST = "9999";
 	
-	//LINUX voice上传地址和URL
+	
+	
 	public final static String VOICE_FILE_lINUX = "/usr/local/resin/resin-pro-4.0.53-8080/webapps/GXCareDevice/watchvoice/device";
-	public final static String VOICE_URL = "http://"+IP+":8080/GXCareDevice/watchvoice/device/";
-	//LINUX 设备上传图片 和URL
 	public final static String PHOTO_FILE_lINUX = "/usr/local/resin/resin-pro-4.0.53-8080/webapps/GXCareDevice/watchphoto/device";
-	public final static String PHOTO_URL = "http://"+IP+":8080/GXCareDevice/watchphoto/device/";
-	// app头像图片地址和url
 	public final static String PHOTT_FILE_lINUX = "/usr/local/resin/resin-pro-4.0.53-8080/webapps/GXCareDevice/headPhoto/appset";
-	public final static String APP_PHOTO_UTL = "http://"+IP+":8080/GXCareDevice/headPhoto/appset/";
-	//通讯录头像
 	public final static String PHONEBook_FILE_lINUX = "/usr/local/resin/resin-pro-4.0.53-8080/webapps/GXCareDevice/headImg";
+	//LINUX voice上传地址和URL
+	//LINUX 设备上传图片 和URL
+	// app头像图片地址和url
+	//通讯录头像
+	
+	
+	public static final String IP = "47.92.30.81";
+	public final static String VOICE_URL = "http://"+IP+":8080/GXCareDevice/watchvoice/device/";
+	public final static String PHOTO_URL = "http://"+IP+":8080/GXCareDevice/watchphoto/device/";
+	public final static String APP_PHOTO_UTL = "http://"+IP+":8080/GXCareDevice/headPhoto/appset/";
 	public final static String PHONEBook_PHOTO_UTL = "http://"+IP+":8080/GXCareDevice/headImg/";
-
+	
+	
+	
+	
+	
+	/*public static final String IP = "39.98.236.1";
+	public final static String VOICE_URL = "http://"+IP+":8080/GXCareDevice/watchvoice/device/";
+	public final static String PHOTO_URL = "http://"+IP+":8080/GXCareDevice/watchphoto/device/";
+	public final static String APP_PHOTO_UTL = "http://"+IP+":8080/GXCareDevice/headPhoto/appset/";
+	public final static String PHONEBook_PHOTO_UTL = "http://"+IP+":8080/GXCareDevice/headImg/";*/
 	
 	//获取amr语音文件长度
 	 public static int getAmrDuration(File file) throws IOException {

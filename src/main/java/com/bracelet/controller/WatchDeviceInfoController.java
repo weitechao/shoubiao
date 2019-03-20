@@ -1,6 +1,7 @@
 package com.bracelet.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.bracelet.dto.HttpBaseDto;
 import com.bracelet.dto.SocketLoginDto;
@@ -9,19 +10,26 @@ import com.bracelet.entity.Fencelog;
 import com.bracelet.entity.OddShape;
 import com.bracelet.entity.SensitivePoint;
 import com.bracelet.entity.SensitivePointLog;
+import com.bracelet.entity.TimeSwitch;
 import com.bracelet.entity.WatchDevice;
 import com.bracelet.entity.WatchDeviceAlarm;
 import com.bracelet.entity.WatchDeviceHomeSchool;
+import com.bracelet.entity.WatchDeviceSet;
 import com.bracelet.entity.WatchPhoneBook;
 import com.bracelet.exception.BizException;
+import com.bracelet.service.IConfService;
 import com.bracelet.service.IDeviceService;
 import com.bracelet.service.IFenceService;
 import com.bracelet.service.IFencelogService;
+import com.bracelet.service.IPushlogService;
 import com.bracelet.service.ISensitivePointService;
 import com.bracelet.service.ISensitivePointlogService;
 import com.bracelet.service.IUserInfoService;
 import com.bracelet.service.IWatchDeviceService;
+import com.bracelet.service.WatchSetService;
+import com.bracelet.util.AndroidPushUtil;
 import com.bracelet.util.ChannelMap;
+import com.bracelet.util.IOSPushUtil;
 import com.bracelet.util.RadixUtil;
 import com.bracelet.util.RespCode;
 import com.bracelet.util.StringUtil;
@@ -35,12 +43,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/watchinfo")
@@ -50,6 +52,14 @@ public class WatchDeviceInfoController extends BaseController {
 
 	@Autowired
 	IDeviceService ideviceService;
+
+	@Autowired
+	WatchSetService watchSetService;
+	@Autowired
+	IConfService confService;
+	
+	@Autowired
+	IPushlogService pushlogService;
 
 	/* 获取 */
 	@ResponseBody
@@ -68,15 +78,15 @@ public class WatchDeviceInfoController extends BaseController {
 
 		if (watch != null) {
 			bb.put("id", watch.getId());
-			
-			//bb.put("head", "");
-			bb.put("Birthday", watch.getBirday()+"");
-			
+
+			// bb.put("head", "");
+			bb.put("Birthday", watch.getBirday() + "");
+
 			bb.put("Code", 1);
 			bb.put("ActiveDate", "");
 			bb.put("BabyName", watch.getNickname() + "");
 			bb.put("BindNumber", imei);
-			
+
 			bb.put("CreateTime", Utils.getLocationTime(watch.getCreatetime().getTime()));
 			bb.put("CurrentFirmware", "Y01_K2_RDA6625_RENQI_LE_DIAN_LINUX.0.967.QGJ_V1.0");
 			bb.put("SetVersionNO", 1);
@@ -92,16 +102,15 @@ public class WatchDeviceInfoController extends BaseController {
 			bb.put("HireStartDate", "");
 			bb.put("IsGuard", "");
 			bb.put("Password", "");
-			bb.put("Gender", watch.getSex()+"");
+			bb.put("Gender", watch.getSex() + "");
 			bb.put("Grade", 0);
-			
-			if(!StringUtils.isAllEmpty(watch.getSchool_age())){
+
+			if (!StringUtils.isAllEmpty(watch.getSchool_age())) {
 				bb.put("Grade", watch.getSchool_age());
 			}
-			
-			
-			bb.put("PhoneNumber", watch.getPhone()+"");
-			bb.put("PhoneCornet", watch.getShort_number()+"");
+
+			bb.put("PhoneNumber", watch.getPhone() + "");
+			bb.put("PhoneCornet", watch.getShort_number() + "");
 			bb.put("Photo", watch.getHead() + "");
 			bb.put("SmsFlowKey", "0");
 			bb.put("SerialNumber", imei);
@@ -110,41 +119,49 @@ public class WatchDeviceInfoController extends BaseController {
 			bb.put("SchoolLat", "0");
 			bb.put("SchoolLng", "0");
 			bb.put("UpdateTime", "");
-			bb.put("LatestTime", "00:00");
+			bb.put("LatestTime", "23:00");
 			bb.put("HomeAddress", "");
 			bb.put("HomeLat", "0");
 			bb.put("HomeLng", "0");
-			
-			/*shortNumber，PhoneCornet）,( phone, PhoneNumber) ,( schoolAge, Grade)，(sex, Gender)*/
+
+			/*
+			 * shortNumber，PhoneCornet）,( phone, PhoneNumber) ,( schoolAge,
+			 * Grade)，(sex, Gender)
+			 */
 
 			WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfo(Long.valueOf(userId));
 			if (whsc != null) {
-				bb.put("SchoolAddress", whsc.getSchoolAddress()+"");
-				
-				bb.put("UpdateTime", whsc.getUpdatetime().getTime()+"");
-				//bb.put("LatestTime", whsc.getLatestTime()+"");
-				bb.put("LatestTime", "00:00");
-				bb.put("HomeAddress", whsc.getHomeAddress()+"");
-				
-				if(StringUtil.isEmpty(whsc.getSchoolLat())){
-					bb.put("SchoolLat","0");
-				}else{
-					bb.put("SchoolLat", whsc.getSchoolLat()+"");
+				bb.put("SchoolAddress", whsc.getSchoolAddress() + "");
+
+				bb.put("UpdateTime", whsc.getUpdatetime().getTime() + "");
+				if (StringUtil.isEmpty(whsc.getLatestTime())) {
+					bb.put("LatestTime", "23:00");
+				} else {
+					bb.put("LatestTime", whsc.getLatestTime() + "");
 				}
-				if(StringUtil.isEmpty(whsc.getSchoolLng())){
-					bb.put("SchoolLng","0");
-				}else{
-					bb.put("SchoolLng", whsc.getSchoolLng()+"");
+
+				// bb.put("LatestTime", "23:00");
+				bb.put("HomeAddress", whsc.getHomeAddress() + "");
+
+				if (StringUtil.isEmpty(whsc.getSchoolLat())) {
+					bb.put("SchoolLat", "0");
+				} else {
+					bb.put("SchoolLat", whsc.getSchoolLat() + "");
 				}
-				if(StringUtil.isEmpty(whsc.getHomeLat())){
-					bb.put("HomeLat","0");
-				}else{
-					bb.put("HomeLat",  whsc.getHomeLat()+"");
+				if (StringUtil.isEmpty(whsc.getSchoolLng())) {
+					bb.put("SchoolLng", "0");
+				} else {
+					bb.put("SchoolLng", whsc.getSchoolLng() + "");
 				}
-				if(StringUtil.isEmpty(whsc.getHomeLng())){
-					bb.put("HomeLng","0");
-				}else{
-					bb.put("HomeLng",  whsc.getHomeLng()+"");
+				if (StringUtil.isEmpty(whsc.getHomeLat())) {
+					bb.put("HomeLat", "0");
+				} else {
+					bb.put("HomeLat", whsc.getHomeLat() + "");
+				}
+				if (StringUtil.isEmpty(whsc.getHomeLng())) {
+					bb.put("HomeLng", "0");
+				} else {
+					bb.put("HomeLng", whsc.getHomeLng() + "");
 				}
 			}
 
@@ -153,7 +170,7 @@ public class WatchDeviceInfoController extends BaseController {
 			if (this.ideviceService.insertDeviceImeiInfo(imei, "", "", 1, "", "", "", "", "", "", "")) {
 				WatchDevice watchh = ideviceService.getDeviceInfo(imei);
 				bb.put("id", watchh.getId());
-				bb.put("Birthday", watchh.getBirday()+"");
+				bb.put("Birthday", watchh.getBirday() + "");
 				bb.put("phone", watchh.getPhone() + "");
 				bb.put("nickname", watchh.getNickname() + "");
 				bb.put("createtime", watchh.getCreatetime().getTime());
@@ -167,65 +184,63 @@ public class WatchDeviceInfoController extends BaseController {
 				bb.put("homeInfo", watchh.getHome_info() + "");
 				bb.put("weight", watchh.getWeight() + "");
 				bb.put("height", watchh.getHeight() + "");
-				//bb.put("head", watchh.getHead() + "");
-			
-				
+				// bb.put("head", watchh.getHead() + "");
+
 				bb.put("SchoolAddress", "");
 				bb.put("SchoolLat", "0");
 				bb.put("SchoolLng", "0");
 				bb.put("UpdateTime", "");
-				bb.put("LatestTime", "00:00");
+				bb.put("LatestTime", "23:00");
 				bb.put("HomeAddress", "");
 				bb.put("HomeLat", "0");
 				bb.put("HomeLng", "0");
-				bb.put("HomeAddress", watchh.getHome_info()+"");
-				
+				bb.put("HomeAddress", watchh.getHome_info() + "");
+
 				WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfo(Long.valueOf(userId));
 				if (whsc == null) {
-					ideviceService.insertDeviceHomeAndFamilyInfo(Long.valueOf(userId), imei, "", "08:00-12:00", "14:00-17:00", "", "0", "0", "", "",
-							"0", "0");
-				}else{
-					bb.put("SchoolAddress", whsc.getSchoolAddress()+"");
-					
+					ideviceService.insertDeviceHomeAndFamilyInfo(Long.valueOf(userId), imei, "", "08:00-12:00",
+							"14:00-17:00", "", "0", "0", "", "", "0", "0");
+				} else {
+					bb.put("SchoolAddress", whsc.getSchoolAddress() + "");
+
 					bb.put("UpdateTime", whsc.getUpdatetime().getTime());
-					bb.put("LatestTime", "00:00");
-				
-					bb.put("HomeAddress",whsc.getHomeAddress()+"");
-					
-					bb.put("SchoolLat", whsc.getSchoolLat()+"");
-					bb.put("SchoolLng", whsc.getSchoolLng()+"");
-					bb.put("HomeLat", whsc.getHomeLat()+"");
-					bb.put("HomeLng", whsc.getHomeLng()+"");
-					
-					
-					if(StringUtil.isEmpty(whsc.getSchoolLat())){
-						bb.put("SchoolLat","0");
-					}else{
-						bb.put("SchoolLat", whsc.getSchoolLat()+"");
+					bb.put("LatestTime", "23:00");
+
+					bb.put("HomeAddress", whsc.getHomeAddress() + "");
+
+					bb.put("SchoolLat", whsc.getSchoolLat() + "");
+					bb.put("SchoolLng", whsc.getSchoolLng() + "");
+					bb.put("HomeLat", whsc.getHomeLat() + "");
+					bb.put("HomeLng", whsc.getHomeLng() + "");
+
+					if (StringUtil.isEmpty(whsc.getSchoolLat())) {
+						bb.put("SchoolLat", "0");
+					} else {
+						bb.put("SchoolLat", whsc.getSchoolLat() + "");
 					}
-					if(StringUtil.isEmpty(whsc.getSchoolLng())){
-						bb.put("SchoolLng","0");
-					}else{
-						bb.put("SchoolLng", whsc.getSchoolLng()+"");
+					if (StringUtil.isEmpty(whsc.getSchoolLng())) {
+						bb.put("SchoolLng", "0");
+					} else {
+						bb.put("SchoolLng", whsc.getSchoolLng() + "");
 					}
-					if(StringUtil.isEmpty(whsc.getHomeLat())){
-						bb.put("HomeLat","0");
-					}else{
-						bb.put("HomeLat",  whsc.getHomeLat()+"");
+					if (StringUtil.isEmpty(whsc.getHomeLat())) {
+						bb.put("HomeLat", "0");
+					} else {
+						bb.put("HomeLat", whsc.getHomeLat() + "");
 					}
-					if(StringUtil.isEmpty(whsc.getHomeLng())){
-						bb.put("HomeLng","0");
-					}else{
-						bb.put("HomeLng",  whsc.getHomeLng()+"");
+					if (StringUtil.isEmpty(whsc.getHomeLng())) {
+						bb.put("HomeLng", "0");
+					} else {
+						bb.put("HomeLng", whsc.getHomeLng() + "");
 					}
-					
+
 				}
 				bb.put("Code", 1);
 
 				bb.put("ActiveDate", "");
 				bb.put("BabyName", watchh.getNickname() + "");
 				bb.put("BindNumber", imei);
-				
+
 				bb.put("CreateTime", Utils.getLocationTime(watchh.getCreatetime().getTime()));
 				bb.put("CurrentFirmware", "Y01_K2_RDA6625_RENQI_LE_DIAN_LINUX.0.967.QGJ_V1.0");
 				bb.put("SetVersionNO", 1);
@@ -244,15 +259,15 @@ public class WatchDeviceInfoController extends BaseController {
 				bb.put("IsGuard", "");
 				bb.put("Password", "");
 				bb.put("PhoneNumber", "");
-				
-				bb.put("Gender", watchh.getSex()+"");
-				
-				if(!StringUtils.isAllEmpty(watchh.getSchool_age())){
+
+				bb.put("Gender", watchh.getSex() + "");
+
+				if (!StringUtils.isAllEmpty(watchh.getSchool_age())) {
 					bb.put("Grade", watchh.getSchool_age());
 				}
-				
-				bb.put("PhoneNumber", watchh.getPhone()+"");
-				bb.put("PhoneCornet", watchh.getShort_number()+"");
+
+				bb.put("PhoneNumber", watchh.getPhone() + "");
+				bb.put("PhoneCornet", watchh.getShort_number() + "");
 				bb.put("Photo", watchh.getHead() + "");
 
 				bb.put("SerialNumber", imei);
@@ -374,7 +389,7 @@ public class WatchDeviceInfoController extends BaseController {
 			return bb.toString();
 		}
 
-		//String id = jsonObject.getString("id");
+		// String id = jsonObject.getString("id");
 		String imei = jsonObject.getString("imei");
 
 		/*
@@ -396,15 +411,15 @@ public class WatchDeviceInfoController extends BaseController {
 
 		WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfo(Long.valueOf(userId));
 		if (whsc != null) {
-			if (this.ideviceService.updateImeiHomeAndFamilyInfoById(whsc.getId(), classDisable1, classDisable2, weekDisable,
-					schoolAddress, schoolLat, schoolLng, latestTime, homeAddress, homeLat, homeLng)) {
+			if (this.ideviceService.updateImeiHomeAndFamilyInfoById(whsc.getId(), classDisable1, classDisable2,
+					weekDisable, schoolAddress, schoolLat, schoolLng, latestTime, homeAddress, homeLat, homeLng)) {
 				bb.put("Code", 1);
 			} else {
 				bb.put("Code", 0);
 			}
 		} else {
-			if (ideviceService.insertDeviceHomeAndFamilyInfo(Long.valueOf(userId), imei, schoolAddress, classDisable1, classDisable2,
-					weekDisable, schoolLat, schoolLng, latestTime, homeAddress, homeLng, homeLat)) {
+			if (ideviceService.insertDeviceHomeAndFamilyInfo(Long.valueOf(userId), imei, schoolAddress, classDisable1,
+					classDisable2, weekDisable, schoolLat, schoolLng, latestTime, homeAddress, homeLng, homeLat)) {
 				bb.put("Code", 1);
 			} else {
 				bb.put("Code", 0);
@@ -453,14 +468,125 @@ public class WatchDeviceInfoController extends BaseController {
 			bb.put("Code", -1);
 			return bb.toString();
 		}
-
 		String imei = jsonObject.getString("imei");
+
+		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
+		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
+			bb.put("Code", 4);
+			// bb.put("Message", "");
+			return bb.toString();
+		}
 		String weekAlarm1 = jsonObject.getString("weekAlarm1");
 		String weekAlarm2 = jsonObject.getString("weekAlarm2");
 		String weekAlarm3 = jsonObject.getString("weekAlarm3");
 		String alarm1 = jsonObject.getString("alarm1");
 		String alarm2 = jsonObject.getString("alarm2");
 		String alarm3 = jsonObject.getString("alarm3");
+
+		if (socketLoginDto.getChannel().isActive()) {
+
+			WatchDeviceSet deviceSet = watchSetService.getDeviceSetByImei(Long.valueOf(userId));
+
+			StringBuffer sendMsg = new StringBuffer("SET" + ",,1234,F48,");
+			if (deviceSet != null) {
+
+				if (deviceSet.getDisabledInClass() == 1) {
+					WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfo(Long.valueOf(userId));
+					if (whsc != null) {
+						sendMsg.append(whsc.getClassDisable1() + "|" + whsc.getClassDisable2() + "|"
+								+ whsc.getWeekDisable1() + ",");
+					} else {
+						sendMsg.append("08:00-11:30|14:00-16:30|12345,");
+					}
+				} else {
+					sendMsg.append("08:00-11:30|14:00-16:30|12345,");
+				}
+
+				if (1 == deviceSet.getTimerSwitch()) {
+					TimeSwitch time = confService.getTimeSwitch(Long.valueOf(userId));
+					if (time != null) {
+						sendMsg.append(time.getTimeOpen() + "," + time.getTimeClose() + ",");
+					} else {
+						sendMsg.append("06:05,23:00,");
+					}
+				} else {
+					sendMsg.append("06:05,23:00,");
+				}
+				sendMsg.append(deviceSet.getBrightScreen() + ",2,480,0,");
+
+				sendMsg.append(weekAlarm1+ "," +weekAlarm2 + "," + weekAlarm3
+						+ "," + alarm1 + "," +alarm2 + "," + alarm3 + ",");
+				
+				sendMsg.append(deviceSet.getLocationMode() + "," + deviceSet.getLocationTime() + ","
+						+ deviceSet.getFlowerNumber());
+				/*String reps = "[YW*" + imei + "*0001*" + RadixUtil.changeRadix(sendMsg.toString()) + "*"
+						+ sendMsg.toString() + "]";
+				logger.info("设备参数设置=" + reps);
+				socketLoginDto.getChannel().writeAndFlush(reps);
+				bb.put("Code", 1);*/
+			} else {
+
+				sendMsg.append("08:00-11:30|14:00-16:30|12345,");
+
+				sendMsg.append("06:05,23:00,");
+
+				sendMsg.append("0,2,480,0,");
+				sendMsg.append(weekAlarm1+ "," +weekAlarm2 + "," + weekAlarm3+ "," + alarm1 + "," +alarm2 + "," + alarm3 + ",");
+				sendMsg.append( "2," + "0,1");
+				
+			}
+			
+			String reps = "[YW*" + imei + "*0001*" + RadixUtil.changeRadix(sendMsg.toString()) + "*"
+					+ sendMsg.toString() + "]";
+			logger.info("设备参数设置=" + reps);      
+			socketLoginDto.getChannel().writeAndFlush(reps);
+			bb.put("Code", 1);
+			
+			
+			//下面开始推送组包
+
+			JSONObject push = new JSONObject();
+			JSONArray jsonArray = new JSONArray();
+			JSONObject dataMap = new JSONObject();
+			dataMap.put("DeviceID", "");
+			String deviceid = limitCache.getRedisKeyValue(imei + "_id");
+			if (deviceid != null && !"0".equals(deviceid) && !"".equals(deviceid)) {
+				dataMap.put("DeviceID", deviceid);
+			} else {
+				WatchDevice watchd = ideviceService.getDeviceInfo(imei);
+				if (watchd != null) {
+					deviceid = watchd.getId() + "";
+					dataMap.put("DeviceID", watchd.getId());
+					limitCache.addKey(imei + "_id", watchd.getId() + "");
+				}
+			}
+			dataMap.put("Message", 1);
+			dataMap.put("Voice", 0);
+			dataMap.put("SMS", 0);
+			dataMap.put("Photo", 0);
+			jsonArray.add(dataMap);
+			push.put("NewList", jsonArray);
+			JSONArray jsonArray1 = new JSONArray();
+			push.put("DeviceState", jsonArray1);
+
+			JSONArray jsonArray2 = new JSONArray();
+			JSONObject dataMap2 = new JSONObject();
+			dataMap2.put("Type", 231);
+			dataMap2.put("DeviceID", deviceid);
+			dataMap2.put("Message", "成功更新设备设置");
+			dataMap2.put("imei", imei);
+			jsonArray2.add(dataMap2);
+			push.put("Notification", jsonArray2);
+
+			push.put("Code", 1);
+			push.put("New", 1);
+			pushlogService.insertMsgInfo(imei, 231, deviceid, "成功更新闹钟设置", "成功更新闹钟设置");
+			AndroidPushUtil.push(token, "成功更新闹钟设置", push.toString(), "成功更新闹钟设置");
+			IOSPushUtil.push(token, "成功更新闹钟设置", push.toString(), "成功更新闹钟设置");
+
+		} else {
+			bb.put("Code", 2);
+		}
 
 		WatchDeviceAlarm watch = ideviceService.getDeviceAlarmInfo(imei);
 		if (watch != null) {

@@ -124,29 +124,29 @@ public class TkService extends AbstractBizService {
 					dataMap2.put("DeviceID", deviceid);
 					dataMap2.put("Message", "新语音");
 					dataMap2.put("imei", imei);
-
+					jsonArray2.add(dataMap2);
+					push.put("Notification", jsonArray2);
+					
 					// dataMap2.put("voiceUrl", Utils.VOICE_URL + voiceName);
 					JSONArray jsonArrayVoice = new JSONArray();
 					JSONObject dataMapVoice = new JSONObject();
 					dataMapVoice.put("voiceUrl", "");
 					dataMapVoice.put("DeviceVoiceId", ((int) ((Math.random() * 9 + 1) * 10000)) + "");
 					// dataMapVoice.put("DeviceID", deviceid);
-					dataMapVoice.put("DeviceID", "");
+					dataMapVoice.put("DeviceID", deviceid);
 					dataMapVoice.put("State", 1);
 					dataMapVoice.put("Type", 3);
 					dataMapVoice.put("MsgType", 0);
-					dataMapVoice.put("ObjectId", "");
+					dataMapVoice.put("ObjectId", deviceid);
 					dataMapVoice.put("Mark", "");
 					dataMapVoice.put("Path", Utils.VOICE_URL + voiceName);
 					dataMapVoice.put("Length", 2);
 					dataMapVoice.put("CreateTime", Utils.getLocationTime(System.currentTimeMillis()));
 					dataMapVoice.put("UpdateTime", "");
 					jsonArrayVoice.add(dataMapVoice);
-					dataMap2.put("VoiceList", jsonArrayVoice);
-
-					jsonArray2.add(dataMap2);
-					push.put("Notification", jsonArray2);
-
+					//dataMap2.put("VoiceList", jsonArrayVoice);
+					
+					push.put("VoiceList", jsonArrayVoice);
 					push.put("Code", 1);
 					push.put("New", 1);
 					String targettime = Utils.getTime(System.currentTimeMillis());
