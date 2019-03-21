@@ -2,6 +2,8 @@ package com.bracelet.socket.business.impl;
 
 import io.netty.channel.Channel;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import org.slf4j.Logger;
@@ -72,11 +74,12 @@ public class HeartCheck extends AbstractBizService {
 	//	voltageService.insertDianLiang(imei, Integer.valueOf(energy));
 		logger.info("链路保持imei:" + imei  + ",电量:" + energy);
 	     
-		String resp = "[YW*"+imei+"*0001*0016*LK,"+Utils.getTime()+"]";
+		String resp = "[YW*"+imei+"*0001*0016*LK,"+Utils.getJian8Time()+"]";
 		logger.info("心跳返回="+resp);
 		return resp;
 		
 		}
+	 
 
 
 

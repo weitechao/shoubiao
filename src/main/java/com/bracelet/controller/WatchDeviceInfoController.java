@@ -7,6 +7,7 @@ import com.bracelet.dto.HttpBaseDto;
 import com.bracelet.dto.SocketLoginDto;
 import com.bracelet.entity.Fence;
 import com.bracelet.entity.Fencelog;
+import com.bracelet.entity.HealthStepManagement;
 import com.bracelet.entity.OddShape;
 import com.bracelet.entity.SensitivePoint;
 import com.bracelet.entity.SensitivePointLog;
@@ -536,6 +537,13 @@ public class WatchDeviceInfoController extends BaseController {
 				
 			}
 			
+			HealthStepManagement  heathM = confService.getHeathStepInfo(imei);
+			if(heathM != null){
+				sendMsg.append(","+heathM.getSleepCalculate()+","+heathM.getStepCalculate()+",0,0,baby");
+			}else{
+				sendMsg.append(",1|23:00-23:59|05:00-06:00,4000,0,0,baby");
+			}
+			
 			String reps = "[YW*" + imei + "*0001*" + RadixUtil.changeRadix(sendMsg.toString()) + "*"
 					+ sendMsg.toString() + "]";
 			logger.info("设备参数设置=" + reps);      
@@ -573,7 +581,7 @@ public class WatchDeviceInfoController extends BaseController {
 			JSONObject dataMap2 = new JSONObject();
 			dataMap2.put("Type", 231);
 			dataMap2.put("DeviceID", deviceid);
-			dataMap2.put("Message", "成功更新设备设置");
+			dataMap2.put("Message", "成功更新闹钟设置");
 			dataMap2.put("imei", imei);
 			jsonArray2.add(dataMap2);
 			push.put("Notification", jsonArray2);

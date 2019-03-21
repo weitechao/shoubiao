@@ -162,36 +162,64 @@ public class WatchAppSetController extends BaseController {
 		}
 		if (socketLoginDto.getChannel().isActive()) {
 			
-			String setInfo = jsonObject.getString("setInfo");
 			
-			Integer infoVibration = jsonObject.getInteger("infoVibration");// 手表信息震动
-			Integer infoVoice = jsonObject.getInteger("infoVoice");// 手表信息声音
-			Integer phoneComeVibration = jsonObject.getInteger("phoneComeVibration");// 手表来电话震动
-			Integer phoneComeVoice = jsonObject.getInteger("phoneComeVoice");// 手表来电话声音
-			Integer watchOffAlarm = jsonObject.getInteger("watchOffAlarm");// 手表脱落报警
-			Integer rejectStrangers = jsonObject.getInteger("rejectStrangers");// 拒绝陌生人来电
-			String timerSwitch = jsonObject.getString("timerSwitch");// 定时开关机
+			
+			Integer brightScreen = Integer.valueOf(jsonObject.getString("brightScreen"));// 亮屏时间
+			Integer flowerNumber =  Integer.valueOf(jsonObject.getString("flowerNumber"));// 爱心奖励
+			Integer phoneComeVibration = Integer.valueOf(jsonObject.getString("phoneComeVibration"));// 手表来电话震动
+			
+			Integer language = 2;// 语言
+			Integer infoVibration = Integer.valueOf(jsonObject.getString("infoVibration"));// 手表信息震动
 			String disabledInClass = jsonObject.getString("disabledInClass");// 上课禁用
-			Integer reserveEmergencyPower = jsonObject.getInteger("reserveEmergencyPower");// 预留紧急电量6
-			Integer somatosensory = jsonObject.getInteger("somatosensory");// 体感接听
-			Integer reportCallLocation = jsonObject.getInteger("reportCallLocation");// 报告通话位置
-			Integer automaticAnswering = jsonObject.getInteger("automaticAnswering");// 自动接听
-			Integer sosMsgswitch = jsonObject.getInteger("sosMsgswitch");// sos开关
-			String flowerNumber = jsonObject.getString("flowerNumber");// 爱心奖励
-			Integer brightScreen = jsonObject.getInteger("brightScreen");// 亮屏时间
-			Integer language = jsonObject.getInteger("language");// 语言
-			Integer timeZone = jsonObject.getInteger("timeZone");// 时区
-			Integer locationMode = jsonObject.getInteger("locationMode");// 工作模式
-			Integer locationTime = jsonObject.getInteger("locationTime");// 工作时长
+			Integer rejectStrangers = Integer.valueOf(jsonObject.getString("rejectStrangers"));// 拒绝陌生人来电
+			String timerSwitch = jsonObject.getString("timerSwitch");// 定时开关机
+			Integer reportCallLocation = Integer.valueOf(jsonObject.getString("reportCallLocation"));// 报告通话位置
+			Integer phoneComeVoice = Integer.valueOf(jsonObject.getString("phoneComeVoice"));// 手表来电话声音
+			Integer watchOffAlarm = Integer.valueOf(jsonObject.getString("watchOffAlarm"));// 手表脱落报警
+			String setInfo = jsonObject.getString("setInfo");
+			Integer locationMode = Integer.valueOf(jsonObject.getInteger("locationMode"));// 工作模式
+//			Integer timeZone = Integer.valueOf(jsonObject.getString("timeZone"));// 时区
+			Integer timeZone = 480;// 时区
+			Integer infoVoice = Integer.valueOf(jsonObject.getString("infoVoice"));// 手表信息声音
+			Integer locationTime = Integer.valueOf(jsonObject.getString("locationTime"));// 工作时长
+			Integer reserveEmergencyPower = Integer.valueOf(jsonObject.getString("reserveEmergencyPower"));// 预留紧急电量6
+			Integer sosMsgswitch = Integer.valueOf(jsonObject.getString("sosMsgswitch"));// sos短信开关
+			Integer automaticAnswering = Integer.valueOf(jsonObject.getString("automaticAnswering"));// 自动接听
+			Integer somatosensory = Integer.valueOf(jsonObject.getString("somatosensory"));// 体感接听
+			
+//			Integer language = jsonObject.getInteger("language");// 语言
+			
+		
+		
 
 			/*
-			 * ["{\n  \"brightScreen\" :
-			 *  \"0\",\n  \"flowerNumber\" : \"4\",
-			 *  \n  \"phoneComeVibration\" : \"1\",
-			 *  \n  \"language\" : \"\",\n  \
-			 *  "infoVibration\" : \"1\",\n  \"disabledInClass\" : \"0\",\n  \"imei\" : \"872018020142168\",\n  \"rejectStrangers\" : \"0\",\n  \"timerSwitch\" : \"0\",\n  \"reportCallLocation\" : \"1\",\n  \"phoneComeVoice\" : \"1\",\n  \"watchOffAlarm\" : \"0\",\n  \"setInfo\" : \"1-1-1-1-0-0-0-0-1-0-1-0\",\n  \"locationMode\" : \"2\",\n  \"timeZone\" : \"\",\n  \"infoVoice\" : \"1\",\n  \"token\" : \"D9934C15BE042FE36DEBB455B03949D6\",\n  \"locationTime\" : \"0\",\n  \"reserveEmergencyPower\" : \"1\",\n  \"sosMsgswitch\" : \"0\",\n  \"automaticAnswering\" : \"0\",\n  \"somatosensory\" : \"0\"\n}"]
-			 * */
+			["{\n  \"brightScreen\" : \"5\",
+			\n  \"flowerNumber\" : \"4\",
+			\n  \"phoneComeVibration\" : \"1\",\n  
+			\"language\" : \"\",\n  
+			\"infoVibration\" : \"1\",\n 
+			 \"disabledInClass\" : \"1\",\n  \"imei\" : \"861807000437760\",\n 
+			  \"rejectStrangers\" : \"0\",\n  
+			  \"timerSwitch\" : \"1\",\n  \"reportCallLocation\" : \"1\",\n  
+			  \"phoneComeVoice\" : \"0\",\n  \"watchOffAlarm\" : \"0\",\n  \"setInfo\" : \"1-1-1-0-0-0-1-1-1-0-1-1\",\n 
+			   \"locationMode\" : \"2\",\n  \"timeZone\" : \"\",\n  \"infoVoice\" : \"1\",\n  
+			   \"token\" : \"9A5FFC09DB7CB212E47F120F2AE5207F\",\n  
+			   \"locationTime\" : \"0\",\n  \"reserveEmergencyPower\" : \"1\",\n  \"sosMsgswitch\" : \"0\",\n  \"automaticAnswering\" : \"1\",\n  \"somatosensory\" : \"0\"\n}"]* */
 			
+			//修改数据库的数据
+			 WatchDeviceSet deviceSet = watchSetService.getDeviceSetByImei(Long.valueOf(userId));
+				if (deviceSet != null) {
+					watchSetService.updateWatchSet(deviceSet.getId(), setInfo, infoVibration, infoVoice, phoneComeVibration,
+							phoneComeVoice, watchOffAlarm, rejectStrangers, Integer.valueOf(timerSwitch), Integer.valueOf(disabledInClass), reserveEmergencyPower,
+							somatosensory, reportCallLocation, automaticAnswering, sosMsgswitch, Integer.valueOf(flowerNumber), brightScreen,
+							language, 1, locationMode, locationTime);
+				} else {
+					watchSetService.insertWatchDeviceSet(Long.valueOf(userId),imei, setInfo, infoVibration, infoVoice, phoneComeVibration,
+							phoneComeVoice, watchOffAlarm, rejectStrangers, Integer.valueOf(timerSwitch), Integer.valueOf(disabledInClass), reserveEmergencyPower,
+							somatosensory, reportCallLocation, automaticAnswering, sosMsgswitch, Integer.valueOf(flowerNumber), brightScreen,
+							language, 1, locationMode, locationTime);
+				}
+				
 			
 
 			StringBuffer sendMsg = new StringBuffer("SET" + ",,1234,F48,");
@@ -229,7 +257,13 @@ public class WatchAppSetController extends BaseController {
 				sendMsg.append("0:12345,0:0,");
 			}
 			sendMsg.append(locationMode + "," + locationTime + "," + flowerNumber);
-
+			HealthStepManagement  heathM = confService.getHeathStepInfo(imei);
+			if(heathM != null){
+				sendMsg.append(","+heathM.getSleepCalculate()+","+heathM.getStepCalculate()+",0,"+sosMsgswitch+","+"baby");
+			}else{
+				sendMsg.append(",1|23:00-23:59|05:00-06:00,4000,0,"+sosMsgswitch+","+"baby");
+			}
+			
 			/*
 			 * [YW*YYYYYYYYYY*NNNN*LEN*SET,
 			 * 手表电话号码，设置次数流水号,设置项,上课禁用时间段,定时开机时间,定时关机时间,亮屏时间,语言,时区,指示灯,
@@ -252,25 +286,9 @@ public class WatchAppSetController extends BaseController {
 					+ sendMsg.toString() + "]";
 			logger.info("设备参数设置=" + reps);
 			socketLoginDto.getChannel().writeAndFlush(reps);
-			bb.put("Code", 1);
-			// bb.put("Message", "");
+		
 			
-			//修改数据库的数据
-			 WatchDeviceSet deviceSet = watchSetService.getDeviceSetByImei(Long.valueOf(userId));
-				if (deviceSet != null) {
-					watchSetService.updateWatchSet(deviceSet.getId(), setInfo, infoVibration, infoVoice, phoneComeVibration,
-							phoneComeVoice, watchOffAlarm, rejectStrangers, Integer.valueOf(timerSwitch), Integer.valueOf(disabledInClass), reserveEmergencyPower,
-							somatosensory, reportCallLocation, automaticAnswering, sosMsgswitch, Integer.valueOf(flowerNumber), brightScreen,
-							language, timeZone, locationMode, locationTime);
-				} else {
-					watchSetService.insertWatchDeviceSet(Long.valueOf(userId),imei, setInfo, infoVibration, infoVoice, phoneComeVibration,
-							phoneComeVoice, watchOffAlarm, rejectStrangers, Integer.valueOf(timerSwitch), Integer.valueOf(disabledInClass), reserveEmergencyPower,
-							somatosensory, reportCallLocation, automaticAnswering, sosMsgswitch, Integer.valueOf(flowerNumber), brightScreen,
-							language, timeZone, locationMode, locationTime);
-				}
-				
-				
-				//下面开始推送组包
+			//下面开始推送组包
 
 			JSONObject push = new JSONObject();
 			JSONArray jsonArray = new JSONArray();
@@ -310,7 +328,10 @@ public class WatchAppSetController extends BaseController {
 			pushlogService.insertMsgInfo(imei, 231, deviceid, "成功更新设备设置", "成功更新设备设置");
 			AndroidPushUtil.push(token, "成功更新设备设置", push.toString(), "成功更新设备设置");
 			IOSPushUtil.push(token, "成功更新设备设置", push.toString(), "成功更新设备设置");
-
+			
+			// bb.put("Message", "");
+			
+			bb.put("Code", 1);
 		} else {
 			bb.put("Code", 2);
 			// bb.put("Message", "");

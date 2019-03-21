@@ -131,6 +131,12 @@ public class SchoolController extends BaseController {
 			@PathVariable String sleepCalculate) {
 		JSONObject bb = new JSONObject();
 
+		String userId = checkTokenWatchAndUser(token);
+		if ("0".equals(userId)) {
+			bb.put("Code", -1);
+			bb.put("Message", "");
+			return bb.toString();
+		}
 		
 		HealthStepManagement  heathM = confService.getHeathStepInfo(deviceId);
 		if(heathM != null){
@@ -140,7 +146,7 @@ public class SchoolController extends BaseController {
 				bb.put("Code", 0);
 			}
 		}else{
-			if(confService.insertHeath(deviceId, "", sleepCalculate, "" )){
+			if(confService.insertHeath(deviceId, "4000", sleepCalculate, "0" )){
 				bb.put("Code", 1);
 			}else{
 				bb.put("Code", 0);

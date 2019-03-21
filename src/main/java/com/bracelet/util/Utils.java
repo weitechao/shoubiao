@@ -534,6 +534,15 @@ public class Utils {
 		SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd,HH:mm:ss");
 		return ft.format(new Date());
 	}
+	
+	public static String getJian8Time() {
+	   Date date = new Date();
+       Calendar cal = Calendar.getInstance();
+       cal.setTime(date);//date 换成已经已知的Date对象
+       cal.add(Calendar.HOUR_OF_DAY, -8);// before 8 hour
+       SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd,HH:mm:ss");
+	      return format.format(cal.getTime());
+	}
 
 	public static String getRiQi() {
 		SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");

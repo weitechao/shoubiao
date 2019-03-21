@@ -89,8 +89,8 @@ public class LocationUdService extends AbstractBizService {
 				jsonArray.add(dataMap);
 				push.put("NewList", jsonArray);
 				JSONArray jsonArray1 = new JSONArray();
-				JSONObject dataMap1 = new JSONObject();
-				jsonArray1.add(dataMap1);
+			/*	JSONObject dataMap1 = new JSONObject();
+				jsonArray1.add(dataMap1);*/
 				push.put("DeviceState", jsonArray1);
 
 				JSONArray jsonArray2 = new JSONArray();
@@ -451,8 +451,8 @@ public class LocationUdService extends AbstractBizService {
 							jsonArray.add(dataMap);
 							push.put("NewList", jsonArray);
 							JSONArray jsonArray1 = new JSONArray();
-							JSONObject dataMap1 = new JSONObject();
-							jsonArray1.add(dataMap1);
+						/*	JSONObject dataMap1 = new JSONObject();
+							jsonArray1.add(dataMap1);*/
 							push.put("DeviceState", jsonArray1);
 
 							JSONArray jsonArray2 = new JSONArray();
@@ -501,8 +501,8 @@ public class LocationUdService extends AbstractBizService {
 							jsonArray.add(dataMap);
 							push.put("NewList", jsonArray);
 							JSONArray jsonArray1 = new JSONArray();
-							JSONObject dataMap1 = new JSONObject();
-							jsonArray1.add(dataMap1);
+							/*JSONObject dataMap1 = new JSONObject();
+							jsonArray1.add(dataMap1);*/
 							push.put("DeviceState", jsonArray1);
 
 							JSONArray jsonArray2 = new JSONArray();
