@@ -44,7 +44,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-
 @Controller
 @RequestMapping("/watchinfo")
 public class WatchDeviceInfoController extends BaseController {
@@ -58,7 +57,7 @@ public class WatchDeviceInfoController extends BaseController {
 	WatchSetService watchSetService;
 	@Autowired
 	IConfService confService;
-	
+
 	@Autowired
 	IPushlogService pushlogService;
 
@@ -488,9 +487,24 @@ public class WatchDeviceInfoController extends BaseController {
 
 			WatchDeviceSet deviceSet = watchSetService.getDeviceSetByImei(Long.valueOf(userId));
 
-			StringBuffer sendMsg = new StringBuffer("SET" + ",,1234,F48,");
+			StringBuffer sendMsg = new StringBuffer("SET" + ",,1234,");// F48,");
 			if (deviceSet != null) {
+				StringBuffer setString = new StringBuffer("");
+				setString.append(deviceSet.getInfoVibration()).append(deviceSet.getInfoVoice())
+						.append(deviceSet.getPhoneComeVibration()).append(deviceSet.getPhoneComeVoice())
+						.append(deviceSet.getWatchOffAlarm()).append(deviceSet.getRejectStrangers())
+						.append(deviceSet.getTimerSwitch()).append(deviceSet.getDisabledInClass())
+						.append(deviceSet.getReserveEmergencyPower()).append(deviceSet.getSomatosensory())
+						.append(deviceSet.getReportCallLocation()).append(deviceSet.getAutomaticAnswering());
 
+				String set16 = Integer.toHexString(Integer.parseInt(setString.toString(), 2));
+				int set16L = set16.length();
+				if (set16L == 1) {
+					set16 = "00" + set16;
+				} else if (set16L == 2) {
+					set16 = "0" + set16;
+				}
+				sendMsg.append(set16).append(",");
 				if (deviceSet.getDisabledInClass() == 1) {
 					WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfo(Long.valueOf(userId));
 					if (whsc != null) {
@@ -515,43 +529,45 @@ public class WatchDeviceInfoController extends BaseController {
 				}
 				sendMsg.append(deviceSet.getBrightScreen() + ",2,480,0,");
 
-				sendMsg.append(weekAlarm1+ "," +weekAlarm2 + "," + weekAlarm3
-						+ "," + alarm1 + "," +alarm2 + "," + alarm3 + ",");
-				
+				sendMsg.append(weekAlarm1 + "," + weekAlarm2 + "," + weekAlarm3 + "," + alarm1 + "," + alarm2 + ","
+						+ alarm3 + ",");
+
 				sendMsg.append(deviceSet.getLocationMode() + "," + deviceSet.getLocationTime() + ","
 						+ deviceSet.getFlowerNumber());
-				/*String reps = "[YW*" + imei + "*0001*" + RadixUtil.changeRadix(sendMsg.toString()) + "*"
-						+ sendMsg.toString() + "]";
-				logger.info("设备参数设置=" + reps);
-				socketLoginDto.getChannel().writeAndFlush(reps);
-				bb.put("Code", 1);*/
+				/*
+				 * String reps = "[YW*" + imei + "*0001*" +
+				 * RadixUtil.changeRadix(sendMsg.toString()) + "*" +
+				 * sendMsg.toString() + "]"; logger.info("设备参数设置=" + reps);
+				 * socketLoginDto.getChannel().writeAndFlush(reps);
+				 * bb.put("Code", 1);
+				 */
 			} else {
-
+				sendMsg.append("FFF,");
 				sendMsg.append("08:00-11:30|14:00-16:30|12345,");
 
 				sendMsg.append("06:05,23:00,");
 
 				sendMsg.append("0,2,480,0,");
-				sendMsg.append(weekAlarm1+ "," +weekAlarm2 + "," + weekAlarm3+ "," + alarm1 + "," +alarm2 + "," + alarm3 + ",");
-				sendMsg.append( "2," + "0,1");
-				
+				sendMsg.append(weekAlarm1 + "," + weekAlarm2 + "," + weekAlarm3 + "," + alarm1 + "," + alarm2 + ","
+						+ alarm3 + ",");
+				sendMsg.append("2," + "0,1");
+
 			}
-			
-			HealthStepManagement  heathM = confService.getHeathStepInfo(imei);
-			if(heathM != null){
-				sendMsg.append(","+heathM.getSleepCalculate()+","+heathM.getStepCalculate()+",0,0,baby");
-			}else{
+
+			HealthStepManagement heathM = confService.getHeathStepInfo(imei);
+			if (heathM != null) {
+				sendMsg.append("," + heathM.getSleepCalculate() + "," + heathM.getStepCalculate() + ",0,0,baby");
+			} else {
 				sendMsg.append(",1|23:00-23:59|05:00-06:00,4000,0,0,baby");
 			}
-			
+
 			String reps = "[YW*" + imei + "*0001*" + RadixUtil.changeRadix(sendMsg.toString()) + "*"
 					+ sendMsg.toString() + "]";
-			logger.info("设备参数设置=" + reps);      
+			logger.info("设备参数设置=" + reps);
 			socketLoginDto.getChannel().writeAndFlush(reps);
 			bb.put("Code", 1);
-			
-			
-			//下面开始推送组包
+
+			// 下面开始推送组包
 
 			JSONObject push = new JSONObject();
 			JSONArray jsonArray = new JSONArray();

@@ -194,7 +194,7 @@ public class WatchAppUserController extends BaseController {
 					}
 				} else {
 
-					ideviceService.insertNewImei(tel, "1", 0, "1");
+					ideviceService.insertNewImei(tel, "", 0, "1");
 					bb.put("phone", "");
 					WatchDevice watchdd = ideviceService.getDeviceInfo(tel);
 					if (watchdd != null) {
@@ -526,7 +526,7 @@ public class WatchAppUserController extends BaseController {
 					dataMap.put("Grade", 0);
 					dataMap.put("HireExpireDate", "0");
 					dataMap.put("HireStartDate", "0");
-					dataMap.put("HomeAddress", "0");
+					dataMap.put("HomeAddress", "");
 					dataMap.put("HomeLat", "0");
 					dataMap.put("HomeLng", "0");
 					dataMap.put("IsGuard", "0");
@@ -534,7 +534,7 @@ public class WatchAppUserController extends BaseController {
 					dataMap.put("PhoneCornet", "");
 					dataMap.put("PhoneNumber", "");
 					dataMap.put("Photo", "0");
-					dataMap.put("SchoolAddress", "0");
+					dataMap.put("SchoolAddress", "");
 					dataMap.put("SchoolLat", "0");
 					dataMap.put("SchoolLng", "0");
 					dataMap.put("SerialNumber", location.getImei());
@@ -1102,7 +1102,7 @@ public class WatchAppUserController extends BaseController {
 							}
 					} else {
 
-						ideviceService.insertNewImei(tel, "1", 0, "1");
+						ideviceService.insertNewImei(tel, "", 0, "1");
 						bb.put("phone", "");
 						WatchDevice watchdd = ideviceService.getDeviceInfo(tel);
 						if (watchdd != null) {

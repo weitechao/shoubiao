@@ -170,11 +170,11 @@ public class WatchAppSetController extends BaseController {
 			
 			Integer language = 2;// 语言
 			Integer infoVibration = Integer.valueOf(jsonObject.getString("infoVibration"));// 手表信息震动
-			String disabledInClass = jsonObject.getString("disabledInClass");// 上课禁用
+			Integer disabledInClass = Integer.valueOf(jsonObject.getString("disabledInClass"));// 上课禁用
 			Integer rejectStrangers = Integer.valueOf(jsonObject.getString("rejectStrangers"));// 拒绝陌生人来电
-			String timerSwitch = jsonObject.getString("timerSwitch");// 定时开关机
+			Integer timerSwitch =  Integer.valueOf(jsonObject.getString("timerSwitch"));// 定时开关机
 			Integer reportCallLocation = Integer.valueOf(jsonObject.getString("reportCallLocation"));// 报告通话位置
-			Integer phoneComeVoice = Integer.valueOf(jsonObject.getString("phoneComeVoice"));// 手表来电话声音
+			Integer phoneComeVoice = Integer.valueOf(jsonObject.getString("phoneComeVoice"));// 手表来电响铃
 			Integer watchOffAlarm = Integer.valueOf(jsonObject.getString("watchOffAlarm"));// 手表脱落报警
 			String setInfo = jsonObject.getString("setInfo");
 			Integer locationMode = Integer.valueOf(jsonObject.getInteger("locationMode"));// 工作模式
@@ -188,8 +188,7 @@ public class WatchAppSetController extends BaseController {
 			Integer somatosensory = Integer.valueOf(jsonObject.getString("somatosensory"));// 体感接听
 			
 //			Integer language = jsonObject.getInteger("language");// 语言
-			
-		
+	
 		
 
 			/*
@@ -210,22 +209,35 @@ public class WatchAppSetController extends BaseController {
 			 WatchDeviceSet deviceSet = watchSetService.getDeviceSetByImei(Long.valueOf(userId));
 				if (deviceSet != null) {
 					watchSetService.updateWatchSet(deviceSet.getId(), setInfo, infoVibration, infoVoice, phoneComeVibration,
-							phoneComeVoice, watchOffAlarm, rejectStrangers, Integer.valueOf(timerSwitch), Integer.valueOf(disabledInClass), reserveEmergencyPower,
+							phoneComeVoice, watchOffAlarm, rejectStrangers, timerSwitch,disabledInClass, reserveEmergencyPower,
 							somatosensory, reportCallLocation, automaticAnswering, sosMsgswitch, Integer.valueOf(flowerNumber), brightScreen,
 							language, 1, locationMode, locationTime);
 				} else {
 					watchSetService.insertWatchDeviceSet(Long.valueOf(userId),imei, setInfo, infoVibration, infoVoice, phoneComeVibration,
-							phoneComeVoice, watchOffAlarm, rejectStrangers, Integer.valueOf(timerSwitch), Integer.valueOf(disabledInClass), reserveEmergencyPower,
+							phoneComeVoice, watchOffAlarm, rejectStrangers, timerSwitch, disabledInClass, reserveEmergencyPower,
 							somatosensory, reportCallLocation, automaticAnswering, sosMsgswitch, Integer.valueOf(flowerNumber), brightScreen,
 							language, 1, locationMode, locationTime);
 				}
 				
 			
-
-			StringBuffer sendMsg = new StringBuffer("SET" + ",,1234,F48,");
+				StringBuffer setString = new StringBuffer("");
+				setString.append(infoVibration).append(infoVoice).append(phoneComeVibration).append(phoneComeVoice)
+				.append(watchOffAlarm).append(rejectStrangers).append(timerSwitch).append(disabledInClass).append(reserveEmergencyPower)
+	            .append(somatosensory).append(reportCallLocation).append(automaticAnswering);
+				
+				String set16 = Integer.toHexString(Integer.parseInt(setString.toString(), 2));
+				 int set16L = set16.length();
+				if(set16L==1){
+					set16="00"+set16;
+				}else if(set16L == 2){
+					set16="0"+set16;
+				}
+				
+			StringBuffer sendMsg = new StringBuffer("SET" + ",,1234,");//F48,");
+			sendMsg.append(set16).append(",");
 //[YW*872018020142169*0001*0066*SET,,1234,F48,08:00-11:30|14:00-16:30|12345,06:05,23:00,0,2,480,0,1:24,0:4,0:0,04:00,00:00,00:00,2,0,1]
 
-			if ("1".equals(disabledInClass)) {
+			if (disabledInClass == 1) {
 				WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfo(Long.valueOf(userId));
 				if (whsc != null) {
 					sendMsg.append(whsc.getClassDisable1() + "|" + whsc.getClassDisable2() + "|"
@@ -237,7 +249,7 @@ public class WatchAppSetController extends BaseController {
 				sendMsg.append("08:00-11:30|14:00-16:30|12345,");
 			}
 
-			if ("1".equals(timerSwitch)) {
+			if (timerSwitch==1) {
 				TimeSwitch time = confService.getTimeSwitch(Long.valueOf(userId));
 				if (time != null) {
 					sendMsg.append(time.getTimeOpen() + "," + time.getTimeClose() + ",");
@@ -543,7 +555,8 @@ public class WatchAppSetController extends BaseController {
 		}
 
 		return bb.toString();
-
 	}
+	
+	
 
 }

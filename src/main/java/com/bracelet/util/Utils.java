@@ -30,6 +30,7 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.http.util.TextUtils;
 
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
@@ -80,87 +81,81 @@ public class Utils {
 	public final static String SSRH_TIANQI_KEY = "7d92f6b57a23743f6939c24714731a6a";
 	public final static String SSRH_GPS_URL = "http://restapi.amap.com/v3/assistant/coordinate/convert";
 
-	
-
 	public final static String METHOD_NAME = "WatchDeviceInfoController.updateBabyHead(..)";
 	public final static String METHOD_TkService = "com.bracelet.socket.business.impl.TkService";
 	public final static String METHOD_UploadPhoto = "com.bracelet.socket.business.impl.UploadPhoto";
 	public final static String METHOD_SLBTEST = "PosController.testslb(..)";
-	public final static String NOTIFY_LIST= "NotifyController.notifyList(..)";
+	public final static String NOTIFY_LIST = "NotifyController.notifyList(..)";
 
 	public static final String GPS_URL = "http://restapi.amap.com/v3/assistant/coordinate/convert";
 
-	public static final String IP_PORT_URL = "http://47.92.183.190/shoubiao/slb/getiport/1";//这个是负载均衡的ip 使用了80代理  8088  这个不用修改
+	public static final String IP_PORT_URL = "http://47.92.183.190/shoubiao/slb/getiport/1";// 这个是负载均衡的ip
+																							// 使用了80代理
+																							// 8088
+																							// 这个不用修改
 	public final static String VOICE_FILE_WINDOWS = "F:/test";
-	
-	/*更换服务器部署一定要修改这两个参数*/
-	
-	
+
+	/* 更换服务器部署一定要修改这两个参数 */
+
 	public static final String PORT_TCP = "7780";
 	public static final String PORT_HTTP = "8088";
-	
-	
-	
+
 	public final static String VOICE_FILE_lINUX = "/usr/local/resin/resin-pro-4.0.53-8080/webapps/GXCareDevice/watchvoice/device";
 	public final static String PHOTO_FILE_lINUX = "/usr/local/resin/resin-pro-4.0.53-8080/webapps/GXCareDevice/watchphoto/device";
 	public final static String PHOTT_FILE_lINUX = "/usr/local/resin/resin-pro-4.0.53-8080/webapps/GXCareDevice/headPhoto/appset";
 	public final static String PHONEBook_FILE_lINUX = "/usr/local/resin/resin-pro-4.0.53-8080/webapps/GXCareDevice/headImg";
-	//LINUX voice上传地址和URL
-	//LINUX 设备上传图片 和URL
+	// LINUX voice上传地址和URL
+	// LINUX 设备上传图片 和URL
 	// app头像图片地址和url
-	//通讯录头像
+	// 通讯录头像
+
+	/*public static final String IP = "47.92.30.81";
+	public final static String VOICE_URL = "http://" + IP + ":8080/GXCareDevice/watchvoice/device/";
+	public final static String PHOTO_URL = "http://" + IP + ":8080/GXCareDevice/watchphoto/device/";
+	public final static String APP_PHOTO_UTL = "http://" + IP + ":8080/GXCareDevice/headPhoto/appset/";
+	public final static String PHONEBook_PHOTO_UTL = "http://" + IP + ":8080/GXCareDevice/headImg/";*/
+
 	
-	
-	public static final String IP = "47.92.30.81";
-	public final static String VOICE_URL = "http://"+IP+":8080/GXCareDevice/watchvoice/device/";
-	public final static String PHOTO_URL = "http://"+IP+":8080/GXCareDevice/watchphoto/device/";
-	public final static String APP_PHOTO_UTL = "http://"+IP+":8080/GXCareDevice/headPhoto/appset/";
+	public static final String IP = "39.98.236.1"; 
+	public final static String VOICE_URL = "http://"+IP+":8080/GXCareDevice/watchvoice/device/"; 
+	public  final static String PHOTO_URL ="http://"+IP+":8080/GXCareDevice/watchphoto/device/"; 
+	public final static String APP_PHOTO_UTL ="http://"+IP+":8080/GXCareDevice/headPhoto/appset/";
 	public final static String PHONEBook_PHOTO_UTL = "http://"+IP+":8080/GXCareDevice/headImg/";
-	
-	
-	
-	
-	
-	/*public static final String IP = "39.98.236.1";
-	public final static String VOICE_URL = "http://"+IP+":8080/GXCareDevice/watchvoice/device/";
-	public final static String PHOTO_URL = "http://"+IP+":8080/GXCareDevice/watchphoto/device/";
-	public final static String APP_PHOTO_UTL = "http://"+IP+":8080/GXCareDevice/headPhoto/appset/";
-	public final static String PHONEBook_PHOTO_UTL = "http://"+IP+":8080/GXCareDevice/headImg/";*/
-	
-	//获取amr语音文件长度
-	 public static int getAmrDuration(File file) throws IOException {
-	        long duration = -1;
-	        int[] packedSize = { 12, 13, 15, 17, 19, 20, 26, 31, 5, 0, 0, 0, 0, 0,
-	                0, 0 };
-	        RandomAccessFile randomAccessFile = null;
-	        try {
-	            randomAccessFile = new RandomAccessFile(file, "rw");
-	            long length = file.length();// 文件的长度
-	            int pos = 6;// 设置初始位置
-	            int frameCount = 0;// 初始帧数
-	            int packedPos = -1;
 	 
-	            byte[] datas = new byte[1];// 初始数据值
-	            while (pos <= length) {
-	                randomAccessFile.seek(pos);
-	                if (randomAccessFile.read(datas, 0, 1) != 1) {
-	                    duration = length > 0 ? ((length - 6) / 650) : 0;
-	                    break;
-	                }
-	                packedPos = (datas[0] >> 3) & 0x0F;
-	                pos += packedSize[packedPos] + 1;
-	                frameCount++;
-	            }
-	 
-	            duration += frameCount * 20;// 帧数*20
-	        } finally {
-	            if (randomAccessFile != null) {
-	                randomAccessFile.close();
-	            }
-	        }
-	        return (int)((duration/1000)+1);
-	    }
-	 
+
+	// 获取amr语音文件长度
+	public static int getAmrDuration(File file) throws IOException {
+		long duration = -1;
+		int[] packedSize = { 12, 13, 15, 17, 19, 20, 26, 31, 5, 0, 0, 0, 0, 0, 0, 0 };
+		RandomAccessFile randomAccessFile = null;
+		try {
+			randomAccessFile = new RandomAccessFile(file, "rw");
+			long length = file.length();// 文件的长度
+			int pos = 6;// 设置初始位置
+			int frameCount = 0;// 初始帧数
+			int packedPos = -1;
+
+			byte[] datas = new byte[1];// 初始数据值
+			while (pos <= length) {
+				randomAccessFile.seek(pos);
+				if (randomAccessFile.read(datas, 0, 1) != 1) {
+					duration = length > 0 ? ((length - 6) / 650) : 0;
+					break;
+				}
+				packedPos = (datas[0] >> 3) & 0x0F;
+				pos += packedSize[packedPos] + 1;
+				frameCount++;
+			}
+
+			duration += frameCount * 20;// 帧数*20
+		} finally {
+			if (randomAccessFile != null) {
+				randomAccessFile.close();
+			}
+		}
+		return (int) ((duration / 1000) + 1);
+	}
+
 	public static String randomString(int len) {
 		if (len <= 0) {
 			len = 32;
@@ -534,14 +529,14 @@ public class Utils {
 		SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd,HH:mm:ss");
 		return ft.format(new Date());
 	}
-	
+
 	public static String getJian8Time() {
-	   Date date = new Date();
-       Calendar cal = Calendar.getInstance();
-       cal.setTime(date);//date 换成已经已知的Date对象
-       cal.add(Calendar.HOUR_OF_DAY, -8);// before 8 hour
-       SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd,HH:mm:ss");
-	      return format.format(cal.getTime());
+		Date date = new Date();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);// date 换成已经已知的Date对象
+		cal.add(Calendar.HOUR_OF_DAY, -8);// before 8 hour
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd,HH:mm:ss");
+		return format.format(cal.getTime());
 	}
 
 	public static String getRiQi() {
@@ -549,16 +544,16 @@ public class Utils {
 		return ft.format(new Date());
 	}
 
-	
 	public static String getTime(Long timestame) {
-		SimpleDateFormat smt =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat smt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		return smt.format(timestame);
 	}
-	
+
 	public static String getLocationTime(Long timestame) {
-		SimpleDateFormat smt =  new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		SimpleDateFormat smt = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		return smt.format(timestame);
 	}
+
 	/**
 	 * 将图片转换成二进制
 	 * 
@@ -688,46 +683,62 @@ public class Utils {
 	 * return result
 	 * 
 	 */
-	
-	public static byte[] getAmrByte(String lujing){
 
-		    byte[] b = null ;
-			//InputStream:是一个抽象类
-			// \:是一个 转移符
-			//表示磁盘路径的两种表示方式：1、\\   2、/
-			try {
-				//从文件地址中读取内容到程序中
-				//1、建立连接
-				InputStream is = new FileInputStream(lujing);
-				//2、开始读取信息	
-				//先定义一个字节数组存放数据
-				b = new byte[is.available()];//把所有的数据读取到这个字节当中
-				//is.available()：返回文件的大小
-		//		while(is.available()==0);//不等于0时才停止循环
-				//完整的读取一个文件
-				int off = 0;
-				int le = 2;
-				while(is.read(b, off, 2)!=-1){
-					off+=1;
-				}
-				is.read(b,off,2);
-				//read:返回的是读取的文件大小
-				//最大不超过b.length，返回实际读取的字节个数
-				System.out.println(Arrays.toString(b));//读取的是字节数组
-				//把字节数组转成字符串
-				System.out.println(new String(b));
-				//关闭流
-				is.close();
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				//系统强制解决的问题：文件没有找到
-				e.printStackTrace();
-			} catch (IOException e) {
-				//文件读写异常
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+	public static byte[] getAmrByte(String lujing) {
+
+		byte[] b = null;
+		// InputStream:是一个抽象类
+		// \:是一个 转移符
+		// 表示磁盘路径的两种表示方式：1、\\ 2、/
+		try {
+			// 从文件地址中读取内容到程序中
+			// 1、建立连接
+			InputStream is = new FileInputStream(lujing);
+			// 2、开始读取信息
+			// 先定义一个字节数组存放数据
+			b = new byte[is.available()];// 把所有的数据读取到这个字节当中
+			// is.available()：返回文件的大小
+			// while(is.available()==0);//不等于0时才停止循环
+			// 完整的读取一个文件
+			int off = 0;
+			int le = 2;
+			while (is.read(b, off, 2) != -1) {
+				off += 1;
 			}
-			return b;
+			is.read(b, off, 2);
+			// read:返回的是读取的文件大小
+			// 最大不超过b.length，返回实际读取的字节个数
+			System.out.println(Arrays.toString(b));// 读取的是字节数组
+			// 把字节数组转成字符串
+			System.out.println(new String(b));
+			// 关闭流
+			is.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			// 系统强制解决的问题：文件没有找到
+			e.printStackTrace();
+		} catch (IOException e) {
+			// 文件读写异常
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return b;
+	}
+
+	// 进制的字符串 111111110000 怎么转成16进制的 FF0
+	public static String binaryString2hexString(String bString) {
+		if (bString == null || bString.equals(""))
+			return null;
+		StringBuffer tmp = new StringBuffer();
+		int iTmp = 0;
+		for (int i = 0; i < bString.length(); i += 4) {
+			iTmp = 0;
+			for (int j = 0; j < 4; j++) {
+				iTmp += Integer.parseInt(bString.substring(i + j, i + j + 1)) << (4 - j - 1);
+			}
+			tmp.append(Integer.toHexString(iTmp));
+		}
+		return tmp.toString();
 	}
 
 	public static void main(String[] args) throws UnsupportedEncodingException {
