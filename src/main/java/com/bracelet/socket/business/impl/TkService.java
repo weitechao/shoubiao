@@ -151,8 +151,8 @@ public class TkService extends AbstractBizService {
 					push.put("New", 1);
 					String targettime = Utils.getTime(System.currentTimeMillis());
 					pushlogService.insertMsgInfo(imei, 1, deviceid, "新语音" + targettime, "新语音" + targettime);
-					AndroidPushUtil.push(token, "新语音" + targettime, push.toString(), "新语音" + targettime);
-					IOSPushUtil.push(token, "新语音" + targettime, push.toString(), "新语音" + targettime);
+					AndroidPushUtil.pushNotifyNotify(token, "新语音" + targettime, push.toString(), "新语音" + targettime);
+					IOSPushUtil.pushNotifyNotify(token, "新语音" + targettime, push.toString(), "新语音" + targettime);
 				}
 
 			}

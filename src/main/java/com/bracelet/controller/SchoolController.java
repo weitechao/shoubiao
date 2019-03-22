@@ -146,7 +146,7 @@ public class SchoolController extends BaseController {
 				bb.put("Code", 0);
 			}
 		}else{
-			if(confService.insertHeath(deviceId, "4000", sleepCalculate, "0" )){
+			if(confService.insertHeath(deviceId, "0", sleepCalculate, "0" )){
 				bb.put("Code", 1);
 			}else{
 				bb.put("Code", 0);

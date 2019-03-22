@@ -498,12 +498,7 @@ public class WatchDeviceInfoController extends BaseController {
 						.append(deviceSet.getReportCallLocation()).append(deviceSet.getAutomaticAnswering());
 
 				String set16 = Integer.toHexString(Integer.parseInt(setString.toString(), 2));
-				int set16L = set16.length();
-				if (set16L == 1) {
-					set16 = "00" + set16;
-				} else if (set16L == 2) {
-					set16 = "0" + set16;
-				}
+				
 				sendMsg.append(set16).append(",");
 				if (deviceSet.getDisabledInClass() == 1) {
 					WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfo(Long.valueOf(userId));
@@ -527,7 +522,12 @@ public class WatchDeviceInfoController extends BaseController {
 				} else {
 					sendMsg.append("06:05,23:00,");
 				}
-				sendMsg.append(deviceSet.getBrightScreen() + ",2,480,0,");
+				if(deviceSet.getBrightScreen()==0 ){
+					sendMsg.append("10,2,480,0,");
+				}else{
+					sendMsg.append(deviceSet.getBrightScreen() + ",2,480,0,");
+				}
+				
 
 				sendMsg.append(weekAlarm1 + "," + weekAlarm2 + "," + weekAlarm3 + "," + alarm1 + "," + alarm2 + ","
 						+ alarm3 + ",");
@@ -547,7 +547,7 @@ public class WatchDeviceInfoController extends BaseController {
 
 				sendMsg.append("06:05,23:00,");
 
-				sendMsg.append("0,2,480,0,");
+				sendMsg.append("10,2,480,0,");
 				sendMsg.append(weekAlarm1 + "," + weekAlarm2 + "," + weekAlarm3 + "," + alarm1 + "," + alarm2 + ","
 						+ alarm3 + ",");
 				sendMsg.append("2," + "0,1");
@@ -558,7 +558,7 @@ public class WatchDeviceInfoController extends BaseController {
 			if (heathM != null) {
 				sendMsg.append("," + heathM.getSleepCalculate() + "," + heathM.getStepCalculate() + ",0,0,baby");
 			} else {
-				sendMsg.append(",1|23:00-23:59|05:00-06:00,4000,0,0,baby");
+				sendMsg.append(",1|23:00-23:59|05:00-06:00,0,0,0,baby");
 			}
 
 			String reps = "[YW*" + imei + "*0001*" + RadixUtil.changeRadix(sendMsg.toString()) + "*"

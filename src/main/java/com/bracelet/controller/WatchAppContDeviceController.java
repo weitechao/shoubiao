@@ -5,7 +5,9 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.bracelet.dto.SocketLoginDto;
 import com.bracelet.entity.WatchDevice;
+import com.bracelet.entity.WatchPhoneBook;
 import com.bracelet.service.ILocationService;
+import com.bracelet.service.IMemService;
 import com.bracelet.service.IPushlogService;
 import com.bracelet.service.IStepService;
 import com.bracelet.service.IUserInfoService;
@@ -17,6 +19,7 @@ import com.bracelet.util.Utils;
 
 import io.netty.buffer.Unpooled;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +45,9 @@ public class WatchAppContDeviceController extends BaseController {
 	WatchSetService  watchSetService;
 	@Autowired
 	IPushlogService pushMsgService;
+	
+	@Autowired
+	IMemService memberService;
 	@Resource
 	BaseChannelHandler baseChannelHandler;
 	
@@ -147,9 +153,25 @@ public class WatchAppContDeviceController extends BaseController {
 				return bb.toString();
 			}
 			if (socketLoginDto.getChannel().isActive()) {
-				String msg="MONITOR,"+phone;
-				String reps = "[YW*"+imei+"*0001*"+RadixUtil.changeRadix(msg)+"*"+msg+"]";
-				socketLoginDto.getChannel().writeAndFlush(reps);
+				if(!StringUtils.isEmpty(phone)&&phone.length() == 11){
+					String msg="MONITOR,"+phone;
+					String reps = "[YW*"+imei+"*0001*"+RadixUtil.changeRadix(msg)+"*"+msg+"]";
+					socketLoginDto.getChannel().writeAndFlush(reps);
+				}else{
+					WatchPhoneBook phoneBook = memberService.getPhoneBookByImeiAndStatus(imei, 1);
+					if(phoneBook != null){
+						String msg="MONITOR,"+phoneBook.getPhone();
+						String reps = "[YW*"+imei+"*0001*"+RadixUtil.changeRadix(msg)+"*"+msg+"]";
+						socketLoginDto.getChannel().writeAndFlush(reps);
+					}else{
+						WatchPhoneBook phoneBookOnther = memberService.getPhoneBookByImeiAndStatus(imei, 0);
+						if(phoneBookOnther!=null){
+							String msg="MONITOR,"+phoneBookOnther.getPhone();
+							String reps = "[YW*"+imei+"*0001*"+RadixUtil.changeRadix(msg)+"*"+msg+"]";
+							socketLoginDto.getChannel().writeAndFlush(reps);
+						}
+					}
+				}
 				bb.put("Code", 1);
 			} else {
 				bb.put("Code", 0);

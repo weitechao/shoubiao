@@ -187,6 +187,26 @@ public class WatchAppMakeDeviceUpdateVersionController extends BaseController {
 		return bb.toString();
 	}
 	
+	//恢复出厂设置不用token的
+		@ResponseBody
+		@RequestMapping(value = "/factoryNoToken/{imei}", method = RequestMethod.GET)
+		public String factoryNoToken(@PathVariable String imei) {
+			JSONObject bb = new JSONObject();
+			SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
+			if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
+				bb.put("Code", 4);
+				return bb.toString();
+			}
+			String reps = "[YW*"+imei+"*0001*0007*FACTORY]";
+			if (socketLoginDto.getChannel().isActive()) {
+				socketLoginDto.getChannel().writeAndFlush(reps);
+				bb.put("Code", 1);
+			} else {
+				bb.put("Code", 0);
+			}
+			return bb.toString();
+		}
+	
 	/* APN设置 */
 	@ResponseBody
 	@RequestMapping(value = "/setApnInfo", method = RequestMethod.POST)

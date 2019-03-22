@@ -113,8 +113,8 @@ public class Utils {
 	public final static String VOICE_URL = "http://" + IP + ":8080/GXCareDevice/watchvoice/device/";
 	public final static String PHOTO_URL = "http://" + IP + ":8080/GXCareDevice/watchphoto/device/";
 	public final static String APP_PHOTO_UTL = "http://" + IP + ":8080/GXCareDevice/headPhoto/appset/";
-	public final static String PHONEBook_PHOTO_UTL = "http://" + IP + ":8080/GXCareDevice/headImg/";*/
-
+	public final static String PHONEBook_PHOTO_UTL = "http://" + IP + ":8080/GXCareDevice/headImg/";
+*/
 	
 	public static final String IP = "39.98.236.1"; 
 	public final static String VOICE_URL = "http://"+IP+":8080/GXCareDevice/watchvoice/device/"; 

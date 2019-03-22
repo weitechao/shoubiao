@@ -35,6 +35,13 @@ public class IOSPushUtil {
 		}
 
 	}
+	
+	public static void pushNotifyNotify(String targetValue, String title, String content,
+			String notifyContent) {
+		if (targetValue != null && !"".equals(targetValue)) {
+			pushNotify(targetValue, title, content, notifyContent, 0);
+		}
+	}
 
 	public static PushResponse pushMessage(String targetValue, String title,
 			String content, int second) {

@@ -35,6 +35,15 @@ public class AndroidPushUtil {
 		}
 
 	}
+	
+	public static void pushNotifyNotify(String targetValue, String title, String content,
+			String notifyContent) {
+		if (targetValue != null && !"".equals(targetValue)) {
+			//pushMessage(targetValue, title, content, 0);
+			pushNotify(targetValue, title, content, notifyContent, 0);
+		}
+
+	}
 
 	public static PushResponse pushMessage(String targetValue, String title,
 			String content, int second) {

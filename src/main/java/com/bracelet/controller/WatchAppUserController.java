@@ -26,6 +26,7 @@ import com.bracelet.service.IVoltageService;
 import com.bracelet.service.WatchSetService;
 import com.bracelet.service.WatchTkService;
 import com.bracelet.util.ChannelMap;
+import com.bracelet.util.HttpClientGet;
 import com.bracelet.util.IOSPushUtil;
 import com.bracelet.util.AndroidPushUtil;
 import com.bracelet.util.RadixUtil;
@@ -663,46 +664,58 @@ public class WatchAppUserController extends BaseController {
 			// bb.put("Message", "");
 			return bb.toString();
 		}
+		
+		String ipport = limitCache.getRedisKeyValue(imei);
+		
+		String responseJsonString = HttpClientGet.get("http://"+ipport+"/shoubiao/watchuser/factoryNoToken/"+imei);
+		JSONObject responseJsonObject = (JSONObject) JSON.parse(responseJsonString);
+		Integer code = responseJsonObject.getInteger("Code");
+		
+		if(code == 1){
+			// 清空设置信息 device_watch_info
+			WatchDevice watch = ideviceService.getDeviceInfo(imei);
+			if (watch != null) {
+				this.ideviceService.updateWatchImeiInfoById(watch.getId(), "", "", 1, "", "", "", "", "", "");
+			}
+			ideviceService.updateImeiHeadInfoByImei(watch.getId(), "");
 
-		// 清空设置信息 device_watch_info
-		WatchDevice watch = ideviceService.getDeviceInfo(imei);
-		if (watch != null) {
-			this.ideviceService.updateWatchImeiInfoById(watch.getId(), "", "", 1, "", "", "", "", "", "");
-		}
-		ideviceService.updateImeiHeadInfoByImei(watch.getId(), "");
+			WatchDeviceHomeSchool watchSchool = ideviceService.getDeviceHomeAndFamilyInfo(Long.valueOf(userId));
+			if (watchSchool != null) {
+				ideviceService.updateImeiHomeAndFamilyInfoById(watchSchool.getId(), "08:00-12:00", "14:00-17:00", "", "",
+						"", "", "", "", "", "");
+			}
+			
+			DeviceManagePhone demp = ideviceService.getManagePhoneByImei(imei);
+			if(demp != null){
+				ideviceService.updateAdminPhoneById(demp.getId(), "");	
+			}
 
-		WatchDeviceHomeSchool watchSchool = ideviceService.getDeviceHomeAndFamilyInfo(Long.valueOf(userId));
-		if (watchSchool != null) {
-			ideviceService.updateImeiHomeAndFamilyInfoById(watchSchool.getId(), "08:00-12:00", "14:00-17:00", "", "",
-					"", "", "", "", "", "");
+			fenceService.deleteWatchFenceByImei(imei);
+			memService.deleteWatchMemberByImei(imei);
+			// 删语音 删定位
+			locationService.deleteByImei(imei);
+			watchtkService.delteByImei(imei);
+			// 删闹钟
+			ideviceService.deleteDeviceAlarmInfo(imei);
+			
+			userInfoService.deleteWatchBindByUserId(Long.valueOf(userId));
+			//删除绑定设备
+			ideviceService.deleteBindDevicebyImei(imei);
+			HealthStepManagement  heathM = confService.getHeathStepInfo(imei);
+			if(heathM != null){
+				confService.deteHeathyInfoByImei(heathM.getId());
+			}
+			
+			UserInfo userInfo = userInfoService.getUserInfoByUsername(imei);
+			if (userInfo != null) {
+					userInfoService.updateUserPassword(userInfo.getUser_id(), "123456");
+			}
+			bb.put("Code", 1);
+		}else{
+			bb.put("Code", 1);
 		}
 		
-		DeviceManagePhone demp = ideviceService.getManagePhoneByImei(imei);
-		if(demp != null){
-			ideviceService.updateAdminPhoneById(demp.getId(), "");	
-		}
-
-		fenceService.deleteWatchFenceByImei(imei);
-		memService.deleteWatchMemberByImei(imei);
-		// 删语音 删定位
-		locationService.deleteByImei(imei);
-		watchtkService.delteByImei(imei);
-		// 删闹钟
-		ideviceService.deleteDeviceAlarmInfo(imei);
 		
-		userInfoService.deleteWatchBindByUserId(Long.valueOf(userId));
-		//删除绑定设备
-		ideviceService.deleteBindDevicebyImei(imei);
-		HealthStepManagement  heathM = confService.getHeathStepInfo(imei);
-		if(heathM != null){
-			confService.deteHeathyInfoByImei(heathM.getId());
-		}
-		
-		UserInfo userInfo = userInfoService.getUserInfoByUsername(imei);
-		if (userInfo != null) {
-				userInfoService.updateUserPassword(userInfo.getUser_id(), "123456");
-		}
-		bb.put("Code", 1);
 		// bb.put("Message", "解绑成功");
 		return bb.toString();
 	}

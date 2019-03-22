@@ -226,12 +226,6 @@ public class WatchAppSetController extends BaseController {
 	            .append(somatosensory).append(reportCallLocation).append(automaticAnswering);
 				
 				String set16 = Integer.toHexString(Integer.parseInt(setString.toString(), 2));
-				 int set16L = set16.length();
-				if(set16L==1){
-					set16="00"+set16;
-				}else if(set16L == 2){
-					set16="0"+set16;
-				}
 				
 			StringBuffer sendMsg = new StringBuffer("SET" + ",,1234,");//F48,");
 			sendMsg.append(set16).append(",");
@@ -259,21 +253,26 @@ public class WatchAppSetController extends BaseController {
 			} else {
 				sendMsg.append("06:05,23:00,");
 			}
-			sendMsg.append(brightScreen + ",2,480,0,");
+			if(brightScreen==0){
+				sendMsg.append( "10,2,480,0,");
+			}else{
+				sendMsg.append(brightScreen + ",2,480,0,");
+			}
+		
 
 			WatchDeviceAlarm watch = ideviceService.getDeviceAlarmInfo(imei);
 			if (watch != null) {
 				sendMsg.append(watch.getWeekAlarm1() + "," + watch.getWeekAlarm2() + "," + watch.getWeekAlarm3() + ","
 						+ watch.getAlarm1() + "," + watch.getAlarm2() + "," + watch.getAlarm3() + ",");
 			} else {
-				sendMsg.append("0:12345,0:0,");
+				sendMsg.append("0:0,0:0,0:0,00:00,00:00,00:00, ");
 			}
 			sendMsg.append(locationMode + "," + locationTime + "," + flowerNumber);
 			HealthStepManagement  heathM = confService.getHeathStepInfo(imei);
 			if(heathM != null){
 				sendMsg.append(","+heathM.getSleepCalculate()+","+heathM.getStepCalculate()+",0,"+sosMsgswitch+","+"baby");
 			}else{
-				sendMsg.append(",1|23:00-23:59|05:00-06:00,4000,0,"+sosMsgswitch+","+"baby");
+				sendMsg.append(",1|23:00-23:59|05:00-06:00,0,0,"+sosMsgswitch+","+"baby");
 			}
 			
 			/*
