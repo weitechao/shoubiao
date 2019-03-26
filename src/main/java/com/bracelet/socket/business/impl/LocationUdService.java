@@ -230,7 +230,7 @@ public class LocationUdService extends AbstractBizService {
 									String latSave = locationShuzu[0];
 									String lngSave = locationShuzu[1];
 
-									if (((System.currentTimeMillis() - timeStampSave) / (60 * 1000)) >= 3) {
+									if (((System.currentTimeMillis() - timeStampSave) / (60 * 1000)) >= 5) {
 										locationService.insertUdInfo(imei, 2, lat, lng, status, time, locationStyle);
 										limitCache.addKey(imei + "_save", locationValue);
 									} else {
@@ -312,7 +312,7 @@ public class LocationUdService extends AbstractBizService {
 										String latSave = locationShuzu[0];
 										String lngSave = locationShuzu[1];
 
-										if (((System.currentTimeMillis() - timeStampSave) / (60 * 1000)) >= 3) {
+										if (((System.currentTimeMillis() - timeStampSave) / (60 * 1000)) >= 5) {
 											locationService.insertUdInfo(imei, 3, lat, lng, status, time,
 													locationStyle);
 											limitCache.addKey(imei + "_save", locationValue);

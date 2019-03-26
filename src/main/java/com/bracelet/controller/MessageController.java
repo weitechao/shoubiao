@@ -211,7 +211,7 @@ public class MessageController extends BaseController {
 		}
 		// List 数组{ Type ，DeviceID ，Content，Message，CreateTime }
 		JSONArray jsonArray = new JSONArray();
-		List<MsgInfo> msgList = pushlogService.getMsgInfoList(imei);
+		List<MsgInfo> msgList = pushlogService.getMsgInfoList(imei,Long.valueOf(user_id));
 		if (msgList != null) {
 			for (MsgInfo msginfo : msgList) {
 				JSONObject dataMap = new JSONObject();
@@ -244,7 +244,7 @@ public class MessageController extends BaseController {
 			return bb.toString();
 		}
 		
-		pushlogService.deleteMsgInfo(imei,id);
+		pushlogService.deleteMsgInfo(imei,id,Long.valueOf(user_id));
 	
 		bb.put("Code", 1);
 	

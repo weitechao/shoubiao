@@ -642,16 +642,17 @@ public class LocationController extends BaseController {
 				JSONObject dataMap = new JSONObject();
 				dataMap.put("lat", location.getLat());
 				dataMap.put("lng", location.getLng());
-				dataMap.put("timestamp", location.getUpload_time().getTime());
+				String time = Utils.getTime(location.getUpload_time().getTime());
+				dataMap.put("timestamp",time);
 				dataMap.put("locationType", location.getLocation_type());
 
-				dataMap.put("Time", location.getUpload_time().getTime() + "");
+				dataMap.put("Time", time);
 				dataMap.put("Status", 0);
 				dataMap.put("Latitude", location.getLat());
 				dataMap.put("Longitude", location.getLng());
 				dataMap.put("LocationType", location.getLocation_type());
-				dataMap.put("CreateTime", Utils.getTime(location.getUpload_time().getTime()));
-				dataMap.put("UpdateTime", location.getUpload_time().getTime() + "");
+				dataMap.put("CreateTime",time);
+				dataMap.put("UpdateTime", time);
 				jsonArray.add(dataMap);
 			}
 			bb.put("Code", 1);

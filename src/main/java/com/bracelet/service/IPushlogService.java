@@ -28,10 +28,10 @@ public interface IPushlogService {
 
 	boolean insertErrorInfo(Long userId, String content);
 
-	List<MsgInfo> getMsgInfoList(String imei);
+	List<MsgInfo> getMsgInfoList(String imei, Long userId);
 
 	boolean insertMsgInfo(String imei, Integer type, String deviceid, String content, String message);
 
-	boolean deleteMsgInfo(String imei,Long id);
+	boolean deleteMsgInfo(String imei,Long id,Long userId);
 
 }
