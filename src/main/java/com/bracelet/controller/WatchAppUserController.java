@@ -743,8 +743,31 @@ public class WatchAppUserController extends BaseController {
 		String imei = jsonObject.getString("imei");
 		String name = jsonObject.getString("name");
 		
+		BindDevice  bindDeviceAppMyself= userInfoService.getWatchBindInfoByUserId(Long.valueOf(userId));
+		String imeimyselef =userInfoService.getUserInfoById(Long.valueOf(userId)).getUsername()+"";
+		if(bindDeviceAppMyself == null ){
+			userInfoService.saveWatchBindInfo(Long.valueOf(userId), imeimyselef, imeimyselef, 1, imeimyselef);
+			
+			userInfoService.saveWatchBindInfo(Long.valueOf(userId), imeimyselef, imeimyselef, 1, imei);
+			userInfoService.saveWatchBindInfo(Long.valueOf(userId), imei, name, 1, imeimyselef);
+			bb.put("Code", 1);
+		}else{
+
+			BindDevice  bindDevice= userInfoService.getWatchBindInfoByImeiAndUserId(imei, Long.valueOf(userId));	
+			if(bindDevice != null){
+				bb.put("Code", 2);
+			}else{
+				userInfoService.saveWatchBindInfo(Long.valueOf("1"), bindDeviceAppMyself.getImei()+"", bindDeviceAppMyself.getImei()+"", 1, imei);
+				userInfoService.saveWatchBindInfo(Long.valueOf("2"), imei, name, 1, bindDeviceAppMyself.getImei()+"");
+				
+				bb.put("Code", 1);
+			}
 		
-		BindDevice  bindDeviceApp= userInfoService.getWatchBindInfoByUserId(Long.valueOf(userId));
+		}
+		
+		
+		
+	/*	BindDevice  bindDeviceApp= userInfoService.getWatchBindInfoByUserId(Long.valueOf(userId));
 		if(bindDeviceApp != null){
 			BindDevice  bindDevice= userInfoService.getWatchBindInfoByImeiAndUserId(imei, Long.valueOf(userId));	
 			if(bindDevice != null){
@@ -760,7 +783,7 @@ public class WatchAppUserController extends BaseController {
 			userInfoService.saveWatchBindInfo(Long.valueOf("1"), imeii, imeii, 1, imeii);
 			userInfoService.saveWatchBindInfo(Long.valueOf("2"), imeii, name, 1, imei);
 			bb.put("Code", 1);
-		}
+		}*/
 		//String appImei = userInfoService.getUserInfoById(Long.valueOf(userId)).getImei();
 		
 		

@@ -109,18 +109,18 @@ public class Utils {
 	// app头像图片地址和url
 	// 通讯录头像
 
-/*	public static final String IP = "47.92.30.81";
+	public static final String IP = "47.92.30.81";
 	public final static String VOICE_URL = "http://" + IP + ":8080/GXCareDevice/watchvoice/device/";
 	public final static String PHOTO_URL = "http://" + IP + ":8080/GXCareDevice/watchphoto/device/";
 	public final static String APP_PHOTO_UTL = "http://" + IP + ":8080/GXCareDevice/headPhoto/appset/";
-	public final static String PHONEBook_PHOTO_UTL = "http://" + IP + ":8080/GXCareDevice/headImg/";*/
+	public final static String PHONEBook_PHOTO_UTL = "http://" + IP + ":8080/GXCareDevice/headImg/";
 
 	
-	public static final String IP = "39.98.236.1"; 
+	/*public static final String IP = "39.98.236.1"; 
 	public final static String VOICE_URL = "http://"+IP+":8080/GXCareDevice/watchvoice/device/"; 
 	public  final static String PHOTO_URL ="http://"+IP+":8080/GXCareDevice/watchphoto/device/"; 
 	public final static String APP_PHOTO_UTL ="http://"+IP+":8080/GXCareDevice/headPhoto/appset/";
-	public final static String PHONEBook_PHOTO_UTL = "http://"+IP+":8080/GXCareDevice/headImg/";
+	public final static String PHONEBook_PHOTO_UTL = "http://"+IP+":8080/GXCareDevice/headImg/";*/
 	 
 
 	// 获取amr语音文件长度
