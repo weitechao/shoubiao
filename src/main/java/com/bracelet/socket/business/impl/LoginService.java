@@ -13,20 +13,28 @@ import com.alibaba.fastjson.JSONObject;
 import com.bracelet.dto.SocketBaseDto;
 import com.bracelet.dto.SocketLoginDto;
 import com.bracelet.dto.WatchLatestLocation;
+import com.bracelet.entity.HealthStepManagement;
 import com.bracelet.entity.LocationWatch;
+import com.bracelet.entity.TimeSwitch;
 import com.bracelet.entity.UserInfo;
 import com.bracelet.entity.WatchDevice;
+import com.bracelet.entity.WatchDeviceAlarm;
 import com.bracelet.entity.WatchDeviceBak;
+import com.bracelet.entity.WatchDeviceHomeSchool;
+import com.bracelet.entity.WatchDeviceSet;
 import com.bracelet.exception.BizException;
 import com.bracelet.redis.LimitCache;
 import com.bracelet.util.RespCode;
 import com.bracelet.util.StringUtil;
 import com.bracelet.util.Utils;
+import com.bracelet.service.IConfService;
 import com.bracelet.service.IDeviceService;
 import com.bracelet.service.ILocationService;
 import com.bracelet.service.IUserInfoService;
+import com.bracelet.service.WatchSetService;
 import com.bracelet.socket.business.IService;
 import com.bracelet.util.ChannelMap;
+import com.bracelet.util.RadixUtil;
 
 /**
  * 登录服务 {"type":1,"no":"1234567","timestamp":1501123709,"data":
@@ -40,6 +48,12 @@ public class LoginService implements IService {
 	IDeviceService ideviceService;
 	@Autowired
 	ILocationService locationService;
+	
+	@Autowired
+	WatchSetService watchSetService;
+	
+	@Autowired
+	IConfService confService;
 
 	@Autowired
 	LimitCache limitCache;
@@ -142,8 +156,125 @@ public class LoginService implements IService {
 
 		limitCache.addKey(imei, Utils.IP + ":" + Utils.PORT_HTTP);//设备要先登录，服务器记录设备登录的http ip端口
 		String resp = "[YW*" + imei + "*0001*0006*INIT,1]";
-		logger.info("返回设备登录信息=" + resp+",redis 里的key为="+limitCache.getRedisKeyValue(imei + "_id"));
-		return resp;
+		
+		
+		
+		//拼设置的指令包
+		
+		String userId = limitCache.getRedisKeyValue(imei + "_id");
+		WatchDeviceSet deviceSet = watchSetService.getDeviceSetByImei(Long.valueOf(userId));
+
+		StringBuffer sendMsg = new StringBuffer("SET" + ",,1234,");// F48,");
+		WatchDeviceAlarm watch = ideviceService.getDeviceAlarmInfo(imei);
+		
+		if (deviceSet != null) {
+			StringBuffer setString = new StringBuffer("");
+			setString.append(deviceSet.getInfoVibration()).append(deviceSet.getInfoVoice())
+					.append(deviceSet.getPhoneComeVibration()).append(deviceSet.getPhoneComeVoice())
+					.append(deviceSet.getWatchOffAlarm()).append(deviceSet.getRejectStrangers())
+					.append(deviceSet.getTimerSwitch()).append(deviceSet.getDisabledInClass())
+					.append(deviceSet.getReserveEmergencyPower()).append(deviceSet.getSomatosensory())
+					.append(deviceSet.getReportCallLocation()).append(deviceSet.getAutomaticAnswering());
+
+			String set16 = Integer.toHexString(Integer.parseInt(setString.toString(), 2));
+			
+			sendMsg.append(set16).append(",");
+			if (deviceSet.getDisabledInClass() == 1) {
+				WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfo(Long.valueOf(userId));
+				if (whsc != null) {
+					sendMsg.append(whsc.getClassDisable1() + "|" + whsc.getClassDisable2() + "|"
+							+ whsc.getWeekDisable1() + ",");
+				} else {
+					sendMsg.append("08:00-11:30|14:00-16:30|12345,");
+				}
+			} else {
+				sendMsg.append("08:00-11:30|14:00-16:30|12345,");
+			}
+
+			if (1 == deviceSet.getTimerSwitch()) {
+				TimeSwitch time = confService.getTimeSwitch(Long.valueOf(userId));
+				if (time != null) {
+					sendMsg.append(time.getTimeOpen() + "," + time.getTimeClose() + ",");
+				} else {
+					sendMsg.append("06:05,23:00,");
+				}
+			} else {
+				sendMsg.append("06:05,23:00,");
+			}
+			if(deviceSet.getBrightScreen()==0 ){
+				sendMsg.append("10,2,480,0,");
+			}else{
+				sendMsg.append(deviceSet.getBrightScreen() + ",2,480,0,");
+			}
+			
+           if(watch!=null){
+        	   sendMsg.append(watch.getWeekAlarm1() + "," + watch.getWeekAlarm2() + "," + watch.getWeekAlarm3() + "," + watch.getAlarm1() + "," + watch.getAlarm2()  + ","
+   					+ watch.getAlarm3()  + ",");
+           }else{
+        	   sendMsg.append( "0:0,0:0,0:0,00:00,00:00,00:00,");
+           }
+			
+
+			sendMsg.append(deviceSet.getLocationMode() + ",60,"
+					+ deviceSet.getFlowerNumber());
+			/*
+			 * String reps = "[YW*" + imei + "*0001*" +
+			 * RadixUtil.changeRadix(sendMsg.toString()) + "*" +
+			 * sendMsg.toString() + "]"; logger.info("设备参数设置=" + reps);
+			 * socketLoginDto.getChannel().writeAndFlush(reps);
+			 * bb.put("Code", 1);
+			 */
+		} else {
+			sendMsg.append("500,");
+			sendMsg.append("08:00-11:30|14:00-16:30|12345,");
+
+			sendMsg.append("06:05,23:00,");
+
+			sendMsg.append("10,2,480,0,");
+			
+			  if(watch!=null){
+	        	   sendMsg.append(watch.getWeekAlarm1() + "," + watch.getWeekAlarm2() + "," + watch.getWeekAlarm3() + "," + watch.getAlarm1() + "," + watch.getAlarm2()  + ","
+	   					+ watch.getAlarm3()  + ",");
+	           }else{
+	        	   sendMsg.append( "0:0,0:0,0:0,00:00,00:00,00:00,");
+	           }
+			sendMsg.append("1,60,0");
+}
+
+		HealthStepManagement heathM = confService.getHeathStepInfo(imei);
+		if (heathM != null) {
+			sendMsg.append("," + heathM.getSleepCalculate() + "," + heathM.getStepCalculate() + ",0,0,baby");
+		} else {
+			sendMsg.append(",1|23:00-23:59|05:00-06:00,0,0,0,baby");
+		}
+
+		String reps = "[YW*" + imei + "*0001*" + RadixUtil.changeRadix(sendMsg.toString()) + "*"
+				+ sendMsg.toString() + "]";
+		
+		
+		/*
+		 * [YW*YYYYYYYYYY*NNNN*LEN*SET,
+		 * 手表电话号码，设置次数流水号,设置项,上课禁用时间段,定时开机时间,定时关机时间,亮屏时间,语言,时区,指示灯,
+		 * 闹钟1周期,闹钟2周期,闹钟3周期,闹钟1时间,闹钟2时间,闹钟3时间,定位模式,定位时间,小红花,睡眠,计步,心率,
+		 * SOS短信开关,手表宝贝名称,后续还会加设置需要保留扩展]
+		 * [YW*872018020142169*0001*0056*SET,123456,F48,08:00-11:30|14:00-16
+		 * :30|12345,06:05,23:00,20,2,480,0,0:12345,0:0,2,10,5]
+		 * [YW*872018020142169*0001*006a*SET,123456,F48,08:00-11:30|14:00-16
+		 * :30|12345,06:05,23:00,60,2,480,0,1:234,0:0,0:0,02:00,00:00,00:00,
+		 * 2,10,2] 实例:
+		 * [YW*5678901234*0001*000A*SET,13232211111,1234,F48,08:00-11:30|14:
+		 * 00-16:30|12345,06:05,23:00,10,2,480,0 ,
+		 * 0:12345,0:0,0:0,06:30,00:00,00:00,1,60,,,,,,宝贝]
+		 * 
+		 * [YW*872018020142169*0001*0065*SET,123456,F48,10:00-12:00|15:00-17
+		 * :00|1245,
+		 * 06:05,23:00,5,,,1:123,0:25,0:234,02:00,03:00,21:00,2,10,4]
+		 */
+		
+		
+		
+		
+		return resp+reps;
 	}
 
 	public SocketBaseDto process(JSONObject jsonObject, Channel channel) {
@@ -181,4 +312,5 @@ public class LoginService implements IService {
 		dto.setStatus(0);
 		return dto;
 	}
+	
 }

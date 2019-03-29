@@ -181,7 +181,8 @@ public class WatchAppSetController extends BaseController {
 //			Integer timeZone = Integer.valueOf(jsonObject.getString("timeZone"));// 时区
 			Integer timeZone = 480;// 时区
 			Integer infoVoice = Integer.valueOf(jsonObject.getString("infoVoice"));// 手表信息声音
-			Integer locationTime = Integer.valueOf(jsonObject.getString("locationTime"));// 工作时长
+			//Integer locationTime = Integer.valueOf(jsonObject.getString("locationTime"));// 工作时长
+			Integer locationTime = 60;// 工作时长
 			Integer reserveEmergencyPower = Integer.valueOf(jsonObject.getString("reserveEmergencyPower"));// 预留紧急电量6
 			Integer sosMsgswitch = Integer.valueOf(jsonObject.getString("sosMsgswitch"));// sos短信开关
 			Integer automaticAnswering = Integer.valueOf(jsonObject.getString("automaticAnswering"));// 自动接听
@@ -229,7 +230,7 @@ public class WatchAppSetController extends BaseController {
 				
 			StringBuffer sendMsg = new StringBuffer("SET" + ",,1234,");//F48,");
 			sendMsg.append(set16).append(",");
-//[YW*872018020142169*0001*0066*SET,,1234,F48,08:00-11:30|14:00-16:30|12345,06:05,23:00,0,2,480,0,1:24,0:4,0:0,04:00,00:00,00:00,2,0,1]
+
 
 			if (disabledInClass == 1) {
 				WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfo(Long.valueOf(userId));

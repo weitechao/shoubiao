@@ -63,14 +63,14 @@ public class HttpDataAspect {
 		// logger.info("[HTTP] process info: [name:" + name + "][reqParams:" +
 		// reqParams + "][resp:" + resp + "][rstatus:" + rstatus + "][rmsg:" +
 		// rmsg + "][time:" + time + "]");
-	//	if (time > 500) {
+		if (time >= 2000) {
 			if (name.equals(Utils.METHOD_NAME)) {
 				apilogService.insertApp(name, "head", resp, "", rstatus, rmsg, time);
 			} else {
 				if (!Utils.METHOD_SLBTEST.equals(name) && !Utils.NOTIFY_LIST.equals(name)) {
 					apilogService.insertApp(name, reqParams, resp, "", rstatus, rmsg, time);
 				}
-		//	}
+			}
 		}
 		return result;
 	}

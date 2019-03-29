@@ -532,7 +532,7 @@ public class WatchDeviceInfoController extends BaseController {
 				sendMsg.append(weekAlarm1 + "," + weekAlarm2 + "," + weekAlarm3 + "," + alarm1 + "," + alarm2 + ","
 						+ alarm3 + ",");
 
-				sendMsg.append(deviceSet.getLocationMode() + "," + deviceSet.getLocationTime() + ","
+				sendMsg.append(deviceSet.getLocationMode() + ",60,"
 						+ deviceSet.getFlowerNumber());
 				/*
 				 * String reps = "[YW*" + imei + "*0001*" +
@@ -542,7 +542,7 @@ public class WatchDeviceInfoController extends BaseController {
 				 * bb.put("Code", 1);
 				 */
 			} else {
-				sendMsg.append("FFF,");
+				sendMsg.append("500,");
 				sendMsg.append("08:00-11:30|14:00-16:30|12345,");
 
 				sendMsg.append("06:05,23:00,");
@@ -550,7 +550,7 @@ public class WatchDeviceInfoController extends BaseController {
 				sendMsg.append("10,2,480,0,");
 				sendMsg.append(weekAlarm1 + "," + weekAlarm2 + "," + weekAlarm3 + "," + alarm1 + "," + alarm2 + ","
 						+ alarm3 + ",");
-				sendMsg.append("2," + "0,1");
+				sendMsg.append("1,60,0");
 
 			}
 
