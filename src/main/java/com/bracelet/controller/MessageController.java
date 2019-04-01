@@ -211,7 +211,7 @@ public class MessageController extends BaseController {
 		}
 		// List 数组{ Type ，DeviceID ，Content，Message，CreateTime }
 		JSONArray jsonArray = new JSONArray();
-		List<MsgInfo> msgList = pushlogService.getMsgInfoList(imei,Long.valueOf(user_id));
+		List<MsgInfo> msgList = pushlogService.getMsgInfoList(imei);
 		if (msgList != null) {
 			for (MsgInfo msginfo : msgList) {
 				JSONObject dataMap = new JSONObject();

@@ -666,6 +666,7 @@ public class WatchAppUserController extends BaseController {
 		}
 		
 		String ipport = limitCache.getRedisKeyValue(imei);
+		if(!StringUtil.isEmpty(ipport)){
 		
 		String responseJsonString = HttpClientGet.get("http://"+ipport+"/shoubiao/watchuser/factoryNoToken/"+imei);
 		JSONObject responseJsonObject = (JSONObject) JSON.parse(responseJsonString);
@@ -712,7 +713,10 @@ public class WatchAppUserController extends BaseController {
 			}
 			bb.put("Code", 1);
 		}else{
-			bb.put("Code", 1);
+			bb.put("Code", 0);
+		}
+		}else{
+			bb.put("Code", 0);
 		}
 		
 		

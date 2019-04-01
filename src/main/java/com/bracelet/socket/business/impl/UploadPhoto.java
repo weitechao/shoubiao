@@ -48,10 +48,10 @@ public class UploadPhoto extends AbstractBizService {
 	IUploadPhotoService iUploadPhotoService;
 	@Autowired
 	ILocationService locationService;
-	
+
 	@Autowired
 	IVoltageService voltageService;
-	
+
 	@Autowired
 	IPushlogService pushlogService;
 
@@ -64,51 +64,47 @@ public class UploadPhoto extends AbstractBizService {
 	@Override
 	protected String process2(SocketLoginDto socketLoginDto, String jsonInfo, Channel channel) {
 
-		/* [YW*YYYYYYYYYY*NNNN*LEN*TK,来源,文件名字,当前包,总分包数,ARM格式二进制音频数据]
+		/*
+		 * [YW*YYYYYYYYYY*NNNN*LEN*TK,来源,文件名字,当前包,总分包数,ARM格式二进制音频数据]
 		 *
 		 * 
 		 * 后面的传图片数据,起始包是1
-[YW*YYYYYYYYYY*NNNN*LEN*TPBK,来源,文件名字,当前包,总分包数,XX格式二进制图片数据]
-[YW*872018020142169*002E*0423*TK,0,wetalk_20181214000413.amr,1,2,#!AMR
-[YW*872018020142169*0007*042B*TPBK,18735662247,IMG20181214002304.jpg,1,8,����C
+		 * [YW*YYYYYYYYYY*NNNN*LEN*TPBK,来源,文件名字,当前包,总分包数,XX格式二进制图片数据]
+		 * [YW*872018020142169*002E*0423*TK,0,wetalk_20181214000413.amr,1,2,#!
+		 * AMR
+		 * [YW*872018020142169*0007*042B*TPBK,18735662247,IMG20181214002304.jpg,
+		 * 1,8,����C
+		 * 
+		 */
 
-		 * */
-		 
-		
 		logger.info("设备照片上传=" + jsonInfo);
-		
+
 		String imei = socketLoginDto.getImei();
-		
-		
-		
-			
-			String[] shuzu = jsonInfo.split("\\*");
-			//String imei = shuzu[1];// 设备imei
-			String no = shuzu[2];// 流水号
-			String info = shuzu[4];
-			Integer locationStyle = 4;// 1正常2报警3天气4拍照
-			String[] infoshuzuMsg = info.split(",");
-			String source = infoshuzuMsg[1];// 文件-来源 如果是设备就填0，如果是App就填发的人的手机号码
-			String photoName = infoshuzuMsg[2];// 文件名
-			int thisNumber = Integer.valueOf(infoshuzuMsg[3]);// 当前包 如果是0就是定位
-																// 1就是照片数据
-			int allNumber = Integer.valueOf(infoshuzuMsg[4]);// 总包个数
-			//String dataInfo = "ud," + infoshuzuMsg[5];// thisNumber0位置数据--其他照片数据
-	
-          
-            		
-		if (thisNumber != 0) {// 当前包 如果是0就是定位  1就是照片数据
+
+		String[] shuzu = jsonInfo.split("\\*");
+		// String imei = shuzu[1];// 设备imei
+		String no = shuzu[2];// 流水号
+		String info = shuzu[4];
+		Integer locationStyle = 4;// 1正常2报警3天气4拍照
+		String[] infoshuzuMsg = info.split(",");
+		String source = infoshuzuMsg[1];// 文件-来源 如果是设备就填0，如果是App就填发的人的手机号码
+		String photoName = infoshuzuMsg[2];// 文件名
+		int thisNumber = Integer.valueOf(infoshuzuMsg[3]);// 当前包 如果是0就是定位
+															// 1就是照片数据
+		int allNumber = Integer.valueOf(infoshuzuMsg[4]);// 总包个数
+		// String dataInfo = "ud," + infoshuzuMsg[5];// thisNumber0位置数据--其他照片数据
+
+		if (thisNumber != 0) {// 当前包 如果是0就是定位 1就是照片数据
 			logger.info("[photoName]=" + photoName);
-			if (photoName == null || "".equals(photoName)) {
-				photoName = imei + "_" + System.currentTimeMillis() + ".jpg";
-			} else {
-				photoName = imei + "_" + photoName;
+			if (StringUtil.isEmpty(photoName)) {
+				// photoName = imei + "_" + System.currentTimeMillis() + ".jpg";
+				photoName = System.currentTimeMillis() + ".jpg";
 			}
 
 			Integer jpgL = jsonInfo.lastIndexOf(".jpg");
-			logger.info(".jpg的位置="+jpgL);
-			
-			if(jpgL  == -1){
+			logger.info(".jpg的位置=" + jpgL);
+
+			if (jpgL == -1) {
 				String resp = "TPCF," + photoName + "," + thisNumber + "," + allNumber + ",0";
 				StringBuffer sb = new StringBuffer("[YW*" + imei + "*0002*");
 				sb.append(RadixUtil.changeRadix(resp));
@@ -118,38 +114,44 @@ public class UploadPhoto extends AbstractBizService {
 				logger.info("设备拍照返回数据=" + sb.toString());
 				return sb.toString();
 			}
-			
-			
-			
-			logger.info("jpgL加10后数字为="+jpgL);
-			
+
+			logger.info("jpgL加10后数字为=" + jpgL);
+
 			byte[] vocieByte = ChannelMap.getByte(channel.remoteAddress() + "_byte");
 
-			byte[] voiceSubByte = Utils.subByte(vocieByte, jpgL+10, vocieByte.length - jpgL-10);
+			byte[] voiceSubByte = Utils.subByte(vocieByte, jpgL + 11, vocieByte.length - jpgL - 11);
+
+			if ("2c".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
+				voiceSubByte = Utils.subByte(voiceSubByte, 1, voiceSubByte.length - 1);
+			}
+
+			if ("2c".equals(Integer.toHexString(voiceSubByte[voiceSubByte.length - 1] & 0xFF))) {
+				voiceSubByte = Utils.subByte(voiceSubByte, 0, voiceSubByte.length - 1);
+			}
 
 			Utils.createFileContent(Utils.PHOTO_FILE_lINUX, photoName, voiceSubByte);
+
 			
-			ChannelMap.removeAll(channel.remoteAddress() + "");
-			
-			if(thisNumber == allNumber&& allNumber!=0){
-				iUploadPhotoService.insertPhoto(imei, Utils.PHOTO_URL+ photoName, photoName, "1");
-				
-				
+
+			if (thisNumber == allNumber && allNumber != 0) {
+				ChannelMap.removeAll(channel.remoteAddress() + "");
+				iUploadPhotoService.insertPhoto(imei, Utils.PHOTO_URL + photoName, photoName, "1");
+
 				String token = limitCache.getRedisKeyValue(imei + "_push");
-				if( !StringUtil.isEmpty(token)){
+				if (!StringUtil.isEmpty(token)) {
 					JSONObject push = new JSONObject();
 					JSONArray jsonArray = new JSONArray();
 					JSONObject dataMap = new JSONObject();
 					dataMap.put("DeviceID", "");
 					String deviceid = limitCache.getRedisKeyValue(imei + "_id");
-					if(deviceid !=null && !"0".equals(deviceid) && !"".equals(deviceid)){
+					if (deviceid != null && !"0".equals(deviceid) && !"".equals(deviceid)) {
 						dataMap.put("DeviceID", deviceid);
-					}else{
+					} else {
 						WatchDevice watchd = ideviceService.getDeviceInfo(imei);
 						if (watchd != null) {
-							deviceid=watchd.getId()+"";
+							deviceid = watchd.getId() + "";
 							dataMap.put("DeviceID", watchd.getId());
-							limitCache.addKey(imei + "_id", watchd.getId()+"");
+							limitCache.addKey(imei + "_id", watchd.getId() + "");
 						}
 					}
 					dataMap.put("Message", 0);
@@ -159,49 +161,51 @@ public class UploadPhoto extends AbstractBizService {
 					jsonArray.add(dataMap);
 					push.put("NewList", jsonArray);
 					JSONArray jsonArray1 = new JSONArray();
-				
+
 					push.put("DeviceState", jsonArray1);
 
 					JSONArray jsonArray2 = new JSONArray();
 					JSONObject dataMap2 = new JSONObject();
 					dataMap2.put("Type", 11);
 					dataMap2.put("DeviceID", deviceid);
-					dataMap2.put("photoUrl", Utils.PHOTO_URL+ photoName);
-					dataMap2.put("Message","新图片");
+					dataMap2.put("photoUrl", Utils.PHOTO_URL + photoName);
+					dataMap2.put("Message", "新图片");
 					dataMap2.put("imei", imei);
 					jsonArray2.add(dataMap2);
 					push.put("Notification", jsonArray2);
-					
+
 					JSONObject dataMapPhoto = new JSONObject();
 					dataMapPhoto.put("photoUrl", "");
 					dataMapPhoto.put("createtime", new Date().getTime());
 					dataMapPhoto.put("photoName", photoName);
-					dataMapPhoto.put("DevicePhotoId", ((int)((Math.random()*9+1)*10000))+"");
+					dataMapPhoto.put("DevicePhotoId", ((int) ((Math.random() * 9 + 1) * 10000)) + "");
 					dataMapPhoto.put("DeviceID", deviceid);
 					dataMapPhoto.put("Source", "");
 					dataMapPhoto.put("DeviceTime", "");
 					dataMapPhoto.put("Latitude", "");
 					dataMapPhoto.put("Longitude", "");
 					dataMapPhoto.put("Mark", "");
-					dataMapPhoto.put("Path", Utils.PHOTO_URL+ photoName);
+					dataMapPhoto.put("Path", Utils.PHOTO_URL + photoName);
 					dataMapPhoto.put("Thumb", "");
 					dataMapPhoto.put("CreateTime", Utils.getLocationTime(System.currentTimeMillis()));
 					dataMapPhoto.put("UpdateTime", "");
 					JSONArray jsonArrayPhoto = new JSONArray();
 					jsonArrayPhoto.add(dataMapPhoto);
-					
+
 					push.put("List", jsonArrayPhoto);
-					
+
 					push.put("Code", 1);
 					push.put("New", 1);
-					 String targettime = Utils.getTime(System.currentTimeMillis());
-					 pushlogService.insertMsgInfo(imei, 11, deviceid, "新图片"+targettime, "新图片"+targettime);
-					AndroidPushUtil.push(token, "新图片"+targettime, push.toString(), "新图片"+targettime);	
-					IOSPushUtil.push(token, "新图片"+targettime, push.toString(), "新图片"+targettime);	
+					String targettime = Utils.getTime(System.currentTimeMillis());
+					pushlogService.insertMsgInfo(imei, 11, deviceid, "新图片" + targettime, "新图片" + targettime);
+				/*	AndroidPushUtil.push(token, "新图片" + targettime, push.toString(), "新图片" + targettime);
+					IOSPushUtil.push(token, "新图片" + targettime, push.toString(), "新图片" + targettime);*/
+					AndroidPushUtil.pushNotifyNotify(token, "新图片" + targettime, push.toString(), "新图片" + targettime);
+					IOSPushUtil.pushNotifyNotify(token, "新图片" + targettime, push.toString(), "新图片" + targettime);
 				}
-				
+
 			}
-			
+
 			String resp = "TPCF," + photoName + "," + thisNumber + "," + allNumber + ",1";
 			StringBuffer sb = new StringBuffer("[YW*" + imei + "*0002*");
 			sb.append(RadixUtil.changeRadix(resp));
@@ -210,8 +214,8 @@ public class UploadPhoto extends AbstractBizService {
 			sb.append("]");
 			logger.info("设备拍照返回数据=" + sb.toString());
 			return sb.toString();
-		}else{
-			chuliLocationInfo(imei, info, no, locationStyle,imei+"_"+photoName);
+		} else {
+			chuliLocationInfo(imei, info, no, locationStyle, photoName);
 			String resp = "TPCF," + photoName + "," + thisNumber + "," + allNumber + ",1";
 			StringBuffer sb = new StringBuffer("[YW*" + imei + "*0002*");
 			sb.append(RadixUtil.changeRadix(resp));
@@ -221,24 +225,24 @@ public class UploadPhoto extends AbstractBizService {
 			logger.info("设备拍照返回数据=" + sb.toString());
 			return sb.toString();
 		}
-		
-		
-		//iUploadPhotoService.insert(imei, photoName, source, thisNumber, allNumber);
+
+		// iUploadPhotoService.insert(imei, photoName, source, thisNumber,
+		// allNumber);
 	}
-	
-	public void chuliLocationInfo(String imei, String info, String no, Integer locationStyle,String photoName) {
+
+	public void chuliLocationInfo(String imei, String info, String no, Integer locationStyle, String photoName) {
 
 		logger.info("imei=" + imei + ",info=" + info + ",no=" + no);
 		String[] infoshuzu = info.split(",");
-		String locationis = infoshuzu[3+4];// A定位 V不定位
+		String locationis = infoshuzu[3 + 4];// A定位 V不定位
 		if (locationis == null || "".equals(locationis)) {
 			locationis = "V";
 		}
-		String time = infoshuzu[1+4] + "-" + infoshuzu[2+4];
-		String lat = infoshuzu[4+4];// 纬度
-		String lng = infoshuzu[6+4]; // 经度
-		String status = infoshuzu[16+4];
-		String energy = infoshuzu[13+4];
+		String time = infoshuzu[1 + 4] + "-" + infoshuzu[2 + 4];
+		String lat = infoshuzu[4 + 4];// 纬度
+		String lng = infoshuzu[6 + 4]; // 经度
+		String status = infoshuzu[16 + 4];
+		String energy = infoshuzu[13 + 4];
 
 		if ("A".equals(locationis)) {
 
@@ -246,7 +250,8 @@ public class UploadPhoto extends AbstractBizService {
 					+ ",energy=" + energy);
 
 			if (!"0.000000".equals(lat) && !"0.000000".equals(lng)) {
-				String url = Utils.SSRH_GPS_URL + "?key=" + Utils.SSRH_TIANQI_KEY + "&coordsys=gps&locations=" + lng + "," + lat;
+				String url = Utils.SSRH_GPS_URL + "?key=" + Utils.SSRH_TIANQI_KEY + "&coordsys=gps&locations=" + lng
+						+ "," + lat;
 				// http://restapi.amap.com/v3/assistant/coordinate/convert?key=c6a272fdecf96b343c31719d6b8cb0be&coordsys=gps&locations=114.0231567,22.5351085
 				logger.info("[LocationService]请求高德GPS位置转换,URL:" + url);
 				String responseJsonString = HttpClientGet.get(url);
@@ -261,21 +266,20 @@ public class UploadPhoto extends AbstractBizService {
 					String[] locationsArr = locations.split(",");
 					if (locationsArr.length == 2) {
 						locationService.insertUdPhotoInfo(imei, 1, locationsArr[1], locationsArr[0], status, time,
-								locationStyle,photoName);
+								locationStyle, photoName);
 
-						String locationValue=lat+","+lng+",1"+","+System.currentTimeMillis();
-						limitCache.addKey(imei+"_save",locationValue); 
-						limitCache.addKey(imei+"_last",locationValue); 
-						
-						
+						String locationValue = lat + "," + lng + ",1" + "," + System.currentTimeMillis();
+						limitCache.addKey(imei + "_save", locationValue);
+						limitCache.addKey(imei + "_last", locationValue);
+
 					}
 				}
 			} else {
 				logger.info("GPS定位失败=" + lat + "," + lng);
 			}
 		} else if ("V".equals(locationis)) {
-			Integer lbsCount = Integer.valueOf(infoshuzu[17+4]);
-			Integer wifiCount = Integer.valueOf(infoshuzu[17 + 1 + 2 + 1 + 3 * lbsCount+4]);
+			Integer lbsCount = Integer.valueOf(infoshuzu[17 + 4]);
+			Integer wifiCount = Integer.valueOf(infoshuzu[17 + 1 + 2 + 1 + 3 * lbsCount + 4]);
 			logger.info("lbsCount=" + lbsCount);
 			logger.info("wifiCount=" + wifiCount);
 			if (wifiCount == 0) {
@@ -284,8 +288,8 @@ public class UploadPhoto extends AbstractBizService {
 
 				sbb.append("bts=");
 				sbb.append(aab);
-				sbb.append(infoshuzu[21+4]).append(",").append(infoshuzu[22+4]).append(",")
-						.append((Integer.valueOf(infoshuzu[23+4]) * 2 - 113) + "");
+				sbb.append(infoshuzu[21 + 4]).append(",").append(infoshuzu[22 + 4]).append(",")
+						.append((Integer.valueOf(infoshuzu[23 + 4]) * 2 - 113) + "");
 				StringBuffer sb = new StringBuffer();
 				if (lbsCount > 1) {
 					sb.append("&nearbts=");
@@ -294,8 +298,8 @@ public class UploadPhoto extends AbstractBizService {
 							sb.append("|");
 						}
 						sb.append(aab);
-						sb.append(infoshuzu[21 + i+4]).append(",").append(infoshuzu[22 + i+4]).append(",")
-								.append((Integer.valueOf(infoshuzu[23 + i+4]) * 2 - 113) + "");
+						sb.append(infoshuzu[21 + i + 4]).append(",").append(infoshuzu[22 + i + 4]).append(",")
+								.append((Integer.valueOf(infoshuzu[23 + i + 4]) * 2 - 113) + "");
 					}
 				}
 
@@ -314,11 +318,12 @@ public class UploadPhoto extends AbstractBizService {
 
 						String[] arr = location.split(",");
 						if (arr.length == 2) {
-							 lat = arr[1];
-							 lng = arr[0];
-							locationService.insertUdPhotoInfo(imei, 2, lat, lng, status, time, locationStyle,photoName);
-							String locationValue=lat+","+lng+",2"+","+System.currentTimeMillis();
-							limitCache.addKey(imei+"_last",locationValue); 
+							lat = arr[1];
+							lng = arr[0];
+							locationService.insertUdPhotoInfo(imei, 2, lat, lng, status, time, locationStyle,
+									photoName);
+							String locationValue = lat + "," + lng + ",2" + "," + System.currentTimeMillis();
+							limitCache.addKey(imei + "_last", locationValue);
 						}
 					}
 				}
@@ -326,16 +331,17 @@ public class UploadPhoto extends AbstractBizService {
 				String mmac = "";
 				String macs = "";
 				if (wifiCount > 0) {
-					mmac = infoshuzu[23 + 3 * lbsCount+4] + "," + infoshuzu[21 + 3 + 3 * lbsCount+4] + ","
-							+ infoshuzu[22 + 3 * lbsCount+4];
+					mmac = infoshuzu[23 + 3 * lbsCount + 4] + "," + infoshuzu[21 + 3 + 3 * lbsCount + 4] + ","
+							+ infoshuzu[22 + 3 * lbsCount + 4];
 					logger.info("mmac=" + mmac);
 					if (wifiCount > 1) {
 						for (int i = 0; i < wifiCount * 3; i = i + 3) {
 							if (i > 1) {
 								macs += "|";
 							}
-							macs += infoshuzu[23 + 3 * lbsCount + i+4] + "," + infoshuzu[21 + 3 + 3 * lbsCount + i+4] + ","
-									+ infoshuzu[22 + 3 * lbsCount + i+4];
+							macs += infoshuzu[23 + 3 * lbsCount + i + 4] + ","
+									+ infoshuzu[21 + 3 + 3 * lbsCount + i + 4] + ","
+									+ infoshuzu[22 + 3 * lbsCount + i + 4];
 						}
 					}
 
@@ -358,11 +364,12 @@ public class UploadPhoto extends AbstractBizService {
 							if (arr.length == 2) {
 								lat = arr[1];
 								lng = arr[0];
-								
-								locationService.insertUdPhotoInfo(imei, 3, lat, lng, status, time, locationStyle,photoName);
-								String locationValue=lat+","+lng+",3"+","+System.currentTimeMillis();
-								limitCache.addKey(imei+"_last",locationValue); 
-							
+
+								locationService.insertUdPhotoInfo(imei, 3, lat, lng, status, time, locationStyle,
+										photoName);
+								String locationValue = lat + "," + lng + ",3" + "," + System.currentTimeMillis();
+								limitCache.addKey(imei + "_last", locationValue);
+
 							}
 						}
 					}

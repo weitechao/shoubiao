@@ -50,10 +50,10 @@ public class UploadPhotoServiceImpl implements IUploadPhotoService{
 	public boolean insertPhoto(String imei,  String source,String photoName, String dataInfo) {
 		Timestamp now = Utils.getCurrentTimestamp();
 		int i = jdbcTemplate
-				.update("insert into watch_upload_photo (imei, photo_name, source, data, createtime) values (?,?,?,?,?)",
-						new Object[] { imei, photoName, source,dataInfo, now}, 
+				.update("insert into watch_upload_photo (imei, photo_name, source, data, createtime,updatetime) values (?,?,?,?,?,?)",
+						new Object[] { imei, photoName, source,dataInfo, now,now}, 
 						new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
-								Types.VARCHAR, Types.TIMESTAMP});
+								Types.VARCHAR, Types.TIMESTAMP, Types.TIMESTAMP});
 		return i == 1;
 	}
 

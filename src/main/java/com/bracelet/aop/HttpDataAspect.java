@@ -63,7 +63,8 @@ public class HttpDataAspect {
 		// logger.info("[HTTP] process info: [name:" + name + "][reqParams:" +
 		// reqParams + "][resp:" + resp + "][rstatus:" + rstatus + "][rmsg:" +
 		// rmsg + "][time:" + time + "]");
-		if (time >= 2000) {
+		
+		//if (time >= 2000) {
 			if (name.equals(Utils.METHOD_NAME)) {
 				apilogService.insertApp(name, "head", resp, "", rstatus, rmsg, time);
 			} else {
@@ -71,7 +72,7 @@ public class HttpDataAspect {
 					apilogService.insertApp(name, reqParams, resp, "", rstatus, rmsg, time);
 				}
 			}
-		}
+		//}
 		return result;
 	}
 

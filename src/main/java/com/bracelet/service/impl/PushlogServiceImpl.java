@@ -123,10 +123,9 @@ public class PushlogServiceImpl implements IPushlogService {
 	}
 
 	@Override
-	public List<MsgInfo> getMsgInfoList(String imei,Long userId) {
+	public List<MsgInfo> getMsgInfoList(String imei) {
 		String table = "msg_0_info";
-		//Integer count = Integer.valueOf(imei.substring(imei.length() - 1, imei.length())) % 4;
-		Integer count = (int) (userId % 10);
+		Integer count = Integer.valueOf(imei.substring(imei.length() - 1, imei.length())) % 10;
 		if (count == 1) {
 			table = "msg_1_info";
 		} else if (count == 2) {
@@ -147,9 +146,9 @@ public class PushlogServiceImpl implements IPushlogService {
 			table = "msg_9_info";
 		}
 		
-		String sql = "select * from " + table+ " where device_id = ?  order by id desc limit 10";
+		String sql = "select * from " + table+ " where imei = ?  order by id desc limit 10";
 		List<MsgInfo> list = jdbcTemplate.query(sql, new Object[] {
-				userId }, new BeanPropertyRowMapper<MsgInfo>(
+				imei }, new BeanPropertyRowMapper<MsgInfo>(
 						MsgInfo.class));
 		return list;
 	}
@@ -159,8 +158,7 @@ public class PushlogServiceImpl implements IPushlogService {
 		Timestamp now = Utils.getCurrentTimestamp();
 		
 		String table = "msg_0_info";
-		//Integer count = Integer.valueOf(imei.substring(imei.length() - 1, imei.length())) % 4;
-		Integer count = (int) (Long.valueOf(deviceid) % 10);
+		Integer count = Integer.valueOf(imei.substring(imei.length() - 1, imei.length())) % 10;
 		if (count == 1) {
 			table = "msg_1_info";
 		} else if (count == 2) {
@@ -193,7 +191,7 @@ public class PushlogServiceImpl implements IPushlogService {
 	@Override
 	public boolean deleteMsgInfo(String imei,Long id, Long userId) {
 		String table = "msg_0_info";
-		Integer count = (int) (userId % 10);
+		Integer count = Integer.valueOf(imei.substring(imei.length() - 1, imei.length())) % 10;
 		if (count == 1) {
 			table = "msg_1_info";
 		} else if (count == 2) {

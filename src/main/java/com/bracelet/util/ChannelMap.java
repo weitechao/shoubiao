@@ -1,5 +1,7 @@
 package com.bracelet.util;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 
 import java.util.HashMap;
@@ -154,5 +156,27 @@ public class ChannelMap {
 		appVoiceByteMap.remove(voiceName);
 	}
 
+/*	public static void main(String[] args) {
+		
+		
+		byte[] rightLast =",".getBytes();
+		System.out.println(rightLast.length);
+			  StringBuilder stringBuilder = new StringBuilder("");  
+			     if (rightLast == null || rightLast.length <= 0) {  
+			         
+			       }  
+			     for (int i = 0; i < rightLast.length; i++) {  
+			          int v = rightLast[i] & 0xFF;  
+			         String hv = Integer.toHexString(v);  
+			         System.out.println("hv="+hv);
+			         if (hv.length() < 2) {  
+			             stringBuilder.append(0);  
+			          }  
+			         stringBuilder.append(hv);  
+			     }  
+			 System.out.println(stringBuilder.toString());
+			
+		}*/
+	
 
 }

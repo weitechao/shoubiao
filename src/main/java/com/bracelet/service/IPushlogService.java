@@ -28,7 +28,7 @@ public interface IPushlogService {
 
 	boolean insertErrorInfo(Long userId, String content);
 
-	List<MsgInfo> getMsgInfoList(String imei, Long userId);
+	List<MsgInfo> getMsgInfoList(String imei);
 
 	boolean insertMsgInfo(String imei, Integer type, String deviceid, String content, String message);
 
