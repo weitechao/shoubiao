@@ -119,23 +119,37 @@ public class UploadPhoto extends AbstractBizService {
 
 			byte[] vocieByte = ChannelMap.getByte(channel.remoteAddress() + "_byte");
 
-			byte[] voiceSubByte = Utils.subByte(vocieByte, jpgL + 11, vocieByte.length - jpgL - 11);
+			byte[] voiceSubByte = Utils.subByte(vocieByte, jpgL + 10, vocieByte.length - jpgL - 10);
 
+			if ("38".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
+				voiceSubByte = Utils.subByte(voiceSubByte, 1, voiceSubByte.length - 1);
+			}
+			
+			if ("32".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
+				voiceSubByte = Utils.subByte(voiceSubByte, 1, voiceSubByte.length - 1);
+			}
+			
 			if ("2c".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
 				voiceSubByte = Utils.subByte(voiceSubByte, 1, voiceSubByte.length - 1);
 			}
 
-			if ("2c".equals(Integer.toHexString(voiceSubByte[voiceSubByte.length - 1] & 0xFF))) {
+			/*if ("2c".equals(Integer.toHexString(voiceSubByte[voiceSubByte.length - 1] & 0xFF))) {
 				voiceSubByte = Utils.subByte(voiceSubByte, 0, voiceSubByte.length - 1);
 			}
+			if ("32".equals(Integer.toHexString(voiceSubByte[voiceSubByte.length - 1] & 0xFF))) {
+				voiceSubByte = Utils.subByte(voiceSubByte, 0, voiceSubByte.length - 1);
+			}*/
 
-			Utils.createFileContent(Utils.PHOTO_FILE_lINUX, photoName, voiceSubByte);
+			if(thisNumber==1){
+				Utils.deleteFile(Utils.PHOTO_FILE_lINUX+"/"+imei+"/"+photoName);
+			}
+			Utils.createFileContent(Utils.PHOTO_FILE_lINUX+"/"+imei+"/", photoName, voiceSubByte);
 
-			
+			ChannelMap.removeAll(channel.remoteAddress() + "");
 
 			if (thisNumber == allNumber && allNumber != 0) {
-				ChannelMap.removeAll(channel.remoteAddress() + "");
-				iUploadPhotoService.insertPhoto(imei, Utils.PHOTO_URL + photoName, photoName, "1");
+				
+				iUploadPhotoService.insertPhoto(imei, Utils.PHOTO_URL +imei+"/"+photoName, photoName, "1");
 
 				String token = limitCache.getRedisKeyValue(imei + "_push");
 				if (!StringUtil.isEmpty(token)) {
@@ -198,7 +212,7 @@ public class UploadPhoto extends AbstractBizService {
 					push.put("New", 1);
 					String targettime = Utils.getTime(System.currentTimeMillis());
 					pushlogService.insertMsgInfo(imei, 11, deviceid, "新图片" + targettime, "新图片" + targettime);
-				/*	AndroidPushUtil.push(token, "新图片" + targettime, push.toString(), "新图片" + targettime);
+					/*AndroidPushUtil.push(token, "新图片" + targettime, push.toString(), "新图片" + targettime);
 					IOSPushUtil.push(token, "新图片" + targettime, push.toString(), "新图片" + targettime);*/
 					AndroidPushUtil.pushNotifyNotify(token, "新图片" + targettime, push.toString(), "新图片" + targettime);
 					IOSPushUtil.pushNotifyNotify(token, "新图片" + targettime, push.toString(), "新图片" + targettime);

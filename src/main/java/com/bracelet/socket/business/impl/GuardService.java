@@ -71,7 +71,7 @@ public class GuardService extends AbstractBizService {
 		}
 		if(thisNumber!=0){
 			if(thisNumber==1){
-				iUploadPhotoService.insertPhoto( imei,"0", photoName,dataInfo);
+				//iUploadPhotoService.insertPhoto( imei,"0", photoName,dataInfo);
 			}else{
 				WatchUploadPhotoInfo waUpInfo = iUploadPhotoService.getByPhotoNameAndImei(imei,photoName);
 				if(waUpInfo!=null){

@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 import com.bracelet.redis.LimitCache;
 import com.bracelet.socket.business.IBusinessHandler;
 import com.bracelet.util.ChannelMap;
+import com.bracelet.util.StringUtil;
 import com.bracelet.util.Utils;
 
 @Component
@@ -66,14 +67,15 @@ public class BaseChannelHandler extends SimpleChannelInboundHandler<String> {
 
 			if (hexString.length() >= 8) {
 				String kaiTou = Utils.hexStringToString(hexString.substring(0, 8));
+				logger.info("hexString的长度="+hexString.length());
 				logger.info("开头=" + kaiTou);
 
-				if ("[YW*".equals(kaiTou)) {
+				if ("[YW*".equals(kaiTou) && hexString.length()>=58) {
 
 					Integer len = Integer.parseInt(Utils.hexStringToString(hexString.substring(50, 58)), 16);
 					logger.info("len=" + len);
 					String cmd = Utils.hexStringToString(hexString.substring(60, 64));
-
+					logger.info("cmd=" + cmd);
 					if (len + 30 - receiveMsgBytes.length == 0) {
 						if ("TK".equals(cmd) || "TP".equals(cmd)) {
 							// 需要使用原始byte去write file
@@ -102,8 +104,16 @@ public class BaseChannelHandler extends SimpleChannelInboundHandler<String> {
 					// Utils.hexStringToByte(hexString);
 
 				} else {
-					Integer syLength = ChannelMap.getInteger(ctx.channel().remoteAddress() + "_len")
-							- receiveMsgBytes.length;
+					
+					if(hexString.length()!=50){
+					
+						Integer syLength=0;
+					if(StringUtil.isEmpty(ChannelMap.getInteger(ctx.channel().remoteAddress() + "_len"))){
+						syLength = 0 - receiveMsgBytes.length;
+					}else{
+						syLength = ChannelMap.getInteger(ctx.channel().remoteAddress() + "_len") - receiveMsgBytes.length;
+					}
+					//syLength = ChannelMap.getInteger(ctx.channel().remoteAddress() + "_len") - receiveMsgBytes.length;
 					logger.info("开头不是YW的剩余长度=" + syLength);
 
 					if (syLength > 0) {
@@ -112,8 +122,8 @@ public class BaseChannelHandler extends SimpleChannelInboundHandler<String> {
 						// "_voice",ChannelMap.getVoiceName(ctx.channel().remoteAddress()
 						// + "_voice") + hexString + "5d");
 
-						ChannelMap.addInteger(ctx.channel().remoteAddress() + "_len", syLength - 2);
-						logger.info("减2剩余长度=" + ChannelMap.getInteger(ctx.channel().remoteAddress() + "_len"));
+						ChannelMap.addInteger(ctx.channel().remoteAddress() + "_len", syLength - 1);
+						logger.info("减1剩余长度=" + ChannelMap.getInteger(ctx.channel().remoteAddress() + "_len"));
 
 						byte[] addLast = Utils.byteMerger(receiveMsgBytes, Utils.getRightLast());
 
@@ -135,6 +145,8 @@ public class BaseChannelHandler extends SimpleChannelInboundHandler<String> {
 						// 移除map里的长度
 						super.channelRead(ctx, ChannelMap.getContent(ctx.channel().remoteAddress() + "_voice"));
 					}
+					
+				}
 
 				}
 
@@ -147,7 +159,7 @@ public class BaseChannelHandler extends SimpleChannelInboundHandler<String> {
 					// ChannelMap.addContent(ctx.channel().remoteAddress() +
 					// "_voice",ChannelMap.getContent(ctx.channel().remoteAddress()
 					// + "_voice") + hexString + "5d");
-					ChannelMap.addInteger(ctx.channel().remoteAddress() + "_len", syLength - 2);
+					ChannelMap.addInteger(ctx.channel().remoteAddress() + "_len", syLength - 1);
 					logger.info("减2剩余长度=" + ChannelMap.getInteger(ctx.channel().remoteAddress() + "_len"));
 
 					byte[] addLast = Utils.byteMerger(receiveMsgBytes, Utils.getRightLast());
@@ -212,6 +224,5 @@ public class BaseChannelHandler extends SimpleChannelInboundHandler<String> {
 		logger.error("exceptioncaught," + incoming.remoteAddress(), cause);
 	}
 
-	
 
 }
