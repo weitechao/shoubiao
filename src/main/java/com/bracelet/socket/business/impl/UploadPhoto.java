@@ -120,14 +120,38 @@ public class UploadPhoto extends AbstractBizService {
 			byte[] vocieByte = ChannelMap.getByte(channel.remoteAddress() + "_byte");
 
 			byte[] voiceSubByte = Utils.subByte(vocieByte, jpgL + 10, vocieByte.length - jpgL - 10);
-
+			
+			
+			if ("39".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
+				voiceSubByte = Utils.subByte(voiceSubByte, 1, voiceSubByte.length - 1);
+			}
 			if ("38".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
 				voiceSubByte = Utils.subByte(voiceSubByte, 1, voiceSubByte.length - 1);
 			}
-			
+			if ("37".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
+				voiceSubByte = Utils.subByte(voiceSubByte, 1, voiceSubByte.length - 1);
+			}
+			if ("36".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
+				voiceSubByte = Utils.subByte(voiceSubByte, 1, voiceSubByte.length - 1);
+			}
+			if ("35".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
+				voiceSubByte = Utils.subByte(voiceSubByte, 1, voiceSubByte.length - 1);
+			}
+			if ("34".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
+				voiceSubByte = Utils.subByte(voiceSubByte, 1, voiceSubByte.length - 1);
+			}
+			if ("33".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
+				voiceSubByte = Utils.subByte(voiceSubByte, 1, voiceSubByte.length - 1);
+			}
 			if ("32".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
 				voiceSubByte = Utils.subByte(voiceSubByte, 1, voiceSubByte.length - 1);
 			}
+
+			if ("31".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
+				voiceSubByte = Utils.subByte(voiceSubByte, 1, voiceSubByte.length - 1);
+			}
+			
+			
 			
 			if ("2c".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
 				voiceSubByte = Utils.subByte(voiceSubByte, 1, voiceSubByte.length - 1);

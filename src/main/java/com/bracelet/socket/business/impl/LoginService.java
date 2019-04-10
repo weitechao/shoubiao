@@ -153,7 +153,7 @@ public class LoginService implements IService {
 			ChannelMap.addChannel(imei, channelDto);
 			ChannelMap.addChannel(channel, channelDto);
 		}
-
+		limitCache.addKey(imei+"_energy", "100");
 		limitCache.addKey(imei, Utils.IP + ":" + Utils.PORT_HTTP);//设备要先登录，服务器记录设备登录的http ip端口
 		String resp = "[YW*" + imei + "*0001*0006*INIT,1]";
 		
