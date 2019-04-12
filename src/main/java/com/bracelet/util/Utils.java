@@ -45,6 +45,13 @@ public class Utils {
 
 	public static BASE64Encoder encoder = new sun.misc.BASE64Encoder();
 	public static BASE64Decoder decoder = new sun.misc.BASE64Decoder();
+	
+	// OSS
+	public final static String endpointOSS = "oss-cn-zhangjiakou.aliyuncs.com";
+	
+	public final static String  accessKeyIdOSS = "LTAIbB6A0M192V67";
+	public final static String accessKeySecretOSS = "0Sch7htDMfWXba1BwYbGMrWSfQDerY";
+	public static final String bucketNameOSS = "20190411weicreate";
 
 	public final static String accessKeyId = "LTAI8CmVtQhm7KSG";
 	public final static String accessKeySecret = "c9wj4Lw22QmDLuQkx2l46xmfCD4H1e";
@@ -109,17 +116,17 @@ public class Utils {
 	// app头像图片地址和url
 	// 通讯录头像
 
-     public static final String IP = "47.92.30.81";
+    /*public static final String IP = "47.92.30.81";
 	public final static String VOICE_URL = "http://" + IP + ":8080/GXCareDevice/watchvoice/device/";
 	public final static String PHOTO_URL = "http://" + IP + ":8080/GXCareDevice/watchphoto/device/";
 	public final static String APP_PHOTO_UTL = "http://" + IP + ":8080/GXCareDevice/headPhoto/appset/";
-	public final static String PHONEBook_PHOTO_UTL = "http://" + IP + ":8080/GXCareDevice/headImg/";
+	public final static String PHONEBook_PHOTO_UTL = "http://" + IP + ":8080/GXCareDevice/headImg/";*/
 	
-/*	public static final String IP = "39.98.236.1"; 
+	public static final String IP = "39.98.236.1"; 
 	public final static String VOICE_URL = "http://"+IP+":8080/GXCareDevice/watchvoice/device/"; 
 	public  final static String PHOTO_URL ="http://"+IP+":8080/GXCareDevice/watchphoto/device/"; 
 	public final static String APP_PHOTO_UTL ="http://"+IP+":8080/GXCareDevice/headPhoto/appset/";
-	public final static String PHONEBook_PHOTO_UTL = "http://"+IP+":8080/GXCareDevice/headImg/";*/
+	public final static String PHONEBook_PHOTO_UTL = "http://"+IP+":8080/GXCareDevice/headImg/";
 	
 
 	// 获取amr语音文件长度

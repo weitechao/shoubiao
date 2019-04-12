@@ -85,7 +85,7 @@ public class BusinessHandler implements IBusinessHandler {
 				dto.setMessage("Params error.Not json type");
 			}
 		}
-		long time = System.currentTimeMillis() - startTime;
+		//long time = System.currentTimeMillis() - startTime;
 		/*
 		 * String responseJson = JSON.toJSONString(dto); if (a == 0) { //
 		 * 如果a是1，表示应答，则无需返回结果 incoming.writeAndFlush(responseJson + "\r\n"); }
@@ -94,7 +94,7 @@ public class BusinessHandler implements IBusinessHandler {
         if(!StringUtil.isEmpty(reponse)){
         	incoming.writeAndFlush(reponse);
         }
-      if(time >= 2000){
+   /*   if(time >= 2000){
 		if(!"LK".equals(cmd)){
 			if("TPBK".equals(cmd) || "TK".equals(cmd)){
 				apilogService.insert(serviceName, cmd, reponse, imei, rstatus, rmsg, time);
@@ -102,7 +102,7 @@ public class BusinessHandler implements IBusinessHandler {
 				apilogService.insert(serviceName, json, reponse, imei, rstatus, rmsg,time);
 		}
         }
-         }
+         }*/
 	}
 
 }

@@ -28,6 +28,7 @@ import com.bracelet.service.ISensitivePointlogService;
 import com.bracelet.service.IUserInfoService;
 import com.bracelet.service.IWatchDeviceService;
 import com.bracelet.service.WatchSetService;
+import com.bracelet.util.AliOssUtil;
 import com.bracelet.util.AndroidPushUtil;
 import com.bracelet.util.ChannelMap;
 import com.bracelet.util.IOSPushUtil;
@@ -354,21 +355,27 @@ public class WatchDeviceInfoController extends BaseController {
 
 		byte[] headByte = Base64.decodeBase64(head);
 		String photoName = imei + "_" + System.currentTimeMillis() + ".jpg";
-		Utils.createFileContent(Utils.PHOTT_FILE_lINUX, photoName, headByte);
+	
 
 		// if (this.ideviceService.updateImeiHeadInfo(id,
 		// Utils.APP_PHOTO_UTL+photoName)) {
-
+		Utils.createFileContent(Utils.PHOTT_FILE_lINUX, photoName, headByte);
+		
+	/*	String url = AliOssUtil.picOssByLocalAddress(Utils.PHOTT_FILE_lINUX+"/"+photoName, photoName);
+		if(StringUtil.isEmpty(url)){
+			url = Utils.APP_PHOTO_UTL + photoName;
+		}*/
+		
 		WatchDevice watch = ideviceService.getDeviceInfo(imei);
 		if (watch != null) {
 
-			if (this.ideviceService.updateImeiHeadInfoByImei(watch.getId(), Utils.APP_PHOTO_UTL + photoName)) {
+			if (this.ideviceService.updateImeiHeadInfoByImei(watch.getId(),Utils.APP_PHOTO_UTL + photoName )) {
 				bb.put("Code", 1);
 			} else {
 				bb.put("Code", 0);
 			}
 		} else {
-			ideviceService.insertDeviceImeiInfo(imei, "", "", 1, "", "", "", "", "", "", head);
+			ideviceService.insertDeviceImeiInfo(imei, "", "", 1, "", "", "", "", "", "", Utils.APP_PHOTO_UTL + photoName );
 			bb.put("Code", 1);
 
 		}

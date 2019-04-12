@@ -40,6 +40,37 @@ public class ChannelMap {
 	
 	//app 发送的 语音map
 	private static Map<String, byte[]> appVoiceByteMap = new HashMap<String, byte[]>();
+	// 设备语音map 和图片map
+	private static Map<String, byte[]> deviceVoiceByteMap = new HashMap<String, byte[]>();
+	
+	private static Map<String, byte[]> devicePhotoByteMap = new HashMap<String, byte[]>();
+	
+	
+	public static void addDeviceVoiceByte(String deviceVoiceName, byte[] voiceByte) {
+		deviceVoiceByteMap.put(deviceVoiceName, voiceByte);
+	}
+
+	public static byte[] getDeviceVoiceByte(String deviceVoiceName) {
+		return deviceVoiceByteMap.get(deviceVoiceName);
+	}
+
+	public static void removeDeviceVoiceByte(String deviceVoiceName) {
+		deviceVoiceByteMap.remove(deviceVoiceName);
+	}
+	
+	
+	public static void addDevicePhtotByte(String devicePhotoName, byte[] voiceByte) {
+		devicePhotoByteMap.put(devicePhotoName, voiceByte);
+	}
+
+	public static byte[] getDevicePhtotByte(String devicePhotoName) {
+		return devicePhotoByteMap.get(devicePhotoName);
+	}
+
+	public static void removeDevicePhtotByte(String devicePhotoName) {
+		devicePhotoByteMap.remove(devicePhotoName);
+	}
+	
 
 	/**
 	 * 
@@ -156,27 +187,7 @@ public class ChannelMap {
 		appVoiceByteMap.remove(voiceName);
 	}
 
-/*	public static void main(String[] args) {
-		
-		
-		byte[] rightLast =",".getBytes();
-		System.out.println(rightLast.length);
-			  StringBuilder stringBuilder = new StringBuilder("");  
-			     if (rightLast == null || rightLast.length <= 0) {  
-			         
-			       }  
-			     for (int i = 0; i < rightLast.length; i++) {  
-			          int v = rightLast[i] & 0xFF;  
-			         String hv = Integer.toHexString(v);  
-			         System.out.println("hv="+hv);
-			         if (hv.length() < 2) {  
-			             stringBuilder.append(0);  
-			          }  
-			         stringBuilder.append(hv);  
-			     }  
-			 System.out.println(stringBuilder.toString());
-			
-		}*/
+
 	
 
 }

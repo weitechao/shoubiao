@@ -186,7 +186,7 @@ public class BaseChannelHandler extends SimpleChannelInboundHandler<String> {
 
 				}
 			}
-		} finally {
+		}finally {
 			ReferenceCountUtil.release(msg);
 		}
 

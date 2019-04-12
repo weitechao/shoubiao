@@ -150,6 +150,9 @@ public class UploadPhoto extends AbstractBizService {
 			if ("31".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
 				voiceSubByte = Utils.subByte(voiceSubByte, 1, voiceSubByte.length - 1);
 			}
+			/*if ("30".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
+				voiceSubByte = Utils.subByte(voiceSubByte, 1, voiceSubByte.length - 1);
+			}*/
 			
 			
 			

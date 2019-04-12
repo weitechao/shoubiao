@@ -28,6 +28,8 @@ public class SocketBusinessFactory {
     @Resource
     private IService locationUdService;
     @Resource
+    private IService locationDdService;
+    @Resource
     private IService costService;
     @Resource
     private IService insertFriendService; 
@@ -68,8 +70,11 @@ public class SocketBusinessFactory {
             // 2.链路保持
             return heartCheck;
         case "UD":
-            // 3.位置数据上报
+            // 3.位置数据上报  移动联通
             return locationUdService;
+        case "DD":
+            // 3.位置数据上报  电信
+            return locationDdService;
         case "UD2":
             // 4.盲点补传数据
             return locationUdService;
@@ -157,7 +162,7 @@ public class SocketBusinessFactory {
         
        
         default:
-            logger.info("找不到对应的类型:" + cmd);
+            logger.error("找不到对应的类型:" + cmd);
             throw new BizException(RespCode.DEV_REQ_TYPE_ERR);
         }
     }
