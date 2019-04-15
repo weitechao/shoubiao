@@ -278,7 +278,7 @@ public class TianQi extends AbstractBizService {
 		if (tianQi != null) {
 			String message = "TQ," + locationStatus + ",\"" + city + "\",\"" + tianQi.getWeather() + "\",\""
 					+ tianQi.getTemperature() + "\"," + lat + "," + lng;
-			sbreponse.append(RadixUtil.changeRadix(message));
+			sbreponse.append(RadixUtil.changeRadix(message.getBytes().length));
 			sbreponse.append("*");
 			sbreponse.append(message);
 			sbreponse.append("]");
@@ -298,7 +298,7 @@ public class TianQi extends AbstractBizService {
 			String reporttime = jsonObject2.getString("reporttime");
 			String message = "TQ," + locationStatus + ",\"" + city + "\",\"" + weather + "\",\"" + temperature + "\","
 					+ lat + "," + lng;
-			sbreponse.append(RadixUtil.changeRadix(message));
+			sbreponse.append(RadixUtil.changeRadix(message.getBytes().length));
 			sbreponse.append("*");
 			sbreponse.append(message);
 			sbreponse.append("]");
@@ -317,7 +317,7 @@ public class TianQi extends AbstractBizService {
 			String temperature = "27";
 			String message = "TQ," + locationStatus + ",\"" + city + "\",\"" + weather + "\",\"" + temperature + "\","
 					+ lat + "," + lng;
-			sbreponse.append(RadixUtil.changeRadix(message));
+			sbreponse.append(RadixUtil.changeRadix(message.getBytes().length));
 			sbreponse.append("*");
 			sbreponse.append(message);
 			sbreponse.append("]");
