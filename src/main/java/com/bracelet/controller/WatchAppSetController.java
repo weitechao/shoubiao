@@ -381,6 +381,14 @@ public class WatchAppSetController extends BaseController {
 
 			bb.put("TimerOpen", "07:00");
 			bb.put("TimerClose", "00:00");
+			
+			  TimeSwitch time = confService.getTimeSwitch(Long.valueOf(userId));
+			  if(time != null){
+				  bb.put("TimerOpen", time.getTimeOpen()+"");
+				  bb.put("TimerClose", time.getTimeClose()+"");
+			  }
+			 
+			  
 			bb.put("BrightScreen", "10");
 
 			bb.put("WeekAlarm1", "");
