@@ -174,8 +174,8 @@ public class LocationDdService extends AbstractBizService {
 			}
 		} else if ("V".equals(locationis)) {
 			Integer lbsCount = Integer.valueOf(infoshuzu[17]);
-//			Integer wifiCount = Integer.valueOf(infoshuzu[17 + 1 + 2 + 1 + 3 * lbsCount]);
-			Integer wifiCount = 0;
+			Integer wifiCount = Integer.valueOf(infoshuzu[17 + 1 + 2 + 1 + 3 * lbsCount]);
+			//Integer wifiCount = 0;
 		
 			if (wifiCount == 0) {
 				StringBuffer sbb = new StringBuffer();

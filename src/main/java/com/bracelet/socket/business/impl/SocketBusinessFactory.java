@@ -40,6 +40,8 @@ public class SocketBusinessFactory {
     @Resource
     private IService getTianQi;
     @Resource
+    private IService getDxTianQi;
+    @Resource
     private IService smsToGetLocation; 
     @Resource
     private IService uploadPhoto; 
@@ -96,6 +98,9 @@ public class SocketBusinessFactory {
         case "TQ":
             // 10.获取天气
             return getTianQi;
+        case "DQ":
+            // 10.电信获取天气
+            return getDxTianQi;
         case "DWREQ":
             // 11.设备通过短信获取位置
             return smsToGetLocation;
