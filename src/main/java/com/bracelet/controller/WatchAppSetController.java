@@ -207,7 +207,7 @@ public class WatchAppSetController extends BaseController {
 			   \"locationTime\" : \"0\",\n  \"reserveEmergencyPower\" : \"1\",\n  \"sosMsgswitch\" : \"0\",\n  \"automaticAnswering\" : \"1\",\n  \"somatosensory\" : \"0\"\n}"]* */
 			
 			//修改数据库的数据
-			 WatchDeviceSet deviceSet = watchSetService.getDeviceSetByImei(Long.valueOf(userId));
+			 WatchDeviceSet deviceSet = watchSetService.getDeviceSetByUserId(Long.valueOf(userId));
 				if (deviceSet != null) {
 					watchSetService.updateWatchSet(deviceSet.getId(), setInfo, infoVibration, infoVoice, phoneComeVibration,
 							phoneComeVoice, watchOffAlarm, rejectStrangers, timerSwitch,disabledInClass, reserveEmergencyPower,
@@ -269,6 +269,9 @@ public class WatchAppSetController extends BaseController {
 				sendMsg.append("0:0,0:0,0:0,00:00,00:00,00:00, ");
 			}
 			sendMsg.append(locationMode + "," + locationTime + "," + flowerNumber);
+			
+			
+			
 			HealthStepManagement  heathM = confService.getHeathStepInfo(imei);
 			if(heathM != null){
 				sendMsg.append(","+heathM.getSleepCalculate()+","+heathM.getStepCalculate()+",0,"+sosMsgswitch+","+"baby");
@@ -361,7 +364,7 @@ public class WatchAppSetController extends BaseController {
 			bb.put("Code", -1);
 			return bb.toString();
 		}
-		WatchDeviceSet deviceSet = watchSetService.getDeviceSetByImei(Long.valueOf(userId));
+		WatchDeviceSet deviceSet = watchSetService.getDeviceSetByUserId(Long.valueOf(userId));
 		if (deviceSet != null) {
 			// bb.put("data", deviceSet.getData());
 			bb.put("Code", 1);

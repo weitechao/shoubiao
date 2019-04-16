@@ -175,7 +175,7 @@ public class SchoolController extends BaseController {
          String timeClose = jsonObject.getString("timeClose");
          String timeOpen  = jsonObject.getString("timeOpen");
          
-         TimeSwitch time = confService.getTimeSwitch(Long.valueOf(user_id));
+         TimeSwitch time = confService.getTimeSwitchByImei(imei);
          if(time != null ){
             if(confService.updateTimeSwitchById(time.getId(), timeClose, timeOpen)){
             	bb.put("Code", 1);
@@ -183,7 +183,7 @@ public class SchoolController extends BaseController {
             	bb.put("Code", 0);
             }
          }else{
-        	 if(confService.insertTimeSwtich(Long.valueOf(user_id),timeClose,timeOpen)){
+        	 if(confService.insertTimeSwtich(Long.valueOf(user_id),timeClose,timeOpen,imei)){
         		 bb.put("Code", 1);
         	 }else{
         		 bb.put("Code", 0);

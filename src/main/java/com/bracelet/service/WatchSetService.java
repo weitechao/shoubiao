@@ -28,7 +28,7 @@ public interface WatchSetService {
 
 	boolean updateWatchSet(Long id, String data);
 	@DataSourceChange(slave = true)
-	WatchDeviceSet getDeviceSetByImei(Long userID);
+	WatchDeviceSet getDeviceSetByUserId(Long userID);
 
 	boolean insertWatchDeviceSet(String imei, String data);
 
@@ -53,6 +53,8 @@ public interface WatchSetService {
 	boolean setdialpadbyImei(String imei, Integer type);
 
 	WatchDialpad getWatchDialpad(String imei);
+
+	WatchDeviceSet getDeviceSetByImei(String imei);
 
 	
 }

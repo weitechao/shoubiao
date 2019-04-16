@@ -161,8 +161,8 @@ public class LoginService implements IService {
 		
 		//拼设置的指令包
 		
-		String userId = limitCache.getRedisKeyValue(imei + "_id");
-		WatchDeviceSet deviceSet = watchSetService.getDeviceSetByImei(Long.valueOf(userId));
+		
+		WatchDeviceSet deviceSet = watchSetService.getDeviceSetByImei(imei);
 
 		StringBuffer sendMsg = new StringBuffer("SET" + ",,1234,");// F48,");
 		WatchDeviceAlarm watch = ideviceService.getDeviceAlarmInfo(imei);
@@ -178,9 +178,13 @@ public class LoginService implements IService {
 
 			String set16 = Integer.toHexString(Integer.parseInt(setString.toString(), 2));
 			
+			
+			
 			sendMsg.append(set16).append(",");
+
+
 			if (deviceSet.getDisabledInClass() == 1) {
-				WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfo(Long.valueOf(userId));
+				WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfoByImei(imei);
 				if (whsc != null) {
 					sendMsg.append(whsc.getClassDisable1() + "|" + whsc.getClassDisable2() + "|"
 							+ whsc.getWeekDisable1() + ",");
@@ -191,8 +195,9 @@ public class LoginService implements IService {
 				sendMsg.append("08:00-11:30|14:00-16:30|12345,");
 			}
 
-			if (1 == deviceSet.getTimerSwitch()) {
-				TimeSwitch time = confService.getTimeSwitch(Long.valueOf(userId));
+			if (deviceSet.getTimerSwitch()==1) {
+				
+				TimeSwitch time = confService.getTimeSwitchByImei(imei);
 				if (time != null) {
 					sendMsg.append(time.getTimeOpen() + "," + time.getTimeClose() + ",");
 				} else {
@@ -201,29 +206,22 @@ public class LoginService implements IService {
 			} else {
 				sendMsg.append("06:05,23:00,");
 			}
-			if(deviceSet.getBrightScreen()==0 ){
-				sendMsg.append("10,2,480,0,");
+			if(deviceSet.getBrightScreen()==0){
+				sendMsg.append( "10,2,480,0,");
 			}else{
 				sendMsg.append(deviceSet.getBrightScreen() + ",2,480,0,");
 			}
-			
-           if(watch!=null){
-        	   sendMsg.append(watch.getWeekAlarm1() + "," + watch.getWeekAlarm2() + "," + watch.getWeekAlarm3() + "," + watch.getAlarm1() + "," + watch.getAlarm2()  + ","
-   					+ watch.getAlarm3()  + ",");
-           }else{
-        	   sendMsg.append( "0:0,0:0,0:0,00:00,00:00,00:00,");
-           }
-			
+		
 
-			sendMsg.append(deviceSet.getLocationMode() + ",60,"
-					+ deviceSet.getFlowerNumber());
-			/*
-			 * String reps = "[YW*" + imei + "*0001*" +
-			 * RadixUtil.changeRadix(sendMsg.toString()) + "*" +
-			 * sendMsg.toString() + "]"; logger.info("设备参数设置=" + reps);
-			 * socketLoginDto.getChannel().writeAndFlush(reps);
-			 * bb.put("Code", 1);
-			 */
+			
+			if (watch != null) {
+				sendMsg.append(watch.getWeekAlarm1() + "," + watch.getWeekAlarm2() + "," + watch.getWeekAlarm3() + ","
+						+ watch.getAlarm1() + "," + watch.getAlarm2() + "," + watch.getAlarm3() + ",");
+			} else {
+				sendMsg.append("0:0,0:0,0:0,00:00,00:00,00:00, ");
+			}
+			sendMsg.append(deviceSet.getLocationMode() + "," + deviceSet.getLocationTime() + "," + deviceSet.getFlowerNumber());
+			
 		} else {
 			sendMsg.append("500,");
 			sendMsg.append("08:00-11:30|14:00-16:30|12345,");

@@ -103,7 +103,7 @@ public class CallPhoneController extends BaseController {
             	bb.put("Code", 0);
             }
          }else{
-        	 if(confService.insertTimeSwtich(Long.valueOf(user_id),timeClose,timeOpen)){
+        	 if(confService.insertTimeSwtich(Long.valueOf(user_id),timeClose,timeOpen,deviceId)){
         		 bb.put("Code", 1);
         	 }else{
         		 bb.put("Code", 0);

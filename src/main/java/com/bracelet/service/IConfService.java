@@ -22,7 +22,7 @@ public interface IConfService {
 
 	boolean updateTimeSwitchById(Long id, String timeClose, String timeOpen);
 
-	boolean insertTimeSwtich(Long userId, String timeClose, String timeOpen);
+	boolean insertTimeSwtich(Long userId, String timeClose, String timeOpen,String imei);
 
 	HealthStepManagement getHeathStepInfo(String deviceId);
 
@@ -39,6 +39,8 @@ public interface IConfService {
 	boolean insertNotify(String deviceId, String notification, String notificationSound, String notificationVibration);
 
 	boolean deteHeathyInfoByImei(Long id);
+
+	TimeSwitch getTimeSwitchByImei(String imei);
 
 
 }

@@ -87,12 +87,12 @@ public class ConfServiceImpl implements IConfService {
 	}
 
 	@Override
-	public boolean insertTimeSwtich(Long userId, String timeClose, String timeOpen) {
+	public boolean insertTimeSwtich(Long userId, String timeClose, String timeOpen,String imei) {
 		Timestamp now = Utils.getCurrentTimestamp();
 		int i = jdbcTemplate.update(
-				"insert into watch_time_switch (deviceId, timeOpen, timeClose, createtime, updatetime) values (?,?,?,?,?)",
-				new Object[] { userId, timeOpen, timeClose, now, now },
-				new int[] { Types.INTEGER, Types.VARCHAR, Types.VARCHAR,  Types.TIMESTAMP, Types.TIMESTAMP });
+				"insert into watch_time_switch (deviceId, timeOpen, timeClose, createtime, updatetime,imei) values (?,?,?,?,?,?)",
+				new Object[] { userId, timeOpen, timeClose, now, now, imei },
+				new int[] { Types.INTEGER, Types.VARCHAR, Types.VARCHAR,  Types.TIMESTAMP, Types.TIMESTAMP, Types.VARCHAR });
 		return i == 1;
 	}
 
@@ -175,6 +175,20 @@ public class ConfServiceImpl implements IConfService {
 		jdbcTemplate.update("delete from healthStepManagement where   id = ?",
 				new Object[] { id }, new int[] { Types.INTEGER });
 		return true;
+	}
+
+	@Override
+	public TimeSwitch getTimeSwitchByImei(String imei) {
+		String sql = "select * from watch_time_switch where imei=?  LIMIT 1";
+		List<TimeSwitch> list = jdbcTemplate.query(sql, new Object[] { imei },
+				new BeanPropertyRowMapper<TimeSwitch>(TimeSwitch.class));
+
+		if (list != null && !list.isEmpty()) {
+			return list.get(0);
+		} else {
+			logger.info("getLatest return null.user_id:" + imei);
+		}
+		return null;
 	}
 
 }

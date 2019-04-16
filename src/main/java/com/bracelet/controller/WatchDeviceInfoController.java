@@ -416,7 +416,7 @@ public class WatchDeviceInfoController extends BaseController {
 		String homeLat = jsonObject.getString("homeLat");
 		String homeLng = jsonObject.getString("homeLng");
 
-		WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfo(Long.valueOf(userId));
+		WatchDeviceHomeSchool whsc = ideviceService.getDeviceHomeAndFamilyInfoByImei(imei);
 		if (whsc != null) {
 			if (this.ideviceService.updateImeiHomeAndFamilyInfoById(whsc.getId(), classDisable1, classDisable2,
 					weekDisable, schoolAddress, schoolLat, schoolLng, latestTime, homeAddress, homeLat, homeLng)) {
@@ -492,7 +492,7 @@ public class WatchDeviceInfoController extends BaseController {
 
 		if (socketLoginDto.getChannel().isActive()) {
 
-			WatchDeviceSet deviceSet = watchSetService.getDeviceSetByImei(Long.valueOf(userId));
+			WatchDeviceSet deviceSet = watchSetService.getDeviceSetByUserId(Long.valueOf(userId));
 
 			StringBuffer sendMsg = new StringBuffer("SET" + ",,1234,");// F48,");
 			if (deviceSet != null) {

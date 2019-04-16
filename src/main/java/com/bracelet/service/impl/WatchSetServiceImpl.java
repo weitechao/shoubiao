@@ -127,7 +127,7 @@ public class WatchSetServiceImpl implements WatchSetService {
 
 	@Override
 	@DataSourceChange(slave = true)
-	public WatchDeviceSet getDeviceSetByImei(Long user_id) {
+	public WatchDeviceSet getDeviceSetByUserId(Long user_id) {
 		String sql = "select * from watch_device_set where  user_id=? limit 1";
 		List<WatchDeviceSet> list = jdbcTemplate.query(sql, new Object[] { user_id },
 				new BeanPropertyRowMapper<WatchDeviceSet>(WatchDeviceSet.class));
@@ -234,6 +234,19 @@ public class WatchSetServiceImpl implements WatchSetService {
 		String sql = "select * from dialpad_info where  imei=? limit 1";
 		List<WatchDialpad> list = jdbcTemplate.query(sql, new Object[] { imei },
 				new BeanPropertyRowMapper<WatchDialpad>(WatchDialpad.class));
+		if (list != null && !list.isEmpty()) {
+			return list.get(0);
+		} else {
+			logger.info("cannot find WatchDeviceSet,imei:" + imei);
+		}
+		return null;
+	}
+
+	@Override
+	public WatchDeviceSet getDeviceSetByImei(String imei) {
+		String sql = "select * from watch_device_set where  imei=? limit 1";
+		List<WatchDeviceSet> list = jdbcTemplate.query(sql, new Object[] { imei },
+				new BeanPropertyRowMapper<WatchDeviceSet>(WatchDeviceSet.class));
 		if (list != null && !list.isEmpty()) {
 			return list.get(0);
 		} else {
