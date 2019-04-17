@@ -42,10 +42,20 @@ import io.netty.buffer.Unpooled;
 
 @SuppressWarnings({ "unused", "restriction" })
 public class Utils {
+	
+	/*
+	 * 部署需要更改
+	 * */
+    public static final String IP = "47.92.30.81";
+	//public static final String IP = "39.98.236.1"; 
+
 
 	public static BASE64Encoder encoder = new sun.misc.BASE64Encoder();
 	public static BASE64Decoder decoder = new sun.misc.BASE64Decoder();
 	
+	
+	 public static final String FORMAT_SHORT = "yyyyMMdd";
+	 
 	// OSS
 	public final static String endpointOSS = "oss-cn-zhangjiakou.aliyuncs.com";
 	
@@ -108,6 +118,8 @@ public class Utils {
 	public static final String PORT_HTTP = "8088";
 
 	public final static String VOICE_FILE_lINUX = "/usr/local/resin/resin-pro-4.0.53-8080/webapps/GXCareDevice/watchvoice/device";
+	public final static String VOICE_FILE_lINUX_APP = "/usr/local/resin/resin-pro-4.0.53-8080/webapps/GXCareDevice/watchvoice/app/";
+	public final static String VOICE_FILE_lINUX_NEW = "/usr/local/resin/resin-pro-4.0.53-8080/webapps/GXCareDevice/watchvoice/";
 	public final static String PHOTO_FILE_lINUX = "/usr/local/resin/resin-pro-4.0.53-8080/webapps/GXCareDevice/watchphoto/device";
 	public final static String PHOTT_FILE_lINUX = "/usr/local/resin/resin-pro-4.0.53-8080/webapps/GXCareDevice/headPhoto/appset";
 	public final static String PHONEBook_FILE_lINUX = "/usr/local/resin/resin-pro-4.0.53-8080/webapps/GXCareDevice/headImg";
@@ -116,19 +128,22 @@ public class Utils {
 	// app头像图片地址和url
 	// 通讯录头像
 
-   public static final String IP = "47.92.30.81";
-	public final static String VOICE_URL = "http://" + IP + ":8080/GXCareDevice/watchvoice/device/";
-	public final static String PHOTO_URL = "http://" + IP + ":8080/GXCareDevice/watchphoto/device/";
-	public final static String APP_PHOTO_UTL = "http://" + IP + ":8080/GXCareDevice/headPhoto/appset/";
-	public final static String PHONEBook_PHOTO_UTL = "http://" + IP + ":8080/GXCareDevice/headImg/";
 	
-/*	public static final String IP = "39.98.236.1"; 
 	public final static String VOICE_URL = "http://"+IP+":8080/GXCareDevice/watchvoice/device/"; 
+	public final static String VOICE_URL_NEW = "http://"+IP+":8080/GXCareDevice/watchvoice/"; 
 	public  final static String PHOTO_URL ="http://"+IP+":8080/GXCareDevice/watchphoto/device/"; 
 	public final static String APP_PHOTO_UTL ="http://"+IP+":8080/GXCareDevice/headPhoto/appset/";
 	public final static String PHONEBook_PHOTO_UTL = "http://"+IP+":8080/GXCareDevice/headImg/";
-	*/
+	
 
+	public static String getYearMonthDay(){
+		SimpleDateFormat df = new SimpleDateFormat(FORMAT_SHORT);
+	    Calendar calendar = Calendar.getInstance();
+	    return df.format(calendar.getTime());
+	}
+		
+	
+	
 	// 获取amr语音文件长度
 	public static int getAmrDuration(File file) throws IOException {
 		long duration = -1;

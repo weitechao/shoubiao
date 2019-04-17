@@ -2,6 +2,8 @@ package com.bracelet.socket.business.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import io.netty.buffer.Unpooled;
@@ -71,8 +73,41 @@ public class TkService extends AbstractBizService {
 			byte[] vocieByte = ChannelMap.getByte(channel.remoteAddress() + "_byte");
 
 			byte[] voiceSubByte = Utils.subByte(vocieByte, 65, vocieByte.length - 65);
+			
 
-			Utils.createFileContent(Utils.VOICE_FILE_lINUX, voiceName, voiceSubByte);
+			if ("39".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
+				voiceSubByte = Utils.subByte(voiceSubByte, 1, voiceSubByte.length - 1);
+			}
+			if ("38".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
+				voiceSubByte = Utils.subByte(voiceSubByte, 1, voiceSubByte.length - 1);
+			}
+			if ("37".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
+				voiceSubByte = Utils.subByte(voiceSubByte, 1, voiceSubByte.length - 1);
+			}
+			if ("36".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
+				voiceSubByte = Utils.subByte(voiceSubByte, 1, voiceSubByte.length - 1);
+			}
+			if ("35".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
+				voiceSubByte = Utils.subByte(voiceSubByte, 1, voiceSubByte.length - 1);
+			}
+			if ("34".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
+				voiceSubByte = Utils.subByte(voiceSubByte, 1, voiceSubByte.length - 1);
+			}
+			if ("33".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
+				voiceSubByte = Utils.subByte(voiceSubByte, 1, voiceSubByte.length - 1);
+			}
+			if ("32".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
+				voiceSubByte = Utils.subByte(voiceSubByte, 1, voiceSubByte.length - 1);
+			}
+			if ("31".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
+				voiceSubByte = Utils.subByte(voiceSubByte, 1, voiceSubByte.length - 1);
+			}
+			if ("2c".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
+				voiceSubByte = Utils.subByte(voiceSubByte, 1, voiceSubByte.length - 1);
+			}
+
+			String yyyyMMdd= Utils.getYearMonthDay();
+			Utils.createFileContent(Utils.VOICE_FILE_lINUX_NEW + yyyyMMdd, voiceName, voiceSubByte);
 
 			ChannelMap.removeAll(channel.remoteAddress() + "");
 
@@ -81,9 +116,9 @@ public class TkService extends AbstractBizService {
 				// ChannelMap.addVoiceName(imei, "");
 
 				try {
-					File source = new File(Utils.VOICE_FILE_lINUX + "/" + voiceName);
+					File source = new File(Utils.VOICE_FILE_lINUX_NEW + yyyyMMdd + "/" + voiceName);
 					int voiceLength = Utils.getAmrDuration(source);
-					watchtkService.insertVoiceInfo(imei, "1", Utils.VOICE_URL + voiceName, "1", 0, "1", 1, 1,
+					watchtkService.insertVoiceInfo(imei, "1", Utils.VOICE_URL_NEW +yyyyMMdd+"/"+voiceName, "1", 0, "1", 1, 1,
 							voiceLength);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -205,5 +240,6 @@ public class TkService extends AbstractBizService {
 	protected SocketBaseDto process1(SocketLoginDto socketLoginDto, JSONObject jsonObject, Channel channel) {
 		return null;
 	}
+	
 
 }

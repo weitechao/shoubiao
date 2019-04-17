@@ -94,7 +94,7 @@ public class WatchAppTkController extends BaseController {
 
 		if (socketLoginDto.getChannel().isActive()) {
 
-			String phone = jsonObject.getString("phone");// 号码
+			//String phone = jsonObject.getString("phone");// 号码
 			String voiceData = jsonObject.getString("voiceData");// 语音内容
 																	// base64转字符串
 			String sourceName = jsonObject.getString("sourceName");// 文件名字
@@ -105,10 +105,10 @@ public class WatchAppTkController extends BaseController {
 
 			byte[] voicebyte = Base64.decodeBase64(voiceData);
 
-			Utils.createFileContent(Utils.VOICE_FILE_lINUX, "app_" + sourceName, voicebyte);
+			Utils.createFileContent(Utils.VOICE_FILE_lINUX_APP+Utils.getYearMonthDay(), "app_" + sourceName, voicebyte);
 
 			JSONArray jsonArray = new JSONArray();
-			String msgNumber = Utils.randomString(5);
+		//	String msgNumber = Utils.randomString(5);
 
 			bb.put("Code", 1);
 
