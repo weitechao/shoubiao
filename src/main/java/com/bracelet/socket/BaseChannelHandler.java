@@ -63,9 +63,10 @@ public class BaseChannelHandler extends SimpleChannelInboundHandler<String> {
 			buf.readBytes(receiveMsgBytes);
 			// receiveMsgBytes 就收到了.
 			String hexString = Hex.encodeHexString(receiveMsgBytes);
+			Integer hexStringLength = hexString.length();
 			logger.info("channelRead  16 hexString =" + hexString);
 
-			if (hexString.length() >= 8) {
+			if (hexStringLength >= 8) {
 				String kaiTou = Utils.hexStringToString(hexString.substring(0, 8));
 				logger.info("hexString的长度="+hexString.length());
 				logger.info("开头=" + kaiTou);
@@ -105,7 +106,7 @@ public class BaseChannelHandler extends SimpleChannelInboundHandler<String> {
 
 				} else {
 					
-					if(hexString.length()!=50){
+					if(hexStringLength!=50){
 					
 						Integer syLength=0;
 					if(StringUtil.isEmpty(ChannelMap.getInteger(ctx.channel().remoteAddress() + "_len"))){
@@ -150,9 +151,14 @@ public class BaseChannelHandler extends SimpleChannelInboundHandler<String> {
 
 				}
 
-			} else {
-				Integer syLength = ChannelMap.getInteger(ctx.channel().remoteAddress() + "_len")
-						- receiveMsgBytes.length;
+			} else if(hexStringLength != 0){
+				Integer syLength = 0;
+				if(StringUtil.isEmpty(ChannelMap.getInteger(ctx.channel().remoteAddress() + "_len"))){
+					syLength = 0 - receiveMsgBytes.length;
+				}else{
+					syLength = ChannelMap.getInteger(ctx.channel().remoteAddress() + "_len")  - receiveMsgBytes.length;
+				}
+				
 				logger.info("hexString.length() >= 8剩余长度=" + syLength);
 
 				if (syLength > 0) {
