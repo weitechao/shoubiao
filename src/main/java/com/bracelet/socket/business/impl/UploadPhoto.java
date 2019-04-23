@@ -119,10 +119,26 @@ public class UploadPhoto extends AbstractBizService {
 
 			byte[] vocieByte = ChannelMap.getByte(channel.remoteAddress() + "_byte");
 
-			byte[] voiceSubByte = Utils.subByte(vocieByte, jpgL + 10, vocieByte.length - jpgL - 10);
+	        	if(thisNumber==1){
+					Utils.deleteFile(Utils.PHOTO_FILE_lINUX+"/"+imei+"/"+photoName);
+				}
+	        	Integer baoLength =(thisNumber+","+allNumber).length();
+	            if(baoLength == 3){
+					byte[] voiceSubByte = Utils.subByte(vocieByte, jpgL + 10, vocieByte.length - jpgL - 10);
+					Utils.createFileContent(Utils.PHOTO_FILE_lINUX+"/"+imei+"/", photoName, voiceSubByte);
+				}else if(baoLength == 4){
+					byte[] voiceSubByte = Utils.subByte(vocieByte, jpgL + 11, vocieByte.length - jpgL - 11);
+					Utils.createFileContent(Utils.PHOTO_FILE_lINUX+"/"+imei+"/", photoName, voiceSubByte);
+				}else if(baoLength == 5){
+					byte[] voiceSubByte = Utils.subByte(vocieByte, jpgL + 12, vocieByte.length - jpgL - 12);
+					Utils.createFileContent(Utils.PHOTO_FILE_lINUX+"/"+imei+"/", photoName, voiceSubByte);
+				}
+				ChannelMap.removeAll(channel.remoteAddress() + "");
+				
+		
 			
 			
-			if ("39".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
+			/*if ("39".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
 				voiceSubByte = Utils.subByte(voiceSubByte, 1, voiceSubByte.length - 1);
 			}
 			if ("38".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
@@ -150,27 +166,17 @@ public class UploadPhoto extends AbstractBizService {
 			if ("31".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
 				voiceSubByte = Utils.subByte(voiceSubByte, 1, voiceSubByte.length - 1);
 			}
-			/*if ("30".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
+			if ("30".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
 				voiceSubByte = Utils.subByte(voiceSubByte, 1, voiceSubByte.length - 1);
-			}*/
-			
-			
+			}
 			
 			if ("2c".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
 				voiceSubByte = Utils.subByte(voiceSubByte, 1, voiceSubByte.length - 1);
-			}
-
-			/*if ("2c".equals(Integer.toHexString(voiceSubByte[voiceSubByte.length - 1] & 0xFF))) {
-				voiceSubByte = Utils.subByte(voiceSubByte, 0, voiceSubByte.length - 1);
-			}
-			if ("32".equals(Integer.toHexString(voiceSubByte[voiceSubByte.length - 1] & 0xFF))) {
-				voiceSubByte = Utils.subByte(voiceSubByte, 0, voiceSubByte.length - 1);
 			}*/
 
-			if(thisNumber==1){
-				Utils.deleteFile(Utils.PHOTO_FILE_lINUX+"/"+imei+"/"+photoName);
-			}
-			Utils.createFileContent(Utils.PHOTO_FILE_lINUX+"/"+imei+"/", photoName, voiceSubByte);
+		
+
+		
 
 			ChannelMap.removeAll(channel.remoteAddress() + "");
 

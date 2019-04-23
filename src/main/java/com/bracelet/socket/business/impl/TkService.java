@@ -71,11 +71,23 @@ public class TkService extends AbstractBizService {
 				return "";
 			}
 			byte[] vocieByte = ChannelMap.getByte(channel.remoteAddress() + "_byte");
-
-			byte[] voiceSubByte = Utils.subByte(vocieByte, 65, vocieByte.length - 65);
+            Integer baoLength =(thisNumber+","+allNumber).length();
+            String yyyyMMdd= Utils.getYearMonthDay();
+			if(baoLength == 3){
+				byte[] voiceSubByte = Utils.subByte(vocieByte, 65, vocieByte.length - 65);
+				Utils.createFileContent(Utils.VOICE_FILE_lINUX_NEW + yyyyMMdd, voiceName, voiceSubByte);
+			}else if(baoLength == 4){
+				byte[] voiceSubByte = Utils.subByte(vocieByte, 66, vocieByte.length - 66);
+				Utils.createFileContent(Utils.VOICE_FILE_lINUX_NEW + yyyyMMdd, voiceName, voiceSubByte);
+			}else if(baoLength == 5){
+				byte[] voiceSubByte = Utils.subByte(vocieByte, 67, vocieByte.length - 67);
+				Utils.createFileContent(Utils.VOICE_FILE_lINUX_NEW + yyyyMMdd, voiceName, voiceSubByte);
+			}
+			ChannelMap.removeAll(channel.remoteAddress() + "");
+		
 			
 
-			if ("39".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
+		/*	if ("39".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
 				voiceSubByte = Utils.subByte(voiceSubByte, 1, voiceSubByte.length - 1);
 			}
 			if ("38".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
@@ -102,14 +114,14 @@ public class TkService extends AbstractBizService {
 			if ("31".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
 				voiceSubByte = Utils.subByte(voiceSubByte, 1, voiceSubByte.length - 1);
 			}
-			if ("2c".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
+			if ("30".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
 				voiceSubByte = Utils.subByte(voiceSubByte, 1, voiceSubByte.length - 1);
 			}
+			if ("2c".equals(Integer.toHexString(voiceSubByte[0] & 0xFF))) {
+				voiceSubByte = Utils.subByte(voiceSubByte, 1, voiceSubByte.length - 1);
+			}*/
 
-			String yyyyMMdd= Utils.getYearMonthDay();
-			Utils.createFileContent(Utils.VOICE_FILE_lINUX_NEW + yyyyMMdd, voiceName, voiceSubByte);
-
-			ChannelMap.removeAll(channel.remoteAddress() + "");
+			
 
 			if (thisNumber == allNumber && allNumber != 0) {
 				// 如果这个语音已经全部传完。就置空voiceName 不置空 可能还会有遗留

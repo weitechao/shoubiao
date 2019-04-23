@@ -1,0 +1,63 @@
+2019-04-15 14:51:31,296 [main] INFO  SocketServer - ===start socket:7780
+2019-04-15 14:51:33,778 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - add connect:/127.0.0.1:59732
+2019-04-15 14:51:33,779 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelActive:/127.0.0.1:59732在线
+2019-04-15 14:51:38,933 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - receiveMsgBytes长度=99
+2019-04-15 14:51:38,936 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelRead  16 hexString =5b59572a3837323031383032303134323136382a303141372a303034352a494e49542c2c302c5930315f4b325f524441363632355f52454e51495f4c455f4449414e5f4c494e55582e302e3936372e51474a5f56312e302c303030302c303030302c30
+2019-04-15 14:51:38,938 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - hexString的长度=198
+2019-04-15 14:51:38,938 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - 开头=[YW*
+2019-04-15 14:51:38,938 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - len=69
+2019-04-15 14:51:38,938 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - cmd=IN
+2019-04-15 14:51:38,938 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - [/127.0.0.1:59732]原始16进制文本数据:5b59572a3837323031383032303134323136382a303141372a303034352a494e49542c2c302c5930315f4b325f524441363632355f52454e51495f4c455f4449414e5f4c494e55582e302e3936372e51474a5f56312e302c303030302c303030302c30
+2019-04-15 14:51:38,938 [nioEventLoopGroup-3-1] INFO  BusinessHandler - 5b59572a3837323031383032303134323136382a303141372a303034352a494e49542c2c302c5930315f4b325f524441363632355f52454e51495f4c455f4449414e5f4c494e55582e302e3936372e51474a5f56312e302c303030302c303030302c30
+2019-04-15 14:51:38,939 [nioEventLoopGroup-3-1] INFO  BusinessHandler - [/127.0.0.1:59732]原始发送信息字符串:[YW*872018020142168*01A7*0045*INIT,,0,Y01_K2_RDA6625_RENQI_LE_DIAN_LINUX.0.967.QGJ_V1.0,0000,0000,0]
+2019-04-15 14:51:38,939 [nioEventLoopGroup-3-1] INFO  SocketBusinessFactory - *****cmd:INIT
+2019-04-15 14:51:38,939 [nioEventLoopGroup-3-1] INFO  LimitCache - getResource redis size is -------->>>0 getNumIdle: 0 getNumWaiters: 0
+2019-04-15 14:51:38,956 [nioEventLoopGroup-3-1] INFO  LimitCache - before close redis size is -------->>>1 getNumIdle: 0 getNumWaiters: 0
+2019-04-15 14:51:38,956 [nioEventLoopGroup-3-1] INFO  LimitCache - after close redis size is -------->>>0 getNumIdle: 1 getNumWaiters: 0
+2019-04-15 14:51:39,218 [nioEventLoopGroup-3-1] INFO  DruidDataSource - {dataSource-1} inited
+2019-04-15 14:51:39,247 [nioEventLoopGroup-3-1] INFO  LimitCache - getResource redis size is -------->>>0 getNumIdle: 1 getNumWaiters: 0
+2019-04-15 14:51:39,247 [nioEventLoopGroup-3-1] INFO  LimitCache - before close redis size is -------->>>1 getNumIdle: 0 getNumWaiters: 0
+2019-04-15 14:51:39,248 [nioEventLoopGroup-3-1] INFO  LimitCache - after close redis size is -------->>>0 getNumIdle: 1 getNumWaiters: 0
+2019-04-15 14:51:39,248 [nioEventLoopGroup-3-1] INFO  LimitCache - getResource redis size is -------->>>0 getNumIdle: 1 getNumWaiters: 0
+2019-04-15 14:51:39,248 [nioEventLoopGroup-3-1] INFO  LimitCache - before close redis size is -------->>>1 getNumIdle: 0 getNumWaiters: 0
+2019-04-15 14:51:39,248 [nioEventLoopGroup-3-1] INFO  LimitCache - after close redis size is -------->>>0 getNumIdle: 1 getNumWaiters: 0
+2019-04-15 14:51:39,248 [nioEventLoopGroup-3-1] INFO  LoginService - 保存手表登录信息,imei872018020142168deviceid=1
+2019-04-15 14:51:39,248 [nioEventLoopGroup-3-1] INFO  LimitCache - getResource redis size is -------->>>0 getNumIdle: 1 getNumWaiters: 0
+2019-04-15 14:51:39,248 [nioEventLoopGroup-3-1] INFO  LimitCache - before close redis size is -------->>>1 getNumIdle: 0 getNumWaiters: 0
+2019-04-15 14:51:39,248 [nioEventLoopGroup-3-1] INFO  LimitCache - after close redis size is -------->>>0 getNumIdle: 1 getNumWaiters: 0
+2019-04-15 14:51:39,249 [nioEventLoopGroup-3-1] INFO  LimitCache - getResource redis size is -------->>>0 getNumIdle: 1 getNumWaiters: 0
+2019-04-15 14:51:39,249 [nioEventLoopGroup-3-1] INFO  LimitCache - before close redis size is -------->>>1 getNumIdle: 0 getNumWaiters: 0
+2019-04-15 14:51:39,249 [nioEventLoopGroup-3-1] INFO  LimitCache - after close redis size is -------->>>0 getNumIdle: 1 getNumWaiters: 0
+2019-04-15 14:51:39,249 [nioEventLoopGroup-3-1] INFO  LimitCache - getResource redis size is -------->>>0 getNumIdle: 1 getNumWaiters: 0
+2019-04-15 14:51:39,249 [nioEventLoopGroup-3-1] INFO  LimitCache - before close redis size is -------->>>1 getNumIdle: 0 getNumWaiters: 0
+2019-04-15 14:51:39,249 [nioEventLoopGroup-3-1] INFO  LimitCache - after close redis size is -------->>>0 getNumIdle: 1 getNumWaiters: 0
+2019-04-15 14:51:39,254 [nioEventLoopGroup-3-1] INFO  WatchSetServiceImpl - cannot find WatchDeviceSet,imei:1
+2019-04-15 14:51:39,298 [nioEventLoopGroup-3-1] INFO  DruidDataSource - {dataSource-2} inited
+2019-04-15 14:51:39,299 [nioEventLoopGroup-3-1] INFO  DeviceServiceImpl - get getDeviceInfo imei:872018020142168
+2019-04-15 14:51:39,301 [nioEventLoopGroup-3-1] INFO  ConfServiceImpl - getLatest return null.user_id:872018020142168
+2019-04-15 14:51:39,302 [nioEventLoopGroup-3-1] INFO  BusinessHandler - cmd:INIT=返回:[YW*872018020142168*0001*0006*INIT,1][YW*872018020142168*0001*008c*SET,,1234,500,08:00-11:30|14:00-16:30|12345,06:05,23:00,10,2,480,0,0:0,0:0,0:0,00:00,00:00,00:00,1,60,0,1|23:00-23:59|05:00-06:00,0,0,0,baby]
+2019-04-15 14:51:51,562 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - receiveMsgBytes长度=138
+2019-04-15 14:51:51,562 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - channelRead  16 hexString =5b59572a3837323031383032303134323136382a303030352a303036432a44512c3135303431392c3134333732342c562c302e3030303030302c4e2c302e3030303030302c452c302e30302c3234392e352c302e302c362c35302c38302c313030302c35302c30303030303030302c312c312c3436302c30332c31333834302c31322c31323630392c30
+2019-04-15 14:51:51,562 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - hexString的长度=276
+2019-04-15 14:51:51,562 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - 开头=[YW*
+2019-04-15 14:51:51,562 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - len=108
+2019-04-15 14:51:51,562 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - cmd=DQ
+2019-04-15 14:51:51,562 [nioEventLoopGroup-3-1] INFO  BaseChannelHandler - [/127.0.0.1:59732]原始16进制文本数据:5b59572a3837323031383032303134323136382a303030352a303036432a44512c3135303431392c3134333732342c562c302e3030303030302c4e2c302e3030303030302c452c302e30302c3234392e352c302e302c362c35302c38302c313030302c35302c30303030303030302c312c312c3436302c30332c31333834302c31322c31323630392c30
+2019-04-15 14:51:51,562 [nioEventLoopGroup-3-1] INFO  BusinessHandler - 5b59572a3837323031383032303134323136382a303030352a303036432a44512c3135303431392c3134333732342c562c302e3030303030302c4e2c302e3030303030302c452c302e30302c3234392e352c302e302c362c35302c38302c313030302c35302c30303030303030302c312c312c3436302c30332c31333834302c31322c31323630392c30
+2019-04-15 14:51:51,562 [nioEventLoopGroup-3-1] INFO  BusinessHandler - [/127.0.0.1:59732]原始发送信息字符串:[YW*872018020142168*0005*006C*DQ,150419,143724,V,0.000000,N,0.000000,E,0.00,249.5,0.0,6,50,80,1000,50,00000000,1,1,460,03,13840,12,12609,0]
+2019-04-15 14:51:51,562 [nioEventLoopGroup-3-1] INFO  SocketBusinessFactory - *****cmd:DQ
+2019-04-15 14:51:51,562 [nioEventLoopGroup-3-1] INFO  DxTianQi - 天气获取=YW*872018020142168*0005*006C*DQ,150419,143724,V,0.000000,N,0.000000,E,0.00,249.5,0.0,6,50,80,1000,50,00000000,1,1,460,03,13840,12,12609,0
+2019-04-15 14:51:51,562 [nioEventLoopGroup-3-1] INFO  DxTianQi - lbsCount=1
+2019-04-15 14:51:51,562 [nioEventLoopGroup-3-1] INFO  DxTianQi - wifiCount=0
+2019-04-15 14:51:51,562 [nioEventLoopGroup-3-1] INFO  DxTianQi - http://apilocate.amap.com/position?key=93b4cf92ab27576506c6ea1edbe8bb54&output=json&accesstype=0&cdma=1&bts=13840,12,12609,,,
+2019-04-15 14:51:51,878 [nioEventLoopGroup-3-1] INFO  LimitCache - getResource redis size is -------->>>0 getNumIdle: 1 getNumWaiters: 0
+2019-04-15 14:51:51,878 [nioEventLoopGroup-3-1] INFO  LimitCache - before close redis size is -------->>>1 getNumIdle: 0 getNumWaiters: 0
+2019-04-15 14:51:51,879 [nioEventLoopGroup-3-1] INFO  LimitCache - after close redis size is -------->>>0 getNumIdle: 1 getNumWaiters: 0
+2019-04-15 14:51:51,883 [nioEventLoopGroup-3-1] INFO  LimitCache - getResource redis size is -------->>>0 getNumIdle: 1 getNumWaiters: 0
+2019-04-15 14:51:51,883 [nioEventLoopGroup-3-1] INFO  LimitCache - before close redis size is -------->>>1 getNumIdle: 0 getNumWaiters: 0
+2019-04-15 14:51:51,883 [nioEventLoopGroup-3-1] INFO  LimitCache - after close redis size is -------->>>0 getNumIdle: 1 getNumWaiters: 0
+2019-04-15 14:51:51,883 [nioEventLoopGroup-3-1] INFO  LimitCache - getResource redis size is -------->>>0 getNumIdle: 1 getNumWaiters: 0
+2019-04-15 14:51:51,883 [nioEventLoopGroup-3-1] INFO  LimitCache - before close redis size is -------->>>1 getNumIdle: 0 getNumWaiters: 0
+2019-04-15 14:51:51,883 [nioEventLoopGroup-3-1] INFO  LimitCache - after close redis size is -------->>>0 getNumIdle: 1 getNumWaiters: 0
+2019-04-15 14:51:52,035 [nioEventLoopGroup-3-1] INFO  DxTianQi - 天气返回=[YW*872018020142168*0001*002b*TQ,0,"上海市","多云","21",31.1326408,121.4007642]
+2019-04-15 14:51:52,035 [nioEventLoopGroup-3-1] INFO  BusinessHandler - cmd:DQ=返回:[YW*872018020142168*0001*002b*TQ,0,"上海市","多云","21",31.1326408,121.4007642]
