@@ -548,23 +548,10 @@ public class WatchAppSetController extends BaseController {
 
 	// 获取设备定位频率
 	@ResponseBody
-	@RequestMapping(value = "/getLocationFrequency/{token}/{imei}", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
-	public String getLocationFrequency(@PathVariable String token, @PathVariable String imei) {
+	@RequestMapping(value = "/getLocationFrequency/{imei}", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	public String getLocationFrequency(@PathVariable String imei) {
 		JSONObject bb = new JSONObject();
-		String userId = checkTokenWatchAndUser(token);
-		if ("0".equals(userId)) {
-			bb.put("Code", -1);
-			return bb.toString();
-		}
-		LocationFrequency locaFre = watchSetService.getLocationFrequencyByImei(imei);
-		if (locaFre != null) {
-			bb.put("Code", 1);
-			bb.put("f", locaFre.getFrequency());
-		} else {
-			bb.put("Code", 1);
-			bb.put("f", 1);
-		}
-
+		
 		return bb.toString();
 	}
 	

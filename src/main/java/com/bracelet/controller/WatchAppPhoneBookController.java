@@ -329,7 +329,7 @@ public class WatchAppPhoneBookController extends BaseController {
 			}
 			// PHB,1234, 001B*
 			String msg = "PHB,1234," + sb1.toString()+sb2.toString();
-			sb.append(RadixUtil.changeRadix(msg.getBytes().length));
+			sb.append(RadixUtil.changeRadix(msg));
 			sb.append("*");
 			sb.append(msg);
 			sb.append("]");

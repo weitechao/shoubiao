@@ -7,6 +7,7 @@ import com.bracelet.dto.SocketLoginDto;
 import com.bracelet.entity.BindDevice;
 import com.bracelet.entity.DeviceManagePhone;
 import com.bracelet.entity.HealthStepManagement;
+import com.bracelet.entity.LocationFrequency;
 import com.bracelet.entity.UserInfo;
 import com.bracelet.entity.WatchDevice;
 import com.bracelet.entity.WatchDeviceAlarm;
@@ -1201,6 +1202,19 @@ public class WatchAppUserController extends BaseController {
 				bb.put("Code", 2);
 			}
 			return bb.toString();
+		}
+		
+		
+		// 获取最新设备的服务器的IP和端口
+		@ResponseBody
+		@RequestMapping(value = "/getDeviceIpPort/{imei}", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+		public String getDeviceIpPort(@PathVariable String imei) {
+			String  ipPort = Utils.IP + ":" + Utils.PORT_HTTP;
+			String ipport = limitCache.getRedisKeyValue(imei);
+			if (!StringUtil.isEmpty(ipport)) {
+				ipPort = ipport;
+			}
+			return ipPort;
 		}
 
 }
