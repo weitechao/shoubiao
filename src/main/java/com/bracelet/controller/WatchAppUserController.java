@@ -1209,12 +1209,17 @@ public class WatchAppUserController extends BaseController {
 		@ResponseBody
 		@RequestMapping(value = "/getDeviceIpPort/{imei}", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
 		public String getDeviceIpPort(@PathVariable String imei) {
+			JSONObject bb = new JSONObject();
+			bb.put("Code", 1);
+			
 			String  ipPort = Utils.IP + ":" + Utils.PORT_HTTP;
+			bb.put("ip", ipPort);
 			String ipport = limitCache.getRedisKeyValue(imei);
 			if (!StringUtil.isEmpty(ipport)) {
 				ipPort = ipport;
+				bb.put("ip", ipPort);
 			}
-			return ipPort;
+			return bb.toString();
 		}
 
 }

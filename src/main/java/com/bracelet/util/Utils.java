@@ -46,7 +46,7 @@ public class Utils {
 	/*
 	 * 部署需要更改
 	 * */
-    // public static final String IP = "47.92.30.81";
+  //   public static final String IP = "47.92.30.81";
 	public static final String IP = "39.98.236.1"; 
 
 
