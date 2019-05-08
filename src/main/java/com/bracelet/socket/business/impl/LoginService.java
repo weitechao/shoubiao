@@ -86,7 +86,7 @@ public class LoginService implements IService {
 		String haveValue = limitCache.getRedisKeyValue(imei + "_have");
              //判断是否有登陆过
 		if (StringUtil.isEmpty(haveValue)) {
-			
+			//设备没有登录过的
 			WatchDeviceBak watchd = ideviceService.getDeviceBakInfo(imei);
 			if (watchd != null) {
 
@@ -127,6 +127,9 @@ public class LoginService implements IService {
 						ChannelMap.addChannel(channel, channelDto);
 					}
 				} else {
+					if("1".equals(watchSelect.getDv()) || StringUtil.isEmpty(watchSelect.getDv())){
+						ideviceService.updateDvById(watchSelect.getId(),dv);
+					}
 					ideviceService.insertNewImeiBak(watchSelect.getId(), imei);
 
 					SocketLoginDto channelDto = new SocketLoginDto();
@@ -143,6 +146,16 @@ public class LoginService implements IService {
 				}
 			}
 		} else {
+			/*下面这段代码要隐藏在使用一两天后
+			WatchDeviceBak watchd = ideviceService.getDeviceBakInfo(imei);
+			if(watchd != null){
+				ideviceService.updateDvById(watchd.getId(),dv);
+			}
+			
+			*/
+			
+			
+			
 			SocketLoginDto channelDto = new SocketLoginDto();
 			channelDto.setChannel(channel);
 			channelDto.setNo("1");

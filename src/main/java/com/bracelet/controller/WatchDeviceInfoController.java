@@ -89,7 +89,10 @@ public class WatchDeviceInfoController extends BaseController {
 			bb.put("BindNumber", imei);
 
 			bb.put("CreateTime", Utils.getLocationTime(watch.getCreatetime().getTime()));
-			bb.put("CurrentFirmware", "Y01_K2_RDA6625_RENQI_LE_DIAN_LINUX.0.967.QGJ_V1.0");
+			bb.put("CurrentFirmware", "Y07_TP_RENQI_AILIDA_NEW_SRV_HCB.0.449.QGJ_V1.0");
+			if(!"1".equals(watch.getDv())){
+				bb.put("CurrentFirmware", watch.getDv()+"");
+			}
 			bb.put("SetVersionNO", 1);
 			bb.put("ContactVersionNO", 1);
 			bb.put("OperatorType", 1);
@@ -176,6 +179,10 @@ public class WatchDeviceInfoController extends BaseController {
 				bb.put("nickname", watchh.getNickname() + "");
 				bb.put("createtime", watchh.getCreatetime().getTime());
 				bb.put("updatetime", watchh.getUpdatetime().getTime());
+				bb.put("CurrentFirmware", "Y07_TP_RENQI_AILIDA_NEW_SRV_HCB.0.449.QGJ_V1.0");
+				if(!"1".equals(watchh.getDv())){
+					bb.put("CurrentFirmware", watchh.getDv() + "");
+				}
 				bb.put("dv", watchh.getDv() + "");
 				bb.put("type", watchh.getType() + "");
 				bb.put("sex", watchh.getSex() + "");
@@ -243,7 +250,8 @@ public class WatchDeviceInfoController extends BaseController {
 				bb.put("BindNumber", imei);
 
 				bb.put("CreateTime", Utils.getLocationTime(watchh.getCreatetime().getTime()));
-				bb.put("CurrentFirmware", "Y01_K2_RDA6625_RENQI_LE_DIAN_LINUX.0.967.QGJ_V1.0");
+				
+				
 				bb.put("SetVersionNO", 1);
 				bb.put("ContactVersionNO", 1);
 				bb.put("OperatorType", 1);

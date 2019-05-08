@@ -84,6 +84,8 @@ public interface IDeviceService {
 
 	WatchDeviceHomeSchool getDeviceHomeAndFamilyByImei(String imei);
 
+	boolean updateDvById(Long id, String dv);
+
 
 
 

@@ -380,6 +380,16 @@ public class DeviceServiceImpl implements IDeviceService {
 		return null;
 	}
 
+	@Override
+	public boolean updateDvById(Long id, String dv) {
+		Timestamp now = Utils.getCurrentTimestamp();
+		int i = jdbcTemplate.update(
+				"update device_watch_info set dv=?  , updatetime=? where id = ?",
+				new Object[] {dv, now, id },
+				new int[] { Types.VARCHAR, java.sql.Types.TIMESTAMP,java.sql.Types.INTEGER });
+		return i == 1;
+	}
+
 	
 	
 }

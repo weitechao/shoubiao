@@ -343,7 +343,7 @@ public class WatchAppUserController extends BaseController {
 				dataMap.put("DeviceType", 1);
 				dataMap.put("Birthday", "0");
 				dataMap.put("CreateTime", Utils.getLocationTime(System.currentTimeMillis()));
-				dataMap.put("CurrentFirmware", "Y01_K2_RDA6625_RENQI_LE_DIAN_LINUX.0.967.QGJ_V1.0");
+				dataMap.put("CurrentFirmware", "Y07_TP_RENQI_AILIDA_NEW_SRV_HCB.0.449.QGJ_V1.0");
 				dataMap.put("SetVersionNO", "0");
 				dataMap.put("ContactVersionNO", "0");
 				dataMap.put("OperatorType", 0);
@@ -359,6 +359,9 @@ public class WatchAppUserController extends BaseController {
 					WatchDevice watchd = ideviceService.getDeviceInfo(location.getImei());
 					if (watchd != null) {
 						dataMap.put("DeviceID", watchd.getId());
+						if(!"1".equals(watchd.getDv())){
+							dataMap.put("CurrentFirmware", watchd.getDv()+"");
+						}
 						limitCache.addKey(location.getImei() + "_id", watchd.getId() + "");
 					}
 				}
@@ -501,7 +504,7 @@ public class WatchAppUserController extends BaseController {
 					dataMap.put("DeviceType", 1);
 					dataMap.put("Birthday", "0");
 					dataMap.put("CreateTime", Utils.getLocationTime(System.currentTimeMillis()));
-					dataMap.put("CurrentFirmware", "Y01_K2_RDA6625_RENQI_LE_DIAN_LINUX.0.967.QGJ_V1.0");
+					dataMap.put("CurrentFirmware", "Y07_TP_RENQI_AILIDA_NEW_SRV_HCB.0.449.QGJ_V1.0");
 					dataMap.put("SetVersionNO", "0");
 					dataMap.put("ContactVersionNO", "0");
 					dataMap.put("OperatorType", 0);
@@ -517,6 +520,9 @@ public class WatchAppUserController extends BaseController {
 						WatchDevice watchd = ideviceService.getDeviceInfo(location.getImei());
 						if (watchd != null) {
 							dataMap.put("DeviceID", watchd.getId());
+							if(!"1".equals(watchd.getDv())){
+								dataMap.put("CurrentFirmware", watchd.getDv()+"");
+							}
 							limitCache.addKey(location.getImei() + "_id", watchd.getId() + "");
 						}
 					}
