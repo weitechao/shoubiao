@@ -46,8 +46,29 @@ public class Utils {
 	/*
 	 * 部署需要更改
 	 * */
-     public static final String IP = "47.92.30.81";
-	//public static final String IP = "39.98.236.1"; 
+       public static final String IP = "47.92.30.81";         //华北3第一台服务器
+	  //public static final String IP = "39.98.236.1";       //华北3区  第二台服务器 
+     
+       // public static final String IP = "47.244.232.43";   //香港服务器
+     
+     
+       public static final String SLB_IP = "47.92.183.190,7780";//大陆负载均衡
+     //public static final String SLB_IP = "47.244.232.43,7780";//香港负载均衡
+     
+     
+     
+ 	public final static String SSRH_LOCATION_KEY = "93b4cf92ab27576506c6ea1edbe8bb54";   //智能硬件--国内
+ 	public final static String SSRH_TIANQI_KEY = "7d92f6b57a23743f6939c24714731a6a";    //web_use --国内
+ 	
+ 	
+ 	//public final static String SSRH_LOCATION_KEY = "b35ceba813c24c4e0505fa0e82c8672a";   //智能硬件--海外
+ 	//public final static String SSRH_TIANQI_KEY = "	8d3f44798c4c320c1a7d1071ecc66ab6";    //web_use --海外
+ 	
+     
+     /*****
+      * 
+      * 记得 修改redis 账号密码 ip等参数
+      * ******/
 
 
 	public static BASE64Encoder encoder = new sun.misc.BASE64Encoder();
@@ -94,8 +115,7 @@ public class Utils {
 	public final static String dou = ",";
 	public final static String you = "]";
 
-	public final static String SSRH_LOCATION_KEY = "93b4cf92ab27576506c6ea1edbe8bb54";
-	public final static String SSRH_TIANQI_KEY = "7d92f6b57a23743f6939c24714731a6a";
+
 	public final static String SSRH_GPS_URL = "http://restapi.amap.com/v3/assistant/coordinate/convert";
 
 	public final static String METHOD_NAME = "WatchDeviceInfoController.updateBabyHead(..)";
@@ -106,7 +126,7 @@ public class Utils {
 
 	public static final String GPS_URL = "http://restapi.amap.com/v3/assistant/coordinate/convert";
 
-	public static final String IP_PORT_URL = "http://47.92.183.190/shoubiao/slb/getiport/1";// 这个是负载均衡的ip
+	//public static final String IP_PORT_URL = "http://47.92.183.190/shoubiao/slb/getiport/1";// 这个是负载均衡的ip
 																							// 使用了80代理
 																							// 8088
 																							// 这个不用修改
@@ -129,6 +149,7 @@ public class Utils {
 	// 通讯录头像
 
 	
+	public final static String VOICE_URL_APP = "http://"+IP+":8080/GXCareDevice/watchvoice/app/"; 
 	public final static String VOICE_URL = "http://"+IP+":8080/GXCareDevice/watchvoice/device/"; 
 	public final static String VOICE_URL_NEW = "http://"+IP+":8080/GXCareDevice/watchvoice/"; 
 	public  final static String PHOTO_URL ="http://"+IP+":8080/GXCareDevice/watchphoto/device/"; 

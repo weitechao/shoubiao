@@ -474,7 +474,7 @@ public class LocationDdService extends AbstractBizService {
 
 					}
 
-					if (fenone.getIs_exit() == 1 && distance > fenone.getRadius()) {
+					if (fenone.getIs_exit() == 1 && (distance > (fenone.getRadius()+3000))) {
 						// 离开电子围栏
 						// String token = limitCache.getRedisKeyValue(imei +
 						// "_push");

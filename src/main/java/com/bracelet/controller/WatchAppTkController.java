@@ -147,7 +147,8 @@ public class WatchAppTkController extends BaseController {
 				dataMap.put("ObjectId", limitCache.getRedisKeyValue(imei + "_userid"));
 			}
 			dataMap.put("Mark", "");
-			dataMap.put("Path", Utils.VOICE_URL + "app_" + sourceName);
+			//dataMap.put("Path", Utils.VOICE_URL + "app_" + sourceName);//这个路径目前不对
+		    dataMap.put("Path", Utils.VOICE_URL_APP + Utils.getYearMonthDay()+"/"+"app_"+ sourceName); //这个路径是对的
 			dataMap.put("Length", voiceLength);
 			dataMap.put("CreateTime", Utils.getLocationTime(System.currentTimeMillis()));
 			dataMap.put("UpdateTime", "");

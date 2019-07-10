@@ -357,7 +357,7 @@ public class LocationController extends BaseController {
 		String lng = jsonObject.getString("lng");
 
 		if (!"0.000000".equals(lat) && !"0.000000".equals(lng)) {
-			String url = "https://restapi.amap.com/v3/geocode/regeo?key=7d92f6b57a23743f6939c24714731a6a&location="
+			String url = "https://restapi.amap.com/v3/geocode/regeo?key="+Utils.SSRH_TIANQI_KEY+"&location="
 					+ lng + "," + lat;
 			String res = HttpClientGet.get(url);
 			/*

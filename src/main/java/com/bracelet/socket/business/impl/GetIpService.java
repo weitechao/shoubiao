@@ -55,7 +55,7 @@ public class GetIpService implements IService {
 		 * 先通过请求slb 80 端口  slb 自己去获取到后端业务的一个ip和端口返回
 		 * */
 	
-			add.append("47.92.183.190,7780");//这是负载均衡的ip和端口
+			add.append(Utils.SLB_IP);//这是负载均衡的ip和端口
 		
 		sb.append(RadixUtil.changeRadix(add.toString()));
 		sb.append("*");
