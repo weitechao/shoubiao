@@ -168,7 +168,7 @@ public class WatchAppSetController extends BaseController {
 			
 			Integer language = 2;// 语言
 			Integer infoVibration = Integer.valueOf(jsonObject.getString("infoVibration"));// 手表信息震动
-			Integer disabledInClass = Integer.valueOf(jsonObject.getString("disabledInClass"));// 上课禁用******
+			Integer disabledInClass = Integer.valueOf(jsonObject.getString("disabledInClass"));// 上课禁用******disabledInClass    rejectStrangers  timerSwitch
 			Integer rejectStrangers = Integer.valueOf(jsonObject.getString("rejectStrangers"));// 拒绝陌生人来电***
 			Integer timerSwitch =  Integer.valueOf(jsonObject.getString("timerSwitch"));// 定时开关机***************
 			Integer reportCallLocation = Integer.valueOf(jsonObject.getString("reportCallLocation"));// 报告通话位置
