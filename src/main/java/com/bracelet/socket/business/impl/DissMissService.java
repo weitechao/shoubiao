@@ -25,6 +25,7 @@ import com.bracelet.entity.UserInfo;
 import com.bracelet.entity.WatchDevice;
 import com.bracelet.entity.WatchDeviceAlarm;
 import com.bracelet.entity.WatchDeviceHomeSchool;
+import com.bracelet.entity.WatchDeviceSet;
 import com.bracelet.entity.WatchPhoneBook;
 import com.bracelet.entity.WatchVoiceInfo;
 import com.bracelet.exception.BizException;
@@ -35,6 +36,7 @@ import com.bracelet.service.ILocationService;
 import com.bracelet.service.IMemService;
 import com.bracelet.service.IUserInfoService;
 import com.bracelet.service.IVoltageService;
+import com.bracelet.service.WatchSetService;
 import com.bracelet.service.WatchTkService;
 import com.bracelet.socket.business.IService;
 import com.bracelet.util.ChannelMap;
@@ -61,6 +63,8 @@ public class DissMissService extends AbstractBizService {
 	IMemService memService;
 	@Autowired
 	IConfService confService;
+	@Autowired
+	WatchSetService watchSetService;
 
 	@Override
 	protected SocketBaseDto process1(SocketLoginDto socketLoginDto, JSONObject jsonObject, Channel channel) {
@@ -130,6 +134,12 @@ public class DissMissService extends AbstractBizService {
 						"", "", "", "", "", "", "");
 			}
 			userInfoService.deleteWatchBindByUserId(Long.valueOf(userInfo.getUser_id()));
+			
+			 WatchDeviceSet deviceSet = watchSetService.getDeviceSetByUserId(userInfo.getUser_id());
+			 if( deviceSet !=null ){
+				 watchSetService.deleteWatchSetById(deviceSet.getId());
+			 }
+			 
 		}
 		String reps = "[YW*" + imei + "*0001*0007*FACTORY]";
 		logger.info("设备解绑=" + reps);

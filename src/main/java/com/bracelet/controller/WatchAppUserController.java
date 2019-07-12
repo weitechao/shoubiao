@@ -6,14 +6,18 @@ import com.alibaba.fastjson.JSONObject;
 import com.bracelet.dto.SocketLoginDto;
 import com.bracelet.entity.BindDevice;
 import com.bracelet.entity.DeviceManagePhone;
+import com.bracelet.entity.Fence;
 import com.bracelet.entity.HealthStepManagement;
 import com.bracelet.entity.LocationFrequency;
+import com.bracelet.entity.LocationWatch;
 import com.bracelet.entity.UserInfo;
 import com.bracelet.entity.WatchDevice;
 import com.bracelet.entity.WatchDeviceAlarm;
 import com.bracelet.entity.WatchDeviceHomeSchool;
+import com.bracelet.entity.WatchDeviceSet;
 import com.bracelet.entity.WatchDialpad;
 import com.bracelet.entity.WatchPhoneBook;
+import com.bracelet.entity.WatchVoiceInfo;
 import com.bracelet.service.IAuthcodeService;
 import com.bracelet.service.IConfService;
 import com.bracelet.service.IDeviceService;
@@ -683,41 +687,65 @@ public class WatchAppUserController extends BaseController {
 			// 清空设置信息 device_watch_info
 			WatchDevice watch = ideviceService.getDeviceInfo(imei);
 			if (watch != null) {
-				this.ideviceService.updateWatchImeiInfoById(watch.getId(), "", "", 1, "", "", "", "", "", "");
+				ideviceService.updateWatchImeiInfoById(watch.getId(), "", "", 1, "", "", "", "", "", "");
 				ideviceService.updateImeiHeadInfoByImei(watch.getId(), "");
 			}
 
-			WatchDeviceHomeSchool watchSchool = ideviceService.getDeviceHomeAndFamilyInfo(Long.valueOf(userId));
-			if (watchSchool != null) {
-				ideviceService.updateImeiHomeAndFamilyInfoById(watchSchool.getId(), "08:00-12:00", "14:00-17:00", "", "",
-						"", "", "", "", "", "");
-			}
-			
 			DeviceManagePhone demp = ideviceService.getManagePhoneByImei(imei);
-			if(demp != null){
-				ideviceService.updateAdminPhoneById(demp.getId(), "");	
+			if (demp != null) {
+				ideviceService.updateAdminPhoneById(demp.getId(), "");
+			}
+			Fence fence = fenceService.getWatchOne(imei);
+			if (fence != null) {
+				fenceService.deleteWatchFenceByImei(imei);
+			}
+			WatchPhoneBook watchPhoneBook = memService.getMemberInfoByImei(imei);
+			if (watchPhoneBook != null) {
+				memService.deleteWatchMemberByImei(imei);
+			}
+			// 删语音 删定位
+			LocationWatch locationWatch = locationService.getLatest(imei);
+			if (locationWatch != null) {
+				locationService.deleteByImei(imei);
 			}
 
-			fenceService.deleteWatchFenceByImei(imei);
-			memService.deleteWatchMemberByImei(imei);
-			// 删语音 删定位
-			locationService.deleteByImei(imei);
-			watchtkService.delteByImei(imei);
+			WatchVoiceInfo watchVoice = watchtkService.getVoiceByImei(imei);
+			if (watchVoice != null) {
+				watchtkService.delteByImei(imei);
+			}
 			// 删闹钟
-			ideviceService.deleteDeviceAlarmInfo(imei);
-			
-			userInfoService.deleteWatchBindByUserId(Long.valueOf(userId));
-			//删除绑定设备
-			ideviceService.deleteBindDevicebyImei(imei);
-			HealthStepManagement  heathM = confService.getHeathStepInfo(imei);
-			if(heathM != null){
+			WatchDeviceAlarm watchDeviceAlarm = ideviceService.getDeviceAlarmInfo(imei);
+			if (watchDeviceAlarm != null) {
+				ideviceService.deleteDeviceAlarmInfo(imei);
+			}
+
+			// 删除绑定设备
+			BindDevice bindDevice = ideviceService.getBindDeviceByImei(imei);
+			if (bindDevice != null) {
+				ideviceService.deleteBindDevicebyImei(imei);
+			}
+			HealthStepManagement heathM = confService.getHeathStepInfo(imei);
+			if (heathM != null) {
 				confService.deteHeathyInfoByImei(heathM.getId());
 			}
-			
+
 			UserInfo userInfo = userInfoService.getUserInfoByUsername(imei);
 			if (userInfo != null) {
-					userInfoService.updateUserPassword(userInfo.getUser_id(), "123456");
+				userInfoService.updateUserPassword(userInfo.getUser_id(), "123456");
+				WatchDeviceHomeSchool watchSchool = ideviceService
+						.getDeviceHomeAndFamilyInfo(Long.valueOf(userInfo.getUser_id()));
+				if (watchSchool != null) {
+					ideviceService.updateImeiHomeAndFamilyInfoById(watchSchool.getId(), "08:00-12:00", "14:00-17:00", "",
+							"", "", "", "", "", "", "");
+				}
+				userInfoService.deleteWatchBindByUserId(Long.valueOf(userInfo.getUser_id()));
+				
+				 WatchDeviceSet deviceSet = watchSetService.getDeviceSetByUserId(userInfo.getUser_id());
+				 if( deviceSet !=null ){
+					 watchSetService.deleteWatchSetById(deviceSet.getId());
+				 }
 			}
+			
 			bb.put("Code", 1);
 		}else{
 			bb.put("Code", 0);

@@ -255,4 +255,11 @@ public class WatchSetServiceImpl implements WatchSetService {
 		return null;
 	}
 
+	@Override
+	public boolean deleteWatchSetById(Long id) {
+		int i = jdbcTemplate.update("delete from watch_device_set where id = ? ", new Object[] { id },
+				new int[] { Types.INTEGER});
+		return i == 1;
+	}
+
 }

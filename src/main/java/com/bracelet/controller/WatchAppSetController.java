@@ -162,17 +162,15 @@ public class WatchAppSetController extends BaseController {
 		}
 		if (socketLoginDto.getChannel().isActive()) {
 			
-			
-			
 			Integer brightScreen = Integer.valueOf(jsonObject.getString("brightScreen"));// 亮屏时间
 			Integer flowerNumber =  Integer.valueOf(jsonObject.getString("flowerNumber"));// 爱心奖励
 			Integer phoneComeVibration = Integer.valueOf(jsonObject.getString("phoneComeVibration"));// 手表来电话震动
 			
 			Integer language = 2;// 语言
 			Integer infoVibration = Integer.valueOf(jsonObject.getString("infoVibration"));// 手表信息震动
-			Integer disabledInClass = Integer.valueOf(jsonObject.getString("disabledInClass"));// 上课禁用
-			Integer rejectStrangers = Integer.valueOf(jsonObject.getString("rejectStrangers"));// 拒绝陌生人来电
-			Integer timerSwitch =  Integer.valueOf(jsonObject.getString("timerSwitch"));// 定时开关机
+			Integer disabledInClass = Integer.valueOf(jsonObject.getString("disabledInClass"));// 上课禁用******
+			Integer rejectStrangers = Integer.valueOf(jsonObject.getString("rejectStrangers"));// 拒绝陌生人来电***
+			Integer timerSwitch =  Integer.valueOf(jsonObject.getString("timerSwitch"));// 定时开关机***************
 			Integer reportCallLocation = Integer.valueOf(jsonObject.getString("reportCallLocation"));// 报告通话位置
 			Integer phoneComeVoice = Integer.valueOf(jsonObject.getString("phoneComeVoice"));// 手表来电响铃
 			Integer watchOffAlarm = Integer.valueOf(jsonObject.getString("watchOffAlarm"));// 手表脱落报警

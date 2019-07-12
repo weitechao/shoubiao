@@ -56,5 +56,7 @@ public interface WatchSetService {
 
 	WatchDeviceSet getDeviceSetByImei(String imei);
 
+	boolean deleteWatchSetById(Long id);
+
 	
 }
