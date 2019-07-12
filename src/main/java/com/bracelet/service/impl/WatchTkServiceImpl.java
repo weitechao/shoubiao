@@ -101,4 +101,17 @@ public class WatchTkServiceImpl implements WatchTkService {
 		return i == 1;
 	}
 
+	@Override
+	public WatchVoiceInfo getVoiceByImei(String imei) {
+		String sql = "select * from watch_voice_info where sender=?  LIMIT 1";
+		List<WatchVoiceInfo> list = jdbcTemplate.query(sql, new Object[] {imei },
+				new BeanPropertyRowMapper<WatchVoiceInfo>(WatchVoiceInfo.class));
+		if (list != null && !list.isEmpty()) {
+			return list.get(0);
+		} else {
+			logger.info("getLatestVoice return null.user_id:" + imei);
+		}
+		return null;
+	}
+
 }

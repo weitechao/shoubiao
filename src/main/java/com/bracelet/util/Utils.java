@@ -43,17 +43,19 @@ import io.netty.buffer.Unpooled;
 @SuppressWarnings({ "unused", "restriction" })
 public class Utils {
 	
+	
+	
 	/*
 	 * 部署需要更改
 	 * */
-       public static final String IP = "47.92.30.81";         //华北3第一台服务器
-	  //public static final String IP = "39.98.236.1";       //华北3区  第二台服务器 
+      //  public static final String IP = "47.92.30.81";         //华北3第一台服务器
+	    public static final String IP = "39.98.236.1";       //华北3区  第二台服务器 
      
        // public static final String IP = "47.244.232.43";   //香港服务器
      
      
        public static final String SLB_IP = "47.92.183.190,7780";//大陆负载均衡
-     //public static final String SLB_IP = "47.244.232.43,7780";//香港负载均衡
+    // public static final String SLB_IP = "47.244.232.43,7780";//香港负载均衡
      
      
      
@@ -61,8 +63,8 @@ public class Utils {
  	public final static String SSRH_TIANQI_KEY = "7d92f6b57a23743f6939c24714731a6a";    //web_use --国内
  	
  	
- 	//public final static String SSRH_LOCATION_KEY = "b35ceba813c24c4e0505fa0e82c8672a";   //智能硬件--海外
- 	//public final static String SSRH_TIANQI_KEY = "	8d3f44798c4c320c1a7d1071ecc66ab6";    //web_use --海外
+ 	   //public final static String SSRH_LOCATION_KEY = "b35ceba813c24c4e0505fa0e82c8672a";   //智能硬件--海外
+ 	   //public final static String SSRH_TIANQI_KEY = "	8d3f44798c4c320c1a7d1071ecc66ab6";    //web_use --海外
  	
      
      /*****

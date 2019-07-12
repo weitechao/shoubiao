@@ -40,5 +40,7 @@ public interface IMemService {
 
 	WatchPhoneBook getPhoneBookByImeiAndStatus(String imei, Integer status);
 
+	WatchPhoneBook getMemberInfoByImei(String imei);
+
 
 }

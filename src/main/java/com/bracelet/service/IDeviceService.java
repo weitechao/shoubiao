@@ -3,6 +3,7 @@ package com.bracelet.service;
 import java.util.List;
 
 import com.bracelet.datasource.DataSourceChange;
+import com.bracelet.entity.BindDevice;
 import com.bracelet.entity.DeviceManagePhone;
 import com.bracelet.entity.IpAddressInfo;
 import com.bracelet.entity.WatchDevice;
@@ -85,6 +86,8 @@ public interface IDeviceService {
 	WatchDeviceHomeSchool getDeviceHomeAndFamilyByImei(String imei);
 
 	boolean updateDvById(Long id, String dv);
+
+	BindDevice getBindDeviceByImei(String imei);
 
 
 

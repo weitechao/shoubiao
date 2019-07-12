@@ -1,6 +1,7 @@
 package com.bracelet.service.impl;
 
 import com.bracelet.datasource.DataSourceChange;
+import com.bracelet.entity.BindDevice;
 import com.bracelet.entity.DeviceManagePhone;
 import com.bracelet.entity.IpAddressInfo;
 import com.bracelet.entity.WatchDevice;
@@ -388,6 +389,20 @@ public class DeviceServiceImpl implements IDeviceService {
 				new Object[] {dv, now, id },
 				new int[] { Types.VARCHAR, java.sql.Types.TIMESTAMP,java.sql.Types.INTEGER });
 		return i == 1;
+	}
+
+	@Override
+	public BindDevice getBindDeviceByImei(String imei) {
+		String sql = "select * from watch_bind_device where b_imei = ? LIMIT 1";
+		List<BindDevice> list = jdbcTemplate.query(sql, new Object[] { imei },
+				new BeanPropertyRowMapper<BindDevice>(BindDevice.class));
+
+		if (list != null && !list.isEmpty()) {
+			return list.get(0);
+		} else {
+			logger.info("get getBindDeviceByImei imei:" + imei);
+		}
+		return null;
 	}
 
 	

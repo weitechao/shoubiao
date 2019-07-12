@@ -61,6 +61,8 @@ public class SocketBusinessFactory {
     private IService tk2Service;
     @Resource
     private IService avatarqService;
+    @Resource
+    private IService disMissService;
     
     public IService getService(String cmd) throws BizException {
         logger.info("*****cmd:" + cmd);
@@ -164,6 +166,9 @@ public class SocketBusinessFactory {
         case "AVATARQ":
             //下发通讯录真人头像
             return avatarqService;
+        case "DISMISS":
+            //设备上的解绑
+            return disMissService;
         
        
         default:

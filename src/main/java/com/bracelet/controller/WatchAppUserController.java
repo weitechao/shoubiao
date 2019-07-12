@@ -684,8 +684,8 @@ public class WatchAppUserController extends BaseController {
 			WatchDevice watch = ideviceService.getDeviceInfo(imei);
 			if (watch != null) {
 				this.ideviceService.updateWatchImeiInfoById(watch.getId(), "", "", 1, "", "", "", "", "", "");
+				ideviceService.updateImeiHeadInfoByImei(watch.getId(), "");
 			}
-			ideviceService.updateImeiHeadInfoByImei(watch.getId(), "");
 
 			WatchDeviceHomeSchool watchSchool = ideviceService.getDeviceHomeAndFamilyInfo(Long.valueOf(userId));
 			if (watchSchool != null) {
