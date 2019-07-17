@@ -2,6 +2,7 @@ package com.bracelet.service;
 
 import java.sql.Timestamp;
 
+import com.bracelet.entity.BindSimCardInfo;
 import com.bracelet.entity.Voltage;
 
 
@@ -13,5 +14,11 @@ public interface IVoltageService {
 	boolean insertDianLiang(String imei, Integer voltage);
 
 	Voltage getLatest(String imei);
+
+	BindSimCardInfo getSimCardInfoByIccid(String iccid);
+
+	BindSimCardInfo getSimCardInfoByImei(String imei);
+
+	boolean insertBindSimCardInfo(String imei, String iccid);
 
 }

@@ -63,6 +63,8 @@ public class SocketBusinessFactory {
     private IService avatarqService;
     @Resource
     private IService disMissService;
+    @Resource
+    private IService bindCardService;
     
     public IService getService(String cmd) throws BizException {
         logger.info("*****cmd:" + cmd);
@@ -169,6 +171,9 @@ public class SocketBusinessFactory {
         case "DISMISS":
             //设备上的解绑
             return disMissService;
+        case "BINDCARD":
+            //固定绑卡
+            return bindCardService;
         
        
         default:
