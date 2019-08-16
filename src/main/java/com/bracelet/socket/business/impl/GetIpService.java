@@ -48,12 +48,7 @@ public class GetIpService implements IService {
         StringBuffer add=new StringBuffer("IPREQ,");
 		add.append(1);
 		add.append(",");
-	//	String responseJsonString = HttpClientGet.get(Utils.IP_PORT_URL);
-		/*
-47.92.183.190   负载均衡ip端口
-		 * 分配逻辑
-		 * 先通过请求slb 80 端口  slb 自己去获取到后端业务的一个ip和端口返回
-		 * */
+
 	
 			add.append(Utils.SLB_IP);//这是负载均衡的ip和端口
 		

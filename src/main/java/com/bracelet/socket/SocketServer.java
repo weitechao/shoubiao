@@ -24,6 +24,8 @@ public class SocketServer implements InitializingBean, DisposableBean{
   // protected static final int BIZGROUPSIZE = Runtime.getRuntime().availableProcessors()*2; //默认  
     /** 业务出现线程大小*/  
     protected static final int BIZTHREADSIZE = 4;  
+    
+    private static final int port = 7781; 
 	
 
 	@Autowired
@@ -89,7 +91,7 @@ public class SocketServer implements InitializingBean, DisposableBean{
 	}
 
 	public void afterPropertiesSet() throws Exception {
-		start(7780);
+		start(port);
 	}
 
 	public void destroy() throws Exception {

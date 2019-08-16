@@ -38,7 +38,7 @@ public class ServerChannelInitializer extends ChannelInitializer<SocketChannel> 
 		pipeline.addLast("framer", new DelimiterBasedFrameDecoder(8192, Unpooled.wrappedBuffer(new byte[] { ']'})));
 		//pipeline.addLast("decoder", new StringDecoder());
 		pipeline.addLast("encoder", new StringEncoder());
-		pipeline.addLast("readTimeoutHandler", new ReadTimeoutHandler(130));//单位秒  
+       pipeline.addLast("readTimeoutHandler", new ReadTimeoutHandler(130));//单位秒  
 		pipeline.addLast("handler", baseChannelHandler);
 	}
 	

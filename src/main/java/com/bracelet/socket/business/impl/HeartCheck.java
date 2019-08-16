@@ -19,6 +19,7 @@ import com.bracelet.redis.LimitCache;
 import com.bracelet.service.IVoltageService;
 import com.bracelet.socket.business.IService;
 import com.bracelet.util.ChannelMap;
+import com.bracelet.util.RadixUtil;
 import com.bracelet.util.RespCode;
 import com.bracelet.util.Utils;
 
@@ -77,7 +78,6 @@ public class HeartCheck extends AbstractBizService {
 		String resp = "[YW*"+imei+"*0001*0016*LK,"+Utils.getJian8Time()+"]";
 		logger.info("心跳返回="+resp);
 		return resp;
-		
 		}
 	 
 

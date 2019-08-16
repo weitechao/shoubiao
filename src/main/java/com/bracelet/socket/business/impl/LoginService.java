@@ -170,6 +170,9 @@ public class LoginService implements IService {
 		limitCache.addKey(imei, Utils.IP + ":" + Utils.PORT_HTTP);//设备要先登录，服务器记录设备登录的http ip端口
 		String resp = "[YW*" + imei + "*0001*0006*INIT,1]"+"[YW*"+imei+"*0001*0016*LK,"+Utils.getJian8Time()+"]";
 		
+	
+		
+		
 		
 		
 		//拼设置的指令包
@@ -286,6 +289,21 @@ public class LoginService implements IService {
 		
 		
 		return resp+reps;
+	/*	
+	 * StringBuffer sb = new StringBuffer("[YW*" + imei + "*0001*");//0002*
+        StringBuffer add=new StringBuffer("IPREQ,");
+		add.append(1);
+		add.append(",");
+
+	
+			add.append(Utils.SLB_IP);//这是负载均衡的ip和端口
+		
+		sb.append(RadixUtil.changeRadix(add.toString()));
+		sb.append("*");
+		sb.append(add.toString());
+		sb.append("]");
+		
+  return sb.toString();*/
 	}
 
 	public SocketBaseDto process(JSONObject jsonObject, Channel channel) {
