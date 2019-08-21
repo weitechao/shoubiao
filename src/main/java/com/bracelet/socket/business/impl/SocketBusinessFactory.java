@@ -65,6 +65,8 @@ public class SocketBusinessFactory {
     private IService disMissService;
     @Resource
     private IService bindCardService;
+    @Resource
+    private IService locationUd3Service;
     
     public IService getService(String cmd) throws BizException {
         logger.info("*****cmd:" + cmd);
@@ -78,6 +80,9 @@ public class SocketBusinessFactory {
         case "UD":
             // 3.位置数据上报  移动联通
             return locationUdService;
+        case "UD3":
+            // 3.位置数据上报  移动联通
+            return locationUd3Service;
         case "DD":
             // 3.位置数据上报  电信
             return locationDdService;
