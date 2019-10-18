@@ -41,8 +41,8 @@ import com.bracelet.util.RadixUtil;
  * 登录服务 {"type":1,"no":"1234567","timestamp":1501123709,"data":
  * {"dv":"divNo.1","sd":"sdV1"}}
  */
-@Component("loginService")
-public class LoginService implements IService {
+@Component("dzLoginService")
+public class DzLoginService implements IService {
 	@Autowired
 	IUserInfoService userInfoService;
 	@Autowired
@@ -80,7 +80,18 @@ public class LoginService implements IService {
 		String info = shuzu[4];
 
 		String[] infoshuzu = info.split(",");
-		String phone = infoshuzu[1];//ICCID
+		String phone = infoshuzu[1];
+		
+		String url = "http://kids.yycall.cn/api/check?iccid="+phone+"&imei="+imei;
+		logger.info("DZ=url="+url);
+		String responseJsonString = HttpClientGet.get(url);
+		logger.info("responseJsonString"+responseJsonString);
+		
+		if("0".equals(responseJsonString)){
+			String resp = "[YW*" + imei + "*0001*0006*INIT,0]";
+			return resp;
+			}else{
+		
 		int TypeOfOperator = Integer.valueOf(infoshuzu[2]);// 运营商类型:1表示移动2表示联通、3表示电信,0xFF表示其他
 		String dv = infoshuzu[3];// 设备固件版本
 
@@ -169,8 +180,6 @@ public class LoginService implements IService {
 		}
 		limitCache.addKey(imei+"_energy", "100");
 		limitCache.addKey(imei, Utils.IP + ":" + Utils.PORT_HTTP);//设备要先登录，服务器记录设备登录的http ip端口
-		
-		
 		
 		
 		String resp = "[YW*" + imei + "*0001*0006*INIT,1]"+"[YW*"+imei+"*0001*0016*LK,"+Utils.getJian8Time()+"]";
@@ -289,11 +298,11 @@ public class LoginService implements IService {
 		 * :00|1245,
 		 * 06:05,23:00,5,,,1:123,0:25,0:234,02:00,03:00,21:00,2,10,4]
 		 */
-		
-		
-		
-		
 		return resp+reps;
+	}
+		
+		
+		
 	/*	
 	 * StringBuffer sb = new StringBuffer("[YW*" + imei + "*0001*");//0002*
         StringBuffer add=new StringBuffer("IPREQ,");

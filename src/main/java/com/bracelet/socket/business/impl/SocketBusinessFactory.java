@@ -67,6 +67,8 @@ public class SocketBusinessFactory {
     private IService bindCardService;
     @Resource
     private IService locationUd3Service;
+    @Resource
+    private IService dzLoginService;
     
     public IService getService(String cmd) throws BizException {
         logger.info("*****cmd:" + cmd);
@@ -179,6 +181,9 @@ public class SocketBusinessFactory {
         case "BINDCARD":
             //固定绑卡
             return bindCardService;
+        case "DZ":
+            // 1.初始化
+            return dzLoginService;
         
        
         default:

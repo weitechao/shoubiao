@@ -88,7 +88,7 @@ public class WatchAppTkController extends BaseController {
 
 		SocketLoginDto socketLoginDto = ChannelMap.getChannel(imei);
 		if (socketLoginDto == null || socketLoginDto.getChannel() == null) {
-			bb.put("Code", 2);
+			bb.put("Code", 4);
 			return bb.toString();
 		}
 

@@ -25,7 +25,7 @@ public class SocketServer implements InitializingBean, DisposableBean{
     /** 业务出现线程大小*/  
     protected static final int BIZTHREADSIZE = 4;  
     
-    private static final int port = 7781; 
+    private static final int port = 7780; 
 	
 
 	@Autowired
