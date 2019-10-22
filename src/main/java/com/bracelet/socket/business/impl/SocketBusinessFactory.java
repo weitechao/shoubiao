@@ -69,6 +69,8 @@ public class SocketBusinessFactory {
     private IService locationUd3Service;
     @Resource
     private IService dzLoginService;
+    @Resource
+    private IService dzdzLoginService;
     
     public IService getService(String cmd) throws BizException {
         logger.info("*****cmd:" + cmd);
@@ -184,6 +186,9 @@ public class SocketBusinessFactory {
         case "DZ":
             // 1.初始化
             return dzLoginService;
+        case "DZDZ":
+            // 1.初始化
+            return dzdzLoginService;
         
        
         default:
