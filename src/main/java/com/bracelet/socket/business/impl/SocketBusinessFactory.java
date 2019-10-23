@@ -67,8 +67,7 @@ public class SocketBusinessFactory {
     private IService bindCardService;
     @Resource
     private IService locationUd3Service;
-    @Resource
-    private IService dzLoginService;
+  
     @Resource
     private IService dzdzLoginService;
     
@@ -183,9 +182,7 @@ public class SocketBusinessFactory {
         case "BINDCARD":
             //固定绑卡
             return bindCardService;
-        case "DZ":
-            // 1.初始化
-            return dzLoginService;
+      
         case "DZDZ":
             // 1.初始化
             return dzdzLoginService;

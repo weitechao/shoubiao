@@ -183,7 +183,7 @@ public class LoginService implements IService {
 		//拼设置的指令包
 		
 		
-		WatchDeviceSet deviceSet = watchSetService.getDeviceSetByImei(imei);
+	/*	WatchDeviceSet deviceSet = watchSetService.getDeviceSetByImei(imei);
 
 		StringBuffer sendMsg = new StringBuffer("SET" + ",,1234,");// F48,");
 		WatchDeviceAlarm watch = ideviceService.getDeviceAlarmInfo(imei);
@@ -268,7 +268,7 @@ public class LoginService implements IService {
 		}
 
 		String reps = "[YW*" + imei + "*0001*" + RadixUtil.changeRadix(sendMsg.toString()) + "*"
-				+ sendMsg.toString() + "]";
+				+ sendMsg.toString() + "]";*/
 		
 		
 		/*
@@ -293,7 +293,8 @@ public class LoginService implements IService {
 		
 		
 		
-		return resp+reps;
+		//return resp+reps;
+		return resp;
 	/*	
 	 * StringBuffer sb = new StringBuffer("[YW*" + imei + "*0001*");//0002*
         StringBuffer add=new StringBuffer("IPREQ,");

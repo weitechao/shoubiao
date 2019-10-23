@@ -190,7 +190,7 @@ public class DzDzLoginService implements IService {
 		
 		
 		//拼设置的指令包
-		
+	/*	
 		
 		WatchDeviceSet deviceSet = watchSetService.getDeviceSetByImei(imei);
 
@@ -277,7 +277,7 @@ public class DzDzLoginService implements IService {
 		}
 
 		String reps = "[YW*" + imei + "*0001*" + RadixUtil.changeRadix(sendMsg.toString()) + "*"
-				+ sendMsg.toString() + "]";
+				+ sendMsg.toString() + "]";*/
 		
 		
 		/*
@@ -298,7 +298,8 @@ public class DzDzLoginService implements IService {
 		 * :00|1245,
 		 * 06:05,23:00,5,,,1:123,0:25,0:234,02:00,03:00,21:00,2,10,4]
 		 */
-		return resp+reps;
+		//return resp+reps;
+		return resp;
 	}
 		
 		
