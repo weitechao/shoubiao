@@ -48,8 +48,8 @@ public class Utils {
 	/*
 	 * 部署需要更改
 	 * */
-       public static final String IP = "47.92.30.81";         //华北3第一台服务器
-	  // public static final String IP = "39.98.236.1";       //华北3区  第二台服务器 
+      public static final String IP = "47.92.30.81";         //华北3第一台服务器
+	 //  public static final String IP = "39.98.236.1";       //华北3区  第二台服务器 
      
       //public static final String IP = "47.244.232.43";   //香港服务器
      

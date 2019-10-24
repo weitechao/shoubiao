@@ -118,7 +118,7 @@ public class LoginService implements IService {
 						channelDto.setChannel(channel);
 						channelDto.setNo("1");
 						channelDto.setImei(imei);
-						channelDto.setPhone(phone);
+						channelDto.setPhone("");
 						channelDto.setUser_id(watchCopy.getId());
 						limitCache.addKey(imei + "_have", "1");
 						limitCache.addKey(imei + "_id", watchCopy.getId() + "");
@@ -161,7 +161,7 @@ public class LoginService implements IService {
 			channelDto.setChannel(channel);
 			channelDto.setNo("1");
 			channelDto.setImei(imei);
-			channelDto.setPhone(phone);
+			channelDto.setPhone("");
 			channelDto.setUser_id(Long.valueOf(limitCache.getRedisKeyValue(imei + "_id")));
 			logger.info("redis  里有值  保存手表登录信息" + ",imei" + imei + "deviceid=" + limitCache.getRedisKeyValue(imei + "_id"));
 			ChannelMap.addChannel(imei, channelDto);
