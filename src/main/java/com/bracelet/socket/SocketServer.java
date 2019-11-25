@@ -13,6 +13,8 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bracelet.util.Utils;
+
 @Service
 public class SocketServer implements InitializingBean, DisposableBean{
 	 
@@ -23,9 +25,9 @@ public class SocketServer implements InitializingBean, DisposableBean{
 	 /**用于分配处理业务线程的线程组个数 */  
   // protected static final int BIZGROUPSIZE = Runtime.getRuntime().availableProcessors()*2; //默认  
     /** 业务出现线程大小*/  
-    protected static final int BIZTHREADSIZE = 16;  
+    protected static final int BIZTHREADSIZE = 20;  
     
-    private static final int port = 7780; 
+ 
 	
 
 	@Autowired
@@ -37,7 +39,7 @@ public class SocketServer implements InitializingBean, DisposableBean{
 		 * BossGroup和WorkerGroup都是NioEventLoopGroup，BossGroup用来处理nio的Accept，Worker处理nio的Read和Write事件
 		 * */
 		
-		bossGroup = new NioEventLoopGroup(4);
+		bossGroup = new NioEventLoopGroup(2);
 		workerGroup = new NioEventLoopGroup(BIZTHREADSIZE);
 		ServerBootstrap b = new ServerBootstrap();
 		b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class).childHandler(serverChannelInitializer)
@@ -91,7 +93,7 @@ public class SocketServer implements InitializingBean, DisposableBean{
 	}
 
 	public void afterPropertiesSet() throws Exception {
-		start(port);
+		start(Utils.port);
 	}
 
 	public void destroy() throws Exception {

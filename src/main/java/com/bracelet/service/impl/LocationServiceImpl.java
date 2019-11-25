@@ -225,7 +225,7 @@ public class LocationServiceImpl implements ILocationService {
 		}
 
 		String sql = "select * from  " + table
-				+ "  where imei=? and upload_time > ? and upload_time < ? order by upload_time asc";
+				+ "  where imei=? and upload_time > ? and upload_time < ? order by id asc  limit 5";
 		List<LocationWatch> list = jdbcTemplate.query(sql, new Object[] { imei, starttime, endtime },
 				new BeanPropertyRowMapper<LocationWatch>(LocationWatch.class));
 		return list;
