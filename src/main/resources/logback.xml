@@ -18,16 +18,16 @@
 		</encoder>
 	</appender>
 	
- <root>
+<!-- 日志级别	 <root>
 		<level value="info" />
 		<appender-ref ref="console" />
 		<appender-ref ref="info" />
 	</root>
-<!-- 日志级别		
+	--> 
 	 <root>
 		<level value="warn" />
 		<appender-ref ref="console" />
 		<appender-ref ref="info" />
 	</root> 
---> 
+
 </configuration>   
