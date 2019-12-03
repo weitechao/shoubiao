@@ -10,6 +10,7 @@ import com.bracelet.entity.WatchDevice;
 import com.bracelet.entity.WatchDeviceAlarm;
 import com.bracelet.entity.WatchDeviceBak;
 import com.bracelet.entity.WatchDeviceHomeSchool;
+import com.bracelet.entity.WatchDeviceShiChang;
 
 public interface IDeviceService {
 	
@@ -88,6 +89,12 @@ public interface IDeviceService {
 	boolean updateDvById(Long id, String dv);
 
 	BindDevice getBindDeviceByImei(String imei);
+
+	WatchDeviceShiChang getDeviceShiChangInfo(String imei);
+
+	boolean updateWatchShiChangInfo(Long id, int sc);
+
+	boolean insertWatchShiChangInfo(String imei, int shichang);
 
 
 

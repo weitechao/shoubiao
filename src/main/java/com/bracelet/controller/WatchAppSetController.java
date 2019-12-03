@@ -444,7 +444,8 @@ public class WatchAppSetController extends BaseController {
 
 		} else {
 			bb.put("Code", 1);
-			bb.put("SetInfo", "1-1-1-1-0-0-0-0-1-0-1-0");
+//			bb.put("SetInfo", "1-1-1-1-0-0-0-0-1-0-1-0");
+			bb.put("SetInfo", "1-1-1-1-1-1-1-1-1-1-1-1");
 			bb.put("ClassDisabled1", "08:00-12:00");
 			bb.put("ClassDisabled2", "14:00-17:00");
 			bb.put("WeekDisabled", "");

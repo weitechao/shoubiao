@@ -71,6 +71,8 @@ public class SocketBusinessFactory {
     private IService dzdzLoginService;
     @Resource
     private IService dianZiBaoKaService;
+    @Resource
+    private IService shiJianLeiJiService;
     
     public IService getService(String cmd) throws BizException {
         logger.info("*****cmd:" + cmd);
@@ -189,6 +191,9 @@ public class SocketBusinessFactory {
         case "DZBK":
             // 1.电子宝卡
             return dianZiBaoKaService;
+        case "SJLJ":
+            // 时间累积
+            return shiJianLeiJiService;
         
        
         default:

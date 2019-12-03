@@ -11,6 +11,8 @@ import java.util.Properties;
 
 import com.bracelet.util.StringUtil;
 
+import cn.hutool.core.codec.Base64;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
@@ -27,6 +29,7 @@ import cn.hutool.core.lang.Dict;
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.text.StrFormatter;
+import cn.hutool.core.text.StrSpliter;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.NumberUtil;
@@ -36,6 +39,7 @@ import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.core.util.ZipUtil;
+import cn.hutool.system.SystemUtil;
 import junit.framework.Assert;
 
 public class UtilsTestHuTu {
@@ -257,21 +261,27 @@ yyyy-MM-dd HH:mm:ss.SSS
     	//控制台输出：This is Console log for test.
 */    
     	
-    	//通常使用
-    	String result1 = StrFormatter.format("this is {} for {}", "a", "b");
-    	Assert.assertEquals("this is a for b", result1);
+    	/*String[] col= new String[]{"a","b","c","d","e"};
+    	List<String> colList = CollUtil.newArrayList(col);
 
-    	//转义{}
-    	String result2 = StrFormatter.format("this is \\{} for {}", "a", "b");
-    	Assert.assertEquals("this is {} for a", result2);
-
-    	//转义\
-    	String result3 = StrFormatter.format("this is \\\\{} for {}", "a", "b");
-    	Assert.assertEquals("this is \\a for b", result3);
+    	String str = CollUtil.join(colList, "#"); //str -> a#b#c#d#e
+    	Console.log(str);*/
     	
-    	Console.log(result1);
-    	Console.log(result2);
-    	Console.log(result3);
+    	/*Base64编码是用64（2的6次方）个ASCII字符来表示256（2的8次方）个ASCII字符，也就是三位二进制数组经过编码后变为四位的ASCII字符显示，长度比原来增加1/3。
+    	String a = "伦家是一个非常长的字符串";
+    	String encode = Base64.encode(a);
+    	Console.log(encode);
+    	
+    	String decodeStr = Base64.decodeStr(encode);
+    	Console.log(decodeStr);
+    	*/
+    	
+    	/*String str1 = "a, ,efedsfs,   ddf";
+    	//参数：被切分字符串，分隔符逗号，0表示无限制分片数，去除两边空格，忽略空白项
+    	List<String> split = StrSpliter.split(str1, ',', 0, true, true);
+    	Console.log(split);*/
+    	
+    	System.out.println(SystemUtil.getRuntimeInfo());
     	
     }
 

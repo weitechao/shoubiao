@@ -39,8 +39,8 @@ import com.bracelet.util.HttpClientGet;
 import com.bracelet.util.RadixUtil;
 
 
-@Component("dianZiBaoKaService")
-public class DzBkService implements IService {
+@Component("shiJianLeiJiService")
+public class ShiJianLeiJiService implements IService {
 	@Autowired
 	IUserInfoService userInfoService;
 	@Autowired
@@ -74,27 +74,21 @@ public class DzBkService implements IService {
 
 		String[] shuzu = jsonInfo.split("\\*");
 		String imei = shuzu[1];// 设备imei
-	
-	
-		String resp = "[YW*"+imei+"*0001*0018*DZBK,"+Utils.getJian8Time()+"]";
 		
-		WatchDeviceShiChang watchshiChang = ideviceService.getDeviceShiChangInfo(imei);
-              if(watchshiChang != null){
-            	  if(watchshiChang.getSc()>=24){
-            		//设备没有登录过的
-          			WatchDeviceBak watchd = ideviceService.getDeviceBakInfo(imei);
-          			if (watchd != null) {
-          				resp = "[YW*"+imei+"*0001*0018*DZBK,"+Utils.getDiZiBaoKa(watchd.getCreatetime().getTime())+"]";
-          			}else{
-          				 resp = "[YW*" + imei + "*0001*0006*DZBK,0]"; 
-          			}
-            	  }else{
-            		  resp = "[YW*" + imei + "*0001*0006*DZBK,0]"; 
-            	  }
-              }else{
-            	 resp = "[YW*" + imei + "*0001*0006*DZBK,0]";
-              }
-			
+		String info = shuzu[4];
+
+		String[] infoshuzu = info.split(",");
+		int shichang = Integer.valueOf(infoshuzu[1]);//时长
+	
+		String resp = "[YW*" + imei + "*0001*0006*SJLJ,1]";
+		
+			//设备没有登录过的
+		WatchDeviceShiChang watchd = ideviceService.getDeviceShiChangInfo(imei);
+			if (watchd != null) {
+				ideviceService.updateWatchShiChangInfo(watchd.getId(),watchd.getSc()+shichang);
+			}else{
+				ideviceService.insertWatchShiChangInfo(imei,shichang);
+			}
 
 		return resp;
 		

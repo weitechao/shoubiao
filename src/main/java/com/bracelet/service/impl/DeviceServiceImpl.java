@@ -8,6 +8,7 @@ import com.bracelet.entity.WatchDevice;
 import com.bracelet.entity.WatchDeviceAlarm;
 import com.bracelet.entity.WatchDeviceBak;
 import com.bracelet.entity.WatchDeviceHomeSchool;
+import com.bracelet.entity.WatchDeviceShiChang;
 import com.bracelet.service.IDeviceService;
 import com.bracelet.util.Utils;
 
@@ -403,6 +404,36 @@ public class DeviceServiceImpl implements IDeviceService {
 			logger.info("get getBindDeviceByImei imei:" + imei);
 		}
 		return null;
+	}
+
+	@Override
+	public WatchDeviceShiChang getDeviceShiChangInfo(String imei) {
+		String sql = "select id,imei,sc from device_watch_sc_info where imei=? LIMIT 1";
+		List<WatchDeviceShiChang> list = jdbcTemplate.query(sql, new Object[] { imei },
+				new BeanPropertyRowMapper<WatchDeviceShiChang>(WatchDeviceShiChang.class));
+
+		if (list != null && !list.isEmpty()) {
+			return list.get(0);
+		} else {
+			logger.info("get getDeviceInfo imei:" + imei);
+		}
+		return null;
+	}
+
+	@Override
+	public boolean updateWatchShiChangInfo(Long id, int sc) {
+		int i = jdbcTemplate.update("update device_watch_sc_info set sc=?  where id = ?",
+				new Object[] { sc, id }, new int[] {
+						Types.INTEGER, java.sql.Types.INTEGER });
+		return i == 1;
+	}
+
+	@Override
+	public boolean insertWatchShiChangInfo(String imei, int shichang) {
+		int i = jdbcTemplate.update("insert into device_watch_sc_info (imei, sc) values (?,?)",
+				new Object[] { imei, shichang },
+				new int[] { java.sql.Types.VARCHAR, java.sql.Types.INTEGER });
+		return i == 1;
 	}
 
 	

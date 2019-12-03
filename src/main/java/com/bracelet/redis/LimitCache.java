@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.bracelet.dto.WatchLatestLocation;
 
+import cn.hutool.db.nosql.redis.RedisDS;
 import redis.clients.jedis.Jedis;
 
 /**
@@ -115,6 +116,7 @@ public class LimitCache extends BasicRedisSupport {
 	// 增加token key value
 	public void addToken(String token, String userId) {
 		Jedis jedis = getJedis();
+		//Jedis jedis = RedisDS.create().getJedis();
 		if(jedis.exists(userId)){
 			String oldtoken = jedis.get(userId);
 			jedis.del(oldtoken);
