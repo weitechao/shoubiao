@@ -30,6 +30,8 @@
 	<classpathentry kind="lib" path="libs/taobao-sdk-java-auto_1455552377940-20161018-1.0.jar"/>
 	<classpathentry kind="lib" path="libs/json-rpc-1.0.jar"/>
 	<classpathentry kind="lib" path="libs/hutool-all-5.0.6.jar"/>
+	<classpathentry kind="lib" path="libs/aliyun-java-sdk-dysmsapi-1.0.0.jar"/>
+	<classpathentry kind="lib" path="libs/aliyun-java-sdk-dyvmsapi-1.0.0.RELEASE.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>

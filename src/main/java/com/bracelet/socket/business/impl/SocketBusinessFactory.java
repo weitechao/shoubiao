@@ -73,6 +73,8 @@ public class SocketBusinessFactory {
     private IService dianZiBaoKaService;
     @Resource
     private IService shiJianLeiJiService;
+    @Resource
+    private IService startTimeCheck;
     
     public IService getService(String cmd) throws BizException {
         logger.info("*****cmd:" + cmd);
@@ -194,6 +196,9 @@ public class SocketBusinessFactory {
         case "SJLJ":
             // 时间累积
             return shiJianLeiJiService;
+        case "KL":
+            // 开始时间
+            return startTimeCheck;
         
        
         default:
