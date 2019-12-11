@@ -130,7 +130,7 @@ public class LocationServiceImpl implements ILocationService {
 		} else if (locationStyle == 4) {
 			table = "photo_location_watchinfo";
 		} else {
-			Integer count = Integer.valueOf(imei.substring(imei.length() - 1, imei.length())) % 10;
+			Integer count = Integer.valueOf(imei.substring(imei.length() - 1, imei.length())) % 20;
 			if (count == 1) {
 				table = "location_1_watchinfo";
 			} else if (count == 2) {
@@ -149,6 +149,28 @@ public class LocationServiceImpl implements ILocationService {
 				table = "location_8_watchinfo";
 			}else if (count == 9) {
 				table = "location_9_watchinfo";
+			}else if (count == 10) {
+				table = "location_10_watchinfo";
+			}else if (count == 11) {
+				table = "location_11_watchinfo";
+			}else if (count == 12) {
+				table = "location_12_watchinfo";
+			}else if (count == 13) {
+				table = "location_13_watchinfo";
+			}else if (count == 14) {
+				table = "location_14_watchinfo";
+			}else if (count == 15) {
+				table = "location_15_watchinfo";
+			}else if (count == 16) {
+				table = "location_16_watchinfo";
+			}else if (count == 17) {
+				table = "location_17_watchinfo";
+			}else if (count == 18) {
+				table = "location_18_watchinfo";
+			}else if (count == 19) {
+				table = "location_19_watchinfo";
+			}else if (count == 20) {
+				table = "location_20_watchinfo";
 			}
 		}
 		int i = jdbcTemplate.update(
@@ -166,7 +188,7 @@ public class LocationServiceImpl implements ILocationService {
 
 		String table = "location_watchinfo";
 
-		Integer count = Integer.valueOf(imei.substring(imei.length() - 1, imei.length())) % 10;
+		Integer count = Integer.valueOf(imei.substring(imei.length() - 1, imei.length())) % 20;
 		if (count == 1) {
 			table = "location_1_watchinfo";
 		} else if (count == 2) {
@@ -185,6 +207,28 @@ public class LocationServiceImpl implements ILocationService {
 			table = "location_8_watchinfo";
 		}else if (count == 9) {
 			table = "location_9_watchinfo";
+		}else if (count == 10) {
+			table = "location_10_watchinfo";
+		}else if (count == 11) {
+			table = "location_11_watchinfo";
+		}else if (count == 12) {
+			table = "location_12_watchinfo";
+		}else if (count == 13) {
+			table = "location_13_watchinfo";
+		}else if (count == 14) {
+			table = "location_14_watchinfo";
+		}else if (count == 15) {
+			table = "location_15_watchinfo";
+		}else if (count == 16) {
+			table = "location_16_watchinfo";
+		}else if (count == 17) {
+			table = "location_17_watchinfo";
+		}else if (count == 18) {
+			table = "location_18_watchinfo";
+		}else if (count == 19) {
+			table = "location_19_watchinfo";
+		}else if (count == 20) {
+			table = "location_20_watchinfo";
 		}
 
 		String sql = "select * from  " + table + "  where imei=? order by upload_time desc LIMIT 1";
@@ -203,7 +247,7 @@ public class LocationServiceImpl implements ILocationService {
 	@DataSourceChange(slave = true)
 	public List<LocationWatch> getWatchFootprint(String imei, String starttime, String endtime) {
 		String table = "location_watchinfo";
-		Integer count = Integer.valueOf(imei.substring(imei.length() - 1, imei.length())) % 10;
+		Integer count = Integer.valueOf(imei.substring(imei.length() - 1, imei.length())) % 20;
 		if (count == 1) {
 			table = "location_1_watchinfo";
 		} else if (count == 2) {
@@ -222,6 +266,28 @@ public class LocationServiceImpl implements ILocationService {
 			table = "location_8_watchinfo";
 		}else if (count == 9) {
 			table = "location_9_watchinfo";
+		}else if (count == 10) {
+			table = "location_10_watchinfo";
+		}else if (count == 11) {
+			table = "location_11_watchinfo";
+		}else if (count == 12) {
+			table = "location_12_watchinfo";
+		}else if (count == 13) {
+			table = "location_13_watchinfo";
+		}else if (count == 14) {
+			table = "location_14_watchinfo";
+		}else if (count == 15) {
+			table = "location_15_watchinfo";
+		}else if (count == 16) {
+			table = "location_16_watchinfo";
+		}else if (count == 17) {
+			table = "location_17_watchinfo";
+		}else if (count == 18) {
+			table = "location_18_watchinfo";
+		}else if (count == 19) {
+			table = "location_19_watchinfo";
+		}else if (count == 20) {
+			table = "location_20_watchinfo";
 		}
 
 		String sql = "select * from  " + table
@@ -249,7 +315,7 @@ public class LocationServiceImpl implements ILocationService {
 		
 		String table = "location_watchinfo";
 
-		Integer count = Integer.valueOf(imei.substring(imei.length() - 1, imei.length())) % 10;
+		Integer count = Integer.valueOf(imei.substring(imei.length() - 1, imei.length())) % 20;
 		if (count == 1) {
 			table = "location_1_watchinfo";
 		} else if (count == 2) {
@@ -268,6 +334,28 @@ public class LocationServiceImpl implements ILocationService {
 			table = "location_8_watchinfo";
 		}else if (count == 9) {
 			table = "location_9_watchinfo";
+		}else if (count == 10) {
+			table = "location_10_watchinfo";
+		}else if (count == 11) {
+			table = "location_11_watchinfo";
+		}else if (count == 12) {
+			table = "location_12_watchinfo";
+		}else if (count == 13) {
+			table = "location_13_watchinfo";
+		}else if (count == 14) {
+			table = "location_14_watchinfo";
+		}else if (count == 15) {
+			table = "location_15_watchinfo";
+		}else if (count == 16) {
+			table = "location_16_watchinfo";
+		}else if (count == 17) {
+			table = "location_17_watchinfo";
+		}else if (count == 18) {
+			table = "location_18_watchinfo";
+		}else if (count == 19) {
+			table = "location_19_watchinfo";
+		}else if (count == 20) {
+			table = "location_20_watchinfo";
 		}
 		
 		
