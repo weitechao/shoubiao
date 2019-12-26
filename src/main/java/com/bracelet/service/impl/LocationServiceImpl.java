@@ -130,7 +130,7 @@ public class LocationServiceImpl implements ILocationService {
 		} else if (locationStyle == 4) {
 			table = "photo_location_watchinfo";
 		} else {
-			Integer count = Integer.valueOf(imei.substring(imei.length() - 1, imei.length())) % 20;
+			Integer count = Integer.valueOf(imei.substring(imei.length() - 2, imei.length())) % 20;
 			if (count == 1) {
 				table = "location_1_watchinfo";
 			} else if (count == 2) {
@@ -188,7 +188,7 @@ public class LocationServiceImpl implements ILocationService {
 
 		String table = "location_watchinfo";
 
-		Integer count = Integer.valueOf(imei.substring(imei.length() - 1, imei.length())) % 20;
+		Integer count = Integer.valueOf(imei.substring(imei.length() - 2, imei.length())) % 20;
 		if (count == 1) {
 			table = "location_1_watchinfo";
 		} else if (count == 2) {
@@ -247,7 +247,7 @@ public class LocationServiceImpl implements ILocationService {
 	@DataSourceChange(slave = true)
 	public List<LocationWatch> getWatchFootprint(String imei, String starttime, String endtime) {
 		String table = "location_watchinfo";
-		Integer count = Integer.valueOf(imei.substring(imei.length() - 1, imei.length())) % 20;
+		Integer count = Integer.valueOf(imei.substring(imei.length() - 2, imei.length())) % 20;
 		if (count == 1) {
 			table = "location_1_watchinfo";
 		} else if (count == 2) {
@@ -315,7 +315,7 @@ public class LocationServiceImpl implements ILocationService {
 		
 		String table = "location_watchinfo";
 
-		Integer count = Integer.valueOf(imei.substring(imei.length() - 1, imei.length())) % 20;
+		Integer count = Integer.valueOf(imei.substring(imei.length() - 2, imei.length())) % 20;
 		if (count == 1) {
 			table = "location_1_watchinfo";
 		} else if (count == 2) {
