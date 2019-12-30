@@ -86,14 +86,14 @@ public class Utils {
 	// OSS
 	public final static String endpointOSS = "oss-cn-zhangjiakou.aliyuncs.com";
 	
-	public final static String  accessKeyIdOSS = "LTAIbB6A0M192V67";
-	public final static String accessKeySecretOSS = "0Sch7htDMfWXba1BwYbGMrWSfQDerY";
+	public final static String  accessKeyIdOSS = "";
+	public final static String accessKeySecretOSS = "";
 	public static final String bucketNameOSS = "20190411weicreate";
 
-	public final static String accessKeyId = "LTAI8CmVtQhm7KSG";
-	public final static String accessKeySecret = "c9wj4Lw22QmDLuQkx2l46xmfCD4H1e";
-	public final static String accessKeyIdOfBeidou = "LTAI7YNEkaz5J7Vy";
-	public final static String accessKeySecretOfBeidou = "EIHW3lpcPMXnxsdW7CW9jnriovXTch";
+	public final static String accessKeyId = "";
+	public final static String accessKeySecret = "";
+	public final static String accessKeyIdOfBeidou = "";
+	public final static String accessKeySecretOfBeidou = "";
 	public final static String MD5_MAGIC = "water";
 
 	public final static String URL = "https://eco.taobao.com/router/rest";
@@ -113,6 +113,7 @@ public class Utils {
 	public static final String fingerSosSendMsg_SMSTEMPLATE_CODE = "SMS_125735073";// 使用报警指纹打开短信模板
 	public static final String lowElectricSosMsgSendMsg_SMSTEMPLATE_CODE = "SMS_134515053";// 低电量报警
 
+	//这个是亿多宝 阿里推送的
 	public static final String accessKeyIdOfWatch = "";
 	public static final String accessKeySecretOfWatch = "";
 
