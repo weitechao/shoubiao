@@ -23,7 +23,7 @@ public class AliOss {
 		对象/文件 	Object
 		地域  Region   oss-cn-zhangjiakou
 	访问域名   	oss-cn-zhangjiakou.aliyuncs.com      oss-cn-zhangjiakou-internal.aliyuncs.com
-	访问密钥  LTAIbB6A0M192V67   0Sch7htDMfWXba1BwYbGMrWSfQDerY
+	访问密钥 
 		
 		*/
 	
@@ -31,8 +31,8 @@ public class AliOss {
 	// Endpoint以杭州为例，其它Region请按实际情况填写。
 	static final String endpoint = "http://oss-cn-zhangjiakou.aliyuncs.com";
 	// 阿里云主账号AccessKey拥有所有API的访问权限，风险很高。强烈建议您创建并使用RAM账号进行API访问或日常运维，请登录 https://ram.console.aliyun.com 创建RAM账号。
-	static final String accessKeyId = "LTAIbB6A0M192V67";
-	static final String accessKeySecret = "0Sch7htDMfWXba1BwYbGMrWSfQDerY";
+	static final String accessKeyId = "";
+	static final String accessKeySecret = "";
 	static final String bucketName = "20190411weicreate";
 		
 		

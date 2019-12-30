@@ -113,8 +113,8 @@ public class Utils {
 	public static final String fingerSosSendMsg_SMSTEMPLATE_CODE = "SMS_125735073";// 使用报警指纹打开短信模板
 	public static final String lowElectricSosMsgSendMsg_SMSTEMPLATE_CODE = "SMS_134515053";// 低电量报警
 
-	public static final String accessKeyIdOfWatch = "LTAIbB6A0M192V67";
-	public static final String accessKeySecretOfWatch = "0Sch7htDMfWXba1BwYbGMrWSfQDerY";
+	public static final String accessKeyIdOfWatch = "";
+	public static final String accessKeySecretOfWatch = "";
 
 	public final static String USER_SAVE = "/upload/user/";
 
