@@ -33,9 +33,9 @@
 		<property name="locations">
 			<list>
 				<!--  <value>classpath:dbhk.properties</value>
-				<value>classpath:redishk.properties</value> -->
+				<value>classpath:redishk.properties</value>  -->
 				
-					<value>classpath:db.properties</value>
+					 <value>classpath:db.properties</value>
 				<value>classpath:redis.properties</value> 
 				
 			</list>
